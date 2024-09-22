@@ -6,16 +6,14 @@ const theme = extendTheme({
     colorSchemes: {
       light: {
         palette: {
-              primary: teal,
+            primary: teal,
             secondary: deepOrange
-
-          
         },
       },
       dark: {
         palette: {
             primary: cyan,
-            secondary: orange,
+            secondary: orange         
           },
         },
       },
