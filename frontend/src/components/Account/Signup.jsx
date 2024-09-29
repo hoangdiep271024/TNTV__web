@@ -1,9 +1,6 @@
-import React from 'react';
-import FormControl from "@mui/material/FormControl";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import React from 'react';
 import styled from 'styled-components';
-import { useState } from "react";
 const SubmitButton = styled.input`
   width: 85%;
   height: 40px;
@@ -60,7 +57,7 @@ const Signup = () => {
          <br/>
          <label className="birthday__label" style={{color:'#000'}}>Ngày sinh</label>
         <br/>
-        <input className="birthday"  name="birthday" type="date" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px', marginBottom: '10px'}}></input>
+        <input className="birthday"  name="birthday" type="date" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
          <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
           <p style={{color:'black'}}>Giới tính:</p>

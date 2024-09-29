@@ -1,13 +1,12 @@
-import React from "react";
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
+import { useTheme } from "@emotion/react";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
+import SearchIcon from "@mui/icons-material/Search";
 import { Typography } from "@mui/material";
+import Box from "@mui/material/Box";
+import Button from "@mui/material/Button";
 import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import SearchIcon from "@mui/icons-material/Search";
-import Button from "@mui/material/Button";
-import { useTheme } from "@emotion/react";
+import React from "react";
 import ChangeMode from "../ChangeMode";
 const Header = ({ onLoginClick, onSignupClick }) => {
   const theme = useTheme();
@@ -52,13 +51,12 @@ const Header = ({ onLoginClick, onSignupClick }) => {
               },
             }}
             InputProps={{
-              style: { height: "40px", fontSize: "14px", width: "200px" },
               endAdornment: (
                 <InputAdornment position="end">
                   <SearchIcon sx={{ cursor: "pointer" }} />
                 </InputAdornment>
               ),
-              style: { height: "40px", fontSize: "14px", width: "200px", marginRight:'10px'},
+              
             }}
           />
           <Button
