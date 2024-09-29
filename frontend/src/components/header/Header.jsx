@@ -1,17 +1,16 @@
 import React from "react";
 import CssBaseline from "@mui/material/CssBaseline";
-import Box from '@mui/material/Box';
+import Box from "@mui/material/Box";
 import LiveTvIcon from "@mui/icons-material/LiveTv";
 import { Typography } from "@mui/material";
-import InputAdornment from '@mui/material/InputAdornment';
+import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
-import SearchIcon from '@mui/icons-material/Search';
+import SearchIcon from "@mui/icons-material/Search";
 import Button from "@mui/material/Button";
 import { useTheme } from "@emotion/react";
 import ChangeMode from "../ChangeMode";
-const Header = () => {
+const Header = ({ onLoginClick, onSignupClick }) => {
   const theme = useTheme();
-
   return (
     <div
       style={{
@@ -39,7 +38,7 @@ const Header = () => {
         </Typography>
       </Box>
       <Box sx={{ alignItems: "center" }}>
-        <Box sx={{display: 'flex', alignItems: 'center', gap :1}}>
+        <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
           <TextField
             id="outlined-search"
             label="Search..."
@@ -53,39 +52,47 @@ const Header = () => {
               },
             }}
             InputProps={{
-                style: { height: "40px", fontSize: "14px", width: "200px" },
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <SearchIcon sx={{cursor:'pointer'}} />
-                  </InputAdornment>
-                ),
-                style: { height: '40px', fontSize: '14px', width: '200px' }
-              }}
+              style: { height: "40px", fontSize: "14px", width: "200px" },
+              endAdornment: (
+                <InputAdornment position="end">
+                  <SearchIcon sx={{ cursor: "pointer" }} />
+                </InputAdornment>
+              ),
+              style: { height: "40px", fontSize: "14px", width: "200px", marginRight:'10px'},
+            }}
           />
           <Button
-        sx={{
-          textTransform: 'none',
-          color: theme.palette.mode === 'light' ? 'black' : 'white',
-          border: `1px solid ${theme.palette.mode === 'light' ? 'black' : 'white'}`
-        }}
-      >
-        Register
-      </Button>
-      <Button
-  sx={{
-    textTransform: 'none',
-    color: theme.palette.mode === 'light' ? 'black' : 'white',
-    backgroundColor: theme.palette.mode === 'light' ? '#a0ba50' : '#0184FA',
-    '&:hover': {
-      backgroundColor: theme.palette.mode === 'light' ? 'grey' : '#005bb5', // Màu nền khi hover
-    },
-  }}
->
-  Login
-</Button>
-<ChangeMode/>
+            sx={{
+              textTransform: "none",
+              color: theme.palette.mode === "light" ? "black" : "white",
+              border: `1px solid ${
+                theme.palette.mode === "light" ? "black" : "white"
+              }`,
+              width:'90px',
+              height:'37px'
+            }}
+            onClick={onSignupClick}
+          >
+            Đăng ký
+          </Button>
+          <Button
+            sx={{
+              textTransform: "none",
+              color: theme.palette.mode === "light" ? "black" : "white",
+              backgroundColor:
+                theme.palette.mode === "light" ? "#a0ba50" : "#0184FA",
+              "&:hover": {
+                backgroundColor:
+                  theme.palette.mode === "light" ? "grey" : "#005bb5", // Màu nền khi hover
+              },
+              width: '90px'
+            }}
+            onClick={onLoginClick}
+          >
+            Đăng nhập
+          </Button>
+          <ChangeMode />
         </Box>
-
       </Box>
     </div>
   );
