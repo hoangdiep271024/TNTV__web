@@ -38,27 +38,38 @@ const Header = ({ onLoginClick, onSignupClick }) => {
       </Box>
       <Box sx={{ alignItems: "center" }}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
-          <TextField
-            id="outlined-search"
-            label="Search..."
-            type="search"
-            InputLabelProps={{
-              style: {
-                fontFamily: "Arial",
-                fontSize: "14px",
-                textAlign: "center",
-                top: "-6.5px",
-              },
-            }}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position="end">
-                  <SearchIcon sx={{ cursor: "pointer" }} />
-                </InputAdornment>
-              ),
-              
-            }}
-          />
+        <TextField
+  id="outlined-search"
+  label="Search..."
+  type="search"
+  InputLabelProps={{
+    style: {
+      fontFamily: "Arial",
+      fontSize: "14px",
+      textAlign: "center",
+      top: "-6.5px",
+    },
+  }}
+  InputProps={{
+    endAdornment: (
+      <InputAdornment position="end">
+        <SearchIcon sx={{ cursor: "pointer" }} />
+      </InputAdornment>
+    ),
+    sx: {
+      height: '40px', 
+    },
+  }}
+  sx={{
+    width: '230px',
+    '& .MuiOutlinedInput-root': {
+      height: '40px', 
+    },
+    '& .MuiInputBase-input': {
+      padding: '10px', 
+    },
+  }}
+/>
           <Button
             sx={{
               textTransform: "none",
@@ -66,7 +77,7 @@ const Header = ({ onLoginClick, onSignupClick }) => {
               border: `1px solid ${
                 theme.palette.mode === "light" ? "black" : "white"
               }`,
-              width:'90px',
+              width:'100px',
               height:'37px'
             }}
             onClick={onSignupClick}
@@ -83,7 +94,7 @@ const Header = ({ onLoginClick, onSignupClick }) => {
                 backgroundColor:
                   theme.palette.mode === "light" ? "grey" : "#005bb5", // Màu nền khi hover
               },
-              width: '90px'
+              width: '100px'
             }}
             onClick={onLoginClick}
           >
