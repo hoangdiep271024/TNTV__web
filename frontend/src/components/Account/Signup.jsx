@@ -62,11 +62,11 @@ const Signup = () => {
          <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
           <p style={{color:'black'}}>Giới tính:</p>
          <label style={{color: 'black'}}>
-    <input className='gender' type="radio" name="gender" value="male"/>
+    <input className='gender' type="radio" name="sex" value="male"/>
     Nam
   </label>
   <label style={{color: 'black'}}>
-    <input className='gender' type="radio" name="gender" value="female"/>
+    <input className='gender' type="radio" name="sex" value="female"/>
     Nữ
   </label>
          </div>
@@ -75,7 +75,7 @@ const Signup = () => {
          <label className="password__label" style={{color:'#000'}}>Mật khẩu</label>
         
          <br/>
-         <input className="Password"  name="rePassword" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+         <input className="Password"  name="Password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
          <label className="password__label" style={{color:'#000'}}>Xác nhận mật khẩu</label>
          <br/>
