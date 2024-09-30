@@ -34,9 +34,35 @@ const Login = ({onSetAccClick}) => {
     }));
   };
 
-  const handleSubmit = (e) => {
-    // e.preventDefault(); // Ngăn form reload trang
-    console.log('Thông tin form:', formData); // In ra thông tin form
+  const handleSubmit = async (e) => {
+    // e.preventDefault();
+    // console.log('Thông tin form:', formData)
+    
+    if (formData.password !== formData.rePassword) {
+      alert('Mật khẩu không khớp');
+      return;
+    }
+
+    try {
+      const response = await fetch('/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData)
+      });
+      
+      if (response.ok) {
+        // Xử lý thành công
+        const data = await response.json();
+        alert('Đăng nhập thành công:', data);
+      } else {
+        // Xử lý lỗi
+        console.error('Lỗi khi đăng nhập:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Lỗi mạng:', error);
+    }
   };
   return (
     <Box
@@ -54,7 +80,7 @@ const Login = ({onSetAccClick}) => {
       }}
       autoComplete="off"
     >
-      <form method="post" onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit}>
         <label className="user__name__label" style={{color:'#000'}}>Tài khoản</label>
         <br/>
         <input onChange={handleChange} className="user__name"  name="user__name" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input>
