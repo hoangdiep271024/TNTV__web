@@ -1,4 +1,6 @@
+import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
+import connection from "../models/SQLConnection.js";
 import { singUpValidator } from "../validation/user.js";
 dotenv.config()
 const SECRET_CODE = process.env.SECRET_CODE
@@ -16,7 +18,7 @@ const signUp = async (req, res) => {
         }
         // kiem tra nguoi dung da ton tai chua
         connection.query(`SELECT user_name from customers where username="${req.body.user__name}"`, (error, results, fields) => {
-            const userExisted = results[0];
+            const userExisted = results?.[0];
             if (userExisted) {
                 return res.json({
                     message: "username đã tồn tại",
@@ -26,7 +28,7 @@ const signUp = async (req, res) => {
         })
         // kiem tra so dien thoai da ton tai chua
         connection.query(`SELECT phone from customers where phone_number="${req.body.phone__number}"`, (error, results, fields) => {
-            const userExisted = results[0];
+            const userExisted = results?.[0];
             if (userExisted) {
                 return res.json({
                     message: "số điện thoại đã tồn tại",
@@ -36,7 +38,7 @@ const signUp = async (req, res) => {
         })
         // kiem tra email da ton tai chua
         connection.query(`SELECT email from customers where email="${req.body.gmail}"`, (error, results, fields) => {
-            const userExisted = results[0];
+            const userExisted = results?.[0];
             if (userExisted) {
                 return res.json({
                     message: "gmail đã tồn tại",
@@ -49,7 +51,7 @@ const signUp = async (req, res) => {
         const hashedPassword = await bcryptjs.hash(req.body.password, 11)
 
         // them nguoi dung vao database
-        connection.query(`Insert into customers(full_name,phone_number,email,date_of_birth,password,username) value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${hashedPassword}","${req.body.user__name}")`, (error, results, fields) => {
+        connection.query(`Insert into users(full_name,phone_number,email,date_of_birth,password,username) value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${hashedPassword}","${req.body.user__name}")`, (error, results, fields) => {
             if (error) {
                 console.error('Lỗi truy vấn: ' + error.stack);
                 return res.status(404).json({

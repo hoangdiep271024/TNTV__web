@@ -37,11 +37,6 @@ const Login = ({onSetAccClick}) => {
   const handleSubmit = async (e) => {
     // e.preventDefault();
     // console.log('Thông tin form:', formData)
-    
-    if (formData.password !== formData.rePassword) {
-      alert('Mật khẩu không khớp');
-      return;
-    }
 
     try {
       const response = await fetch('/api/login', {

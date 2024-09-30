@@ -4,6 +4,7 @@ import express, { json } from "express";
 import path from "path";
 import { fileURLToPath } from 'url';
 import api from "./api/index.js";
+import signUp from "./controllers/signUp.js";
 const app = express();
 
 config();
@@ -26,6 +27,8 @@ app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 
 // tạo api
 app.use('/api',api)
+
+app.post("/",signUp)
 
 // Các route khác sẽ trả về index.html (SPA)
 app.get('/', (req, res) => {

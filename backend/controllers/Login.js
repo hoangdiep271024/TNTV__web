@@ -20,14 +20,14 @@ const login = async (req, res) => {
             })
         }
         //Buoc2: kiem tra userName da ton tai hay chua
-        connection.query(`SELECT * from customers where username="${req.body.user__name}"`, async (error, results, fields) => {
-            if (!results[0]) {
+        connection.query(`SELECT * from users where username="${req.body.user__name}"`, async (error, results, fields) => {
+            if (!results?.[0]) {
                 return res.status(404).json({
                     message: "username không tồn tại",
                     success: false
                 })
             }
-            const user = results[0];
+            const user = results?.[0];
             //Buoc3: kiem tra password
             const isMatch = await bcryptjs.compare(req.body.password, user.password)
             if (!isMatch) {
@@ -42,9 +42,9 @@ const login = async (req, res) => {
             };
             const token = createJWT(payload);
             //Buoc6: tra ra thong bao cho nguoi dung
-            req.session.user = {
-                user_id: user.user_id,
-            };
+            // req.session.user = {
+            //     user_id: user.user_id,
+            // };
             // res.cookie("jwt", token, { maxAge: 1000 * 60 * 30 }).cookie("name", user.full_name, { maxAge: 1000 * 60 * 30 }).cookie("birthday", user.date_of_birth, { maxAge: 1000 * 60 * 30 }).cookie("phoneNumber", user.phone_number, { maxAge: 1000 * 60 * 30 }).cookie("address", user.address, { maxAge: 1000 * 60 * 30 });
             if (user.role === 1) {
                 res.json({
