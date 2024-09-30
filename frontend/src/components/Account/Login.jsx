@@ -1,9 +1,6 @@
-import React from "react";
-import FormControl from "@mui/material/FormControl";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
+import React, { useState } from "react";
 import styled from 'styled-components';
-import { useState } from "react";
 
 const SubmitButton = styled.input`
   width: 85%;
@@ -38,7 +35,7 @@ const Login = ({onSetAccClick}) => {
   };
 
   const handleSubmit = (e) => {
-    e.preventDefault(); // Ngăn form reload trang
+    // e.preventDefault(); // Ngăn form reload trang
     console.log('Thông tin form:', formData); // In ra thông tin form
   };
   return (
