@@ -5,6 +5,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import api from "./api/index.js";
 import signUp from "./controllers/signUp.js";
+import corMw from "./middlewares/cors.js";
 const app = express();
 
 config();
@@ -22,6 +23,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(json());
 app.use(cookieParser());
 app.set('trust proxy', 1)
+app.options('*', corMw);
 
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 
@@ -34,7 +36,6 @@ app.post("/",signUp)
 app.get('/', (req, res) => {
   res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Chuyển đổi thành đường dẫn tuyệt đối
 });
-
 
 app.listen(PORT,()=>{
     console.log("Server is listening port "+PORT);
