@@ -33,7 +33,7 @@ app.use('/api',api)
 app.post("/",signUp)
 
 // Các route khác sẽ trả về index.html (SPA)
-app.get('/', (req, res) => {
+app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Chuyển đổi thành đường dẫn tuyệt đối
 });
 

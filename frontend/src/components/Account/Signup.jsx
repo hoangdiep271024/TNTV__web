@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box";
 import React from 'react';
 import styled from 'styled-components';
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import Alert from '@mui/material/Alert';
 const SubmitButton = styled.input`
   width: 85%;
   height: 40px;
@@ -31,7 +32,8 @@ const Signup = () => {
     password: '',
     rePassword: ''
   });
-
+  const [errorMessage, setErrorMessage] = useState('');
+const [okMessage, setOkMessage]= useState('')
   // Hàm cập nhật dữ liệu trong form
   const handleChange = (e) => {
     setFormData({
@@ -42,7 +44,7 @@ const Signup = () => {
 
   // Hàm xử lý submit
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+    e.preventDefault();
     // console.log('Thông tin form:', formData)
     
     if (formData.password !== formData.rePassword) {
@@ -62,15 +64,48 @@ const Signup = () => {
       if (response.ok) {
         // Xử lý thành công
         const data = await response.json();
-        console.log('Đăng ký thành công:', data);
+
+        // Kiểm tra success
+        if (data.success) {
+          console.log('Đăng ký thành công:', data.message);
+          setOkMessage(`Đăng ký thành công: ${data.message}`)
+          setTimeout(() => {
+            window.location.reload();
+          }, 2500);
+        } else {
+          const error__alert =`Đăng ký thất bại:, ${data.message}`;
+          console.log(error__alert);
+          setErrorMessage(`Đăng ký thất bại: ${data.message}`)
+          // <Alert severity="error" style={{top:'0', left: '0', zIndex: '20', width:'25vh', height:'30px'}}>{error__alert}</Alert>
+        }
       } else {
-        // Xử lý lỗi
+        setErrorMessage(`Đăng ký thất bại: ${response.statusText}`)
         console.error('Lỗi khi đăng ký:', response.statusText);
       }
     } catch (error) {
-      console.error('Lỗi mạng:', error);
+      setErrorMessage(`Lỗi mạng: ${error}`)
     }
   };
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    if (okMessage) {
+      const timerr = setTimeout(() => {
+        setOkMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timerr);
+    }
+  }, [okMessage]);
+
+
 
     return (
         <div>
@@ -85,10 +120,22 @@ const Signup = () => {
         backgroundColor: "#fff",
         transition: 'linear',
         paddingLeft:'25px',
-        paddingTop:'30px'
+         paddingTop:'30px'
       }}
       autoComplete="off"
     >
+      
+      {errorMessage && (
+          <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {errorMessage}
+          </Alert>
+        )}
+
+      {okMessage && (
+          <Alert variant='filled' severity="success" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {okMessage}
+          </Alert>
+        )}
       <form onSubmit={handleSubmit}>
         <label className="name__label" style={{color:'#000'}}>Họ và tên</label>
         <br/>
