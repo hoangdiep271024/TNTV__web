@@ -1,7 +1,8 @@
 import Box from "@mui/material/Box";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from 'styled-components';
-
+import { useNavigate } from 'react-router-dom';
+import { Alert } from "@mui/material";
 const SubmitButton = styled.input`
   width: 85%;
   height: 40px;
@@ -21,10 +22,13 @@ const SubmitButton = styled.input`
 `;
 
 const Login = ({onSetAccClick}) => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [okMessage, setOkMessage]= useState('')
   const [formData, setFormData] = useState({
     user__name: '',
     password: ''
   });
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -35,7 +39,7 @@ const Login = ({onSetAccClick}) => {
   };
 
   const handleSubmit = async (e) => {
-    // e.preventDefault();
+     e.preventDefault();
     // console.log('Thông tin form:', formData)
 
     try {
@@ -50,7 +54,17 @@ const Login = ({onSetAccClick}) => {
       if (response.ok) {
         // Xử lý thành công
         const data = await response.json();
-        alert('Đăng nhập thành công:', data);
+        if (data.success) {
+          setOkMessage(`Đăng nhập thành công: ${data.message}`)
+          setTimeout(() => {
+            navigate('/home');
+          }, 1500);
+          
+        } else {
+          const error__alert =`Đăng nhập thất bại: ${data.message}`;
+          console.log(error__alert);
+          setErrorMessage(`Đăng nhập thất bại: ${data.message}`)
+        }
       } else {
         // Xử lý lỗi
         console.error('Lỗi khi đăng nhập:', response.statusText);
@@ -59,6 +73,25 @@ const Login = ({onSetAccClick}) => {
       console.error('Lỗi mạng:', error);
     }
   };
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    if (okMessage) {
+      const timerr = setTimeout(() => {
+        setOkMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timerr);
+    }
+  }, [okMessage]);
+
   return (
     <Box
       sx={{
@@ -75,7 +108,19 @@ const Login = ({onSetAccClick}) => {
       }}
       autoComplete="off"
     >
+       {errorMessage && (
+          <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {errorMessage}
+          </Alert>
+        )}
+
+      {okMessage && (
+          <Alert variant='filled' severity="success" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {okMessage}
+          </Alert>
+        )}
       <form onSubmit={handleSubmit}>
+
         <label className="user__name__label" style={{color:'#000'}}>Tài khoản</label>
         <br/>
         <input onChange={handleChange} className="user__name"  name="user__name" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input>

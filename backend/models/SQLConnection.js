@@ -5,7 +5,7 @@ const pool = mysql.createPool({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
     port: 3306,
     user: 'root', // Tên người dùng của cơ sở dữ liệu
-    password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
+    password: '27102004', // Mật khẩu của cơ sở dữ liệu
     database: 'web_phim', // Tên của cơ sở dữ liệu
     waitForConnections: true, // Chờ cho đến khi có kết nối sẵn sàng
     connectionLimit: 10, // Số lượng kết nối tối đa trong pool
