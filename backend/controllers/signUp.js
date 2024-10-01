@@ -2,75 +2,71 @@ import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import connection from "../models/SQLConnection.js";
 import { singUpValidator } from "../validation/user.js";
-dotenv.config()
-const SECRET_CODE = process.env.SECRET_CODE
+
+dotenv.config();
+const SECRET_CODE = process.env.SECRET_CODE;
 
 const signUp = async (req, res) => {
-    // kiem tra dang ki
     try {
-        // buoc 1 validate du lieu
+        // Bước 1: validate dữ liệu
         const { error } = singUpValidator.validate(req.body, { abortEarly: false });
         if (error) {
             return res.json({
                 message: error.details[0].message,
                 success: false
-            })
+            });
         }
-        // kiem tra nguoi dung da ton tai chua
-        connection.query(`SELECT user_name from customers where username="${req.body.user__name}"`, (error, results, fields) => {
-            const userExisted = results?.[0];
-            if (userExisted) {
-                return res.json({
-                    message: "username đã tồn tại",
-                    success: false
-                })
-            }
-        })
-        // kiem tra so dien thoai da ton tai chua
-        connection.query(`SELECT phone from customers where phone_number="${req.body.phone__number}"`, (error, results, fields) => {
-            const userExisted = results?.[0];
-            if (userExisted) {
-                return res.json({
-                    message: "số điện thoại đã tồn tại",
-                    success: false
-                })
-            }
-        })
-        // kiem tra email da ton tai chua
-        connection.query(`SELECT email from customers where email="${req.body.gmail}"`, (error, results, fields) => {
-            const userExisted = results?.[0];
-            if (userExisted) {
-                return res.json({
-                    message: "gmail đã tồn tại",
-                    success: false
-                })
-            }
-        })
 
-        // ma hoa mat khau
-        const hashedPassword = await bcryptjs.hash(req.body.password, 11)
+        // Kiểm tra username đã tồn tại chưa
+        const [userResults] = await connection.promise().query(`SELECT * from users where username="${req.body.user__name}"`);
+        if (userResults.length > 0) {
+            return res.json({
+                message: "username đã tồn tại",
+                success: false
+            });
+        }
 
-        // them nguoi dung vao database
-        connection.query(`Insert into users(full_name,phone_number,email,date_of_birth,password,username) value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${hashedPassword}","${req.body.user__name}")`, (error, results, fields) => {
-            if (error) {
-                console.error('Lỗi truy vấn: ' + error.stack);
-                return res.status(404).json({
-                    message: "error",
-                    success: false
-                })
-            }
-        })
-        // buoc 5 thong bao dang ki thanh cong
-        // xoa mat khau di
-        req.body.password = undefined
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        const [phoneResults] = await connection.promise().query(`SELECT phone_number from users where phone_number="${req.body.phone__number}"`);
+        if (phoneResults.length > 0) {
+            return res.json({
+                message: "số điện thoại đã tồn tại",
+                success: false
+            });
+        }
+
+        // Kiểm tra email đã tồn tại chưa
+        const [emailResults] = await connection.promise().query(`SELECT email from users where email="${req.body.gmail}"`);
+        if (emailResults.length > 0) {
+            return res.json({
+                message: "gmail đã tồn tại",
+                success: false
+            });
+        }
+
+        // Mã hóa mật khẩu
+        const hashedPassword = await bcryptjs.hash(req.body.password, 11);
+
+        // Thêm người dùng vào database
+        await connection.promise().query(
+            `Insert into users(full_name,phone_number,email,date_of_birth,password,username) 
+            value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${hashedPassword}","${req.body.user__name}")`
+        );
+
+        // Bước 5: thông báo đăng kí thành công
+        // Xóa mật khẩu trước khi gửi phản hồi
+        req.body.password = undefined;
         res.json({
             message: "đăng kí thành công",
             success: true
-        })
+        });
     } catch (error) {
-        console.log(error.message)
+        console.error(error.message);
+        res.status(500).json({
+            message: "Đã xảy ra lỗi",
+            success: false
+        });
     }
-}
+};
 
-
-export default signUp
+export default signUp;

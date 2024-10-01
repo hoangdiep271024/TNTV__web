@@ -1,27 +1,21 @@
 import mysql from 'mysql2';
 
-// Tạo một connection pool
-const pool = mysql.createPool({
+// Tạo một kết nối đơn lẻ
+const connection = mysql.createConnection({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
     port: 3306,
     user: 'root', // Tên người dùng của cơ sở dữ liệu
     password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
-    database: 'web_phim', // Tên của cơ sở dữ liệu
-    waitForConnections: true, // Chờ cho đến khi có kết nối sẵn sàng
-    connectionLimit: 10, // Số lượng kết nối tối đa trong pool
-    queueLimit: 0 // Không giới hạn số lượng yêu cầu trong hàng đợi
+    database: 'web_phim' // Tên của cơ sở dữ liệu
 });
 
-// Sử dụng kết nối từ pool
-pool.getConnection((err, connection) => {
+// Kết nối đến cơ sở dữ liệu
+connection.connect((err) => {
     if (err) {
         console.error('Error connecting: ' + err.stack);
         return;
     }
     console.log('Connected as id ' + connection.threadId);
-
-    // Sau khi hoàn thành sử dụng, trả lại kết nối cho pool
-    connection.release();
 });
 
-export default pool;
+export default connection;
