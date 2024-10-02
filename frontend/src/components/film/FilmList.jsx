@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components';
-const filmListStyled = styled.div`
+const FilmListStyled = styled.div`
   display: grid;
-  margin-left:100px;
-  grid-template-columns: repeat(3, 1fr);
-  gap:30px;
+  left:'auto';
+  grid-template-columns: repeat(6, 1fr);
+  gap:20px;
 `;
 export default function FilmList(props) {
   return (
-    <filmListStyled>{props.children}</filmListStyled>
+    <FilmListStyled>{props.children}</FilmListStyled>
   )
 }
