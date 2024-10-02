@@ -1,4 +1,5 @@
 import express from "express";
+import routerFilm from "./film.js";
 import routerHome from "./home.js";
 import routerLogin from "./login.js";
 import routerPayment from "./payment.js";
@@ -12,4 +13,6 @@ router.use("/login",routerLogin)
 router.use("/signUp",routerSignUp)
 router.use("/uploadImage",routerUploadImage)
 router.use("/payment",routerPayment)
+router.use("/film",routerFilm)
+
 export default router;

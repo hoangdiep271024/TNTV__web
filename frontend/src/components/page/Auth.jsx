@@ -6,6 +6,7 @@ import Login from "../Account/Login";
 import Header from "../header/Header"
 import Signup from "../Account/Signup";
 import Navbar from "../navbar/Navbar"
+import Ticket__film from "../film/Ticket__film";
 export default function Auth() {
     const [isClickLogin, setIsClickLogin] = useState(false);
     const LoginClick = () => {
@@ -21,7 +22,19 @@ export default function Auth() {
       setIsClickLogin(!isClickLogin);
       setIsClickSignup(!isClickSignup);
     }
-  
+
+
+
+    fetch('/api/payment', {
+      method: 'POST',
+      headers: {
+      'Content-Type': 'application/json'
+    },
+    })
+    .then(response => response.json())
+    .then(data => console.log(data)) 
+    .catch(error => console.error('Error:', error));
+    
   return (
     <Box
       sx={{
@@ -31,6 +44,7 @@ export default function Auth() {
     >
       <Header onLoginClick={LoginClick} onSignupClick={SignupClick}></Header>
       <Navbar></Navbar>
+      
       {isClickLogin && (
         <>
           <Box
@@ -64,7 +78,9 @@ export default function Auth() {
           />{" "}
           <Signup />
         </>
+       
       )}
+       <Ticket__film></Ticket__film>
     </Box>
   )
 }
