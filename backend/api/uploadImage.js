@@ -7,11 +7,10 @@ import multer from "multer";
 const cloudinary = cloudinaryModule.v2;
 dotenv.config();
 const routerUploadImage = express.Router()
-
 cloudinary.config({
-    cloud_name: process.env.CLOUD_NAME,
-    api_key: process.env.API_KEY,
-    api_secret: process.env.API_SECRET,
+    cloud_name: process.env.CLOUDINARY_NAME,
+    api_key: process.env.CLOUDINARY_KEY,
+    api_secret: process.env.CLOUDINARY_SECRET,
 });
 
 async function handleUpload(file) {
@@ -26,11 +25,12 @@ const upload = multer({
     storage,
 });
 
-routerUploadImage.post("/upload", upload.single("my_file"), async (req, res) => {
+routerUploadImage.post("/", upload.single("image"), async (req, res) => {
     try {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         const cldRes = await handleUpload(dataURI);
+        console.log(cldRes.url)
         res.json({
             message: cldRes,
             success: true
