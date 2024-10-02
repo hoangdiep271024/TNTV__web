@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 const payment = async (req, res) => {
     //https://developers.momo.vn/#/docs/en/aiov2/?id=payment-method
     //parameters
@@ -10,7 +12,7 @@ const payment = async (req, res) => {
     var redirectUrl = "https://momo.vn/return";
     var ipnUrl = "https://callback.url/notify";
     // var ipnUrl = redirectUrl = "https://webhook.site/454e7b77-f177-4ece-8236-ddf1c26ba7f8";
-    var amount = "50000";
+    var amount = "50000"//req.amount;
     var requestType = "captureWallet"
     var extraData = ""; //pass empty value if your merchant does not have stores
     //before sign HMAC SHA256 with format
@@ -43,40 +45,27 @@ const payment = async (req, res) => {
         lang: 'en'
     });
     //Create the HTTPS objects
-    const https = require('https');
     const options = {
-        hostname: 'test-payment.momo.vn',
-        port: 443,
-        path: '/v2/gateway/api/create',
-        method: 'POST',
+        method: "POST",
+        url: "https://test-payment.momo.vn/vn2/gateway/api/create",
         headers: {
             'Content-Type': 'application/json',
             'Content-Length': Buffer.byteLength(requestBody)
-        }
+        },
+        data: requestBody
     }
-    //Send the request and get the response
-    const req = https.request(options, res => {
-        console.log(`Status: ${res.statusCode}`);
-        console.log(`Headers: ${JSON.stringify(res.headers)}`);
-        res.setEncoding('utf8');
-        res.on('data', (body) => {
-            console.log('Body: ');
-            console.log(body);
-            console.log('payUrl: ');
-            console.log(JSON.parse(body).payUrl);
-        });
-        res.on('end', () => {
-            console.log('No more data in response.');
-        });
-    })
-
-    req.on('error', (e) => {
-        console.log(`problem with request: ${e.message}`);
-    });
-    // write data to request body
-    console.log("Sending....")
-    req.write(requestBody);
-    req.end();
+    let result;
+    try {
+        result = await axios(options);
+        return res.json(result.data);
+    } catch (error) {
+        return res.status(500).json({
+            message: "server error"
+        })
+    }
 }
+
+//
+
 
 export default payment
