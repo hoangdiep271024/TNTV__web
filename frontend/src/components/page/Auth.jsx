@@ -6,6 +6,7 @@ import Login from "../Account/Login";
 import Header from "../header/Header"
 import Signup from "../Account/Signup";
 import Navbar from "../navbar/Navbar"
+import Ticket__film from "../Ticket__film";
 export default function Auth() {
     const [isClickLogin, setIsClickLogin] = useState(false);
     const LoginClick = () => {
@@ -21,7 +22,6 @@ export default function Auth() {
       setIsClickLogin(!isClickLogin);
       setIsClickSignup(!isClickSignup);
     }
-  
   return (
     <Box
       sx={{
@@ -31,6 +31,7 @@ export default function Auth() {
     >
       <Header onLoginClick={LoginClick} onSignupClick={SignupClick}></Header>
       <Navbar></Navbar>
+      
       {isClickLogin && (
         <>
           <Box
@@ -64,7 +65,9 @@ export default function Auth() {
           />{" "}
           <Signup />
         </>
+       
       )}
+       <Ticket__film></Ticket__film>
     </Box>
   )
 }
