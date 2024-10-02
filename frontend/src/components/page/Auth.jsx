@@ -1,12 +1,10 @@
+import Box from "@mui/material/Box";
 import { useState, } from "react";
-import { useNavigate } from 'react-router-dom';
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box"
 import Login from "../Account/Login";
-import Header from "../header/Header"
 import Signup from "../Account/Signup";
-import Navbar from "../navbar/Navbar"
 import Ticket__film from "../film/Ticket__film";
+import Header from "../header/Header";
+import Navbar from "../navbar/Navbar";
 export default function Auth() {
     const [isClickLogin, setIsClickLogin] = useState(false);
     const LoginClick = () => {
@@ -32,7 +30,6 @@ export default function Auth() {
     },
     })
     .then(response => response.json())
-    .then(data => console.log(data)) 
     .catch(error => console.error('Error:', error));
     
   return (
