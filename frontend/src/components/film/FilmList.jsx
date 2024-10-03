@@ -1,10 +1,12 @@
 import React from 'react'
 import styled from 'styled-components';
 const FilmListStyled = styled.div`
-  display: grid;
+  display: flex;
   left:'auto';
-  grid-template-columns: repeat(6, 1fr);
-  gap:20px;
+  flex-wrap: wrap;
+  gap:10px;
+  padding-left: 10%;
+  padding-right: 10%;
 `;
 export default function FilmList(props) {
   return (

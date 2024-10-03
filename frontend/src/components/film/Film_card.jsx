@@ -8,7 +8,7 @@ import { useTheme } from "@emotion/react";
 export default function Film_card(props) {
   const theme = useTheme();
   return (
-    <Box sx={{width: '150px', height: '300px', paddingLeft: '4px', marginTop:'8px'}}>
+    <Box sx={{width: '150px', height: '300px', paddingLeft: '4px', marginTop:'8px', cursor:'pointer'}}>
         <img style={{borderRadius: '4px', width:'150px', height:'auto', objectFit: 'cover'}} src={props.image}></img>
         <Typography style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '800'}}>{props.name}</Typography>
         <div style={{display: 'flex', justifyContent: 'space-between'}}>

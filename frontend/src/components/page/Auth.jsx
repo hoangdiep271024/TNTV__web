@@ -1,10 +1,12 @@
+import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { useState, } from "react";
+import { useState } from "react";
 import Login from "../Account/Login";
 import Signup from "../Account/Signup";
 import Ticket__film from "../film/Ticket__film";
 import Header from "../header/Header";
 import Navbar from "../navbar/Navbar";
+import { useTheme } from "@emotion/react";
 export default function Auth() {
     const [isClickLogin, setIsClickLogin] = useState(false);
     const LoginClick = () => {
@@ -20,7 +22,7 @@ export default function Auth() {
       setIsClickLogin(!isClickLogin);
       setIsClickSignup(!isClickSignup);
     }
-    
+    const theme = useTheme();
   return (
     <Box
       sx={{
@@ -28,9 +30,11 @@ export default function Auth() {
         height: "100vh",
       }}
     >
+      <div style={{top: '0',left: '0',position: 'fixed', backgroundColor: theme.palette.mode === "light" ? "white" : "#121212"}}>
       <Header onLoginClick={LoginClick} onSignupClick={SignupClick}></Header>
       <Navbar></Navbar>
-      
+      </div>
+    
       {isClickLogin && (
         <>
           <Box

@@ -1,8 +1,8 @@
-import { Alert } from "@mui/material";
 import Box from "@mui/material/Box";
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import Alert from '@mui/material/Alert';
 const SubmitButton = styled.input`
   width: 85%;
   height: 40px;
