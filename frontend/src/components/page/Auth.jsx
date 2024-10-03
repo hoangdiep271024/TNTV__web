@@ -20,17 +20,6 @@ export default function Auth() {
       setIsClickLogin(!isClickLogin);
       setIsClickSignup(!isClickSignup);
     }
-
-
-
-    fetch('/api/payment', {
-      method: 'POST',
-      headers: {
-      'Content-Type': 'application/json'
-    },
-    })
-    .then(response => response.json())
-    .catch(error => console.error('Error:', error));
     
   return (
     <Box
