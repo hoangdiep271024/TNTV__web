@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import https from "https";
 
-const payment = async (req, res) => {
+const QRPayment = async (req, res) => {
     // Parameters
     var accessKey = 'F8BBA842ECF85';
     var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
@@ -83,4 +83,4 @@ const payment = async (req, res) => {
     paymentReq.end();
 };
 
-export default payment;
+export default QRPayment;
