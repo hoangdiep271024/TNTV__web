@@ -23,6 +23,7 @@ export default function Auth() {
       setIsClickSignup(!isClickSignup);
     }
     const theme = useTheme();
+
   return (
     <Box
       sx={{

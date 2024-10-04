@@ -63,11 +63,6 @@ export default function Ticket__film() {
     </Box>
     )}
 
-
-
-    
-    
-
 <FilmList>
   {showing && data[0].map((item, index) => {
     const datee = item.Release_date.substring(0, 10);

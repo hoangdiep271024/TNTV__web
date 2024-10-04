@@ -8,8 +8,27 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import ChangeMode from "../ChangeMode";
+import { useState, useEffect } from "react";
+// const [login, setLogin] = useState('');
+
+
+
+
 const Header = ({ onLoginClick, onSignupClick }) => {
   const theme = useTheme();
+  useEffect(() => {
+    fetch('/api/userInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        console.log(responseData);
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
   return (
     <div
       style={{

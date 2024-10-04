@@ -28,7 +28,6 @@ const Login = ({onSetAccClick}) => {
     user__name: '',
     password: ''
   });
-  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -40,7 +39,7 @@ const Login = ({onSetAccClick}) => {
 
   const handleSubmit = async (e) => {
      e.preventDefault();
-    // console.log('Thông tin form:', formData)
+ 
 
     try {
       const response = await fetch('/api/login', {
@@ -52,12 +51,11 @@ const Login = ({onSetAccClick}) => {
       });
       
       if (response.ok) {
-        // Xử lý thành công
         const data = await response.json();
         if (data.success) {
           setOkMessage(`Đăng nhập thành công: ${data.message}`)
           setTimeout(() => {
-            navigate('/home');
+            window.location.reload();
           }, 1500);
           
         } else {
@@ -86,7 +84,7 @@ const Login = ({onSetAccClick}) => {
     if (okMessage) {
       const timerr = setTimeout(() => {
         setOkMessage('');
-      }, 2000); // 2 giây
+      }, 2000); 
 
       return () => clearTimeout(timerr);
     }
