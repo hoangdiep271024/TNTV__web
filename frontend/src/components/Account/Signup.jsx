@@ -1,3 +1,4 @@
+import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import React from 'react';
 import styled from 'styled-components';
@@ -161,24 +162,20 @@ const [okMessage, setOkMessage]= useState('')
          <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
           <p style={{color:'black'}}>Giới tính:</p>
          <label style={{color: 'black'}}>
-    <input className='gender' onChange={handleChange} type="radio" name="sex" value="male"/>
+    <input className='sex' onChange={handleChange} type="radio" name="sex" value="male"/>
     Nam
   </label>
   <label style={{color: 'black'}}>
-    <input className='gender' onChange={handleChange} type="radio" name="sex" value="female"/>
+    <input className='sex' onChange={handleChange} type="radio" name="sex" value="female"/>
     Nữ
   </label>
          </div>
-        
-  
          <label className="password__label" style={{color:'#000'}}>Mật khẩu</label>
-        
          <br/>
          <input className="Password" onChange={handleChange}  name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
          <label className="password__label" style={{color:'#000'}}>Xác nhận mật khẩu</label>
          <br/>
-        
          <input className="rePassword" onChange={handleChange} name="rePassword" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input>
          <SubmitButton type="submit" value="Đăng ký" />
       </form>

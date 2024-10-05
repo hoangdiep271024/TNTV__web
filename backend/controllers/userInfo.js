@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { isTokenExpired, verifyToken } from '../middlewares/JWT.js';
-
+import connection from '../models/SQLConnection.js';
 dotenv.config();
 const userInfo = async (req, res) => {
     try {
@@ -23,7 +23,7 @@ const userInfo = async (req, res) => {
         }
 
         const [userInfo] = await connection.promise().query(
-            `SELECT user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
+            `SELECT username,user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
         );
 
         if (userInfo.length === 0) {
