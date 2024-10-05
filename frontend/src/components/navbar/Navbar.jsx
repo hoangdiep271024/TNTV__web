@@ -5,7 +5,7 @@ import Link from '@mui/material/Link';
 
 const Navbar = () => {
     return (
-        <Box sx={{width : '100vw', height: '40px', display: 'flex', marginTop: '5vh', justifyContent: 'center', gap:8}}>
+        <Box sx={{width : '100vw', height: '40px', display: 'flex', marginTop: '3vh', justifyContent: 'center', gap:8}}>
             <Link href="#" underline="none">Trang chủ</Link>
             <Link href="#" underline="none">Lịch chiếu</Link>
             <Link href="#" underline="none">Phim</Link>

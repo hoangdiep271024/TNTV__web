@@ -5,9 +5,12 @@ import { Typography } from '@mui/material';
 import FilmList from './FilmList';
 import { useState, useEffect } from 'react';
 import Film_card from './Film_card';
+import { useTheme } from "@emotion/react";
 export default function Ticket__film() {
-
+  
+  const theme = useTheme()
   const [data, setData] = useState([[]]);
+  const [showing, setShowing] = useState(true)
   useEffect(() => {
     fetch('/api/film', {
       method: 'POST',
@@ -21,35 +24,76 @@ export default function Ticket__film() {
     })
     .catch(error => console.error('Error:', error));
   }, []); 
-
+  const showingClick = () =>{
+    setShowing(true)
+  }
+  const unShowingClick = () =>{
+    setShowing(false)
+  }
 
   return (
-   <Box sx={{width: '100vw'}}>
-<Typography sx={{textAlign: 'center', fontSize: '20px', fontWeight: ''}} >Mua vé theo phim</Typography>
-<FilmList>
-  {data[0].map((item, index) => {
-//      const date = item.Release_date;
+   <Box sx={{width: '100vw', marginTop: '17vh'}}>
+    
+    {theme.palette.mode === "light" && showing &&(
+      <Box sx={{display: 'flex' , alignItems: 'center', textAlign:'center', justifyContent: 'center', gap: '15px'}}>
+      <div style={{ fontSize: '20px',cursor: 'pointer', color: '#babfc2'}} onClick={showingClick}>Đang chiếu</div>
+      <div style={{ fontSize: '50px'}} >|</div>
+    <div style={{ fontSize: '20px',cursor: 'pointer'}} onClick={unShowingClick}>Sắp chiếu</div>
+    </Box>
+    )}
+    {theme.palette.mode === "light" && !showing &&(
+      <Box sx={{display: 'flex' , alignItems: 'center', textAlign:'center', justifyContent: 'center', gap: '15px'}}>
+      <div style={{ fontSize: '20px',cursor: 'pointer'}} onClick={showingClick}>Đang chiếu</div>
+      <div style={{ fontSize: '50px'}} >|</div>
+      <div style={{ fontSize: '20px',cursor: 'pointer', color: '#babfc2'}} onClick={unShowingClick}>Sắp chiếu</div>
+    </Box>
+    )}
+    {theme.palette.mode === "dark" && showing &&(
+      <Box sx={{display: 'flex' , alignItems: 'center', textAlign:'center', justifyContent: 'center', gap: '15px'}}>
+      <div style={{ fontSize: '20px',cursor: 'pointer', color: '#00BCD4'}} onClick={showingClick}>Đang chiếu</div>
+      <div style={{ fontSize: '50px'}} >|</div>
+    <div style={{ fontSize: '20px',cursor: 'pointer'}} onClick={unShowingClick}>Sắp chiếu</div>
+    </Box>
+    )}
+    {theme.palette.mode === "dark" && !showing &&(
+      <Box sx={{display: 'flex' , alignItems: 'center', textAlign:'center', justifyContent: 'center', gap: '15px'}}>
+      <div style={{ fontSize: '20px',cursor: 'pointer'}} onClick={showingClick}>Đang chiếu</div>
+      <div style={{ fontSize: '50px'}} >|</div>
+      <div style={{ fontSize: '20px',cursor: 'pointer', color: '#00BCD4'}} onClick={unShowingClick}>Sắp chiếu</div>
+    </Box>
+    )}
 
-//      // Lấy ngày, tháng, năm từ đối tượng Date
-//      const day = String(date.getDate()).padStart(2, '0'); // Thêm số 0 ở đầu nếu cần
-//      const month = String(date.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
-//      const year = date.getFullYear();
-//  const datee = `${day}-${month}-${year}`
-    const datee = item.Release_date.substring(0,10);
-const year = datee.substring(0,4)
-const month = datee.substring(5,7)
-const day = datee.substring(8,10)
-const exactlyDate = `${day}/${month}`
-console.log(datee)
-    return (
-    <Film_card
-    key = {item.index}
-    image = {item.film_img}
-    name = {item.film_name}
-    date = {exactlyDate}
-    />)
-  })
-  }
+<FilmList>
+  {showing && data[0].map((item, index) => {
+    const datee = item.Release_date.substring(0, 10);
+    const year = datee.substring(0, 4);
+    const month = datee.substring(5, 7);
+    const day = datee.substring(8, 10);
+    const exactlyDate = `${day}/${month}`;
+    return item.film_type === 1 && (
+      <Film_card
+        key={index}  // Using index as key (consider a better unique key if available)
+        image={item.film_img}
+        name={item.film_name}
+        date={exactlyDate}
+      />
+    );
+  })}
+  {!showing && data[0].map((item, index) => {
+    const datee = item.Release_date.substring(0, 10);
+    const year = datee.substring(0, 4);
+    const month = datee.substring(5, 7);
+    const day = datee.substring(8, 10);
+    const exactlyDate = `${day}/${month}`;
+    return item.film_type === 2 && (
+      <Film_card
+        key={index}  // Using index as key (consider a better unique key if available)
+        image={item.film_img}
+        name={item.film_name}
+        date={exactlyDate}
+      />
+    );
+  })}
 </FilmList>
 
    </Box>

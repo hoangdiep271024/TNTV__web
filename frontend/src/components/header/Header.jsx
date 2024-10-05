@@ -8,8 +8,49 @@ import InputAdornment from "@mui/material/InputAdornment";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import ChangeMode from "../ChangeMode";
-const Header = ({ onLoginClick, onSignupClick }) => {
+import { useState, useEffect } from "react";
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+  const handleCloseProfile = () => {
+    setAnchorEl(null);
+    onProfileClick();
+  };
   const theme = useTheme();
+  const [login, setLogin] = useState('');
+  const [userInfor, setUserInfor] = useState([]);
+  
+  useEffect(() => {
+    fetch('/api/userInfo', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        if(responseData.success){
+          setLogin(true)
+          setUserInfor(responseData.userInfo[0])
+        }
+        else{
+          setLogin(false)
+        }
+        
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
+
   return (
     <div
       style={{
@@ -70,7 +111,8 @@ const Header = ({ onLoginClick, onSignupClick }) => {
     },
   }}
 />
-          <Button
+
+{!login && (<Button
             sx={{
               textTransform: "none",
               color: theme.palette.mode === "light" ? "black" : "white",
@@ -83,8 +125,9 @@ const Header = ({ onLoginClick, onSignupClick }) => {
             onClick={onSignupClick}
           >
             Đăng ký
-          </Button>
-          <Button
+          </Button>)}
+
+          {!login && (<Button
             sx={{
               textTransform: "none",
               color: theme.palette.mode === "light" ? "black" : "white",
@@ -99,8 +142,60 @@ const Header = ({ onLoginClick, onSignupClick }) => {
             onClick={onLoginClick}
           >
             Đăng nhập
+          </Button>)}
+          {login && (
+            <div>
+            <Button
+              id="basic-button"
+              aria-controls={open ? 'basic-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              style={{textTransform: 'none',display:'flex', alignItems: 'center', justifyContent:'center', gap :'5px', width:'auto', whiteSpace: 'nowrap',color: theme.palette.mode === "light" ? "black" : "white"}}
+            ><AccountCircleIcon style={{width: '40px', height: '40px'}}/>
+              {userInfor.full_name}
+            </Button>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              MenuListProps={{
+                'aria-labelledby': 'basic-button',
+              }}
+            >
+              <MenuItem onClick={handleCloseProfile}>Profile</MenuItem>
+              <MenuItem onClick={handleClose}>My account</MenuItem>
+            </Menu>
+          </div>
+            // <div style={{cursor: 'pointer',marginLeft: '15px',display:'flex', alignItems: 'center', justifyContent:'center', gap :'5px', width:'auto', whiteSpace: 'nowrap', fontSize: '17px'}}>
+            // <AccountCircleIcon style={{width: '40px', height: '40px'}}/>
+            // <div>{userInfor.full_name}</div>
+            // </div>
+          )}
+<ChangeMode />
+          {login && (
+            <Button
+            sx={{
+              marginRight: '15px',
+              textTransform: "none",
+              color: theme.palette.mode === "light" ? "black" : "white",
+              border: `1px solid ${
+                theme.palette.mode === "light" ? "black" : "white"
+              }`,
+              width:'100px',
+              height:'37px'
+            }}
+            // onClick={onSignupClick}
+          >
+            Đăng xuất
           </Button>
-          <ChangeMode />
+          )}
+
+
+          
+          
+          
         </Box>
       </Box>
     </div>
