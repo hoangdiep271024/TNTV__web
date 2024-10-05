@@ -23,7 +23,7 @@ export const userInfo = async (req, res) => {
         }
 
         const [userInfo] = await connection.promise().query(
-            `SELECT username,user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
+            `SELECT user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
         );
 
         if (userInfo.length === 0) {

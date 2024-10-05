@@ -50,6 +50,37 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
       })
       .catch(error => console.error('Error:', error));
   }, []);
+const logOutClick = async(e) => {
+  try {
+    const response = await fetch('/api/logOut', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+
+    });
+    
+    if (response.ok) {
+      // Xử lý thành công
+      const data = await response.json();
+
+      // Kiểm tra success
+      if (data.success) {
+        window.location.reload();
+      } else {
+        const error__alert =`Đăng ký thất bại:, ${data.message}`;
+        console.log(error__alert);
+        
+        // <Alert severity="error" style={{top:'0', left: '0', zIndex: '20', width:'25vh', height:'30px'}}>{error__alert}</Alert>
+      }
+    } else {
+      
+      console.error('Lỗi khi đăng ký:', response.statusText);
+    }
+  } catch (error) {
+    console.error(error)
+  }
+};
 
   return (
     <div
@@ -186,7 +217,8 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
               width:'100px',
               height:'37px'
             }}
-            // onClick={onSignupClick}
+          
+            onClick={logOutClick}
           >
             Đăng xuất
           </Button>
