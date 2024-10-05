@@ -1,8 +1,6 @@
-import React from 'react'
-import { useState, useEffect } from 'react';
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
 import { Button } from '@mui/material';
+import Box from "@mui/material/Box";
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 const SubmitButton = styled.input`
   width: 85%;
@@ -98,7 +96,7 @@ export default function Profile() {
       };
       const handleSubmit = async (e) => {
         try {
-            const response = await fetch('/api/', {
+            const response = await fetch('/api/userInfo/update', {
               method: 'POST',
               headers: {
                 'Content-Type': 'application/json',

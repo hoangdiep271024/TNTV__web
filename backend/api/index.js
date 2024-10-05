@@ -3,6 +3,7 @@ import routerChatBot from "./chatBot.js";
 import routerFilm from "./film.js";
 import routerHome from "./home.js";
 import routerLogin from "./login.js";
+import routerLogOut from "./logOut.js";
 import routerQRPayment from "./QRPayment.js";
 import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
@@ -18,4 +19,5 @@ router.use("/payment",routerQRPayment)
 router.use("/film",routerFilm)
 router.use("/chatBot",routerChatBot)
 router.use("/userInfo",routerUserInfo)
+router.use("/logOut",routerLogOut)
 export default router;

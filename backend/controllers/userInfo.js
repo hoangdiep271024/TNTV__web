@@ -2,7 +2,7 @@ import dotenv from 'dotenv';
 import { isTokenExpired, verifyToken } from '../middlewares/JWT.js';
 import connection from '../models/SQLConnection.js';
 dotenv.config();
-const userInfo = async (req, res) => {
+export const userInfo = async (req, res) => {
     try {
         const token = req.cookies.jwt;
 
@@ -15,7 +15,7 @@ const userInfo = async (req, res) => {
 
         const decoded = verifyToken(token);
 
-        if(isTokenExpired(token)){
+        if (isTokenExpired(token)) {
             res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
@@ -43,4 +43,36 @@ const userInfo = async (req, res) => {
     }
 }
 
-export default userInfo
+export const userInfoUpdate = async (req, res) => {
+    try {
+        const token = req.cookies.jwt;
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            })
+        }
+
+        const decoded = verifyToken(token);
+
+        if (isTokenExpired(token)) {
+            res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            })
+        }
+        const [userInfo] = await connection.promise().query(
+            `UPDATE users
+            SET full_name = '${req.body.user__name}', phone_number = '${req.body.phone__number}', email = '${req.body.gmail}'
+            WHERE user_id="${decoded.id}"`
+        );
+
+        return res.json({
+            message: "cập nhật thành công",
+            success: true
+        })
+
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token", error: error.message });
+    }
+}
