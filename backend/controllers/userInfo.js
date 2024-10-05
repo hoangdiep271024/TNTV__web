@@ -1,6 +1,6 @@
 import dotenv from 'dotenv';
 import { isTokenExpired, verifyToken } from '../middlewares/JWT.js';
-
+import connection from '../models/SQLConnection.js';
 dotenv.config();
 const userInfo = async (req, res) => {
     try {
