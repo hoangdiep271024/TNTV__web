@@ -1,17 +1,18 @@
 import React from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import Auth from "./components/page/Auth";
-
+import Auth from "./pages/Auth";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Navigate to="/auth" />}/>
+        <Route path="/" element={<Navigate to="/auth" />} />
         <Route path="/auth" element={<Auth />} />
-        </Routes>
-    </Router> );
-  
+        <Route path="/admin_dashboard" element={<Dashboard />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
