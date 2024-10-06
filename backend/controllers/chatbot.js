@@ -32,7 +32,6 @@ async function getMovieInfo(movieName) {
 
 // API cho chatbot
 const chatbot = async (req, res) => {
-  return res.json("a")
   try {
     const userMessage = req.body.message;
 

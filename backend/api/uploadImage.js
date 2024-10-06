@@ -3,6 +3,8 @@ import cloudinaryModule from "cloudinary";
 import dotenv from "dotenv";
 import express from "express";
 import multer from "multer";
+import { isTokenExpired, verifyToken } from "../middlewares/JWT.js";
+import connection from "../models/SQLConnection.js";
 
 const cloudinary = cloudinaryModule.v2;
 dotenv.config();
@@ -30,6 +32,23 @@ routerUploadImage.post("/", upload.single("image"), async (req, res) => {
         const b64 = Buffer.from(req.file.buffer).toString("base64");
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         const cldRes = await handleUpload(dataURI);
+
+        const token = req.cookies.jwt;
+        if(!token) {
+            res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            });
+        }
+        if(isTokenExpired(token)){
+            res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            });
+        }
+
+        const decode = verifyToken(token);
+        const results = await connection.promise().query(`UPDATE users set user_img = '${cldRes.url}' where user_id = '${decode.id}'`)
         console.log(cldRes.url)
         res.json({
             message: cldRes,
