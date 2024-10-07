@@ -7,6 +7,7 @@ const SubmitButton = styled.button`
   width: 85%;
   height: 40px;
   margin-top: 20px;
+  margin-left: 25px;
   border-radius: 7px;
   outline: none;
   border: none;
@@ -33,8 +34,6 @@ export default function Profile() {
       const [file, setFile] = useState(null);
       const [preview, setPreview] = useState(null);
       const [uploadStatus, setUploadStatus] = useState('');
-      const form1Ref = useRef(null);
-      const form2Ref = useRef(null);
     // Hàm xử lý khi chọn file
     // const handleFileChange = (event) => {
     //     const file = event.target.files[0];
@@ -57,7 +56,6 @@ export default function Profile() {
       setPreview(previewURL);
     };
     const handleSubmitt = async (e) => {
-      e.preventDefault();
       if (!file) {
         alert('Hãy chọn một ảnh trước khi upload!');
         return;
@@ -100,6 +98,7 @@ export default function Profile() {
           if(responseData.success){
             setLogin(true)
             setUserInfor(responseData.userInfo[0])
+            setImage(responseData.userInfo[0].user_img|| defaultImage)
           }
           else{
             setLogin(false)
@@ -112,7 +111,7 @@ export default function Profile() {
         name: '',
         phone__number: '',
         gmail: '',
-        
+        sex:'',
       });
     useEffect(() => {
         if (userInfor) {
@@ -120,6 +119,7 @@ export default function Profile() {
             name: userInfor.full_name || '',
             phone__number: userInfor.phone_number || '',
             gmail: userInfor.email || '',
+            sex:userInfor.sex || ''
           });
         }
       }, [userInfor]);
@@ -144,8 +144,8 @@ export default function Profile() {
             const data = await response.json();
             if (data.success) {
               setTimeout(() => {
-                console.log('gui from 2 thanh cong')
-                // window.location.reload();
+                console.log('gui form 2 thanh cong')
+                window.location.reload();
               }, 1500);
             } else {
               const error__alert = `Thay đổi thông tin thất bại: ${data.message}`;
@@ -184,31 +184,45 @@ export default function Profile() {
         height: "100vh",
         backgroundColor: "#fff",
         transition: 'linear',
-        paddingLeft:'25px',
+
         paddingTop:'30px'
       }}
       autoComplete="off"
     >
-      <img src={preview || image}  style={{width: '70px', height: '70px', objectFit :'cover', borderRadius: '100%', marginLeft:'40%'}}></img>
-      {changeClick && (<form onSubmit={handleSubmitt}>
+      <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>
+  <img src={preview || image} style={{ width: '70px', height: '70px', objectFit: 'cover', borderRadius: '100%', border: '2px solid #9ea4ad' }} />
+</div>
+
+      {changeClick && (<form onSubmit={handleSubmitt} style={{ marginLeft: '38%', marginTop: '10px'}}>
         <input type="file" name='user__img' accept="image/*" 
       onChange={handleFileChange}></input>
       </form>)
         }
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} style={{marginLeft: '25px', width: '85%'}}>
         <br/>
        <label className="name__label" style={{color:'#000'}}>Họ và tên</label>
         <br/>
-        <input className="name" value={formData.name} disabled={!changeClick}  name="name" type="text" onChange={handleChange} required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="name" value={formData.name} disabled={!changeClick}  name="name" type="text" onChange={handleChange} required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'100%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
          <label className="gmail__label" style={{color:'#000'}}>E-mail</label>
         <br/>
-        <input className="gmail" disabled={!changeClick} value={formData.gmail} name="gmail" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="gmail" disabled={!changeClick} value={formData.gmail} name="gmail" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'100%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
          <label className="phone__label" style={{color:'#000'}}>Số điện thoại</label>
         <br/>
-        <input className="phone__number" disabled={!changeClick}  value={formData.phone__number} onChange={handleChange}  name="phone__number" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="phone__number" disabled={!changeClick}  value={formData.phone__number} onChange={handleChange}  name="phone__number" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'100%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
+         <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
+          <p style={{color:'black'}}>Giới tính:</p>
+         <label style={{color: 'black'}}>
+    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="male" checked={formData.sex === 'male'}/>
+    Nam
+  </label>
+  <label style={{color: 'black'}}>
+    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="female" checked={formData.sex === 'female'}/>
+    Nữ
+  </label>
+         </div>
          {!changeClick && <Button onClick={changeClickButton}>Chỉnh sửa</Button>}
       </form>
       {changeClick && <SubmitButton onClick={submit}>Cập nhật</SubmitButton>}
