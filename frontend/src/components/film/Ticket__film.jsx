@@ -72,7 +72,8 @@ export default function Ticket__film() {
     const exactlyDate = `${day}/${month}`;
     return item.film_type === 1 && (
       <Film_card
-        key={index}  // Using index as key (consider a better unique key if available)
+        key={item.film_id}  
+        index={item.film_id}  
         image={item.film_img}
         name={item.film_name}
         date={exactlyDate}
@@ -87,7 +88,8 @@ export default function Ticket__film() {
     const exactlyDate = `${day}/${month}`;
     return item.film_type === 2 && (
       <Film_card
-        key={index}  // Using index as key (consider a better unique key if available)
+      key={item.film_id}  
+      index={item.film_id}  
         image={item.film_img}
         name={item.film_name}
         date={exactlyDate}
