@@ -210,12 +210,13 @@ BEGIN
 SELECT 
     'Ticket' AS TYPE,
     CONCAT(s.seat_row, s.seat_number) AS DESCRIPTION,
-    ts.slot_time AS INFORMATION,
+    st.show_time AS INFORMATION,
     t.ticket_price AS PRICE
 FROM 
     tickets t
-JOIN time_slots ts ON t.slot_id = ts.slot_id
-JOIN seats s ON t.seat_id = s.seat_id
+JOIN orders o ON t.order_id = o.order_id
+JOIN showtimes st ON o.showtime_id = st.showtime_id
+JOIN seats s ON t.seat_id = s.seat_id;
 WHERE 
     t.order_id = x
 
