@@ -1,11 +1,19 @@
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express, { json } from "express";
+import session from 'express-session';
 import path from "path";
 import { fileURLToPath } from 'url';
 import api from "./api/index.js";
 import corMw from "./middlewares/cors.js";
 const app = express();
+
+app.use(session({
+  secret: 'your-secret-key',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false }  // Bỏ secure nếu không dùng HTTPS
+}));
 
 config();
 

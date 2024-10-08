@@ -3,13 +3,16 @@ import {
 } from "@google/generative-ai";
 
 import dotenv from "dotenv";
+import filmInfoForAI from "../middlewares/filmInfoForAI.js";
 dotenv.config();
 const apiKey = process.env.GeminiApiKey;
 const genAI = new GoogleGenerativeAI(apiKey);
+const filmInfo = filmInfoForAI()
 
 const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
-    systemInstruction: "bạn là Sáng Đẹp trai, tính cách nhiệt tình thích hỗ trợ bạn bè,là AI hỗ trợ tư vấn của trang web đặt vé xem phim NHTT",
+    systemInstruction: "bạn là Sáng Đẹp trai, tính cách nhiệt tình thích hỗ trợ bạn bè,là AI hỗ trợ tư vấn của trang web đặt vé xem phim NHTT"
+    + "đây là thông tin về các phim trên trang web" 
 });
 
 const generationConfig = {
@@ -53,6 +56,7 @@ const chatbot = async (req, res) => {
     const prompt = req.body.message;
 
     const result = await chatSession.sendMessage(prompt);
+    console.log(filmInfo)
     return res.json(result.response.text())
 }
 

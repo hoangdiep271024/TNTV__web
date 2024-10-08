@@ -63,7 +63,7 @@ export const userInfoUpdate = async (req, res) => {
         }
         const [userInfo] = await connection.promise().query(
             `UPDATE users
-            SET full_name = '${req.body.name}', phone_number = '${req.body.phone__number}', email = '${req.body.gmail}', sex = '${req.body.sex}'
+            SET full_name = '${req.body.name}', phone_number = '${req.body.phone__number}', email = '${req.body.gmail}'
             WHERE user_id="${decoded.id}"`
         );
 

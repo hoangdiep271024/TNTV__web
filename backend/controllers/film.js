@@ -1,10 +1,9 @@
-import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import connection from "../models/SQLConnection.js";
 
 dotenv.config();
 
-const filmShowing = async (req, res) => {
+export const filmShowing = async (req, res) => {
     try {
         const results = await connection.promise().query('SELECT * FROM films WHERE film_type = 1 or film_type = 2');
         return res.json(results);
@@ -15,5 +14,7 @@ const filmShowing = async (req, res) => {
     }
 };
 
-export default filmShowing;
+export const filmInfo = async (req,res) => {
+    
+}
 
