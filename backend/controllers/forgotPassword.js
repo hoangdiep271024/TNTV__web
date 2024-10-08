@@ -5,23 +5,7 @@ import connection from '../models/SQLConnection.js';
 dotenv.config();
 
 export const forgotPassword = async (req, res) => {
-    const jwt = req.cookies.jwt;
-    if (!jwt) {
-        return res.json({
-            message: "Người dùng chưa đăng nhập",
-            success: false
-        })
-    }
-
-    if (isTokenExpired(jwt)) {
-        res.json({
-            message: "Người dùng hết phiên đăng nhập",
-            success: false
-        })
-    }
-
-    const decoded = verifyToken(jwt);
-
+    const userEmail = req.body.gmail
     // Tạo mã xác thực ngẫu nhiên
     const token = Math.floor(10000 + Math.random() * 90000).toString();
     const expireToken = new Date(Date.now() + 3600000).toISOString().slice(0, 19).replace('T', ' ');
@@ -29,8 +13,8 @@ export const forgotPassword = async (req, res) => {
 
 
     // Truy vấn lấy email của người dùng
-    const query = `SELECT email FROM users WHERE user_id = ?`;
-    connection.query(query, [decoded.id], (err, results) => {
+    const query = `SELECT email FROM users WHERE gmail = ?`;
+    connection.query(query, userEmail, (err, results) => {
         if (err) return res.status(500).json({
             message: err.message,
             success: false
@@ -40,11 +24,10 @@ export const forgotPassword = async (req, res) => {
             success: false
         });
 
-        const userEmail = results[0].email;
 
         // Cập nhật mã xác thực trong DB
-        const updateQuery = `UPDATE users SET reset_token = ?, reset_token_expire = ? WHERE user_id = ?`;
-        connection.query(updateQuery, [hashedToken, expireToken, decoded.id], (err) => {
+        const updateQuery = `UPDATE users SET reset_token = ?, reset_token_expire = ? WHERE email = ?`;
+        connection.query(updateQuery, [hashedToken, expireToken, userEmail], (err) => {
             if (err) return res.status(500).json({
                 message: err.message,
                 success: false
@@ -84,25 +67,8 @@ export const forgotPassword = async (req, res) => {
 }
 
 export const forgotPasswordCheck = async (req, res) => {
-    const jwt = req.cookies.jwt;
-    if (!jwt) {
-        return res.json({
-            message: "Người dùng chưa đăng nhập",
-            success: false
-        })
-    }
-
-    if (isTokenExpired(jwt)) {
-        res.json({
-            message: "Người dùng hết phiên đăng nhập",
-            success: false
-        })
-    }
-
-    const decoded = verifyToken(jwt);
-
-    const query = `SELECT reset_token FROM users WHERE user_id = ?`;
-    connection.query(query, [decoded.id], async (err, results) => {
+    const query = `SELECT reset_token, reset_token_expire FROM users WHERE email = ?`;
+    connection.query(query, req.body.gmail, async (err, results) => {
         if (err) return res.status(500).json({
             message: err.message,
             success: false

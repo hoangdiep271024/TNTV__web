@@ -130,7 +130,7 @@ export default function Auth() {
       <Ticket__film></Ticket__film>
     </Box>
 
-    /* chatBot */
+    {/* chatBot */}
     <div className="chatbot-container">
       <button className="chatbot-toggle" onClick={toggleChat}>
         {isOpen ? '✖' : '💬'}
