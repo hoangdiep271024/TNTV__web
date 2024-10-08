@@ -5,12 +5,12 @@ const AdminPanel = () => {
         <Box sx={{ display: 'flex' }}>
             <Drawer variant="permanent" sx={{ width: 240 }}>
                 <List>
-                    <ListItemButton>
+                    <ListItem>
                         <ListItemText primary="Dashboard" />
-                    </ListItemButton>
-                    <ListItemButton>
+                    </ListItem>
+                    <ListItem>
                         <ListItemText primary="Users" />
-                    </ListItemButton>
+                    </ListItem>
                     {/* More links */}
                 </List>
             </Drawer>
