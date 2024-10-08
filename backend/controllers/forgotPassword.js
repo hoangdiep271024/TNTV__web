@@ -9,7 +9,7 @@ export const forgotPassword = async (req, res) => {
         const userEmail = req.body.gmail
         // Tạo mã xác thực ngẫu nhiên
         const token = Math.floor(10000 + Math.random() * 90000).toString();
-        const expireToken = new Date(Date.now() + 600000).toISOString().slice(0, 19).replace('T', ' ');
+        const expireToken = new Date(Date.now() + 600000);
         const hashedToken = await bcryptjs.hash(token, 11);
 
 

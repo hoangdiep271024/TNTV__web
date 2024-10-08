@@ -46,11 +46,13 @@ const signUp = async (req, res) => {
 
         // Mã hóa mật khẩu
         const hashedPassword = await bcryptjs.hash(req.body.password, 11);
-
+        var sex = null;
+        if(req.body.sex == 'male') sex = 1
+        else sex = 2
         // Thêm người dùng vào database
         await connection.promise().query(
             `Insert into users(full_name,phone_number,email,date_of_birth,sex,password,username) 
-            value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${req.body.sex}","${hashedPassword}","${req.body.user__name}")`
+            value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${sex}","${hashedPassword}","${req.body.user__name}")`
         );
 
         // Bước 5: thông báo đăng kí thành công
