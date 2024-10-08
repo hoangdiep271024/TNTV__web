@@ -77,7 +77,7 @@ export const forgotPasswordCheck = async (req, res) => {
         const userEmail = req.session.userEmail;  // Lấy email từ session
         const query = `SELECT reset_token, reset_token_expire FROM users WHERE email = ?`;
         connection.query(query, userEmail, async (err, results) => {
-            if (err) return res.status(500).json({
+            if (err) return res.json({
                 message: err.message,
                 success: false
             });
@@ -85,7 +85,7 @@ export const forgotPasswordCheck = async (req, res) => {
             const currentTime = new Date();
             // Kiểm tra thời gian hết hạn của token
             if (currentTime > expireToken) {
-                return res.status(400).json({ message: "Mã xác thực đã hết hạn", success: false });
+                return res.json({ message: "Mã xác thực đã hết hạn", success: false });
             }
             const hashedToken = results[0].reset_token
             const isMatch = await bcryptjs.compare(req.body.token, hashedToken);
@@ -101,7 +101,7 @@ export const forgotPasswordCheck = async (req, res) => {
             })
         })
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.json({ message: error.message, success: false });
     }
 
 }

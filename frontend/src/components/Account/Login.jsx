@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import Alert from '@mui/material/Alert';
 const SubmitButton = styled.input`
-  width: 85%;
+  width: 100%;
   height: 40px;
   margin-top: 20px;
   border-radius: 7px;
@@ -22,7 +22,7 @@ const SubmitButton = styled.input`
   }
 `;
 
-const Login = ({onSetAccClick}) => {
+const Login = ({onSetAccClick, onSetForgotPassword}) => {
   const [errorMessage, setErrorMessage] = useState('');
   const [okMessage, setOkMessage]= useState('')
   const [formData, setFormData] = useState({
@@ -37,7 +37,7 @@ const Login = ({onSetAccClick}) => {
       [name]: value
     }));
   };
-
+  
   const handleSubmit = async (e) => {
      e.preventDefault();
  
@@ -119,20 +119,52 @@ const Login = ({onSetAccClick}) => {
           </Alert>
         )}
       <form onSubmit={handleSubmit}>
-
-        <label className="user__name__label" style={{color:'#000'}}>Tài khoản</label>
-        <br/>
-        <input onChange={handleChange} className="user__name"  name="user__name" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input>
-         <br/>
-        
-         <div style={{display:'flex', alignItems:'center', justifyContent:'space-between', width:'85%'}}>
-         <label className="password__label" style={{color:'#000'}}>Mật khẩu</label>
-         <p style={{fontSize:'13px', color:'grey', cursor:'pointer', fontWeight:'500'}}>Quên mật khẩu?</p>
-         </div>
-        
-         <input onChange={handleChange} className="password" name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px'}}></input>
-         <SubmitButton type="submit" value="Đăng nhập" />
-      </form>
+  <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', width: '85%', paddingLeft: '0' }}>
+    <label className="user__name__label" style={{ color: '#000' }}>Tài khoản</label>
+    <input
+      onChange={handleChange}
+      className="user__name"
+      name="user__name"
+      type="text"
+      required
+      style={{
+        outline: 'none',
+        borderRadius: '5px',
+        border: '1px solid #b8b2b2',
+        height: '35px',
+        width: '100%',
+        fontSize: '17px',
+        paddingLeft: '5px',
+        marginTop: '10px'
+      }}
+    />
+    <br/>
+    <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', width: '100%' }}>
+      <label className="password__label" style={{ color: '#000' }}>Mật khẩu</label>
+      <div onClick={onSetForgotPassword} style={{ fontSize: '13px', color: 'grey', cursor: 'pointer', fontWeight: '500' }}>Quên mật khẩu?</div>
+    </div>
+    
+    <input
+      onChange={handleChange}
+      className="password"
+      name="password"
+      type="password"
+      required
+      style={{
+        outline: 'none',
+        borderRadius: '5px',
+        border: '1px solid #b8b2b2',
+        height: '35px',
+        width: '100%',
+        fontSize: '17px',
+        paddingLeft: '5px',
+        marginTop: '10px'
+      }}
+    />
+    
+    <SubmitButton type="submit" value="Đăng nhập" />
+  </div>
+</form>
       <div style={{display: 'flex', fontSize:'13px'}}>
         <p style={{color:'grey', marginLeft:'16%'}}>Chưa có tài khoản?</p>
         <p style={{color:'#207ee3', cursor:'pointer', marginLeft:'3px' }} onClick={onSetAccClick} >Đăng kí ngay!</p>

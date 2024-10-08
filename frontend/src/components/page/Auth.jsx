@@ -9,16 +9,20 @@ import Ticket__film from "../film/Ticket__film";
 import Header from "../header/Header";
 import Navbar from "../navbar/Navbar";
 import "./chatBot.css";
+import ForgetPassword from "../Account/ForgetPassword";
 export default function Auth() {
   const [isClickLogin, setIsClickLogin] = useState(false);
   const [isClickProfile, setIsClickProfile] = useState(false);
+  const [isClickForgotPassword, setIsClickForgotPassword] = useState(false);
   const LoginClick = () => {
     setIsClickLogin(!isClickLogin);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
   const [isClickSignup, setIsClickSignup] = useState(false);
   const SignupClick = () => {
     setIsClickSignup(!isClickSignup);
-    console.log(isClickSignup);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  
   }
   const SetAccClick = () => {
     setIsClickLogin(!isClickLogin);
@@ -26,6 +30,12 @@ export default function Auth() {
   }
   const ProfileClick = () => {
     setIsClickProfile(!isClickProfile)
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+  const forgotPasswordClick =() => {
+    setIsClickLogin(false)
+    setIsClickForgotPassword(!isClickForgotPassword)
+    console.log(isClickForgotPassword)
   }
   const theme = useTheme();
 
@@ -93,7 +103,7 @@ export default function Auth() {
               zIndex: 9,
             }}
             onClick={LoginClick} />{" "}
-          <Login onSetAccClick={SetAccClick}></Login>
+          <Login onSetAccClick={SetAccClick} onSetForgotPassword={forgotPasswordClick}></Login>
         </>
       )}
       {isClickSignup && (
@@ -127,8 +137,25 @@ export default function Auth() {
           onClick={ProfileClick} />{" "}
         <Profile />
       </>}
+      {isClickForgotPassword && (
+        <>
+          <Box
+            sx={{
+              position: "fixed",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              backgroundColor: "rgba(0, 0, 0, 0.5)",
+              zIndex: 4
+            }}
+            onClick={forgotPasswordClick} />{" "}
+          <ForgetPassword></ForgetPassword>
+        </>
+      )}
       <Ticket__film></Ticket__film>
     </Box>
+
 
     {/* chatBot */}
     <div className="chatbot-container">

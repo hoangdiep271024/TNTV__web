@@ -12,7 +12,7 @@ export default function Ticket__film() {
   const [data, setData] = useState([[]]);
   const [showing, setShowing] = useState(true)
   useEffect(() => {
-    fetch('/api/film', {
+    fetch('/api/film/filmShowing', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
