@@ -49,8 +49,8 @@ const signUp = async (req, res) => {
 
         // Thêm người dùng vào database
         await connection.promise().query(
-            `Insert into users(full_name,phone_number,email,date_of_birth,password,username) 
-            value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${hashedPassword}","${req.body.user__name}")`
+            `Insert into users(full_name,phone_number,email,date_of_birth,sex,password,username) 
+            value("${req.body.name}","${req.body.phone__number}","${req.body.gmail}","${req.body.birthday}","${req.body.sex}","${hashedPassword}","${req.body.user__name}")`
         );
 
         // Bước 5: thông báo đăng kí thành công

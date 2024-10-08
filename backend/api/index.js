@@ -1,6 +1,7 @@
 import express from "express";
 import routerChatBot from "./chatBot.js";
 import routerFilm from "./film.js";
+import routerForgotPassword from "./forgotPassword.js";
 import routerHome from "./home.js";
 import routerLogin from "./login.js";
 import routerLogOut from "./logOut.js";
@@ -20,4 +21,5 @@ router.use("/film",routerFilm)
 router.use("/chatBot",routerChatBot)
 router.use("/userInfo",routerUserInfo)
 router.use("/logOut",routerLogOut)
+router.use("/forgotPassword",routerForgotPassword)
 export default router;

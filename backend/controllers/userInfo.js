@@ -13,8 +13,6 @@ export const userInfo = async (req, res) => {
             })
         }
 
-        const decoded = verifyToken(token);
-
         if (isTokenExpired(token)) {
             res.json({
                 message: "Người dùng hết phiên đăng nhập",
@@ -22,6 +20,8 @@ export const userInfo = async (req, res) => {
             })
         }
 
+        const decoded = verifyToken(token);
+        
         const [userInfo] = await connection.promise().query(
             `SELECT user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
         );
@@ -63,7 +63,7 @@ export const userInfoUpdate = async (req, res) => {
         }
         const [userInfo] = await connection.promise().query(
             `UPDATE users
-            SET full_name = '${req.body.user__name}', phone_number = '${req.body.phone__number}', email = '${req.body.gmail}'
+            SET full_name = '${req.body.name}', phone_number = '${req.body.phone__number}', email = '${req.body.gmail}', sex = '${req.body.sex}'
             WHERE user_id="${decoded.id}"`
         );
 
