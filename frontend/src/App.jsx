@@ -2,7 +2,6 @@ import React from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Auth from "./components/page/Auth";
 import FilmDetail from "./components/film/FilmDetail";
-import Dashboard from "./pages/Dashboard";
 
 function App() {
   return (
@@ -11,8 +10,6 @@ function App() {
         <Route path="/" element={<Navigate to="/auth" />} />
         <Route path="/auth" element={<Auth />} />
         <Route path="/auth/:film_name" element={<FilmDetail />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-
       </Routes>
     </Router>);
 
