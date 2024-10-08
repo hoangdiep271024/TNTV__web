@@ -13,8 +13,6 @@ export const userInfo = async (req, res) => {
             })
         }
 
-        const decoded = verifyToken(token);
-
         if (isTokenExpired(token)) {
             res.json({
                 message: "Người dùng hết phiên đăng nhập",
@@ -22,6 +20,8 @@ export const userInfo = async (req, res) => {
             })
         }
 
+        const decoded = verifyToken(token);
+        
         const [userInfo] = await connection.promise().query(
             `SELECT user_img,email,phone_number,full_name,sex,date_of_birth from users where user_id="${decoded.id}"`
         );
