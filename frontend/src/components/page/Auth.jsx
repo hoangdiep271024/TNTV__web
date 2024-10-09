@@ -124,7 +124,7 @@ export default function Auth() {
     {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh'}}>
     <ChatBotToggle toggleChat={toggleChatClick}></ChatBotToggle>
     </Box>}
-    {isOpen && <Box sx={{position:'fixed', right: '3vw', bottom: '20px', width: '20vw', height: '32vh'}}>
+    {isOpen && <Box sx={{position:'fixed', right: '3vw',top:'50vh', width: '23vw', height: '35vh'}}>
       
       <ChatBot closeClick={toggleChatClick}></ChatBot>
       </Box>}
