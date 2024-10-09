@@ -66,7 +66,6 @@ export default function ChatBot({closeClick}) {
              <SendIcon sx={{width:'20px'}}></SendIcon>
           </button>
           </div>
-          
         </div>
     </div>
   )
