@@ -5,8 +5,8 @@ const connection = mysql.createConnection({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
     port: 3306,
     user: 'root', // Tên người dùng của cơ sở dữ liệu
-    password: '5ang15122003', // Mật khẩu của cơ sở dữ liệu
-    database: 'test' // Tên của cơ sở dữ liệu
+    password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
+    database: 'web_phim' // Tên của cơ sở dữ liệu
 });
 
 // Kết nối đến cơ sở dữ liệu

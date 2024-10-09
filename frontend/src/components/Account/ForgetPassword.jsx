@@ -23,10 +23,15 @@ const SubmitButton = styled.input`
 export default function ForgetPassword() {
     const [errorMessage, setErrorMessage] = useState('');
     const [okMessage, setOkMessage]= useState('')
-    const [lastStep, setLastStep] = useState(false)
+    const [step, setStep] = useState(1)
     const [formData, setFormData] = useState({
         gmail: ''
       });
+
+    const [formDataaa, setFormDataaa] = useState({
+      password: '',
+      rePassword: ''
+    })
       const [formDataa, setFormDataa] = useState({
         token: ''
       });
@@ -40,6 +45,13 @@ export default function ForgetPassword() {
       const handleChangee = (e) => {
         const { name, value } = e.target;
         setFormDataa((prevData) => ({
+          ...prevData,
+          [name]: value
+        }));
+      };
+      const handleChangeee = (e) => {
+        const { name, value } = e.target;
+        setFormDataaa((prevData) => ({
           ...prevData,
           [name]: value
         }));
@@ -61,7 +73,7 @@ export default function ForgetPassword() {
                 console.log('thanh cong roi')
               setOkMessage(`${data.message}`);
               setTimeout(() => {
-                setLastStep(true);
+                setStep(2);
               }, 1000);
             } else {
               // Đảm bảo rằng bạn đang sử dụng message đúng
@@ -92,11 +104,14 @@ export default function ForgetPassword() {
          if (response.ok) {
            const data = await response.json();
            if (data.success) {
-         console.log('ye ye')
+            setOkMessage(`${data.message}`);
+            setTimeout(() => {
+              setStep(3)
+            }, 1000);
+            
              
            } else {
-             const error__alert =`Gửi mã xác thực thất bại: ${data.message}`;
-             console.log(error__alert)
+             setErrorMessage(`Xác thực thất bại: ${data.message}`)
            }
          } else {
            console.error('Lỗi khi gửi:', response.statusText);
@@ -105,6 +120,36 @@ export default function ForgetPassword() {
          console.error('Lỗi mạng:', error);
        }
      };
+     const handleSubmittt = async (e) => {
+      e.preventDefault();
+     try {
+       const response = await fetch('/api/forgotPassword/changePassword', {
+         method: 'POST',
+         headers: {
+           'Content-Type': 'application/json',
+         },
+         body: JSON.stringify(formDataaa)
+       });
+       
+       if (response.ok) {
+         const data = await response.json();
+         if (data.success) {
+          setOkMessage(`${data.message}`);
+          setTimeout(() => {
+            window.location.reload();
+          }, 1000);
+          
+           
+         } else {
+           setErrorMessage(`Đặt mật khẩu mới thất bại: ${data.message}`)
+         }
+       } else {
+         console.error('Lỗi khi đặt mật khẩu:', response.statusText);
+       }
+     } catch (error) {
+       console.error('Lỗi mạng:', error);
+     }
+   };
       useEffect(() => {
         if (errorMessage) {
           const timer = setTimeout(() => {
@@ -125,7 +170,7 @@ export default function ForgetPassword() {
       }, [okMessage]);
   return (
     <>
-   {!lastStep && (<Box
+   {step === 1 && (<Box
     sx={{
       position: "absolute",
       zIndex: "15",
@@ -160,7 +205,7 @@ export default function ForgetPassword() {
     </form>
   </Box>)} 
 
-  {lastStep && (<Box  sx={{
+  {step === 2 && (<Box  sx={{
       position: "absolute",
       zIndex: "15",
       top: "0",
@@ -171,11 +216,55 @@ export default function ForgetPassword() {
       transition: 'linear',
       paddingLeft:'25px',
       paddingTop:'30px'}}>
+        {errorMessage && (
+        <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+          {errorMessage}
+        </Alert>
+      )}
+
+    {okMessage && (
+        <Alert variant='filled' severity="success" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+          {okMessage}
+        </Alert>
+      )} 
     <form onSubmit={handleSubmitt}>
       <label className="code__label" style={{color:'#000'}}>Mã xác thực</label>
       <br/>
       <input onChange={handleChangee} className="token"  name="token" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input> 
-       <SubmitButton type="submit" value="Nhận mã xác thực"/>
+       <SubmitButton type="submit" value="Xác thực"/>
+    </form>
+  </Box>)}
+  {step === 3 && (<Box  sx={{
+      position: "absolute",
+      zIndex: "15",
+      top: "0",
+      left: "0",
+      width: "25vw",
+      height: "100vh",
+      backgroundColor: "#fff",
+      transition: 'linear',
+      paddingLeft:'25px',
+      paddingTop:'30px'}}>
+        {errorMessage && (
+        <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+          {errorMessage}
+        </Alert>
+      )}
+
+    {okMessage && (
+        <Alert variant='filled' severity="success" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+          {okMessage}
+        </Alert>
+      )} 
+    <form onSubmit={handleSubmittt}>
+      <label className="password__label" style={{color:'#000'}}>Mật khẩu mới</label>
+      <br/>
+      <input onChange={handleChangeee} className="password"  name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input> 
+      <br/>
+      <label className="rePassword__label" style={{color:'#000'}}>Xác nhận mật khẩu mới</label>
+      <br/>
+      <input onChange={handleChangeee} className="rePassword"  name="rePassword" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input> 
+       <SubmitButton type="submit" value="Lưu"/>
     </form>
   </Box>)}
   </>
