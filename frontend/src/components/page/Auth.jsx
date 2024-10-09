@@ -1,7 +1,6 @@
 import { useTheme } from "@emotion/react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import axios from "axios";
 import React, { useEffect, useRef, useState } from "react";
 import Login from "../Account/Login";
 import Profile from "../Account/Profile";
@@ -125,7 +124,7 @@ export default function Auth() {
     {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh'}}>
     <ChatBotToggle toggleChat={toggleChatClick}></ChatBotToggle>
     </Box>}
-    {isOpen && <Box sx={{position:'fixed', right: '3vw', top: '55vh', width: '20vw', height: '32vh'}}>
+    {isOpen && <Box sx={{position:'fixed', right: '3vw', bottom: '20px', width: '20vw', height: '32vh'}}>
       
       <ChatBot closeClick={toggleChatClick}></ChatBot>
       </Box>}
