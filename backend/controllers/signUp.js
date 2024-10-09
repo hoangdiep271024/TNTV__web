@@ -48,7 +48,7 @@ const signUp = async (req, res) => {
         const hashedPassword = await bcryptjs.hash(req.body.password, 11);
         var sex = null;
         if(req.body.sex == 'male') sex = 1
-        else sex = 2
+        else sex = 0
         // Thêm người dùng vào database
         await connection.promise().query(
             `Insert into users(full_name,phone_number,email,date_of_birth,sex,password,username) 

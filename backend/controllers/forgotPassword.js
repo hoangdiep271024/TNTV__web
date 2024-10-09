@@ -16,7 +16,7 @@ export const forgotPassword = async (req, res) => {
         // Truy vấn lấy email của người dùng
         const query = `SELECT email FROM users WHERE email = ?`;
         connection.query(query, userEmail, (err, results) => {
-            if (err) return res.status(500).json({
+            if (err) return res.json({
                 message: err.message,
                 success: false
             });
@@ -29,7 +29,7 @@ export const forgotPassword = async (req, res) => {
             // Cập nhật mã xác thực trong DB
             const updateQuery = `UPDATE users SET reset_token = ?, reset_token_expire = ? WHERE email = ?`;
             connection.query(updateQuery, [hashedToken, expireToken, userEmail], (err) => {
-                if (err) return res.status(500).json({
+                if (err) return res.json({
                     message: err.message,
                     success: false
                 });
@@ -54,7 +54,7 @@ export const forgotPassword = async (req, res) => {
                 };
 
                 transporter.sendMail(mailOptions, (error, info) => {
-                    if (error) return res.status(500).json({
+                    if (error) return res.json({
                         message: error.message,
                         success: false
                     });
@@ -67,7 +67,7 @@ export const forgotPassword = async (req, res) => {
             });
         });
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.json({ message: error.message, success: false });
     }
 
 }
@@ -108,12 +108,19 @@ export const forgotPasswordCheck = async (req, res) => {
 
 export const forgotPasswordChangePassword = async (req, res) => {
     try {
-        const userEmail = req.session.userEmail;  // Lấy email từ session
         const newPassword = req.body.password;
+        const reNewPassword = req.body.rePassword;
+        if(newPassword != reNewPassword){
+            res.json({
+                message: "nhập lại mật khẩu sai",
+                success: false
+            })
+        }
+        const userEmail = req.session.userEmail;  // Lấy email từ session
         const hashedPassword = await bcryptjs.hash(newPassword, 11);
         const query = "UPDATE users SET password = ? where email = ?";
         connection.query(query, hashedPassword, userEmail, async (err, results) => {
-            if (err) return res.status(500).json({
+            if (err) return res.json({
                 message: err.message,
                 success: false
             });
@@ -123,7 +130,7 @@ export const forgotPasswordChangePassword = async (req, res) => {
             })
         })
     } catch (error) {
-        res.status(500).json({ error: error.message });
+        res.json({ message: error.message, success: false });
     }
 
 }
