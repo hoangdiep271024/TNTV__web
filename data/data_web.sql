@@ -38,6 +38,7 @@ CREATE TABLE `actor_film` (
 
 LOCK TABLES `actor_film` WRITE;
 /*!40000 ALTER TABLE `actor_film` DISABLE KEYS */;
+INSERT INTO `actor_film` VALUES (1,1),(1,2),(1,3),(1,4),(1,5),(29,4);
 /*!40000 ALTER TABLE `actor_film` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -54,7 +55,7 @@ CREATE TABLE `actors` (
   `actor_img` varchar(200) DEFAULT NULL,
   `actor_describe` text,
   PRIMARY KEY (`actor_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -63,6 +64,7 @@ CREATE TABLE `actors` (
 
 LOCK TABLES `actors` WRITE;
 /*!40000 ALTER TABLE `actors` DISABLE KEYS */;
+INSERT INTO `actors` VALUES (1,'Thúy Diễm','https://cdn.moveek.com/storage/media/cache/short/6694d91a8bcab582730577.jpg','Thuý Diễm đã có sự nghiệp diễn xuất ấn tượng ở mảng phim truyền hình Việt Nam, quen mặt khán giả qua các bộ phim truyền hình được yêu thích như Sóng Tình, Mùa Thu Đi Một Nửa, Trái Tim Hoa Hồng, Trạm Cứu Hộ Trái Tim, Tình Yêu Bất Tử. Con Cám là phim điện ảnh kinh dị đầu tiên của Thuý Diễm sẽ tham gia.'),(2,'Lâm Thanh Mỹ','https://cdn.moveek.com/storage/media/cache/short/9468e0ac398cfbd3c007c29b0f20c7c33c0ca02d.jpg','Lâm Thanh Mỹ sinh năm 2005, bén duyên với nghệ thuật từ năm 3 tuổi. Dù không qua trường lớp diễn xuất, nhưng cô bé lại được đánh giá cao do sở hữu lối diễn chân thật. Lâm Thanh Mỹ từng gây ấn tượng trong các phim Tôi thấy hoa vàng trên cỏ xanh, Siêu trộm, Nghề siêu dễ.'),(3,'Rima Thanh Vy','https://cdn.moveek.com/storage/media/cache/short/5c031949261836460c39273877ef19b66501c851.jpg','Rima Thanh Vy là diễn viên, người mẫu người Việt Nam. Cô được biết đến qua cuộc thi Miss World Việt Nam năm 2016. Mới đây nhất, cô nàng xinh đẹp góp mặt trong Asias Next Top Model 2018. Cô là đại diện Việt Nam được lựa chọn để đi thi đấu trường nhan sắc quốc tế'),(4,'Quốc Cường','https://cdn.moveek.com/storage/media/cache/short/63f58f331f49a839730648.jpeg','Gia nhập làng mẫu Việt suốt 10 năm nhưng mãi đến năm 2003, anh mới may mắn nhận được vai chính trong phim Dốc Tình. Quốc Cường cùng dàn diễn viên trong phim như Tăng Thanh Hà, Kim Hiền, Nguyệt Ánh, Huy Khánh,...đã tạo nên thành công vang dội cho Dốc Tình. Kể từ đó, anh trở nên nổi tiếng và góp mặt trong hàng loạt bộ phim khác như 39 Độ Yêu, Hạnh Phúc Bất Tận, Sóng Gió Thương Trường, Tình Án,... Gần đây, Quốc Cường còn tham gia dự án phim điện ảnh Người Lắng Nghe.'),(5,'Hạnh Thúy','https://cdn.moveek.com/storage/media/cache/short/YRKoLFe7fm.jpg','Hạnh Thúy sinh ra tại Bến Tre trong một gia đình có bốn anh chị em. Cô từng học diễn viên ở trường Nghệ thuật Sân khấu II, khoa diễn viên cùng lớp với Thuý Nga, Việt Hương, Cao Minh Đạt, Tiết Cương… do Nghệ sĩ Minh Nhí chủ nhiệm. Sau đó hoàn thành khoá đạo diễn sân khấu ở trường Cao đẳng Sân khấu Điện ảnh TP HCM với tấm bằng tốt nghiệp loại giỏi. Từ đó, Hạnh Thuý tham gia ở các vai trò diễn viên, đạo diễn, tác giả cộng tác cùng các đơn vị: Nhà hát kịch Sân khấu nhỏ, sân khấu Hoàng Thái Thanh, sân khấu kịch Hồng Vân, sân khấu Hồng Hạc, các chương trình sân khấu của đài truyền hình thành phố Hồ Chí Minh-HTV và tham gia nhiều vai diễn trong nhiều bộ phim truyền hình, điện ảnh của Việt Nam. Cô từng đoạt giải \"Nữ diễn viên phụ xuất sắc\" trong phim điện ảnh Sống trong sợ hãi của đạo diễn Bùi Thạc Chuyên');
 /*!40000 ALTER TABLE `actors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -210,7 +212,7 @@ CREATE TABLE `directors` (
   `director_img` varchar(200) DEFAULT NULL,
   `director_describe` text,
   PRIMARY KEY (`director_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -219,6 +221,7 @@ CREATE TABLE `directors` (
 
 LOCK TABLES `directors` WRITE;
 /*!40000 ALTER TABLE `directors` DISABLE KEYS */;
+INSERT INTO `directors` VALUES (1,'Trần Hữu Tấn','https://www.elleman.vn/app/uploads/2024/01/17/229737/Tran-Huu-Tan_elleman.jpg','Trần Hữu Tấn là đạo diễn của một số tác phẩm như Bắc Kim Thang, Rừng Thế Mạng, Chuyện Ma Gần Nhà, Tết Ở Làng Địa Ngục, Kẻ Ăn Hồn và gần đây nhất là Con Cám.');
 /*!40000 ALTER TABLE `directors` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -586,4 +589,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-10-08 11:03:26
+-- Dump completed on 2024-10-08 21:02:16
