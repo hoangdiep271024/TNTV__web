@@ -38,6 +38,13 @@ export default function Auth() {
     setIsClickForgotPassword(!isClickForgotPassword)
     console.log(isClickForgotPassword)
   }
+  useEffect(() => {
+    if (isClickLogin || isClickSignup || isClickProfile || isClickForgotPassword) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+  }, [isClickLogin, isClickSignup, isClickProfile, isClickForgotPassword]);
   const theme = useTheme();
   const [isOpen, setIsOpen] = useState(false); 
   const toggleChatClick = () => {
