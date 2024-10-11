@@ -35,7 +35,7 @@ export default function ChatBot({closeClick}) {
         <div className="chatbot-box">
           <div className="chatbot-header">
             <div style={{display: 'flex',gap: '10px',alignItems: 'center'}}>
-            <img src='./6098491.png' style={{
+            <img src='/6098491.png' style={{
               width:'40px',
               height: '40px',
             }}></img>
