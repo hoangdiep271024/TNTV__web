@@ -35,7 +35,7 @@ export default function ChatBot({closeClick}) {
         <div className="chatbot-box">
           <div className="chatbot-header">
             <div style={{display: 'flex',gap: '10px',alignItems: 'center'}}>
-            <img src='./6098491.png' style={{
+            <img src='/6098491.png' style={{
               width:'40px',
               height: '40px',
             }}></img>
@@ -55,7 +55,7 @@ export default function ChatBot({closeClick}) {
             ))}
             <div ref={messagesEndRef} />
           </div>
-          <div style={{display: 'flex', justifyContent: 'space-between', position:'relative'}}>
+          <div style={{display: 'flex', justifyContent: 'start', position:'relative', height:'45px', backgroundColor:'#e7e2e6', padding:'5px', gap:'0px', borderRadius: '0 0 5px 5px'}}>
           <input className='input__text'
             type="text"
             value={input}

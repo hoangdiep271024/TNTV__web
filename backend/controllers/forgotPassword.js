@@ -133,7 +133,7 @@ export const forgotPasswordChangePassword = async (req, res) => {
         const userEmail = req.session.userEmail;  // Lấy email từ session
         const hashedPassword = await bcryptjs.hash(newPassword, 11);
         const query = "UPDATE users SET password = ? where email = ?";
-        connection.query(query, [hashedPassword], userEmail, async (err, results) => {
+        connection.query(query, [hashedPassword, userEmail],(err, results) => {
             if (err) return res.json({
                 message: err.message,
                 success: false
