@@ -34,14 +34,14 @@ export const filmInfo = async (req, res) => {
         });
         postInfo.film = filmResults;
 
-        // const queryEvaluate = `Select * from film_evaluate where film_id = ?`;
-        // const evaluateResults = await new Promise((resolve, reject) => {
-        //     connection.query(queryFilm, [req.params.id], (err, results) => {
-        //         if (err) return reject(err);
-        //         resolve(results);
-        //     });
-        // });
-        // postInfo.evaluate = evaluateResults;
+        const queryEvaluate = `Select film_rate,sum_rate from film_evaluate where film_id = ?`;
+        const evaluateResults = await new Promise((resolve, reject) => {
+            connection.query(queryFilm, [req.params.id], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+        postInfo.evaluate = evaluateResults;
 
         // Truy vấn diễn viên
         const queryActor = `Select A.actor_id,A.actor_name
