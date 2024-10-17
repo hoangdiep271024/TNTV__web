@@ -15,7 +15,7 @@ export default function ChatBotToggle({ toggleChat }) {
         }}
       >
         <img
-          src='./1646842.png'
+          src='/1646842.png'
           alt='Chat Toggle'
           style={{
             width: '100%',

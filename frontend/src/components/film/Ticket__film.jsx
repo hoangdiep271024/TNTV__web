@@ -87,7 +87,7 @@ export default function Ticket__film() {
     const day = datee.substring(8, 10);
     const exactlyDate = `${day}/${month}`;
     return item.film_type === 2 && (
-      <Film_card
+      <Film_card 
       key={item.film_id}  
       index={item.film_id}  
         image={item.film_img}
