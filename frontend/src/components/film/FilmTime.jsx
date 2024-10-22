@@ -51,6 +51,36 @@ export default function FilmDetail() {
       fetchData();
     }
   }, [film_id]);
+  // useEffect(() => {
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await fetch(`/api/film/filmInfo/id=${film_id}`, {
+  //         method: 'POST',
+  //         headers: {
+  //           'Content-Type': 'application/json',
+  //         },
+  //       });
+  //       if (response.ok) {
+  //         const result = await response.json();
+  //         if (result.success) {
+  //           console.log(result)
+  //           setData(result);
+  //         } else {
+  //           console.log(`Truy cập: ${result.message}`);
+  //         }
+  //       } else {
+  //         console.error('Lỗi khi truy cập:', response.statusText);
+  //       }
+  //     } catch (error) {
+  //       console.error('Lỗi mạng:', error);
+  //     }
+  //   };
+
+  //   if (film_id) {
+  //     fetchData();
+  //   }
+  // }, [film_id]);
+
   return (
     <>
       <Shared />
