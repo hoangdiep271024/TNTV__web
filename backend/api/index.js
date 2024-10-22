@@ -2,7 +2,7 @@ import express from "express";
 import routerChatBot from "./chatBot.js";
 import routerFilm from "./film.js";
 import routerForgotPassword from "./forgotPassword.js";
-import routerHome from "./home.js";
+import routerLichChieu from "./lichChieu.js";
 import routerLogin from "./login.js";
 import routerLogOut from "./logOut.js";
 import routerQRPayment from "./QRPayment.js";
@@ -12,7 +12,7 @@ import routerUserInfo from "./userInfo.js";
 
 const router = express.Router()
 
-router.use("/home", routerHome)
+router.use("/lichChieu", routerLichChieu)
 router.use("/login",routerLogin)
 router.use("/signUp",routerSignUp)
 router.use("/uploadImage",routerUploadImage)
