@@ -76,14 +76,12 @@ export default function FilmDetail() {
             directors = {data.info.directors}
           />
           <div style={{display: 'flex', justifyContent: 'center', gap: '7%', paddingTop: "15px", fontSize: '16px'}}>
-        <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? '#c7c1c1' : '#8a8888'}}>Thông tin</Link>
-        <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Lịch chiếu</Link>
+        <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Thông tin</Link>
+        <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? '#c7c1c1' : '#8a8888'}}>Lịch chiếu</Link>
         <Link to={`/danh_gia/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Đánh giá</Link>
         <Link to={`/mua_ve/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Mua vé</Link>
       </div>
-      <hr style={{width:"42%", marginLeft: '29%'}}/>
-<div style={{display: 'flex', justifyContent: 'center', width: '100vw', marginTop: '20px'}}> <iframe src={convertYouTubeLinkToEmbed(data.info.film[0].film_trailer)} width="60%" height="600px" frameborder="0" allowfullscreen></iframe></div>
-     
+      <hr style={{width:"42%", marginLeft: '29%'}}/>  
        </> );
         
       })()}
@@ -91,18 +89,4 @@ export default function FilmDetail() {
     </>
   );
 }
-function convertYouTubeLinkToEmbed(link) {
-  
-  if (link.includes('youtu.be')) {
-      const videoId = link.split('youtu.be/')[1];
-      return `https://www.youtube.com/embed/${videoId}`;
-  } 
-  
-  
-  else if (link.includes('youtube.com/watch?v=')) {
-      const videoId = link.split('v=')[1].split('&')[0]; // Tách VIDEO_ID và bỏ các tham số khác nếu có
-      const startTime = link.includes('t=') ? link.split('t=')[1].replace('s', '') : 0; // Lấy thời gian bắt đầu nếu có
-      return `https://www.youtube.com/embed/${videoId}?start=${startTime}`;
-  }
-  return link;
-}
+
