@@ -10,7 +10,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
 export default function FilmInfo(props) {
   return (
-    <Box sx={{width: '100vw', height: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center'}}>
+    <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
      <div style={{alignItems: 'start', width: '45vw', textWrap: 'wrap'}}>
      <Typography variant="h5" component="h5" sx={{ fontWeight: 'bold'}}>{props.name}</Typography>
@@ -61,7 +61,7 @@ export default function FilmInfo(props) {
      </div>
      
      </div>
-     <div style= {{width:'20vw'}}>
+     <div style= {{width:'20vw', marginLeft: '20px'}}>
       <div>Diễn viên</div>
       {props.actors.map((actor, index) => {
   return (
@@ -73,8 +73,16 @@ export default function FilmInfo(props) {
     </span>
   );
 })}
-      {/* <div>Đạo diễn</div>
-      <div>{props.directors}</div> */}
+      <div>Đạo diễn</div>
+      {props.directors.map((director, index) => {
+  return (
+    <span key={director.director_id}>
+      <Link to={`/director/${director.director_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+        {director.director_name}
+      </Link>
+    </span>
+  );
+})}
      </div>
      
     </Box>
