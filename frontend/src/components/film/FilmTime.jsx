@@ -1,27 +1,31 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import CssBaseline from '@mui/material/CssBaseline';
 import Box from '@mui/material/Box';
-import Shared from '../Shared';
 import FilmInfo from './FilmInfo';
-import {Link} from 'react-router-dom'
-import styled from 'styled-components';
+import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
+import FilmDetailTime from './FilmDetailTime';
+import { Typography } from '@mui/material';
+
 function createSlug(name) {
   return name
-  .trim() 
-  .replace(/\s*:\s*/g, '-') // Thay thế dấu ":" và các khoảng trắng trước và sau nó bằng dấu gạch ngang
-  .replace(/\s+/g, '-') // Thay thế tất cả khoảng trắng còn lại bằng dấu gạch ngang
-  .replace(/-+/g, '-');  // Thay thế nhiều dấu gạch ngang liên tiếp bằng một dấu gạch ngang
+    .trim()
+    .replace(/\s*:\s*/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
 }
 
 export default function FilmDetail() {
   const { film_name } = useParams();
-  const decodedFilmName = decodeURIComponent(film_name);
-
+  const [selectedArea, setSelectedArea] = useState(null);
   const [data, setData] = useState(null);
   const film_id = localStorage.getItem('film_id');
-  const theme = useTheme()
+  const theme = useTheme();
+
+  const handleAreaChange = (newArea) => {
+    setSelectedArea(newArea); 
+  };
+
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -34,7 +38,6 @@ export default function FilmDetail() {
         if (response.ok) {
           const result = await response.json();
           if (result.success) {
-            console.log(result)
             setData(result);
           } else {
             console.log(`Truy cập: ${result.message}`);
@@ -51,72 +54,66 @@ export default function FilmDetail() {
       fetchData();
     }
   }, [film_id]);
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await fetch(`/api/film/filmInfo/id=${film_id}`, {
-  //         method: 'POST',
-  //         headers: {
-  //           'Content-Type': 'application/json',
-  //         },
-  //       });
-  //       if (response.ok) {
-  //         const result = await response.json();
-  //         if (result.success) {
-  //           console.log(result)
-  //           setData(result);
-  //         } else {
-  //           console.log(`Truy cập: ${result.message}`);
-  //         }
-  //       } else {
-  //         console.error('Lỗi khi truy cập:', response.statusText);
-  //       }
-  //     } catch (error) {
-  //       console.error('Lỗi mạng:', error);
-  //     }
-  //   };
 
-  //   if (film_id) {
-  //     fetchData();
-  //   }
-  // }, [film_id]);
+  useEffect(() => {
+    const fetchCinemas = async () => {
+      try {
+        const response = await fetch(`/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const result = await response.json();
+          console.log(result);
+        } else {
+          console.error('Lỗi khi truy cập:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Lỗi mạng:', error);
+      }
+    };
+
+    if (film_id && selectedArea) {
+      fetchCinemas();
+    }
+  }, [film_id, selectedArea]);
 
   return (
     <>
-      <Shared />
       {data && (() => {
         const item = data.info.film[0]; 
-        const datee = item.Release_date.substring(0, 10);
-        const year = datee.substring(0, 4);
-        const month = datee.substring(5, 7);
-        const day = datee.substring(8, 10);
-        const exactlyDate = `${day}/${month}/${year}`;
+        const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
   
-        return (<>
-          <FilmInfo
-            image={item.film_img}
-            name={item.film_name}
-            type={data.info.categorys[0].category_name}
-            descript={item.film_describe}
-            evalute="1"
-            release={exactlyDate} 
-            time = {item.duration}
-            age= {item.age_limit}
-            actors = {data.info.actors}
-            directors = {data.info.directors}
-          />
-          <div style={{display: 'flex', justifyContent: 'center', gap: '7%', paddingTop: "15px", fontSize: '16px'}}>
-        <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Thông tin</Link>
-        <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? '#c7c1c1' : '#8a8888'}}>Lịch chiếu</Link>
-        <Link to={`/danh_gia/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Đánh giá</Link>
-        <Link to={`/mua_ve/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black'}}>Mua vé</Link>
-      </div>
-      <hr style={{width:"42%", marginLeft: '29%'}}/>  
-       </> );
-        
+        return (
+          <>
+            <FilmInfo
+              image={item.film_img}
+              name={item.film_name}
+              type={data.info.categorys[0].category_name}
+              descript={item.film_describe}
+              evalute="1"
+              release={exactlyDate} 
+              time={item.duration}
+              age={item.age_limit}
+              actors={data.info.actors}
+              directors={data.info.directors}
+            />
+            <div style={{ display: 'flex', justifyContent: 'center', gap: '7%', paddingTop: "15px", fontSize: '16px' }}>
+              <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Thông tin</Link>
+              <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? '#c7c1c1' : '#8a8888' }}>Lịch chiếu</Link>
+              <Link to={`/danh_gia/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Đánh giá</Link>
+              <Link to={`/mua_ve/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Mua vé</Link>
+            </div>
+            <hr style={{ width: "42%", marginLeft: '29%' }} />
+          </>
+        );
       })()}
-      
+      <Box sx={{ display: 'flex', justifyContent: 'center', gap: 2, alignItems: 'center', marginTop: '20px' }}>
+        <Typography>Chọn tỉnh / thành phố</Typography>
+        <FilmDetailTime onAreaChange={handleAreaChange} />
+      </Box>
     </>
   );
 }
-
