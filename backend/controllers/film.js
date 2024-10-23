@@ -96,3 +96,71 @@ export const filmInfo = async (req, res) => {
         });
     }
 };
+
+export const filmShowTimeInfo = async (req, res) => {
+    const regionId = req.params.khuVuc_id;
+    const filmId = req.params.id;
+    // Truy vấn MySQL
+    const query = `
+        SELECT cluster_name,cinemas.cinema_id,cinema_name,address,show_date,show_time,showtime_id
+        FROM cinemas inner join cinema_clusters on cinemas.cluster_id = cinema_clusters.cluster_id
+        inner join showtimes on cinemas.cinema_id = showtimes.cinema_id
+        WHERE region_id = ? and film_id = ?
+    `;
+
+    //     SELECT cluster_name, cinemas.cinema_id, cinema_name, address, show_date, show_time, showtime_id
+    // FROM cinemas 
+    // INNER JOIN cinema_clusters ON cinemas.cluster_id = cinema_clusters.cluster_id
+    // INNER JOIN showtimes ON cinemas.cinema_id = showtimes.cinema_id
+    // WHERE region_id = ? 
+    //   AND film_id = ? 
+    //   AND CONCAT(show_date, ' ', show_time) > CURRENT_TIMESTAMP
+    //   AND show_date <= (
+    //     SELECT MIN(show_date) + INTERVAL 4 DAY 
+    //     FROM showtimes 
+    //     WHERE region_id = ? 
+    //       AND film_id = ?
+    //   );
+
+    connection.query(query, [regionId, filmId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        // Xử lý kết quả
+        const clusters = {};
+
+        results.forEach(row => {
+            const { cluster_name, cinema_id, cinema_name, address, show_date, show_time, showtime_id } = row;
+
+            // Kiểm tra nếu cluster chưa tồn tại, tạo một đối tượng trống
+            if (!clusters[cluster_name]) {
+                clusters[cluster_name] = {};
+            }
+
+            // Kiểm tra nếu cinema_id chưa tồn tại trong cluster, tạo đối tượng cho rạp đó
+            if (!clusters[cluster_name][cinema_id]) {
+                clusters[cluster_name][cinema_id] = {
+                    cinema_name: cinema_name,
+                    address: address,
+                    show_date: {} // Sử dụng đối tượng để nhóm showtimes theo show_date
+                };
+            }
+            // Chuyển đổi show_date thành định dạng YYYY-MM-DD
+            const formattedShowDate = new Date(show_date).toISOString().split('T')[0];
+
+            // Kiểm tra nếu show_date chưa tồn tại, tạo một mảng cho show_time
+            if (!clusters[cluster_name][cinema_id].show_date[formattedShowDate]) {
+                clusters[cluster_name][cinema_id].show_date[formattedShowDate] = [];
+            }
+
+            // Thêm show_time vào mảng showtimes cho show_date tương ứng
+            clusters[cluster_name][cinema_id].show_date[formattedShowDate].push({
+                show_time: show_time,
+                showtime_id: showtime_id
+            });
+        });
+
+        res.json(clusters);
+    });
+}
