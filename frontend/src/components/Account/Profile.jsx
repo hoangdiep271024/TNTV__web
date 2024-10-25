@@ -215,15 +215,15 @@ export default function Profile() {
          <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
           <p style={{color:'black'}}>Giới tính:</p>
          <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="male" checked={formData.sex === 'male'}/>
+    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="1" checked={formData.sex == '1'}/>
     Nam
   </label>
   <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="female" checked={formData.sex === 'female'}/>
+    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="2" checked={formData.sex == '2'}/>
     Nữ
   </label>
          </div>
-         {!changeClick && <Button onClick={changeClickButton}>Chỉnh sửa</Button>}
+         {!changeClick && <Button onClick={changeClickButton} style={{width: '100px'}}>Chỉnh sửa</Button>}
       </form>
       {changeClick && <SubmitButton onClick={submit}>Cập nhật</SubmitButton>}
     </Box>)}

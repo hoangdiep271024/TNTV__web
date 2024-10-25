@@ -63,18 +63,18 @@ button {
     background-color: #109f18;
     color: white;
     border: none;
-
+    width: 12%;
     cursor: pointer;
     padding-top: 3px;
     display: 'flex';
     justify-content: center;
     align-items: center;
-    height: 35px;
-    position: absolute;
+    height: 35px;   
     right: 0;
+    border-radius: 5PX;
 }
 .input__text{
-    width: 95%;
+    width: 87%;
     height: 35px;
     outline: none;
     border: 1px solid #c7c5c5;

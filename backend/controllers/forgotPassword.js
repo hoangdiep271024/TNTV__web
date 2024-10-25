@@ -15,7 +15,7 @@ export const forgotPassword = async (req, res) => {
 
         // Truy vấn lấy email của người dùng
         const query = `SELECT email FROM users WHERE email = ?`;
-        connection.query(query, userEmail, (err, results) => {
+        connection.query(query, [userEmail], (err, results) => {
             if (err) return res.json({
                 message: err.message,
                 success: false
@@ -76,35 +76,49 @@ export const forgotPasswordCheck = async (req, res) => {
     try {
         const userEmail = req.session.userEmail;  // Lấy email từ session
         const query = `SELECT reset_token, reset_token_expire FROM users WHERE email = ?`;
-        connection.query(query, userEmail, async (err, results) => {
-            if (err) return res.json({
-                message: err.message,
-                success: false
-            });
+        connection.query(query, [userEmail], async (err, results) => {
+            if (err) {
+                return res.json({
+                    message: err.message,
+                    success: false
+                });
+            }
+            
+            // Kiểm tra nếu không có kết quả
+            if (results.length === 0) {
+                return res.json({
+                    message: "Không tìm thấy người dùng",
+                    success: false
+                });
+            }
+
             const expireToken = new Date(results[0].reset_token_expire);
             const currentTime = new Date();
+
             // Kiểm tra thời gian hết hạn của token
             if (currentTime > expireToken) {
                 return res.json({ message: "Mã xác thực đã hết hạn", success: false });
             }
-            const hashedToken = results[0].reset_token
+
+            const hashedToken = results[0].reset_token;
             const isMatch = await bcryptjs.compare(req.body.token, hashedToken);
             if (!isMatch) {
-                res.json({
-                    message: "wrong",
+                return res.json({
+                    message: "Mã xác thực không đúng",
                     success: false
-                })
+                });
             }
-            res.json({
-                message: "correct",
-                success: true
-            })
-        })
-    } catch (error) {
-        res.json({ message: error.message, success: false });
-    }
 
-}
+            // Nếu tất cả điều kiện đúng
+            return res.json({
+                message: "Mã xác thực chính xác",
+                success: true
+            });
+        });
+    } catch (error) {
+        return res.json({ message: error.message, success: false });
+    }
+};
 
 export const forgotPasswordChangePassword = async (req, res) => {
     try {
@@ -119,7 +133,7 @@ export const forgotPasswordChangePassword = async (req, res) => {
         const userEmail = req.session.userEmail;  // Lấy email từ session
         const hashedPassword = await bcryptjs.hash(newPassword, 11);
         const query = "UPDATE users SET password = ? where email = ?";
-        connection.query(query, hashedPassword, userEmail, async (err, results) => {
+        connection.query(query, [hashedPassword, userEmail],(err, results) => {
             if (err) return res.json({
                 message: err.message,
                 success: false

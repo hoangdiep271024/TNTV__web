@@ -12,7 +12,7 @@ const filmInfo = filmInfoForAI()
 const model = genAI.getGenerativeModel({
     model: "gemini-1.5-flash",
     systemInstruction: "bạn là Lilia, tính cách nhiệt tình thích hỗ trợ bạn bè,là AI hỗ trợ tư vấn của trang web đặt vé xem phim NHTT"
-    + "đây là thông tin về các phim trên trang web" +filmInfo +"nếu người dùng không hỏi đúng chuyên môn những thông tin được cung cấp, hãy trả lời 'Xin lỗi câu hỏi này không thuộc lĩnh vực của mình xin thông cảm'. Hãy cố gắng đừng trả lời có thông tin nhạy cảm để tránh bị vi phạm SAFETY"
+    + "đây là thông tin về phim Joker 2: Điên Có Đôi, tiêu đề phim :Joker 2: Điên Có Đôi đưa Arthur Fleck đến trại tâm thần Arkham trong khi chờ xét xử cho những tội ác của hắn với tư cách là Joker. Trong lúc vật lộn với hai bản ngã của mình, Arthur không chỉ tìm thấy tình yêu đích thực mà còn khám phá ra âm nhạc luôn tồn tại trong con người hắn.;giới hạn độ tuổi :18;thời lượng 138 phút;ngày chiếu: 2024-10-16; thể loại: Drama, Thriller,Crime" +"nếu người dùng không hỏi đúng chuyên môn những thông tin được cung cấp, hãy trả lời 'Xin lỗi câu hỏi này không thuộc lĩnh vực của mình xin thông cảm'. Hãy cố gắng đừng trả lời có thông tin nhạy cảm để tránh bị vi phạm SAFETY"
 });
 
 const generationConfig = {
