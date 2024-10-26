@@ -121,93 +121,102 @@ export const detail = async (req, res) => {
 
 // [POST] /admin/films/create
 export const create = async (req, res) => {
-    const { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
+    try {
+        let { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
+        film_img = JSON.stringify(film_img);
 
-    const countResult = await sequelize.query(
-        `SELECT COUNT(*) as count FROM films`,
-        {
-            type: sequelize.QueryTypes.SELECT,
+        const countResult = await sequelize.query(
+            `SELECT COUNT(*) as count FROM films`,
+            {
+                type: sequelize.QueryTypes.SELECT,
+            }
+        );
+        const totalFilms = countResult[0].count;
+        const filmId =  totalFilms + 1;
+
+        // Lưu data vào bảng films
+        const film = await sequelize.query(
+            `INSERT INTO films 
+            VALUES (:filmId, :film_name, :film_img, :film_trailer, :Release_date, :film_describe, :age_limit, :duration, :film_type, :country)`,
+            {
+                replacements: { filmId, film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country },
+                type: sequelize.QueryTypes.INSERT,
+            }
+        );
+
+        // Lưu data vào bảng actor_film
+        for(const actor of actors) {
+            const actorInfo = await sequelize.query(
+                `SELECT actor_id FROM actors WHERE actor_name = :actorName`,
+                {
+                    replacements: { actorName: actor },
+                    type:  sequelize.QueryTypes.SELECT,
+                }
+            );
+            const actorId = actorInfo[0].actor_id;
+            await sequelize.query(
+                `INSERT INTO actor_film VALUES (:filmId, :actorId)`,
+                {
+                    replacements: { filmId: filmId, actorId: actorId },
+                    type: sequelize.QueryTypes.INSERT,
+                }
+            );
         }
-    );
-    const totalFilms = countResult[0].count;
-    const filmId =  totalFilms + 1;
-
-    // Lưu data vào bảng films
-    const film = await sequelize.query(
-        `INSERT INTO films 
-        VALUES (:filmId, :film_name, :film_img, :film_trailer, :Release_date, :film_describe, :age_limit, :duration, :film_type, :country)`,
-        {
-            replacements: { filmId, film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country },
-            type: sequelize.QueryTypes.INSERT,
+        
+        // // Lưu data vào bảng director_film
+        for(const director of directors) {
+            const directorInfo = await sequelize.query(
+                `SELECT director_id FROM directors WHERE director_name = :directorName`,
+                {
+                    replacements: { directorName: director },
+                    type:  sequelize.QueryTypes.SELECT,
+                }
+            );
+            const directorId = directorInfo[0].director_id;
+            await sequelize.query(
+                `INSERT INTO director_film VALUES (:filmId, :directorId)`,
+                {
+                    replacements: { filmId: filmId, directorId: directorId },
+                    type: sequelize.QueryTypes.INSERT,
+                }
+            );
         }
-    );
 
-    // Lưu data vào bảng actor_film
-    for(const actor of actors) {
-        const actorInfo = await sequelize.query(
-            `SELECT actor_id FROM actors WHERE actor_name = :actorName`,
-            {
-                replacements: { actorName: actor },
-                type:  sequelize.QueryTypes.SELECT,
-            }
-        );
-        const actorId = actorInfo[0].actor_id;
-        await sequelize.query(
-            `INSERT INTO actor_film VALUES (:filmId, :actorId)`,
-            {
-                replacements: { filmId: filmId, actorId: actorId },
-                type: sequelize.QueryTypes.INSERT,
-            }
-        );
-    }
-    
-    // // Lưu data vào bảng director_film
-    for(const director of directors) {
-        const directorInfo = await sequelize.query(
-            `SELECT director_id FROM directors WHERE director_name = :directorName`,
-            {
-                replacements: { directorName: director },
-                type:  sequelize.QueryTypes.SELECT,
-            }
-        );
-        const directorId = directorInfo[0].director_id;
-        await sequelize.query(
-            `INSERT INTO director_film VALUES (:filmId, :directorId)`,
-            {
-                replacements: { filmId: filmId, directorId: directorId },
-                type: sequelize.QueryTypes.INSERT,
-            }
-        );
-    }
+        // Lưu data vào bảng category_film
+        for(const category of categories) {
+            const categoryInfo = await sequelize.query(
+                `SELECT category_id FROM categorys WHERE category_name = :categoryName`,
+                {
+                    replacements: { categoryName: category },
+                    type:  sequelize.QueryTypes.SELECT,
+                }
+            );
+            const categoryId = categoryInfo[0].category_id;
+            await sequelize.query(
+                `INSERT INTO category_film VALUES (:categoryId, :filmId)`,
+                {
+                    replacements: { categoryId: categoryId, filmId: filmId },
+                    type: sequelize.QueryTypes.INSERT,
+                }
+            );
+        }
 
-    // Lưu data vào bảng category_film
-    for(const category of categories) {
-        const categoryInfo = await sequelize.query(
-            `SELECT category_id FROM categorys WHERE category_name = :categoryName`,
-            {
-                replacements: { categoryName: category },
-                type:  sequelize.QueryTypes.SELECT,
-            }
-        );
-        const categoryId = categoryInfo[0].category_id;
-        await sequelize.query(
-            `INSERT INTO category_film VALUES (:categoryId, :filmId)`,
-            {
-                replacements: { categoryId: categoryId, filmId: filmId },
-                type: sequelize.QueryTypes.INSERT,
-            }
-        );
-    }
-
-    // Kiểm tra xem bản ghi có được tạo thành công không
-    if (film) {
-        res.status(201).json({
-            message: "Film created successfully",
-            filmId: film[0], // ID của bản ghi mới được tạo
-        });
-    } else {
-        res.status(500).json({
-            message: "Error creating film",
+        // Kiểm tra xem bản ghi có được tạo thành công không
+        if (film) {
+            res.status(201).json({
+                message: "Film created successfully",
+                filmId: film[0], // ID của bản ghi mới được tạo
+            });
+        } else {
+            res.status(500).json({
+                message: "Error creating film",
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(501).json({
+            message:  "Error creating film",
+            error: error
         });
     }
 }
@@ -219,7 +228,8 @@ export const edit = async (req, res) => {
   
         const { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
 
-        const update = await sequelize.query(
+        // Update bảng film
+        await sequelize.query(
             `UPDATE films
             SET film_name = :film_name, film_img = :film_img, film_trailer = :film_trailer, Release_date = :Release_date, film_describe = :film_describe, age_limit = :age_limit, duration = :duration, film_type = :film_type, country = :country
             WHERE film_id = :filmId`,
@@ -228,8 +238,77 @@ export const edit = async (req, res) => {
                 type: sequelize.QueryTypes.UPDATE,
             }
         )
+
+        // Update bảng actor_film(nếu có)
+        if(actors) {
+            for(const actor of actors) {
+                const actorInfo = await sequelize.query(
+                    `SELECT actor_id FROM actors WHERE actor_name = :actorName`,
+                    {
+                        replacements: { actorName: actor },
+                        type:  sequelize.QueryTypes.SELECT,
+                    }
+                );
+                const actorId = actorInfo[0].actor_id;
+                await sequelize.query(
+                    `UPDATE actor_film
+                    SET actor_id = :actorId
+                    WHERE film_id = :filmId`,
+                    {
+                        replacements: { actorId: actorId, filmId: filmId },
+                        type: sequelize.QueryTypes.UPDATE,
+                    }
+                );
+            }
+        }
+        // Update bảng director_film(nếu có)
+        if(directors) {
+            for(const director of directors) {
+                const directorInfo = await sequelize.query(
+                    `SELECT director_id FROM directors WHERE director_name = :directorName`,
+                    {
+                        replacements: { directorName: director },
+                        type:  sequelize.QueryTypes.SELECT,
+                    }
+                );
+                const directorId = directorInfo[0].director_id;
+                await sequelize.query(
+                    `UPDATE director_film
+                    SET director_id = :directorId
+                    WHERE film_id = :filmId`,
+                    {
+                        replacements: { directorId: directorId, filmId: filmId},
+                        type: sequelize.QueryTypes.UPDATE,
+                    }
+                );
+            }
+        }
+
+        // Update bảng category_film(nếu có)
+        if(categories) {
+            for(const category of categories) {
+                const categoryInfo = await sequelize.query(
+                    `SELECT category_id FROM categorys WHERE category_name = :categoryName`,
+                    {
+                        replacements: { categoryName: category },
+                        type:  sequelize.QueryTypes.SELECT,
+                    }
+                );
+                const categoryId = categoryInfo[0].category_id;
+                await sequelize.query(
+                    `UPDATE category_film
+                    SET category_id = :categoryId
+                    WHERE film_id = :filmId`,
+                    {
+                        replacements: { categoryId: categoryId, filmId: filmId },
+                        type: sequelize.QueryTypes.UPDATE,
+                    }
+                );
+            }
+        }
+
         res.status(200).json({
-            message: "Film updated successfully",
+            message: "Film and related records updated successfully",
         });
     } catch (error) {
         console.log(error);
