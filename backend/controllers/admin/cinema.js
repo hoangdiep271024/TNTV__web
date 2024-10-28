@@ -1,4 +1,4 @@
-import sequelize from "../../config/database.js";
+import sequelize from "../../models/SQLConnection.js";
 
 // [GET] /admin/films
 export const index = async (req, res) => {

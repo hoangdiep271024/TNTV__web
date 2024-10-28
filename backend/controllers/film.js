@@ -147,7 +147,14 @@ export const filmShowTimeInfo = async (req, res) => {
                 };
             }
             // Chuyển đổi show_date thành định dạng YYYY-MM-DD
-            const formattedShowDate = new Date(show_date).toISOString().split('T')[0];
+            // new Date(show_date).toISOString().split('T')[0];
+            const date = new Date(show_date);
+            const weekday = date.toLocaleDateString('en', { weekday: 'long' }); // Lấy thứ bằng tiếng Việt
+            const day = date.getDate(); // Lấy ngày
+            const month = date.getMonth() + 1; // Lấy tháng (thêm 1 vì getMonth() trả về từ 0-11)
+            const year = date.getFullYear();
+
+            const formattedShowDate = weekday + " " + day + "-" + month + "-" + year
 
             // Kiểm tra nếu show_date chưa tồn tại, tạo một mảng cho show_time
             if (!clusters[cluster_name][cinema_id].show_date[formattedShowDate]) {

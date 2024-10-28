@@ -1,11 +1,8 @@
 import express from "express";
-import multer from "multer";
-
-import { uploadSingle } from "../../middlewares/admin/uploadCloud.middleware.js";
 
 import * as controller from "../../controllers/admin/film.js";
 
-const upload = multer();
+import { handleUpload } from "../../middlewares/uploadCloud.js";
 
 const filmRoutes = express.Router()
 
@@ -14,17 +11,21 @@ filmRoutes.get("/", controller.index);
 filmRoutes.get("/detail/:id", controller.detail);
 
 filmRoutes.post(
-    "/create",
-    upload.single("film_img"),
-    uploadSingle,
-    controller.create
+    "/create", async (req, res) =>{
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+        const cldRes = await handleUpload(dataURI);
+        controller.create
+    }
 );
 
 filmRoutes.patch(
-    "/edit/:id",
-    upload.single("film_img"),
-    uploadSingle,
-    controller.edit
+    "/edit/:id",async (req, res) =>{
+        const b64 = Buffer.from(req.file.buffer).toString("base64");
+        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+        const cldRes = await handleUpload(dataURI);
+        controller.create
+    }
 );
 
 filmRoutes.delete("/delete/:id", controller.deleteFilm);

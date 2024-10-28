@@ -1,9 +1,7 @@
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express, { json } from "express";
-import sequelize from "./config/database.js";
-sequelize;
-import bodyParser from "body-parser";
 import session from 'express-session';
 import path from "path";
 import { fileURLToPath } from 'url';

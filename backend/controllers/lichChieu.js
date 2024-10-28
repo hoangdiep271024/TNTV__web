@@ -42,3 +42,7 @@ export const rap = async(req,res)=>{
         res.json(clusters);
     });
 }
+
+export const lichChieu = async(req,res)=>{
+
+}
