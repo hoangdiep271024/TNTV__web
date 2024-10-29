@@ -1,8 +1,8 @@
-import sequelize from "../../models/SQLConnection.js";
+import connection from "../../models/SQLConnection.js";
 
 // [GET] /admin/films
 export const index = async (req, res) => {
-    // SELECT * FROM films WHERE deleted = false;
+    // SELECT * FROM films;
 
     // Lọc theo trạng thái
     const status = req.query.status;
@@ -34,28 +34,26 @@ export const index = async (req, res) => {
 
     // Sắp xếp theo tiêu chí
 
-    const sortKey = req.query.sortKey || "film_name";
+    const sortKey = req.query.sortKey || "film_id";
     const sortValue = req.query.sortValue === "desc" ? "DESC" : "ASC";
 
     // Hết Sắp xếp theo tiêu chí
 
-    const films = await sequelize.query(
-        `SELECT * FROM films
+    // Truy vấn từ database
+    const query = `
+        SELECT * FROM films
         WHERE ${filmType} 
-        AND film_name LIKE :keyword 
+        AND film_name LIKE ?
         ORDER BY ${sortKey} ${sortValue}
-        LIMIT :limitItems
-        OFFSET :skip`,
-        {
-            type: sequelize.QueryTypes.SELECT,
-            raw: true,
-            replacements: {
-                keyword,
-                limitItems,
-                skip,
-            }
-        }
-    );
+        LIMIT ?
+        OFFSET ?`;
+
+    const films = await new Promise((resolve, reject) => {
+        connection.query(query, [keyword, limitItems, skip], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
   
     res.json(films);
 };
@@ -66,49 +64,51 @@ export const detail = async (req, res) => {
         const filmId = req.params.id;
 
         const filmInfo = {};
-    
-        filmInfo.film = await sequelize.query(`Select * from films where films.film_id = :filmId`,
-            {
-            replacements: { filmId },
-            type: sequelize.QueryTypes.SELECT,
-            }
-        );
 
-        filmInfo.actors = await sequelize.query(
-                            `Select A.actor_id,A.actor_name
+        const queryFilm = `Select * from films where films.film_id = ?`;
+    
+        filmInfo.film = await new Promise((resolve, reject) => {
+            connection.query(queryFilm, [filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+
+        const queryActor = `Select A.actor_id,A.actor_name
                             from actors as A
                             inner join actor_film as AF on A.actor_id = AF.actor_id
                             inner join films as F on AF.film_id = F.film_id
-                            where F.film_id = :filmId`,
-                            {
-                                replacements: { filmId },
-                                type: sequelize.QueryTypes.SELECT,
-                            }
-                        );
+                            where F.film_id = ?`;
+        filmInfo.actors = await new Promise((resolve, reject) => {
+            connection.query(queryActor, [filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
-        filmInfo.directors = await sequelize.query(
-                                `Select D.director_id,D.director_name
+        const queryDirector = `Select D.director_id,D.director_name
                                 from directors as D
                                 inner join director_film as DF on D.director_id = DF.director_id
                                 inner join films as F on DF.film_id = F.film_id
-                                where F.film_id = :filmId`,
-                                {
-                                    replacements: { filmId },
-                                    type: sequelize.QueryTypes.SELECT,
-                                }
-                            );
+                                where F.film_id = ?`;
+        filmInfo.directors = await new Promise((resolve, reject) => {
+            connection.query(queryDirector, [filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
-        filmInfo.categories = await sequelize.query(
-                                `Select C.category_id,C.category_name
+        const queryCategory = `Select C.category_id,C.category_name
                                 from categorys as C
                                 inner join category_film as CF on C.category_id = CF.category_id
                                 inner join films as F on CF.film_id = F.film_id
-                                where F.film_id = :filmId`,
-                                {
-                                    replacements: { filmId },
-                                    type: sequelize.QueryTypes.SELECT,
-                                }
-        );
+                                where F.film_id = ?`;
+        filmInfo.categories = await new Promise((resolve, reject) => {
+            connection.query(queryCategory, [filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
         
         res.json(filmInfo);
     } catch (error) {
@@ -125,80 +125,78 @@ export const create = async (req, res) => {
         let { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
         film_img = JSON.stringify(film_img);
 
-        const countResult = await sequelize.query(
+        const countResult = await connection.promise().query(
             `SELECT COUNT(*) as count FROM films`,
-            {
-                type: sequelize.QueryTypes.SELECT,
-            }
         );
-        const totalFilms = countResult[0].count;
+        const totalFilms = countResult[0][0].count;
         const filmId =  totalFilms + 1;
 
         // Lưu data vào bảng films
-        const film = await sequelize.query(
-            `INSERT INTO films 
-            VALUES (:filmId, :film_name, :film_img, :film_trailer, :Release_date, :film_describe, :age_limit, :duration, :film_type, :country)`,
-            {
-                replacements: { filmId, film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country },
-                type: sequelize.QueryTypes.INSERT,
-            }
-        );
+        const queryFilm = `INSERT INTO films 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+
+        const film = await new Promise((resolve, reject) => {
+            connection.query(queryFilm, [filmId, film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
         // Lưu data vào bảng actor_film
         for(const actor of actors) {
-            const actorInfo = await sequelize.query(
-                `SELECT actor_id FROM actors WHERE actor_name = :actorName`,
-                {
-                    replacements: { actorName: actor },
-                    type:  sequelize.QueryTypes.SELECT,
-                }
-            );
+            const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
+            const actorInfo = await new Promise((resolve, reject) => {
+                connection.query(queryActor, [actor], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
             const actorId = actorInfo[0].actor_id;
-            await sequelize.query(
-                `INSERT INTO actor_film VALUES (:filmId, :actorId)`,
-                {
-                    replacements: { filmId: filmId, actorId: actorId },
-                    type: sequelize.QueryTypes.INSERT,
-                }
-            );
+            const queryInsertActor =  `INSERT INTO actor_film (film_id, actor_id) VALUES (?, ?)`;
+            await new Promise((resolve, reject) => {
+                connection.query(queryInsertActor, [filmId, actorId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
         }
         
         // // Lưu data vào bảng director_film
         for(const director of directors) {
-            const directorInfo = await sequelize.query(
-                `SELECT director_id FROM directors WHERE director_name = :directorName`,
-                {
-                    replacements: { directorName: director },
-                    type:  sequelize.QueryTypes.SELECT,
-                }
-            );
+            const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
+            const directorInfo = await new Promise((resolve, reject) => {
+                connection.query(queryDirector, [director], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
             const directorId = directorInfo[0].director_id;
-            await sequelize.query(
-                `INSERT INTO director_film VALUES (:filmId, :directorId)`,
-                {
-                    replacements: { filmId: filmId, directorId: directorId },
-                    type: sequelize.QueryTypes.INSERT,
-                }
-            );
+            const queryInsertDirector =  `INSERT INTO director_film (film_id, director_id) VALUES (?, ?)`;
+            await new Promise((resolve, reject) => {
+                connection.query(queryInsertDirector, [filmId, directorId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
         }
 
         // Lưu data vào bảng category_film
         for(const category of categories) {
-            const categoryInfo = await sequelize.query(
-                `SELECT category_id FROM categorys WHERE category_name = :categoryName`,
-                {
-                    replacements: { categoryName: category },
-                    type:  sequelize.QueryTypes.SELECT,
-                }
-            );
+            const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
+            const categoryInfo = await new Promise((resolve, reject) => {
+                connection.query(queryCategory, [category], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
             const categoryId = categoryInfo[0].category_id;
-            await sequelize.query(
-                `INSERT INTO category_film VALUES (:categoryId, :filmId)`,
-                {
-                    replacements: { categoryId: categoryId, filmId: filmId },
-                    type: sequelize.QueryTypes.INSERT,
-                }
-            );
+            const queryInsertCategory =  `INSERT INTO category_film (category_id, film_id) VALUES (?, ?)`;
+            await new Promise((resolve, reject) => {
+                connection.query(queryInsertCategory, [categoryId, filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
         }
 
         // Kiểm tra xem bản ghi có được tạo thành công không
@@ -229,81 +227,82 @@ export const edit = async (req, res) => {
         const { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
 
         // Update bảng film
-        await sequelize.query(
-            `UPDATE films
-            SET film_name = :film_name, film_img = :film_img, film_trailer = :film_trailer, Release_date = :Release_date, film_describe = :film_describe, age_limit = :age_limit, duration = :duration, film_type = :film_type, country = :country
-            WHERE film_id = :filmId`,
-            {
-                replacements: { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId},
-                type: sequelize.QueryTypes.UPDATE,
-            }
-        )
+        const queryUpdateFilm = `
+            UPDATE films
+            SET film_name = ?, film_img = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
+            WHERE film_id = ?`;
+        await new Promise((resolve, reject) => {
+            connection.query(queryUpdateFilm, [film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
         // Update bảng actor_film(nếu có)
         if(actors) {
             for(const actor of actors) {
-                const actorInfo = await sequelize.query(
-                    `SELECT actor_id FROM actors WHERE actor_name = :actorName`,
-                    {
-                        replacements: { actorName: actor },
-                        type:  sequelize.QueryTypes.SELECT,
-                    }
-                );
+                const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
+                const actorInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryActor, [actor], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
                 const actorId = actorInfo[0].actor_id;
-                await sequelize.query(
-                    `UPDATE actor_film
-                    SET actor_id = :actorId
-                    WHERE film_id = :filmId`,
-                    {
-                        replacements: { actorId: actorId, filmId: filmId },
-                        type: sequelize.QueryTypes.UPDATE,
-                    }
-                );
+                const queryUpdateActorFilm = `UPDATE actor_film
+                                        SET actor_id = ?
+                                        WHERE film_id = ?`;
+                await new Promise((resolve, reject) => {
+                    connection.query(queryUpdateActorFilm, [actorId, filmId], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
             }
         }
         // Update bảng director_film(nếu có)
         if(directors) {
             for(const director of directors) {
-                const directorInfo = await sequelize.query(
-                    `SELECT director_id FROM directors WHERE director_name = :directorName`,
-                    {
-                        replacements: { directorName: director },
-                        type:  sequelize.QueryTypes.SELECT,
-                    }
-                );
+                const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
+                const directorInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryDirector, [director], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
                 const directorId = directorInfo[0].director_id;
-                await sequelize.query(
-                    `UPDATE director_film
-                    SET director_id = :directorId
-                    WHERE film_id = :filmId`,
-                    {
-                        replacements: { directorId: directorId, filmId: filmId},
-                        type: sequelize.QueryTypes.UPDATE,
-                    }
-                );
+                const queryUpdateDirectorFilm = `UPDATE director_film
+                                            SET director_id = ?
+                                            WHERE film_id = ?`;
+                await new Promise((resolve, reject) => {
+                    connection.query(queryUpdateDirectorFilm, [directorId, filmId], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
             }
         }
 
         // Update bảng category_film(nếu có)
         if(categories) {
             for(const category of categories) {
-                const categoryInfo = await sequelize.query(
-                    `SELECT category_id FROM categorys WHERE category_name = :categoryName`,
-                    {
-                        replacements: { categoryName: category },
-                        type:  sequelize.QueryTypes.SELECT,
-                    }
-                );
+                const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
+                const categoryInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryCategory, [category], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
                 const categoryId = categoryInfo[0].category_id;
-                await sequelize.query(
-                    `UPDATE category_film
-                    SET category_id = :categoryId
-                    WHERE film_id = :filmId`,
-                    {
-                        replacements: { categoryId: categoryId, filmId: filmId },
-                        type: sequelize.QueryTypes.UPDATE,
-                    }
-                );
+                const queryUpdateCategoryFilm = `UPDATE category_film
+                                                SET category_id = ?
+                                                WHERE film_id = ?`;
+                await new Promise((resolve, reject) => {
+                    connection.query(queryUpdateCategoryFilm, [categoryId, filmId], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
+                });
             }
         }
 
@@ -325,22 +324,10 @@ export const deleteFilm = async (req, res) => {
         const filmId = req.params.id;
     
         await Promise.all([
-            sequelize.query(`DELETE FROM actor_film WHERE film_id = :filmId`, {
-                replacements: { filmId },
-                type: sequelize.QueryTypes.DELETE,
-            }),
-            sequelize.query(`DELETE FROM director_film WHERE film_id = :filmId`, {
-                replacements: { filmId },
-                type: sequelize.QueryTypes.DELETE,
-            }),
-            sequelize.query(`DELETE FROM category_film WHERE film_id = :filmId`, {
-                replacements: { filmId },
-                type: sequelize.QueryTypes.DELETE,
-            }),
-            sequelize.query(`DELETE FROM films WHERE film_id = :filmId`, {
-                replacements: { filmId },
-                type: sequelize.QueryTypes.DELETE,
-            }),
+            connection.promise().query(`DELETE FROM actor_film WHERE film_id = ?`, [filmId]),
+            connection.promise().query(`DELETE FROM director_film WHERE film_id = ?`, [filmId]),
+            connection.promise().query(`DELETE FROM category_film WHERE film_id = ?`, [filmId]),
+            connection.promise().query(`DELETE FROM films WHERE film_id = ?`, [filmId]),
         ]);
 
         res.status(200).json({

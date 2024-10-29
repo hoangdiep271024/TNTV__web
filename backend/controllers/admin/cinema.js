@@ -1,4 +1,4 @@
-import sequelize from "../../models/SQLConnection.js";
+import connection from "../../models/SQLConnection.js";
 
 // [GET] /admin/films
 export const index = async (req, res) => {
@@ -19,7 +19,7 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
+    let limitItems = 10;
     if(req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
@@ -34,27 +34,24 @@ export const index = async (req, res) => {
 
     // Sắp xếp theo tiêu chí
 
-    const sortKey = req.query.sortKey || "cinema_name";
+    const sortKey = req.query.sortKey || "cinema_id";
     const sortValue = req.query.sortValue === "desc" ? "DESC" : "ASC";
 
     // Hết Sắp xếp theo tiêu chí
 
-    const cinemas = await sequelize.query(
-        `SELECT * FROM cinemas
-        WHERE cinema_name LIKE :keyword 
+    const query = `
+        SELECT * FROM cinemas
+        WHERE cinema_name LIKE ?
         ORDER BY ${sortKey} ${sortValue}
-        LIMIT :limitItems
-        OFFSET :skip`,
-        {
-            type: sequelize.QueryTypes.SELECT,
-            raw: true,
-            replacements: {
-                keyword,
-                limitItems,
-                skip,
-            }
-        }
-    );
+        LIMIT :?
+        OFFSET :?`;
+
+    const cinemas = await new Promise((resolve, reject) => {
+        connection.query(query, [keyword, limitItems, skip], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
   
     res.json(cinemas);
 };
@@ -65,35 +62,36 @@ export const detail = async (req, res) => {
         const cinemaId = parseInt(req.params.cinemaId);
 
         const cinemaInfo = {};
-    
-        cinemaInfo.cinema = await sequelize.query(`Select * from cinemas where cinemas.cinema_id = :cinemaId`,
-            {
-            replacements: { cinemaId },
-            type: sequelize.QueryTypes.SELECT,
-            }
-        );
 
-        cinemaInfo.clusters = await sequelize.query(
-                            `Select cc.cluster_id,cc.cluster_name
+        const queryCinema = `Select * from cinemas where cinemas.cinema_id = ?`;
+        cinemaInfo.cinema = await new Promise((resolve, reject) => {
+            connection.query(queryCinema, [cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+
+        const queryCluster = `Select cc.cluster_id,cc.cluster_name
                             from cinema_clusters as cc
                             inner join cinemas as c on cc.cluster_id = c.cluster_id
-                            where c.cinema_id = :cinemaId`,
-                            {
-                                replacements: { cinemaId },
-                                type: sequelize.QueryTypes.SELECT,
-                            }
-                        );
+                            where c.cinema_id = ?`;
+        cinemaInfo.clusters = await new Promise((resolve, reject) => {
+            connection.query(queryCluster, [cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
-        cinemaInfo.regions = await sequelize.query(
-                            `Select r.region_id,r.region_name
+        const queryRegion = `Select r.region_id,r.region_name
                             from regions as r
                             inner join cinemas as c on r.region_id = c.region_id
-                            where c.cinema_id = :cinemaId`,
-                            {
-                                replacements: { cinemaId },
-                                type: sequelize.QueryTypes.SELECT,
-                            }
-                        );
+                            where c.cinema_id = ?`;
+        cinemaInfo.regions = await new Promise((resolve, reject) => {
+            connection.query(queryRegion, [cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
         
         res.json(cinemaInfo);
     } catch (error) {
@@ -108,45 +106,41 @@ export const detail = async (req, res) => {
 export const create = async (req, res) => {
     const { cinema_name, cluster_name, region_name, address } =  req.body;
 
-    const countResult = await sequelize.query(
+    const countResult = await connection.promise().query(
         `SELECT COUNT(*) as count FROM cinemas`,
-        {
-            type: sequelize.QueryTypes.SELECT,
-        }
     );
-    const totalCinemas = countResult[0].count;
+    const totalCinemas = countResult[0][0].count;
     const cinemaId =  totalCinemas + 1;
 
     // Truy vấn cluster_id từ cluster_name
-    const clusterInfo = await sequelize.query(
-        `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = :clusterName`,
-        {
-            replacements: {  clusterName: cluster_name },
-            type: sequelize.QueryTypes.SELECT,
-        }
-    );
+    const queryCluster = `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = ?`;
+    const clusterInfo = await new Promise((resolve, reject) => {
+        connection.query(queryCluster, [cluster_name], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
     const clusterId = clusterInfo[0].cluster_id;
 
     // Truy vấn region_id từ region_name
-    const regionInfo = await sequelize.query(
-        `SELECT region_id FROM regions WHERE region_name = :regionName`,
-        {
-            replacements: {  regionName: region_name },
-            type: sequelize.QueryTypes.SELECT,
-        }
-    );
+    const queryRegion = `SELECT region_id FROM regions WHERE region_name = ?`;
+    const regionInfo = await new Promise((resolve, reject) => {
+        connection.query(queryRegion, [region_name], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
     const regionId = regionInfo[0].region_id;
 
     // Lưu data vào bảng cinemas
-    const cinema = await sequelize.query(
-        `INSERT INTO cinemas 
-        VALUES (:cinemaId, :cinema_name, :clusterId, :regionId, :address)`,
-        {
-            replacements: { cinemaId, cinema_name, clusterId, regionId, address },
-
-            type: sequelize.QueryTypes.INSERT,
-        }
-    );
+    const queryCinema = `INSERT INTO cinemas 
+                        VALUES (?, ?, ?, ?, ?)`;
+    const cinema = await new Promise((resolve, reject) => {
+        connection.query(queryCinema, [cinemaId, cinema_name, clusterId, regionId, address], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
 
     // Kiểm tra xem bản ghi có được tạo thành công không
     if (cinema) {
@@ -169,34 +163,35 @@ export const edit = async (req, res) => {
         const { cinema_name, cluster_name, region_name, address } =  req.body;
 
         // Truy vấn cluster_id từ cluster_name
-        const clusterInfo = await sequelize.query(
-            `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = :clusterName`,
-            {
-                replacements: {  clusterName: cluster_name },
-                type: sequelize.QueryTypes.SELECT,
-            }
-        );
+        const queryCluster = `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = ?`;
+        const clusterInfo = await new Promise((resolve, reject) => {
+            connection.query(queryCluster, [cluster_name], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
         const clusterId = clusterInfo[0].cluster_id;
 
         // Truy vấn region_id từ region_name
-        const regionInfo = await sequelize.query(
-            `SELECT region_id FROM regions WHERE region_name = :regionName`,
-            {
-                replacements: {  regionName: region_name },
-                type: sequelize.QueryTypes.SELECT,
-            }
-        );
+        const queryRegion = `SELECT region_id FROM regions WHERE region_name = ?`;
+        const regionInfo = await new Promise((resolve, reject) => {
+            connection.query(queryRegion, [region_name], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
         const regionId = regionInfo[0].region_id;
 
-        await sequelize.query(
+        const queryUpdateCinema = 
             `UPDATE cinemas
-            SET cinema_name = :cinema_name, cluster_id = :clusterId, region_id = :regionId, address = :address
-            WHERE cinema_id = :cinemaId`,
-            {
-                replacements: { cinema_name, clusterId,  regionId, address, cinemaId },
-                type: sequelize.QueryTypes.UPDATE,
-            }
-        )
+            SET cinema_name = ?, cluster_id = ?, region_id = ?, address = ?
+            WHERE cinema_id = ?`;
+        await new Promise((resolve, reject) => {
+            connection.query(queryUpdateCinema, [cinema_name, clusterId,  regionId, address, cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
         res.status(200).json({
             message: "Cinema updated successfully",
         });
@@ -212,15 +207,15 @@ export const edit = async (req, res) => {
 // [PATCH] /admin/cinemas/delete/:cinemaId
 export const deleteItem = async (req, res) => {
     try {
-        const cinemaId = req.params.id;
+        const cinemaId = req.params.cinemaId;
     
-        await sequelize.query(
-            `DELETE FROM cinemas WHERE cinema_id = :cinemaId`,
-            {
-                replacements: { cinemaId },
-                type:  sequelize.QueryTypes.DELETE,
-            }
-        );
+        const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id = ?`;
+        await new Promise((resolve, reject) => {
+            connection.query(queryDeleteCinema, [cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
         res.status(200).json({
             message: "Cinema and related records deleted successfully",
