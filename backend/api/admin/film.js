@@ -11,7 +11,7 @@ filmRoutes.get("/", controller.index);
 filmRoutes.get("/detail/:id", controller.detail);
 
 filmRoutes.post(
-    "/create", upload.single("image"), async (req, res) =>{
+    "/create", upload.single("film_img"), async (req, res) =>{
         const b64 = Buffer.from(req.file.buffer).toString("base64");
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         const cldRes = await handleUpload(dataURI);
@@ -21,7 +21,7 @@ filmRoutes.post(
 );
 
 filmRoutes.patch(
-    "/edit/:id",  upload.single("image"), async (req, res) =>{
+    "/edit/:id",  upload.single("film_img"), async (req, res) =>{
         const b64 = Buffer.from(req.file.buffer).toString("base64");
         let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
         const cldRes = await handleUpload(dataURI);
