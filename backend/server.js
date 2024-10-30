@@ -1,12 +1,15 @@
+import bodyParser from "body-parser";
 import cookieParser from "cookie-parser";
 import { config } from "dotenv";
 import express, { json } from "express";
 import session from 'express-session';
 import path from "path";
 import { fileURLToPath } from 'url';
-import api from "./api/index.js";
+import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
 const app = express();
+
+import { adminApi } from "./api/admin/index.js";
 
 app.use(session({
   secret: 'your-secret-key',
@@ -31,11 +34,14 @@ app.use(json());
 app.use(cookieParser());
 app.set('trust proxy', 1)
 app.options('*', corMw);
+app.use(bodyParser.json());
 
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 
 // tạo api
-app.use('/api',api)
+app.use('/api',api);
+
+adminApi(app);
 
 // Các route khác sẽ trả về index.html (SPA)
 app.get('*', (req, res) => {
