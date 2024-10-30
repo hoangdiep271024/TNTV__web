@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import nodemailer from 'nodemailer';
-import connection from '../models/SQLConnection.js';
+import connection from '../../models/SQLConnection.js';
 dotenv.config();
 
 export const forgotPassword = async (req, res) => {

@@ -1,4 +1,4 @@
-import connection from "../models/SQLConnection.js";
+import connection from "../../models/SQLConnection.js";
 
 async function filmInfoForAI() {
     const query = 'SELECT * FROM films';

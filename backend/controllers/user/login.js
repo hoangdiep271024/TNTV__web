@@ -1,8 +1,8 @@
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
-import { createJWT } from "../middlewares/JWT.js";
-import connection from "../models/SQLConnection.js";
-import { signInValidator } from "../validation/user.js";
+import { createJWT } from "../../middlewares/JWT.js";
+import connection from "../../models/SQLConnection.js";
+import { signInValidator } from "../../validation/user.js";
 
 dotenv.config();
 const SECRET_CODE = process.env.SECRET_CODE;

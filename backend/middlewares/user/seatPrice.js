@@ -16,13 +16,27 @@ function calculateTicketPrice(seatType, dayOfWeek, showTime) {
             throw new Error('Loại ghế không hợp lệ');
     }
 
-    // Tăng giá theo ngày trong tuần
-    if (dayOfWeek >= 2 && dayOfWeek <= 5) {
-        basePrice += 5000; // Thứ 2 - Thứ 5: +5k
-    } else if (dayOfWeek >= 6 && dayOfWeek <= 8) {
-        basePrice += 10000; // Thứ 6 - Chủ Nhật: +10k
-    } else {
+    // Chuyển đổi dayOfWeek từ chuỗi thành số tương ứng
+    const dayMap = {
+        Monday: 2,
+        Tuesday: 3,
+        Wednesday: 4,
+        Thursday: 5,
+        Friday: 6,
+        Saturday: 7,
+        Sunday: 8
+    };
+
+    const dayNumber = dayMap[dayOfWeek];
+    if (!dayNumber) {
         throw new Error('Ngày không hợp lệ');
+    }
+
+    // Tăng giá theo ngày trong tuần
+    if (dayNumber >= 2 && dayNumber <= 5) {
+        basePrice += 5000; // Thứ 2 - Thứ 5: +5k
+    } else if (dayNumber >= 6 && dayNumber <= 8) {
+        basePrice += 10000; // Thứ 6 - Chủ Nhật: +10k
     }
 
     // Tăng giá theo khung giờ
@@ -36,4 +50,4 @@ function calculateTicketPrice(seatType, dayOfWeek, showTime) {
     return basePrice;
 }
 
-export default calculateTicketPrice
+export default calculateTicketPrice;

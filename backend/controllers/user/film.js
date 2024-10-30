@@ -1,5 +1,6 @@
 import dotenv from "dotenv";
-import connection from "../models/SQLConnection.js";
+import calculateTicketPrice from "../../middlewares/user/seatPrice.js";
+import connection from "../../models/SQLConnection.js";
 
 dotenv.config();
 
@@ -128,24 +129,11 @@ export const filmShowTimeInfo = async (req, res) => {
         }
 
         // Xử lý kết quả
-        const clusters = {};
+        const postOut = {};
 
         results.forEach(row => {
             const { cluster_name, cinema_id, cinema_name, address, show_date, show_time, showtime_id } = row;
 
-            // Kiểm tra nếu cluster chưa tồn tại, tạo một đối tượng trống
-            if (!clusters[cluster_name]) {
-                clusters[cluster_name] = {};
-            }
-
-            // Kiểm tra nếu cinema_id chưa tồn tại trong cluster, tạo đối tượng cho rạp đó
-            if (!clusters[cluster_name][cinema_id]) {
-                clusters[cluster_name][cinema_id] = {
-                    cinema_name: cinema_name,
-                    address: address,
-                    show_date: {} // Sử dụng đối tượng để nhóm showtimes theo show_date
-                };
-            }
             // Chuyển đổi show_date thành định dạng YYYY-MM-DD
             // new Date(show_date).toISOString().split('T')[0];
             const date = new Date(show_date);
@@ -156,18 +144,32 @@ export const filmShowTimeInfo = async (req, res) => {
 
             const formattedShowDate = weekday + " " + day + "-" + month + "-" + year
 
-            // Kiểm tra nếu show_date chưa tồn tại, tạo một mảng cho show_time
-            if (!clusters[cluster_name][cinema_id].show_date[formattedShowDate]) {
-                clusters[cluster_name][cinema_id].show_date[formattedShowDate] = [];
+            // Kiểm tra nếu cluster chưa tồn tại, tạo một đối tượng trống
+            if (!postOut[formattedShowDate]) {
+                postOut[formattedShowDate] = {};
+            }
+
+            // Kiểm tra nếu cinema_id chưa tồn tại trong cluster, tạo đối tượng cho rạp đó
+            if (!postOut[formattedShowDate][cluster_name]) {
+                postOut[formattedShowDate][cluster_name] = {}
+            }
+
+            // Kiểm tra nếu cinema_id chưa tồn tại trong cluster, tạo đối tượng cho rạp đó
+            if (!postOut[formattedShowDate][cluster_name][cinema_name]) {
+                postOut[formattedShowDate][cluster_name][cinema_name] = {
+                    address: address,
+                    show_time: []
+                }
             }
 
             // Thêm show_time vào mảng showtimes cho show_date tương ứng
-            clusters[cluster_name][cinema_id].show_date[formattedShowDate].push({
+            postOut[formattedShowDate][cluster_name][cinema_name].show_time.push({
                 show_time: show_time,
-                showtime_id: showtime_id
+                showtime_id: showtime_id,
+                seatPrice: calculateTicketPrice('0',weekday,show_time)
             });
         });
 
-        res.json(clusters);
+        res.json(postOut);
     });
 }

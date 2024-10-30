@@ -1,5 +1,5 @@
 import express from "express";
-import login from "../controllers/login.js";
+import login from "../../controllers/user/login.js";
 const routerLogin = express.Router()
 
 routerLogin.post("/", login)

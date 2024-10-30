@@ -1,5 +1,5 @@
 import express from "express";
-import { userInfo, userInfoUpdate } from "../controllers/userInfo.js";
+import { userInfo, userInfoUpdate } from "../../controllers/user/userInfo.js";
 
 const routerUserInfo = express.Router()
 routerUserInfo.post("/",userInfo)

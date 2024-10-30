@@ -1,5 +1,5 @@
 import express from "express";
-import logOut from "../controllers/logOut.js";
+import logOut from "../../controllers/user/logOut.js";
 
 const routerLogOut = express.Router()
 routerLogOut.post("/",logOut)

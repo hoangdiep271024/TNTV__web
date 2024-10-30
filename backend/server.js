@@ -5,7 +5,7 @@ import express, { json } from "express";
 import session from 'express-session';
 import path from "path";
 import { fileURLToPath } from 'url';
-import api from "./api/index.js";
+import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
 const app = express();
 

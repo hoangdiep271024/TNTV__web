@@ -1,5 +1,5 @@
 import express from "express";
-import { khuVuc, lichChieu, rap } from "../controllers/lichChieu.js";
+import { khuVuc, lichChieu, rap } from "../../controllers/user/lichChieu.js";
 
 const routerLichChieu = express.Router()
 routerLichChieu.post("/khuVuc",khuVuc)

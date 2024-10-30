@@ -1,9 +1,9 @@
 
 import express from "express";
 
-import { isTokenExpired, verifyToken } from "../middlewares/JWT.js";
-import { handleUpload, upload } from "../middlewares/uploadCloud.js";
-import connection from "../models/SQLConnection.js";
+import { isTokenExpired, verifyToken } from "../../middlewares/JWT.js";
+import { handleUpload, upload } from "../../middlewares/uploadCloud.js";
+import connection from "../../models/SQLConnection.js";
 const routerUploadImage = express.Router()
 
 
@@ -29,7 +29,6 @@ routerUploadImage.post("/", upload.single("image"), async (req, res) => {
 
         const decode = verifyToken(token);
         const results = await connection.promise().query(`UPDATE users set user_img = '${cldRes.url}' where user_id = '${decode.id}'`)
-        console.log(cldRes.url)
         res.json({
             message: cldRes,
             success: true

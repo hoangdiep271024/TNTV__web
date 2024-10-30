@@ -5,6 +5,7 @@ import routerForgotPassword from "./forgotPassword.js";
 import routerLichChieu from "./lichChieu.js";
 import routerLogin from "./login.js";
 import routerLogOut from "./logOut.js";
+import routerMuaVe from "./muaVe.js";
 import routerQRPayment from "./QRPayment.js";
 import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
@@ -22,4 +23,5 @@ router.use("/chatBot",routerChatBot)
 router.use("/userInfo",routerUserInfo)
 router.use("/logOut",routerLogOut)
 router.use("/forgotPassword",routerForgotPassword)
+router.use("/muaVe",routerMuaVe)
 export default router;

@@ -1,4 +1,4 @@
-import connection from "../models/SQLConnection.js";
+import connection from "../../models/SQLConnection.js";
 
 export const khuVuc = async(req,res)=>{
     const query = `SELECT region_name,regions.region_id, count(*) from regions

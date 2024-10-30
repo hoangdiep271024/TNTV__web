@@ -1,5 +1,5 @@
 import express from "express";
-import { filmInfo, filmShowing, filmShowTimeInfo } from "../controllers/film.js";
+import { filmInfo, filmShowing, filmShowTimeInfo } from "../../controllers/user/film.js";
 const routerFilm = express.Router()
 routerFilm.post("/filmShowing" ,filmShowing) 
 routerFilm.post("/filmInfo/id=:id",filmInfo)

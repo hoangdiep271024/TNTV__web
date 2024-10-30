@@ -3,7 +3,7 @@ import {
 } from "@google/generative-ai";
 
 import dotenv from "dotenv";
-import filmInfoForAI from "../middlewares/filmInfoForAI.js";
+import filmInfoForAI from "../../middlewares/user/filmInfoForAI.js";
 dotenv.config();
 const apiKey = process.env.GeminiApiKey;
 const genAI = new GoogleGenerativeAI(apiKey);
