@@ -2,7 +2,6 @@
 import axios from 'axios';
 import { default as React, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-
 import "./Mua_ve.css";
 
 const Mua_ve = ({ nextStep }) => {
@@ -73,15 +72,15 @@ const Mua_ve = ({ nextStep }) => {
     return (
         <div className="ticket-booking">
             <div className="book-info">
-                <p>{data.film_name}</p>
-                <p><strong>{data.cinema_name}</strong></p>
-                <p>Suất: {data.show_time} {data.show_date}</p>
-                <p><strong>Phòng chiếu:</strong> {data.room_name}</p>
+                <p style={{fontSize: '18px'}}>{data.film_name}</p>
+                <p style={{fontSize: '15px'}}><strong>{data.cinema_name}</strong></p>
+                <p style={{fontSize: '15px'}}>Suất chiếu: {data.show_time} {data.show_date}</p>
+                <p style={{fontSize: '15px'}}><strong>Phòng chiếu:</strong> {`P${data.room_name.substring(5)}`}</p>
             </div>
 
-            <div className="sum-price">
-                <p>TỔNG ĐƠN HÀNG:</p>
-                <p>{totalPrice.toLocaleString()}đ</p>
+            <div className="sum-price" style={{marginBottom: '15px'}}>
+                <p style={{fontSize: '15px', fontWeight: '800'}}>TỔNG ĐƠN HÀNG:</p>
+                <p style={{fontSize: '15px'}}>{totalPrice.toLocaleString()}đ</p>
             </div>
             <button id="back">
                 ←
@@ -94,6 +93,7 @@ const Mua_ve = ({ nextStep }) => {
                     backgroundColor: '#00b300',
                     boxShadow: '0 0 11px #00b300', color: '#fff', width: '25px', height: '25px', padding: '10px', margin: '10px'
                 }}></div>
+
                 <div>Ghế bạn chọn</div>
                 <div id="da-ban" style={{ background: 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)', width: '25px', height: '25px', margin: '10px' }}></div>
                 <div>Đã bán</div>

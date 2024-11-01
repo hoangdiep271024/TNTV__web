@@ -7,6 +7,8 @@ import { useTheme } from "@emotion/react";
 import FilmDetailTime from "./FilmDetailTime";
 import { Typography } from "@mui/material";
 import Shared from "../Shared";
+import { useNavigate } from 'react-router-dom';
+import Button from "@mui/material/Button";
 
 function createSlug(name) {
   return name
@@ -17,6 +19,7 @@ function createSlug(name) {
 }
 
 export default function FilmDetail() {
+  const navigate = useNavigate(); 
   const { film_name } = useParams();
   const [selectedArea, setSelectedArea] = useState(null);
   const [data, setData] = useState(null);
@@ -90,6 +93,10 @@ export default function FilmDetail() {
       fetchCinemas();
     }
   }, [film_id, selectedArea]);
+  const handleNavigate = (showtime_id) => {
+    localStorage.setItem('showTime_id', showtime_id);
+    navigate(`/dat_ve/${film_name}`);
+  };
 
   return (
     <>
@@ -461,11 +468,12 @@ export default function FilmDetail() {
                         {film__region[Time][theater][cinema] && (
                           <Box key={film__region[Time][theater][cinema].address} sx={{fontSize: '13px', color:theme.palette.mode === "dark" ? "white" : "#86888a"}}>
                             {film__region[Time][theater][cinema].address}
+                            <Box sx={{color: theme.palette.mode === "dark" ? "white" : "black"}}>Khung giờ:</Box>
                             <Box sx={{display: 'flex', justifyContent: 'start', flexWrap: 'wrap', gap: 1, marginTop :'10px'}}>
                             {film__region[Time][theater][cinema].show_time &&
                               Object.values(film__region[Time][theater][cinema].show_time).map(
                                 (showTime, index) => (
-                                  <Box key={index} sx={{border: `1px solid ${theme.palette.mode === "dark" ? "white" : "#86888a"}`, width: '50px', height: '35px', borderRadius: '4px', justifyContent: 'center', display: 'flex', alignItems:'center'}}>{`${showTime.show_time.substring(0,5)}`}</Box>
+                                  <Button onClick = {() => handleNavigate(showTime.showtime_id)} key={index} sx={{border: `1.4px solid ${theme.palette.mode === "dark" ? "white" : "#86888a"}`, width: '50px', height: '35px', borderRadius: '4px', justifyContent: 'center', display: 'flex', alignItems:'center', marginBottom: '7px', cursor: 'pointer'}}>{`${showTime.show_time.substring(0,5)}`}</Button>
                                 )
                               )}
                               </Box>

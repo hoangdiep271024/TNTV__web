@@ -15,7 +15,6 @@ html,body {
     width: 100%;
     height: 545px;
     margin: auto;
-    background-color: #f1f2f273;
     padding: 20px;
 }
 .book-info{
@@ -24,7 +23,6 @@ html,body {
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background: white;
     width: 300px;
     padding-left: 30px;
     font-size: small;
@@ -38,7 +36,6 @@ html,body {
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    background-color: white;
     width: 300px;
     padding-left: 30px;
     font-size: small;
@@ -47,7 +44,7 @@ html,body {
 #back{
     position: absolute;
     left: 975px;
-    top: 400px;
+    top: 410px;
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -61,16 +58,22 @@ html,body {
 #tiep-tuc{
     position: absolute;
     left: 1050px;
-    top: 400px;
+    top: 410px;
     margin: 15px;
-    border: 1px solid #ccc;
+    outline: none;
     border-radius: 8px;
     width: 225px;
     text-align: center;
     background-color: rgb(233, 101, 101);
     padding-top: 0;
-    font-size: small;
+    font-size: 15px;
 }
+#tiep-tuc:hover{
+background-color: transparent;
+border: 1px solid rgb(233, 101, 101);
+transition: all 0.2s;
+}
+
 
 #thanh-toan:hover{
     filter: brightness(0.8); 
@@ -96,7 +99,7 @@ html,body {
 .seat-row-child {
     border: 1px solid #ddd;
     border-radius: 4px;
-    background-color: #727575;
+    background-color: #ccd0d0;
     display: flex;
     justify-content: center; /* Căn giữa theo chiều ngang */
     align-items: center; /* Căn giữa theo chiều dọc */
@@ -124,6 +127,9 @@ html,body {
     text-align: center;
     font-size: small;
     margin: 5px;
+    cursor: pointer;
+    padding: 3px;
+    font-size: 10px;
 }
 
 .double_seat1{
