@@ -54,3 +54,11 @@ export const showSeat = async (req, res) => {
         res.status(500).json({ error: "Failed to retrieve seat information" });
     }
 };
+
+export const popcornInfo = async(req,res)=>{
+    const result = await connection.promise().query(`
+        SELECT * from popcorn_combos
+    `,);
+    res.json(result[0]);
+    console.log(result)
+}

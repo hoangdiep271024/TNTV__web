@@ -5,7 +5,7 @@ import { useParams } from 'react-router-dom';
 
 import "./Mua_ve.css";
 
-const Mua_ve = () => {
+const Mua_ve = ({ nextStep }) => {
 
     const { showtime_id } = useParams();
     const [data, setData] = useState(null);
@@ -14,6 +14,8 @@ const Mua_ve = () => {
     const [totalPrice, setTotalPrice] = useState(0);
 
     const handleSeatClick = (seat) => {
+        // Kiểm tra nếu ghế đã bán thì không thực hiện hành động gì
+        if (seat.seat_status === 1) return;
         const pairSeat = findPairSeat(seat);
         const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
 
@@ -84,7 +86,7 @@ const Mua_ve = () => {
             <button id="back">
                 ←
             </button>
-            <button id="tiep-tuc">
+            <button id="tiep-tuc" onClick={nextStep}>
                 Tiếp tục
             </button>
             <div className="ghe-info">
@@ -138,21 +140,26 @@ const Mua_ve = () => {
                                             ? '#d4b15f'
                                             : '#3b5998',
                                 filter: seat.seat_status === 1 ? 0.7 : 1,
+                                cursor: seat.seat_status === 1 ? 'not-allowed' : 'pointer'
                             }}
                             onClick={() => handleSeatClick(seat)}
                             onMouseOver={(e) => {
-                                if (!isSelected) {
-                                    e.currentTarget.innerText = seat.seat_location;
+                                if (seat.seat_status !== 1) {
+                                    if (!isSelected) {
+                                        e.currentTarget.innerText = seat.seat_location;
+                                    }
+                                    e.currentTarget.style.filter = 'brightness(0.8)';
+                                    e.currentTarget.style.opacity = 0.8;
                                 }
-                                e.currentTarget.style.filter = 'brightness(0.8)';
-                                e.currentTarget.style.opacity = 0.8;
                             }}
                             onMouseOut={(e) => {
-                                if (!isSelected) {
-                                    e.currentTarget.innerText = "";
+                                if (seat.seat_status !== 1) {
+                                    if (!isSelected) {
+                                        e.currentTarget.innerText = "";
+                                    }
+                                    e.currentTarget.style.filter = 'none';
+                                    e.currentTarget.style.opacity = 1;
                                 }
-                                e.currentTarget.style.filter = 'none';
-                                e.currentTarget.style.opacity = 1;
                             }}
                         >
                             {isSelected && seat.seat_location}
