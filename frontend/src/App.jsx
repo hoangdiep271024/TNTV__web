@@ -2,7 +2,7 @@ import React from "react";
 import { Navigate, Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import FilmBuy from "./components/film/FilmBuy";
 import FilmComment from "./components/film/FilmComment";
-import FilmDetail from "./components/film/FilmDetail";
+import FilmDetail from "./components/page/FilmDetail";
 import FilmTime from "./components/film/FilmTime";
 import BookingTicket from "./components/Mua_ve/index";
 import Auth from "./components/page/Auth";

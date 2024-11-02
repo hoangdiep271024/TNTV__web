@@ -10,6 +10,7 @@ import Navbar from './navbar/Navbar';
 import Header from './header/Header';
 import { useTheme } from "@emotion/react";
 import ChatBot from './chatBot/ChatBot';
+import zIndex from '@mui/material/styles/zIndex';
 
 export default function Shared() {
     const [isClickLogin, setIsClickLogin] = useState(false);
@@ -119,10 +120,10 @@ export default function Shared() {
               <ForgetPassword></ForgetPassword>
             </>
           )}
-        {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh'}}>
-        <ChatBotToggle toggleChat={toggleChatClick}></ChatBotToggle>
+        {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh', zIndex: '10000'}}>
+        <ChatBotToggle toggleChat={toggleChatClick} ></ChatBotToggle>
         </Box>}
-        {isOpen && <Box sx={{position:'fixed', right: '3vw',top:'50vh', width: '23vw', height: '35vh'}}>
+        {isOpen && <Box sx={{position:'fixed', right: '3vw',top:'50vh', width: '23vw', height: '35vh', zIndex: '10000'}}>
           
           <ChatBot closeClick={toggleChatClick}></ChatBot>
           </Box>}
