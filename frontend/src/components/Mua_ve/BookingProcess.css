@@ -2,11 +2,9 @@
     display: flex;
     justify-content: space-between;
     margin-bottom: 20px;
-    width: 100%;
+    width: 80%;
     top: 144px;
-    left: 0px;
     position: fixed;
-    background-color: white;
     border: 1px solid #ccc;
     border-radius: 5px;
 }
@@ -15,8 +13,6 @@
     flex: 1;
     text-align: center;
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
 }
 
 .step.active {
