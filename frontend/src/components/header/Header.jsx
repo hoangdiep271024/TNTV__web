@@ -108,7 +108,7 @@ const logOutClick = async(e) => {
           variant="span"
           style={{ marginTop: "4px", fontSize: "20px" }}
         >
-          TNTV Movie Tickets
+          NHTT Movie Tickets
         </Typography>
       </Box>
       <Box sx={{ alignItems: "center" }}>
