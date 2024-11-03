@@ -81,6 +81,8 @@ const logOutClick = async(e) => {
     console.error(error)
   }
 };
+    const black ='/black.gif'
+    const white ='/white.gif'
 
   return (
     <div
@@ -97,15 +99,16 @@ const logOutClick = async(e) => {
           width: "100%",
           display: "flex",
           alignItems: "center",
-          gap: 1,
+          gap: 0.6,
         }}
       >
-        <LiveTvIcon />
+        {theme.palette.mode === "dark" && <img src={white} style={{marginTop: '-15px',width: '50px', height: 'auto', objectFit: 'cover'}}></img>}
+        {theme.palette.mode === "light" && <img src={black} style={{marginTop: '-15px', width: '50px', height: 'auto', objectFit: 'cover'}}></img>}
         <Typography
           variant="span"
           style={{ marginTop: "4px", fontSize: "20px" }}
         >
-          TNTV Movie Tickets
+          NHTT Movie Tickets
         </Typography>
       </Box>
       <Box sx={{ alignItems: "center" }}>

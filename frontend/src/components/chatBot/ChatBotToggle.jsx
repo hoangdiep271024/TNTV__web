@@ -11,7 +11,7 @@ export default function ChatBotToggle({ toggleChat }) {
         sx={{
           width: '50px',
           height: '50px',
-          cursor: 'pointer'
+          cursor: 'pointer',
         }}
       >
         <img

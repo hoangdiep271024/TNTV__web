@@ -9,6 +9,7 @@ import { Typography } from "@mui/material";
 import Shared from "../Shared";
 import { useNavigate } from 'react-router-dom';
 import Button from "@mui/material/Button";
+import Footer from "../Footer/Footer";
 
 function createSlug(name) {
   return name
@@ -493,6 +494,7 @@ export default function FilmDetail() {
         })}
       </Box>
       </Box>
+      <Footer/>
     </>
   );
 }
