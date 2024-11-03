@@ -71,7 +71,7 @@ export default function Footer() {
             <Link href="#" underline="none" sx={{color: 'white'}}>Tin tức</Link>
       </div>
       <div style={{width: '300px', color: 'white'}}>
-          <div style={{fontSize: '20px', marginBottom: '15px'}}><strong>Liên hệ</strong></div>
+          <div style={{fontSize: '20px', marginBottom:'15px'}}><strong>Liên hệ</strong></div>
 
           <div style={{display: 'flex', gap: '8px'}}>
             <Link style={{color: 'white', cursor: 'pointer'}} href='https://x.com/Reuters'><TwitterIcon></TwitterIcon></Link>
