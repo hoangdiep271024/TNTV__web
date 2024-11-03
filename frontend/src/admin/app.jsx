@@ -1,16 +1,19 @@
-import React from "react";
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import Dashboard from "./Dashboard";
+import './global.css';
 
-const AppRouter = () => {
+import { Router } from './routes/sections';
+
+import { useScrollToTop } from './hooks/use-scroll-to-top';
+
+import { ThemeProvider } from './theme/theme-provider';
+
+// ----------------------------------------------------------------------
+
+export default function App() {
+    useScrollToTop();
+
     return (
-        <Router>
-            <Routes>
-                <Route path="/admin" element={<Dashboard />} />
-                <Route path="/dashboard" element={<Dashboard />} />
-            </Routes>
-        </Router>
+        <ThemeProvider>
+            <Router />
+        </ThemeProvider>
     );
-};
-
-export default AppRouter;
+}

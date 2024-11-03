@@ -1,10 +1,18 @@
-import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-import AppRouter from './app';
-import './global.css';
+import { StrictMode } from 'react';
+import { HelmetProvider } from 'react-helmet-async';
+import { BrowserRouter } from 'react-router-dom';
+
+import App from './app';
+
+// ----------------------------------------------------------------------
 
 createRoot(document.getElementById("admin-root")).render(
     <StrictMode>
-        <AppRouter />
+        <HelmetProvider>
+            <BrowserRouter>
+                <App />
+            </BrowserRouter>
+        </HelmetProvider>
     </StrictMode>
 );
