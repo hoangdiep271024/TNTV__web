@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource-variable/dm-sans": "^5.1.0",
     "@fontsource/barlow": "^5.1.0",
+    "@iconify/react": "^5.0.2",
     "@mui/icons-material": "5.13.7",
     "@mui/material": "5.15.14",
     "@mui/system": "^6.1.2",
@@ -23,8 +24,10 @@
     "dayjs": "^1.11.13",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-helmet-async": "^2.0.5",
     "react-pro-sidebar": "^1.1.0",
     "react-router-dom": "^6.26.2",
+    "simplebar-react": "^3.2.6",
     "styled-components": "^6.1.13"
   },
   "devDependencies": {
