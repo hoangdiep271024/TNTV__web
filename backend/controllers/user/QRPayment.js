@@ -1,33 +1,66 @@
 import crypto from "crypto";
 import https from "https";
+import connection from "../../models/SQLConnection.js";
+async function updateSeatStatus(showtime_id, bookedSeat, status){
+    try {
+        // Chuyển đổi bookedSeat thành chuỗi để sử dụng trong câu truy vấn
+        const seatIds = bookedSeat.map(seat => seat.seat_id).join(',');
+        // Thực hiện join các bảng cần thiết để lấy thông tin
+        await connection.promise().query(`
+            update seats set seat_status = ? where room_id in ( select room_id from showtimes where showtime_id = ?) and seat_id in (${seatIds})
+        `, [status,showtime_id]);
 
-const QRPayment = async (req, res) => {
-    // Parameters
+    } catch (error) {
+        console.error('Lỗi khi cập nhật trạng thái ghế:', error);
+    }
+}
+
+export const giuGhe = async(req,res) => {
+    const { showtime_id, bookedSeat } = req.body;
+    try {
+        // Cập nhật trạng thái ghế thành 1 (đã đặt)
+        await updateSeatStatus(showtime_id, bookedSeat, 1);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error reserving seats' });
+    }
+}
+
+export const huyGiuGhe = async(req,res) => {
+    const { showtime_id, bookedSeat } = req.body;
+    try {
+        // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
+        await updateSeatStatus(showtime_id, bookedSeat, 0);
+        res.json({ success: true });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error canceling reservation' });
+    }
+}
+
+export const QRPayment = (req, res) => {
+    const showtime_id = req.body.showtime_id;
+
     var accessKey = 'F8BBA842ECF85';
     var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
-    var orderInfo = 'pay with MoMo';
     var partnerCode = 'MOMO';
-    var redirectUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
-    var ipnUrl = 'https://webhook.site/b3088a6a-2d17-4f8d-a383-71389a6c600b';
+    var redirectUrl = `http://localhost:8888/thong_tin_ve`;
+    var ipnUrl = 'http://localhost:8888/api/payment/callback';
     var requestType = "payWithMethod";
-    var amount = '1000';
+    var amount = req.body.amount;
     var orderId = partnerCode + new Date().getTime();
     var requestId = orderId;
     var extraData = '';
-    var paymentCode = 'T8Qii53fAXyUftPV3m9ysyRhEanUs9KlOPfHgpMR0ON50U10Bh+vZdpJU7VY4z+Z2y77fJHkoDc69scwwzLuW5MzeUKTwPo3ZMaB29imm6YulqnWfTkgzqRaion+EuD7FN9wZ4aXE1+mRt0gHsU193y+yxtRgpmY7SDMU9hCKoQtYyHsfFR5FUAOAKMdw2fzQqpToei3rnaYvZuYaxolprm9+/+WIETnPUDlxCYOiw7vPeaaYQQH0BF0TxyU3zu36ODx980rJvPAgtJzH1gUrlxcSS1HQeQ9ZaVM1eOK/jl8KJm6ijOwErHGbgf/hVymUQG65rHU2MWz9U8QUjvDWA==';
-    var orderGroupId = '';
     var autoCapture = true;
     var lang = 'vi';
 
-    // Creating the raw signature
-    var rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=${orderInfo}&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
-    
-    // Generating HMAC SHA256 signature
+    var rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=pay with MoMo&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+
     var signature = crypto.createHmac('sha256', secretKey)
         .update(rawSignature)
         .digest('hex');
 
-    // JSON request body
     const requestBody = JSON.stringify({
         partnerCode: partnerCode,
         partnerName: "Test",
@@ -35,18 +68,16 @@ const QRPayment = async (req, res) => {
         requestId: requestId,
         amount: amount,
         orderId: orderId,
-        orderInfo: orderInfo,
+        orderInfo: 'pay with MoMo',
         redirectUrl: redirectUrl,
         ipnUrl: ipnUrl,
         lang: lang,
         requestType: requestType,
         autoCapture: autoCapture,
         extraData: extraData,
-        orderGroupId: orderGroupId,
         signature: signature
     });
 
-    // HTTPS request options
     const options = {
         hostname: 'test-payment.momo.vn',
         port: 443,
@@ -58,29 +89,44 @@ const QRPayment = async (req, res) => {
         }
     };
 
-    // Send the request and handle the response
     const paymentReq = https.request(options, paymentRes => {
-        console.log(`Status: ${paymentRes.statusCode}`);
-        paymentRes.setEncoding('utf8');
-        paymentRes.on('data', (body) => {
-            console.log('Body: ');
-            console.log(body);
-            console.log('resultCode: ');
-            console.log(JSON.parse(body).resultCode);
+        let data = '';
+        paymentRes.on('data', chunk => {
+            data += chunk;
         });
         paymentRes.on('end', () => {
-            console.log('No more data in response.');
+            const response = JSON.parse(data);
+            if (response.resultCode === 0) {
+                // Gửi lại URL thanh toán cho frontend
+                res.json({ paymentUrl: response.payUrl, orderId: response.orderId });
+            } else {
+                res.status(500).json({ error: 'Payment initiation failed' });
+            }
         });
     });
 
     paymentReq.on('error', (e) => {
-        console.log(`Problem with request: ${e.message}`);
+        console.error(`Problem with request: ${e.message}`);
+        res.status(500).json({ error: 'Internal Server Error' });
     });
 
-    // Write data to request body
-    console.log("Sending request...");
     paymentReq.write(requestBody);
     paymentReq.end();
 };
 
-export default QRPayment;
+// API trong backend (ví dụ sử dụng Express.js)
+export const QRPaymentUpdate = async (req, res) => {
+    const { orderId, resultCode, amount } = req.body;
+    try {
+        // Xử lý logic cập nhật vào database
+        if (resultCode === '0') {
+            await updatePaymentStatus(orderId, 'PAID'); // Cập nhật trạng thái thành công
+        } else {
+            await updatePaymentStatus(orderId, 'FAILED'); // Cập nhật trạng thái thất bại
+        }
+        res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
+    } catch (error) {
+        console.error('Lỗi khi cập nhật thanh toán:', error);
+        res.status(500).json({ message: 'Lỗi server' });
+    }
+};

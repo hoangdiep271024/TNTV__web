@@ -22,7 +22,7 @@ const generationConfig = {
     maxOutputTokens: 8192,
     responseMimeType: "text/plain",
 };
-const chatbot = async (req, res) => {
+const chatBot = async (req, res) => {
     try {
         const chatSession = model.startChat({
             generationConfig,
@@ -64,4 +64,4 @@ const chatbot = async (req, res) => {
     
 }
 
-export default chatbot
+export default chatBot
