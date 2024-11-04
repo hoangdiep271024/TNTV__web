@@ -1,11 +1,11 @@
 import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
 import { RouterLink } from '../../routes/components';
-import { AnchorIcon as Logo } from '@mui/icons-material/Anchor';
 import { Main, CompactContent } from './main';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 
+import { Typography } from '@mui/material';
 // ----------------------------------------------------------------------
 
 export function SimpleLayout({ sx, children, header, content }) {
@@ -27,7 +27,11 @@ export function SimpleLayout({ sx, children, header, content }) {
                                 This is an info Alert.
                             </Alert>
                         ),
-                        leftArea: <Logo />,
+                        leftArea: (
+                            <Typography variant="h6" component={RouterLink} to="/admin" sx={{ textDecoration: 'none', color: 'inherit' }}>
+                                Admin
+                            </Typography>
+                        ),
                         rightArea: (
                             <Link
                                 href="#"

@@ -18,7 +18,7 @@ export function NotFoundView() {
                 </Typography>
 
                 <Typography sx={{ color: 'text.secondary' }}>
-                    Sorry, we couldn’t find the page you’re looking for. Perhaps you’ve mistyped the URL? Be
+                    Sorry, we couldn't find the page you're looking for. Perhaps you’ve mistyped the URL? Be
                     sure to check your spelling.
                 </Typography>
 
@@ -32,7 +32,7 @@ export function NotFoundView() {
                     }}
                 />
 
-                <Button component={RouterLink} href="/" size="large" variant="contained" color="inherit">
+                <Button component={RouterLink} href="/admin" size="large" variant="contained" color="inherit">
                     Go to home
                 </Button>
             </Container>
