@@ -1,14 +1,14 @@
 import { Helmet } from 'react-helmet-async';
 
 import { NotFoundView } from '../sections/error';
-
 // ----------------------------------------------------- -----------------
 
-export default function Page() {
+export default function ErrorPage() {
+
     return (
         <>
             <Helmet>
-                <title> {`404 page not found! | Error`}</title>
+                <title> {`404 page not found! | Error Page`}</title>
             </Helmet>
 
             <NotFoundView />

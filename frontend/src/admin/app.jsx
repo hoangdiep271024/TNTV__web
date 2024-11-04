@@ -34,7 +34,7 @@ const router = createBrowserRouter([
     },
     {
         path: '*',
-        element: <Navigate to="admin/404" replace />,
+        element: <Navigate to="/admin/404" replace />,
     },
 ]);
 

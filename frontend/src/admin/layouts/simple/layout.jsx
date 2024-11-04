@@ -27,21 +27,6 @@ export function SimpleLayout({ sx, children, header, content }) {
                                 This is an info Alert.
                             </Alert>
                         ),
-                        leftArea: (
-                            <Typography variant="h6" component={RouterLink} to="/admin" sx={{ textDecoration: 'none', color: 'inherit' }}>
-                                Admin
-                            </Typography>
-                        ),
-                        rightArea: (
-                            <Link
-                                href="#"
-                                component={RouterLink}
-                                color="inherit"
-                                sx={{ typography: 'subtitle2' }}
-                            >
-                                Need help?
-                            </Link>
-                        ),
                     }}
                 />
             }
