@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
 
-import { CONFIG } from '../config-global';
 import { DashboardContent } from '../layouts/dashboard';
 import { Box, Typography, Button } from '@mui/material';
 
@@ -10,7 +9,7 @@ export default function HomePage() {
     return (
         <>
             <Helmet>
-                <title>{`Home - ${CONFIG.appName}`}</title>
+                <title>{`Home`}</title>
             </Helmet>
 
             {/* <DashboardContent>
@@ -29,4 +28,3 @@ export default function HomePage() {
         </>
     );
 }
-y

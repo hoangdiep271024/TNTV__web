@@ -13,7 +13,7 @@ import { navData } from '../config-nav-dashboard';
 import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
-import { AccountPopover } from '../components/account-popover';
+import { ScrollToTop } from '../../components/ScrollToTop';
 
 // ----------------------------------------------------------------------
 
@@ -63,24 +63,11 @@ export function DashboardLayout({ sx, children, header }) {
                         ),
                         rightArea: (
                             <Box gap={1} display="flex" alignItems="center">
-                                <AccountPopover
-                                    data={[
-                                        {
-                                            label: 'Home',
-                                            href: '/',
-                                            icon: <Iconify width={22} icon="solar:home-angle-bold-duotone" />,
-                                        },
-                                        {
-                                            label: 'Profile',
-                                            href: '#',
-                                            icon: <Iconify width={22} icon="solar:shield-keyhole-bold-duotone" />,
-                                        },
-                                        {
-                                            label: 'Settings',
-                                            href: '#',
-                                            icon: <Iconify width={22} icon="solar:settings-bold-duotone" />,
-                                        },
-                                    ]}
+                                <Iconify
+                                    icon="solar:user-circle-bold-duotone"
+                                    width={22}
+                                    sx={{ cursor: 'pointer' }}
+                                    onClick={() => alert('Account icon clicked')} // Replace with desired action
                                 />
                             </Box>
                         ),
@@ -115,6 +102,7 @@ export function DashboardLayout({ sx, children, header }) {
                 ...sx,
             }}
         >
+            <ScrollToTop />
             <Main>{children}</Main>
         </LayoutSection>
     );
