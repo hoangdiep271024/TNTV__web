@@ -1,42 +1,41 @@
 
-import axios from 'axios';
-import { default as React, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+
+import { useBooking } from './BookingContext';
 import "./Mua_ve.css";
 
-const Mua_ve = ({ nextStep }) => {
+import { default as React } from 'react';
 
-    const { showtime_id } = useParams();
-    const [data, setData] = useState(null);
-    const [loading, setLoading] = useState(true);
-    const [selectedSeats, setSelectedSeats] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
+const Mua_ve = ({ nextStep}) => {
+    
 
+    const { seatTotalAmount, setSeatTotalAmount, popcornTotalAmount, selectedSeats, setSelectedSeats,seatData } = useBooking();
     const handleSeatClick = (seat) => {
-        // Kiểm tra nếu ghế đã bán thì không thực hiện hành động gì
         if (seat.seat_status === 1) return;
+    
         const pairSeat = findPairSeat(seat);
         const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
-
+    
         let updatedSeats;
         if (isSelected) {
-            // Bỏ chọn cả ghế và ghế đôi nếu đã được chọn
             updatedSeats = selectedSeats.filter(
                 selectedSeat => selectedSeat.seat_id !== seat.seat_id && (!pairSeat || selectedSeat.seat_id !== pairSeat.seat_id)
             );
         } else {
-            // Chọn ghế và ghế đôi nếu chưa được chọn
+            const seatWithSeatName = {
+                ...seat,
+                seat_name: seat.seat_type === 0 ? "ghe_thuong" : seat.seat_type === 1 ? "ghe_vip" : "ghe_doi"
+            };
             updatedSeats = pairSeat
-                ? [...selectedSeats, seat, pairSeat]
-                : [...selectedSeats, seat];
+                ? [...selectedSeats, seatWithSeatName, { ...pairSeat, seat_name: "ghe_doi" }]
+                : [...selectedSeats, seatWithSeatName];
         }
-
+    
         setSelectedSeats(updatedSeats);
-
-        // Cập nhật tổng tiền
+    
         const newTotalPrice = updatedSeats.reduce((total, seat) => total + seat.price, 0);
-        setTotalPrice(newTotalPrice);
+        setSeatTotalAmount(newTotalPrice);
     };
+    
 
     // Hàm để tìm ghế đôi (ghế liền kề) trong hàng 'K' có seat_type = 2
     const findPairSeat = (seat) => {
@@ -49,43 +48,32 @@ const Mua_ve = ({ nextStep }) => {
                 ? `${seatRow}${seatNumber - 1}`
                 : `${seatRow}${seatNumber + 1}`;
 
-            return data.seats.find(s => s.seat_location === pairSeatLocation && s.seat_type === 2);
+            return seatData.seats.find(s => s.seat_location === pairSeatLocation && s.seat_type === 2);
         }
         return null;
     };
 
-    useEffect(() => {
-        // Fetch the showtime data from the API
-        axios.post(`/api/muaVe/showtime_id=${showtime_id}`)
-            .then(response => {
-                setData(response.data);
-                setLoading(false);
-            })
-            .catch(error => {
-                console.error("Error fetching data:", error);
-                setLoading(false);
-            });
-    }, [showtime_id]);
-
-    if (loading) return <p>Loading...</p>;
-    if (!data) return <p>Data not found.</p>;
     return (
         <div className="ticket-booking">
             <div className="book-info">
-                <p style={{fontSize: '18px'}}>{data.film_name}</p>
-                <p style={{fontSize: '15px'}}><strong>{data.cinema_name}</strong></p>
-                <p style={{fontSize: '15px'}}>Suất chiếu: {data.show_time} {data.show_date}</p>
-                <p style={{fontSize: '15px'}}><strong>Phòng chiếu:</strong> {`P${data.room_name.substring(5)}`}</p>
+                <p style={{ fontSize: '18px' }}>{seatData.film_name}</p>
+                <p style={{ fontSize: '15px' }}><strong>{seatData.cinema_name}</strong></p>
+                <p style={{ fontSize: '15px' }}>Suất chiếu: {seatData.show_time} {seatData.show_date}</p>
+                <p style={{ fontSize: '15px' }}><strong>Phòng chiếu:</strong> {`P${seatData.room_name.substring(5)}`}</p>
             </div>
 
-            <div className="sum-price" style={{marginBottom: '15px'}}>
-                <p style={{fontSize: '15px', fontWeight: '800'}}>TỔNG ĐƠN HÀNG:</p>
-                <p style={{fontSize: '15px'}}>{totalPrice.toLocaleString()}đ</p>
+            <div className="sum-price" style={{ marginBottom: '15px' }}>
+                <p style={{ fontSize: '15px', fontWeight: '800' }}>TỔNG ĐƠN HÀNG:</p>
+                <p style={{ fontSize: '15px' }}>{(seatTotalAmount+popcornTotalAmount).toLocaleString()}đ</p>
             </div>
             <button id="back">
                 ←
             </button>
-            <button id="tiep-tuc" onClick={nextStep}>
+            <button id="tiep-tuc" onClick={() => {
+                if (selectedSeats.length > 0) {
+                    nextStep();
+                }
+            }}>
                 Tiếp tục
             </button>
             <div className="ghe-info">
@@ -112,7 +100,7 @@ const Mua_ve = ({ nextStep }) => {
                 <div className="seat-row-child">J</div>
             </div>
             <div className="seats">
-                {data.seats && data.seats.map((seat, index) => {
+                {seatData && seatData.seats ? seatData.seats.map((seat, index) => {
                     const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
                     const isDoubleSeat = seat.seat_type === 2;
 
@@ -165,8 +153,7 @@ const Mua_ve = ({ nextStep }) => {
                             {isSelected && seat.seat_location}
                         </div>
                     );
-                })}
-
+                }) : <p>Loading seats...</p>}
             </div>
         </div >
     );

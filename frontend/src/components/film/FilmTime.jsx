@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
-import FilmInfo from "./FilmInfo";
-import { Link } from "react-router-dom";
 import { useTheme } from "@emotion/react";
-import FilmDetailTime from "./FilmDetailTime";
 import { Typography } from "@mui/material";
-import Shared from "../Shared";
-import { useNavigate } from 'react-router-dom';
+import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
+import Shared from "../Shared";
+import FilmDetailTime from "./FilmDetailTime";
+import FilmInfo from "./FilmInfo";
 
 function createSlug(name) {
   return name
@@ -96,7 +94,7 @@ export default function FilmDetail() {
   }, [film_id, selectedArea]);
   const handleNavigate = (showtime_id) => {
     localStorage.setItem('showTime_id', showtime_id);
-    navigate(`/dat_ve/${film_name}`);
+    navigate(`/dat_ve/${film_name}/${showtime_id}`);
   };
 
   return (
