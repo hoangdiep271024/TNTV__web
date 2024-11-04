@@ -1,15 +1,21 @@
 import axios from 'axios';
 import { createContext, default as React, useContext, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 const BookingContext = createContext();
 export const BookingProvider = ({ children }) => {
+    const location = useLocation();
+    const showtime_id = location.state?.showtime_id;
+    if(!showtime_id) {
+        return (
+            <h1>hi</h1>
+        )
+    }
     const [seatTotalAmount, setSeatTotalAmount] = useState(0);
     const [popcornTotalAmount, setPopcornTotalAmount] = useState(0);
     const [selectedSeats, setSelectedSeats] = useState([]);
     const [selectedCombos, setSelectedCombos] = useState([]);
     const [popcornData, setPopcornData] = useState(null);
-    const {showtime_id} = useParams()
     const [seatData, setSeatData] = useState(null);
     const [seatLoading, setSeatLoading] = useState(true);
     const [popcornLoading, setPopcornLoading] = useState(true);

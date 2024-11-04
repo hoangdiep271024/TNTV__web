@@ -1,14 +1,14 @@
 import crypto from "crypto";
 import https from "https";
 import connection from "../../models/SQLConnection.js";
-async function updateSeatStatus(showtime_id, bookedSeat, status){
+async function updateSeatStatus(showtime_id, bookedSeat, reserved_until){
     try {
         // Chuyển đổi bookedSeat thành chuỗi để sử dụng trong câu truy vấn
         const seatIds = bookedSeat.map(seat => seat.seat_id).join(',');
         // Thực hiện join các bảng cần thiết để lấy thông tin
         await connection.promise().query(`
-            update seats set seat_status = ? where room_id in ( select room_id from showtimes where showtime_id = ?) and seat_id in (${seatIds})
-        `, [status,showtime_id]);
+            update seat_status set reserved_until = ? where showtime_id = ? AND seat_id IN (${seatIds})
+        `, [reserved_until,showtime_id]);
 
     } catch (error) {
         console.error('Lỗi khi cập nhật trạng thái ghế:', error);
@@ -17,9 +17,10 @@ async function updateSeatStatus(showtime_id, bookedSeat, status){
 
 export const giuGhe = async(req,res) => {
     const { showtime_id, bookedSeat } = req.body;
+    const reserved_until = new Date(Date.now() + 5 * 60 * 1000); // Thời gian hiện tại + 5 phút
     try {
         // Cập nhật trạng thái ghế thành 1 (đã đặt)
-        await updateSeatStatus(showtime_id, bookedSeat, 1);
+        await updateSeatStatus(showtime_id, bookedSeat, reserved_until);
         res.json({ success: true });
     } catch (error) {
         console.error(error);
@@ -31,7 +32,7 @@ export const huyGiuGhe = async(req,res) => {
     const { showtime_id, bookedSeat } = req.body;
     try {
         // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
-        await updateSeatStatus(showtime_id, bookedSeat, 0);
+        await updateSeatStatus(showtime_id, bookedSeat, null);
         res.json({ success: true });
     } catch (error) {
         console.error(error);

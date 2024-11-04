@@ -9,6 +9,7 @@ html,body {
 }
 
 .ticket-booking {
+    background-color: rgb(211 208 208 / 16%);
     position: relative;
     top: 190px;
     font-family: Arial, sans-serif;
@@ -23,10 +24,12 @@ html,body {
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 300px;
-    padding-left: 30px;
+    width: 400px;
+    padding: 15px 20px 0px 20px;
     font-size: small;
-    top: 100px
+    top: 100px;
+    background-color: white;
+    color: black;
 }
 
 .sum-price{
@@ -36,9 +39,11 @@ html,body {
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 300px;
-    padding-left: 30px;
+    width: 400px;
+    padding: 15px 20px 0px 20px;
     font-size: small;
+    background-color: white;
+    color: black;
 }
 
 #back{
@@ -48,20 +53,21 @@ html,body {
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
-    width: 60px;
+    width: 70px;
     text-align: center;
     background-color: rgb(211, 208, 208);
     padding-top: 0;
+    color: black;
 }
 
 #tiep-tuc{
     position: absolute;
-    left: 1050px;
+    left: 1075px;
     top: 410px;
     margin: 15px;
     outline: none;
     border-radius: 8px;
-    width: 225px;
+    width: 300px;
     text-align: center;
     background-color: rgb(233, 101, 101);
     padding-top: 0;
@@ -88,6 +94,7 @@ color: red;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(10, 1fr); /* Chia đều thành 10 hàng */
     top: 100px;
+    color: black;
 }
 
 .seat-row-child {

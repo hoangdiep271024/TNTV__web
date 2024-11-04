@@ -18,7 +18,7 @@ function App() {
         <Route path="/phim/:film_name" element={<FilmDetail />}/>
         <Route path="/lich_chieu/:film_name" element={<FilmTime />}/>
         <Route path="/lich_chieu" element={<Lich_chieu />}/>
-        <Route path="/dat_ve/:film_name/:showtime_id" element = {<BookingTicket/>}/>
+        <Route path="/dat_ve/:film_name" element = {<BookingTicket/>}/>
         <Route path="/thong_tin_ve" element = {<Thong_tin_ve/>}/>
         <Route path="/danh_gia/:film_name" element={<FilmComment/>}/>
         <Route path="/mua_ve/:film_name" element={<FilmBuy/>}/>

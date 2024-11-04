@@ -10,7 +10,7 @@ const Mua_ve = ({ nextStep}) => {
 
     const { seatTotalAmount, setSeatTotalAmount, popcornTotalAmount, selectedSeats, setSelectedSeats,seatData } = useBooking();
     const handleSeatClick = (seat) => {
-        if (seat.seat_status === 1) return;
+        if (seat.seat_status === 1 || (seat.reserved_until && new Date(seat.reserved_until) > new Date())) return;
     
         const pairSeat = findPairSeat(seat);
         const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
@@ -81,9 +81,10 @@ const Mua_ve = ({ nextStep}) => {
                     backgroundColor: '#00b300',
                     boxShadow: '0 0 11px #00b300', color: '#fff', width: '25px', height: '25px', padding: '10px', margin: '10px'
                 }}></div>
-
                 <div>Ghế bạn chọn</div>
-                <div id="da-ban" style={{ background: 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)', width: '25px', height: '25px', margin: '10px' }}></div>
+                <div id='đang được giữ' style={{ background: 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)', width: '25px', height: '25px', margin: '10px' }}></div>
+                <div>Đang được giữ</div>
+                <div id="da-ban" style={{ background: 'repeating-linear-gradient(0deg, hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .1) 10px, hsla(0, 0%, 0%, .1) 0, hsla(0, 0%, 60%, .6) 1px)',width: '25px', height: '25px', margin: '10px' }}></div>
                 <div>Đã bán</div>
             </div>
             <div className="man-hinh">MÀN HÌNH</div>
@@ -102,6 +103,7 @@ const Mua_ve = ({ nextStep}) => {
             <div className="seats">
                 {seatData && seatData.seats ? seatData.seats.map((seat, index) => {
                     const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
+                    const isReserved = seat.reserved_until && new Date(seat.reserved_until) > new Date();
                     const isDoubleSeat = seat.seat_type === 2;
 
                     // Kiểm tra xem `seat_location` là số lẻ hay chẵn
@@ -117,8 +119,9 @@ const Mua_ve = ({ nextStep}) => {
                             className={`seat ${seat.seat_status === 0 ? 'available' : 'occupied'} ${isSelected ? 'selected' : ''} ${doubleSeatClass}`}
                             style={{
                                 boxShadow: isSelected ? '0 0 11px #00b300' : 'none',
-                                background: seat.seat_status === 1
+                                background: isReserved
                                     ? 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)'
+                                    : seat.seat_status === 1 ? 'repeating-linear-gradient(0deg, hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .1) 10px, hsla(0, 0%, 0%, .1) 0, hsla(0, 0%, 60%, .6) 1px)'
                                     : 'none',
                                 backgroundColor: isSelected
                                     ? '#00b300'

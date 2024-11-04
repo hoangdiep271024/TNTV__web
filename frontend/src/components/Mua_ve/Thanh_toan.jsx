@@ -1,9 +1,10 @@
 import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useBooking } from './BookingContext';
+import "./Thanh_toan.css";
 
-const Thanh_toan = ({ nextStep}) => {
-    const { showtime_id,seatTotalAmount, popcornTotalAmount, selectedSeats, selectedCombos} = useBooking();
+const Thanh_toan = ({ nextStep }) => {
+    const { showtime_id, seatTotalAmount, popcornTotalAmount, selectedSeats, selectedCombos } = useBooking();
     const [loading, setLoading] = useState(false); // Thêm trạng thái loading
     const [timeLeft, setTimeLeft] = useState(300); // 5 phút = 300 giây
 
@@ -61,7 +62,7 @@ const Thanh_toan = ({ nextStep}) => {
         setLoading(true); // Bắt đầu loading khi nhấn nút Thanh Toán
 
         try {
-            const response = await axios.post('/api/payment', { showtime_id:  showtime_id, amount: totalAmount });
+            const response = await axios.post('/api/payment', { showtime_id: showtime_id, amount: totalAmount });
             if (response.data && response.data.paymentUrl) {
                 // Mở trang mới và chuyển hướng tới URL thanh toán
                 window.location.href = response.data.paymentUrl;
@@ -95,37 +96,52 @@ const Thanh_toan = ({ nextStep}) => {
     }, {});
 
     return (
-        <div className='ticket-booking'>
-            <h2>Thanh Toán</h2>
-            <div>
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Tên sản phẩm</th>
-                            <th>Số lượng</th>
-                            <th>Giá</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {Object.entries(groupedSeats).map(([seatTypeName, details], index) => (
-                            <tr key={`seat-${index}`}>
-                                <td>{seatTypeName}</td>
-                                <td>{details.quantity}</td>
-                                <td>{details.price.toLocaleString()}đ</td>
-                            </tr>
-                        ))}
-                        {Object.values(selectedCombos).map((combo, index) => (
-                            <tr key={`combo-${index}`}>
-                                <td>{combo.combo_name}</td>
-                                <td>{combo.quantity}</td>
-                                <td>{(combo.price * combo.quantity).toLocaleString()}đ</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+        <div className='ticket-booking '>
+            <div className='thong_tin_thang_toan' style={{ position: 'absolute' }}>
+                <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: '450px 180px 180px', // Đặt kích thước tương tự Bap_nuoc
+                    margin: '50px',
+                    marginLeft: '100px',
+                    border: '1px solid #ccc',
+                    padding: '0px',
+                }}>
+                    <div className='grid-items grid-item-first first-row'><div className='display-flex-row'>Tên sản phẩm</div></div>
+                    <div className='grid-items grid-item-second display-flex-column first-row' ><div className='display-flex-row'>Số lượng</div></div>
+                    <div className='grid-items grid-item-third display-flex-column first-row' ><div className='display-flex-row'>Thành tiền</div></div>
+
+                    {/* Danh sách ghế */}
+                    {Object.entries(groupedSeats).map(([seatTypeName, details], index) => (
+                        <React.Fragment key={`seat-${index}`}>
+                            <div className='grid-items grid-item-first background-color-white '><div className='display-flex-row'>{seatTypeName}</div></div>
+                            <div className='grid-items grid-item-second background-color-white display-flex-column'><div className='display-flex-row'>{details.quantity}</div></div>
+                            <div className='grid-items grid-item-third background-color-white display-flex-column'><div className='display-flex-row'>{details.price.toLocaleString()}đ</div></div>
+                        </React.Fragment>
+                    ))}
+
+                    {/* Danh sách combo */}
+                    {Object.values(selectedCombos).map((combo, index) => (
+                        <React.Fragment key={`combo-${index}`}>
+                            <div className='grid-items grid-item-first background-color-white'><div className='display-flex-row'>{combo.combo_name}</div></div>
+                            <div className='grid-items grid-item-second background-color-white display-flex-column'><div className='display-flex-row'>{combo.quantity}</div></div>
+                            <div className='grid-items grid-item-third background-color-white display-flex-column'><div className='display-flex-row'>{(combo.price * combo.quantity).toLocaleString()}đ</div></div>
+                        </React.Fragment>
+                    ))}
+                </div>
             </div>
-            <div className='sum-price'>Tổng tiền: {totalAmount.toLocaleString()}đ  thời gian giữ ghế: {Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</div>
-            <button id='tiep-tuc' onClick={handlePayment}>Thanh Toán</button>
+                <div className='thanh-toan-info'>
+                    <p style={{ fontSize: '15px', fontWeight: '400' }}>Tổng tiền:</p>
+                    <p style={{ fontSize: '15px', fontWeight: '800' }}>{totalAmount.toLocaleString()}đ</p>
+                    <p style={{ fontSize: '15px', fontWeight: '400' }}>Thời gian giữ ghế:</p>
+                    <p style={{ fontSize: '15px', fontWeight: '800' }}>{Math.floor(timeLeft / 60)}:{timeLeft % 60 < 10 ? '0' : ''}{timeLeft % 60}</p>
+                </div>
+                <div className='thanh-toan-canh-bao'>
+                <p style={{ fontSize: '15px', fontWeight: '400' }}>Vé đã mua không thể đổi hoặc hoàn tiền.<br>
+                </br>Mã vé sẽ được gửi 01 lần qua email đã nhập. Vui lòng kiểm tra lại thông tin trước khi tiếp tục.</p>
+                </div>
+                <button id='thanh-toan' style={{
+
+                }} onClick={handlePayment}>Thanh Toán</button>
         </div>
     );
 };
