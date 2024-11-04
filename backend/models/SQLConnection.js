@@ -7,13 +7,7 @@ const connection = mysql.createConnection({
     user: 'root', // Tên người dùng của cơ sở dữ liệu
     password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
     database: 'web_phim' // Tên của cơ sở dữ liệu
-<<<<<<< HEAD
-    
 });
-
-=======
-})
->>>>>>> 95dcc79491519920d277860e2a6e1007efa40038
 // Kết nối đến cơ sở dữ liệu
 connection.connect((err) => {
     if (err) {
