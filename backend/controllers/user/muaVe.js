@@ -3,8 +3,7 @@ import connection from "../../models/SQLConnection.js";
 
 export const showSeat = async (req, res) => {
     try {
-        const showtime_id = req.params.showtime_id;
-
+        const showtime_id = req.params.showtime_id
         // Thực hiện join các bảng cần thiết để lấy thông tin
         const result = await connection.promise().query(`
             SELECT 
@@ -25,8 +24,8 @@ export const showSeat = async (req, res) => {
             JOIN seats ON rooms.room_id = seats.room_id
             WHERE showtimes.showtime_id = ?
         `, [showtime_id]);
-        // Xử lý dữ liệu kết quả để trả về đúng định dạng mong muốn
 
+        // Xử lý dữ liệu kết quả để trả về đúng định dạng mong muốn
         const date = new Date(result[0][0].show_date)
         const weekday = date.toLocaleDateString('en', { weekday: 'long' }); // Lấy thứ bằng tiếng Việt
         const day = date.getDate(); // Lấy ngày
@@ -54,3 +53,10 @@ export const showSeat = async (req, res) => {
         res.status(500).json({ error: "Failed to retrieve seat information" });
     }
 };
+
+export const popcornInfo = async(req,res)=>{
+    const result = await connection.promise().query(`
+        SELECT * from popcorn_combos
+    `,);
+    res.json(result[0]);
+}

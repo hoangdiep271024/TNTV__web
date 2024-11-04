@@ -4,6 +4,8 @@ import Box from '@mui/material/Box';
 import FilmInfo from './FilmInfo';
 import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
+import Footer from '../Footer/Footer';
+import Shared from '../Shared';
 
 function createSlug(name) {
   return name
@@ -80,6 +82,7 @@ export default function FilmDetail() {
 
   return (
     <>
+    <Shared></Shared>
       {data && (() => {
         const item = data.info.film[0]; 
         const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
@@ -108,6 +111,7 @@ export default function FilmDetail() {
           </>
         );
       })()}
+      <Footer/>
     </>
   );
 }

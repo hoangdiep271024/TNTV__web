@@ -4,6 +4,7 @@ import Box from "@mui/material/Box";
 import React from "react";
 import Shared from "../Shared";
 import Ticket__film from "../film/Ticket__film"
+import Footer from "../Footer/Footer";
 export default function Auth() {
   return (
     <><Box
@@ -14,6 +15,7 @@ export default function Auth() {
     >
       <Shared></Shared>
       <Ticket__film></Ticket__film>
+      <Footer/>
       </Box>
     </>
   );

@@ -1,15 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import CssBaseline from '@mui/material/CssBaseline';
+import { useTheme } from "@emotion/react";
 import Box from '@mui/material/Box';
-import ChatBotToggle from './chatBot/ChatBotToggle';
+import React, { useEffect, useState } from 'react';
 import ForgetPassword from './Account/ForgetPassword';
+import Login from './Account/Login';
 import Profile from './Account/Profile';
 import Signup from './Account/Signup';
-import Login from './Account/Login';
-import Navbar from './navbar/Navbar';
-import Header from './header/Header';
-import { useTheme } from "@emotion/react";
 import ChatBot from './chatBot/ChatBot';
+import ChatBotToggle from './chatBot/ChatBotToggle';
+import Header from './header/Header';
+import Navbar from './navbar/Navbar';
 
 export default function Shared() {
     const [isClickLogin, setIsClickLogin] = useState(false);
@@ -119,10 +118,10 @@ export default function Shared() {
               <ForgetPassword></ForgetPassword>
             </>
           )}
-        {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh'}}>
-        <ChatBotToggle toggleChat={toggleChatClick}></ChatBotToggle>
+        {!isOpen && <Box sx={{position:'fixed', right: '3vw', top: '90vh', zIndex: '10000'}}>
+        <ChatBotToggle toggleChat={toggleChatClick} ></ChatBotToggle>
         </Box>}
-        {isOpen && <Box sx={{position:'fixed', right: '3vw',top:'50vh', width: '23vw', height: '35vh'}}>
+        {isOpen && <Box sx={{position:'fixed', right: '3vw',top:'50vh', width: '23vw', height: '35vh', zIndex: '10000'}}>
           
           <ChatBot closeClick={toggleChatClick}></ChatBot>
           </Box>}

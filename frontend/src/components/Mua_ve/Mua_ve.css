@@ -52,7 +52,6 @@ html,body {
     text-align: center;
     background-color: rgb(211, 208, 208);
     padding-top: 0;
-    font-size: small;
 }
 
 #tiep-tuc{
@@ -66,17 +65,12 @@ html,body {
     text-align: center;
     background-color: rgb(233, 101, 101);
     padding-top: 0;
-    font-size: 15px;
 }
 #tiep-tuc:hover{
 background-color: transparent;
 border: 1px solid rgb(233, 101, 101);
 transition: all 0.2s;
-}
-
-
-#thanh-toan:hover{
-    filter: brightness(0.8); 
+color: red;
 }
 
 #back:hover{
