@@ -26,9 +26,15 @@ const router = createBrowserRouter([
         ),
         children: [
             { element: <HomePage />, index: true },
-            { path: '404', element: <Page404 /> },
-            { path: '*', element: <Navigate to="404" replace /> },     // Redirects undefined paths under /admin to /admin/404
         ],
+    },
+    {
+        path: '/admin/404',
+        element: <Page404 />
+    },
+    {
+        path: '*',
+        element: <Navigate to="admin/404" replace />,
     },
 ]);
 
