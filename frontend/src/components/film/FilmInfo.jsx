@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import { Typography } from '@mui/material';
@@ -8,7 +8,12 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
+import Trailer from './Trailer';
 export default function FilmInfo(props) {
+  const [isClickTrailer, setIsClickTrailer] = useState(false)
+  const trailerClick = () => {
+           setIsClickTrailer(!isClickTrailer)
+  }
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
@@ -25,7 +30,7 @@ export default function FilmInfo(props) {
         Thích
         </button>
       <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>Đánh giá</button>
-      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>Trailer</button>
+      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}} onClick={trailerClick}>Trailer</button>
       <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>Mua vé</button>
      </div>
      <Typography style={{ marginTop: '7px', fontSize: '14px'}} >{props.descript}</Typography>
@@ -84,7 +89,20 @@ export default function FilmInfo(props) {
   );
 })}
      </div>
-     
+     {isClickTrailer && <>
+      <Box
+    sx={{
+      position: "absolute",
+      zIndex: "10",
+      width:'100vw',
+      height: '200vh',
+      backgroundColor: 'rgba(76, 79, 77, 0.5)'
+    }}
+    autoComplete="off"
+    onClick = {trailerClick}
+  ></Box>
+     <Trailer/>
+     </>}
     </Box>
   )
 }
