@@ -77,6 +77,12 @@ export function createPaletteChannel(hexPalette) {
  * Color with alpha channel
  */
 export function varAlpha(color, opacity = 1) {
+
+    if (typeof color !== 'string') {
+        console.log("Color received:", color);
+        throw new Error(`[Alpha]: Expected a string for color, but got ${typeof color}.`);
+    }
+
     const unsupported =
         color.startsWith('#') ||
         color.startsWith('rgb') ||

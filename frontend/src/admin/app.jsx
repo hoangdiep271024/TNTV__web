@@ -1,19 +1,43 @@
 import './global.css';
 
-import { Router } from './routes/sections';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import { useScrollToTop } from './hooks/use-scroll-to-top';
+import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
 
-import { ThemeProvider } from './theme/theme-provider';
+import theme from './theme/theme'
+
+import { lazy } from 'react';
+import { Outlet, Navigate } from 'react-router-dom';
+
+import { DashboardLayout } from './layouts/dashboard';
+
+const HomePage = lazy(() => import('./pages/home'));
+const Page404 = lazy(() => import('./pages/page-not-found'));
 
 // ----------------------------------------------------------------------
+const router = createBrowserRouter([
+    {
+        path: '/admin',
+        element: (
+            <DashboardLayout>
+                <Outlet />
+            </DashboardLayout>
+        ),
+        children: [
+            { element: <HomePage />, index: true },
+            { path: '404', element: <Page404 /> },
+            { path: '*', element: <Navigate to="404" replace /> },     // Redirects undefined paths under /admin to /admin/404
+        ],
+    },
+]);
 
+// ----------------------------------------------------------------------
 export default function App() {
-    useScrollToTop();
-
     return (
-        <ThemeProvider>
-            <Router />
-        </ThemeProvider>
+        <CssVarsProvider theme={theme}>
+            <CssBaseline />
+            <RouterProvider router={router} />
+        </CssVarsProvider>
     );
 }

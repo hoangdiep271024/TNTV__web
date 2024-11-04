@@ -1,4 +1,3 @@
-
 import { useEffect } from 'react';
 
 import Box from '@mui/material/Box';
@@ -6,8 +5,6 @@ import ListItem from '@mui/material/ListItem';
 import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
-import { AnchorIcon as Logo } from '@mui/icons-material/Anchor';
-
 
 import { usePathname } from '../../routes/hooks';
 import { RouterLink } from '../../routes/components';
@@ -15,8 +12,67 @@ import { RouterLink } from '../../routes/components';
 import { varAlpha } from '../../theme/styles';
 
 import { Scrollbar } from '../../components/scrollbar';
+import { IconButton } from '@mui/material';
 
+// ----------------------------------------------------------------------
+export function NavContent({ data, slots, sx }) {
+    const pathname = usePathname();
 
+    return (
+        <>
+            {slots?.topArea}
+
+            <Scrollbar fillContent>
+                <Box component="nav" display="flex" flex="1 1 auto" flexDirection="column" sx={sx}>
+                    <Box component="ul" gap={0.5} display="flex" flexDirection="column">
+                        {data.map((item) => {
+                            const isActived = item.path === pathname;
+
+                            return (
+                                <ListItem disableGutters disablePadding key={item.title}>
+                                    <ListItemButton
+                                        disableGutters
+                                        component={RouterLink}
+                                        href={item.path}
+                                        sx={{
+                                            pl: 2,
+                                            py: 1,
+                                            gap: 2,
+                                            pr: 1.5,
+                                            borderRadius: 0.75,
+                                            typography: 'body2',
+                                            fontWeight: 'fontWeightMedium',
+                                            color: 'var(--layout-nav-item-color)',
+                                            minHeight: 'var(--layout-nav-item-height)',
+                                            ...(isActived && {
+                                                fontWeight: 'fontWeightSemiBold',
+                                                bgcolor: 'var(--layout-nav-item-active-bg)',
+                                                color: 'var(--layout-nav-item-active-color)',
+                                                '&:hover': {
+                                                    bgcolor: 'var(--layout-nav-item-hover-bg)',
+                                                },
+                                            }),
+                                        }}
+                                    >
+                                        <Box component="span" sx={{ width: 24, height: 24 }}>
+                                            {item.icon}
+                                        </Box>
+
+                                        <Box component="span" flexGrow={1}>
+                                            {item.title}
+                                        </Box>
+                                    </ListItemButton>
+                                </ListItem>
+                            );
+                        })}
+                    </Box>
+                </Box>
+            </Scrollbar>
+
+            {slots?.bottomArea}
+        </>
+    );
+}
 
 export function NavDesktop({
     sx,
@@ -65,15 +121,14 @@ export function NavMobile({
 
     useEffect(() => {
         if (open) {
-            onClose();
+            onClose(); // Closes the drawer when the pathname changes
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [pathname]);
+    }, [pathname]); // Effect runs on pathname change
 
     return (
         <Drawer
-            open={open}
-            onClose={onClose}
+            open={open} // Controls the open state of the drawer
+            onClose={onClose} // Function to close the drawer
             sx={{
                 [`& .${drawerClasses.paper}`]: {
                     pt: 2.5,
@@ -90,67 +145,3 @@ export function NavMobile({
     );
 }
 
-// ----------------------------------------------------------------------
-
-export function NavContent({ data, slots, sx }) {
-    const pathname = usePathname();
-
-    return (
-        <>
-            <Logo />
-
-            {slots?.topArea}
-
-            <Scrollbar fillContent>
-                <Box component="nav" display="flex" flex="1 1 auto" flexDirection="column" sx={sx}>
-                    <Box component="ul" gap={0.5} display="flex" flexDirection="column">
-                        {data.map((item) => {
-                            const isActived = item.path === pathname;
-
-                            return (
-                                <ListItem disableGutters disablePadding key={item.title}>
-                                    <ListItemButton
-                                        disableGutters
-                                        component={RouterLink}
-                                        href={item.path}
-                                        sx={{
-                                            pl: 2,
-                                            py: 1,
-                                            gap: 2,
-                                            pr: 1.5,
-                                            borderRadius: 0.75,
-                                            typography: 'body2',
-                                            fontWeight: 'fontWeightMedium',
-                                            color: 'var(--layout-nav-item-color)',
-                                            minHeight: 'var(--layout-nav-item-height)',
-                                            ...(isActived && {
-                                                fontWeight: 'fontWeightSemiBold',
-                                                bgcolor: 'var(--layout-nav-item-active-bg)',
-                                                color: 'var(--layout-nav-item-active-color)',
-                                                '&:hover': {
-                                                    bgcolor: 'var(--layout-nav-item-hover-bg)',
-                                                },
-                                            }),
-                                        }}
-                                    >
-                                        <Box component="span" sx={{ width: 24, height: 24 }}>
-                                            {item.icon}
-                                        </Box>
-
-                                        <Box component="span" flexGrow={1}>
-                                            {item.title}
-                                        </Box>
-
-                                        {item.info && item.info}
-                                    </ListItemButton>
-                                </ListItem>
-                            );
-                        })}
-                    </Box>
-                </Box>
-            </Scrollbar>
-
-            {slots?.bottomArea}
-        </>
-    );
-}

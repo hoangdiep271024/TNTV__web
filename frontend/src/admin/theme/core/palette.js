@@ -1,8 +1,6 @@
 import COLORS from './colors.json';
 import { varAlpha, createPaletteChannel } from '../styles';
 
-// ----------------------------------------------------------------------
-
 // Color Types
 export const colorTypes = ['primary', 'secondary', 'info', 'success', 'warning', 'error'];
 
