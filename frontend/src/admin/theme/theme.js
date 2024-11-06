@@ -1,11 +1,12 @@
 import { experimental_extendTheme as extendTheme } from '@mui/material/styles';
-import { shadows, typography, colorSchemes } from './core';
+import { colorSchemes, typography, shadows, components } from './core';
 
 // Create a theme instance.
 const theme = extendTheme({
     colorSchemes,
     typography,
     shadows: shadows(),
+    components,
     shape: { borderRadius: 8 },
     cssVarPrefix: '',
     shouldSkipGeneratingVar
