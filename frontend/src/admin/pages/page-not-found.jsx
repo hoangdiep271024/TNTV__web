@@ -8,7 +8,7 @@ export default function ErrorPage() {
     return (
         <>
             <Helmet>
-                <title> {`404 page not found! | Error Page`}</title>
+                <title> {`404 page not found! | Error Page | NHTT Admin Panel`}</title>
             </Helmet>
 
             <NotFoundView />

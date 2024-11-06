@@ -9,10 +9,10 @@ export default function HomePage() {
     return (
         <>
             <Helmet>
-                <title>{`Home`}</title>
+                <title>{`Home | NHTT Admin Panel`}</title>
             </Helmet>
 
-            {/* <DashboardContent>
+            <DashboardContent>
                 <Box sx={{ padding: 4, textAlign: 'center' }}>
                     <Typography variant="h4" gutterBottom>
                         Welcome to the Dashboard!
@@ -20,11 +20,11 @@ export default function HomePage() {
                     <Typography variant="body1" sx={{ marginBottom: 3 }}>
                         Here you can manage your data and view analytics.
                     </Typography>
-                    <Button variant="contained" color="primary" href="/some-route">
+                    <Button variant="contained" color="primary" href="/admin">
                         Get Started
                     </Button>
                 </Box>
-            </DashboardContent> */}
+            </DashboardContent>
         </>
     );
 }

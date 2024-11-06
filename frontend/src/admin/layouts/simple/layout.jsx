@@ -1,11 +1,7 @@
-import Link from '@mui/material/Link';
 import Alert from '@mui/material/Alert';
-import { RouterLink } from '../../routes/components';
 import { Main, CompactContent } from './main';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
-
-import { Typography } from '@mui/material';
 // ----------------------------------------------------------------------
 
 export function SimpleLayout({ sx, children, header, content }) {
