@@ -12,7 +12,7 @@ import EmailIcon from '@mui/icons-material/Email';
 export default function Footer() {
     const theme = useTheme();
   return (
-    <Box sx={{width: '100vw', height: '400px', backgroundColor: '#3586FF', marginTop: '180px', position:'relative'}}>
+    <Box sx={{width: '100vw', height: '400px', backgroundColor: '#3586FF', marginTop: '200px', position:'relative', zIndex: '4'}}>
       <div className='waves'>
         <div className='wave wave1'></div>
         <div className='wave wave2'></div>
@@ -30,7 +30,7 @@ export default function Footer() {
           <div>Số đăng ký kinh doanh : 0123456789</div>
           <div>Địa chỉ: 33 Nguyễn Trung Trực, P.5, Q. Bình Thạnh, Tp. Hồ Chí Minh</div>
         </div>
-       <div style={{marginTop: '-10px', alignItems: 'start', width: '300px'}}>
+       <div style={{ alignItems: 'start', width: '300px'}}>
         <p style={{fontSize: '20px'}}><strong>Đối tác</strong></p>
         <div style={{display: 'flex', flexWrap: 'wrap', width: '300px', gap: '8px', marginTop: '-5px'}}>
         <img src="/beta.jpg" style={{width: '35px', height: '35px', borderRadius: '100%', objectFit: 'cover'}}></img>

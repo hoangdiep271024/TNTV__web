@@ -7,6 +7,7 @@ const connection = mysql.createConnection({
     user: 'root', // Tên người dùng của cơ sở dữ liệu
     password: 'Noname4ever@', // Mật khẩu của cơ sở dữ liệu
     database: 'newschema' // Tên của cơ sở dữ liệu
+
 });
 // Kết nối đến cơ sở dữ liệu
 connection.connect((err) => {
