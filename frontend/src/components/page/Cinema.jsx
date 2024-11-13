@@ -22,9 +22,12 @@ export default function Cinema() {
     setSelectedArea(newArea);
   };
   const [data, setData]= useState(null)
-  const cinemaClick = (cinema_id, cinema_name) => {
+  const cinemaClick = (cinema_id, cinema_name, cinema_namee, cinema_address, cluster_name) => {
     navigate(`/rap/${cinema_name}`)
     localStorage.setItem('cinema_id', cinema_id)
+    localStorage.setItem('cinema_name', cinema_namee)
+    localStorage.setItem('cinema_address', cinema_address)
+    localStorage.setItem('cluster_name', cluster_name)
   }
   useEffect(() => {
     const fetchData = async () => {
@@ -65,7 +68,7 @@ export default function Cinema() {
     <Box>
       {data.map((item, key) => (
        
-        <Box onClick={() => cinemaClick(item.cinema_id, encodeURIComponent(createSlug(item.cinema_name)))} key = {item.cinema_id} sx={{display: 'flex', justifyContent: 'start',gap: '16px', alignItems: 'center', borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#cccac4' : '#b5b5b3'}`, width: '49.8vw', marginLeft:'0.05vw', height: '60px', cursor: 'pointer', '&:hover': {backgroundColor: theme.palette.mode === 'dark' ? '#636360' : '#dbdbd7'}}}>
+        <Box onClick={() => cinemaClick(item.cinema_id, encodeURIComponent(createSlug(item.cinema_name)), item.cinema_name, item.address, item.cluster_name)} key = {item.cinema_id} sx={{display: 'flex', justifyContent: 'start',gap: '16px', alignItems: 'center', borderTop: `1px solid ${theme.palette.mode === 'dark' ? '#cccac4' : '#b5b5b3'}`, width: '49.8vw', marginLeft:'0.05vw', height: '60px', cursor: 'pointer', '&:hover': {backgroundColor: theme.palette.mode === 'dark' ? '#636360' : '#dbdbd7'}}}>
           {item.cluster_name === 'Beta Cinemas' && (
             <img src="/beta.jpg" style={{width: '30px', height: '30px', borderRadius: '100%', objectFit: 'cover', marginLeft :'10px'}}></img>
           )}
