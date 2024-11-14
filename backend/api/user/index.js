@@ -10,6 +10,7 @@ import routerQRPayment from "./QRPayment.js";
 import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
 import routerUserInfo from "./userInfo.js";
+import routerCinema from "./cinema.js"
 
 const router = express.Router()
 
@@ -24,4 +25,5 @@ router.use("/userInfo",routerUserInfo)
 router.use("/logOut",routerLogOut)
 router.use("/forgotPassword",routerForgotPassword)
 router.use("/muaVe",routerMuaVe)
+router.use("/rap",routerCinema)
 export default router;

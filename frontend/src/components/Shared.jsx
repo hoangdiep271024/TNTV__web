@@ -50,8 +50,8 @@ export default function Shared() {
       setIsOpen(!isOpen); 
     };
   return (
-    <Box>
-     <div style={{ top: '0', left: '0', position: 'fixed', backgroundColor: theme.palette.mode === "light" ? "white" : "#121212" }}>
+    <Box >
+     <div style={{ top: '0', left: '0', position: 'fixed',zIndex: '6', backgroundColor: theme.palette.mode === "light" ? "white" : "#121212" }}>
         <Header onLoginClick={LoginClick} onSignupClick={SignupClick} onProfileClick={ProfileClick}></Header>
         <Navbar></Navbar>
       </div>
