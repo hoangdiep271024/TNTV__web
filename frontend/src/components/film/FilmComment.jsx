@@ -22,7 +22,7 @@ export default function FilmDetail() {
   const { film_name } = useParams();
   const [selectedArea, setSelectedArea] = useState(null);
   const [data, setData] = useState(null);
-  const [dataComment, setDataCommet] = useState(null);
+  const [dataComment, setDataComment] = useState(null);
   const film_id = localStorage.getItem('film_id');
   const theme = useTheme();
 
@@ -34,7 +34,7 @@ export default function FilmDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/film/filmInfo/getCommend/id=${film_id}`, {
+        const response = await fetch(`/api/film/filmInfo/getComment/id=${film_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -42,12 +42,8 @@ export default function FilmDetail() {
         });
         if (response.ok) {
           const result = await response.json();
-          if (result.success) {
-            setDataCommet(result);
-            console.log(dataComment)
-          } else {
-            console.log(`Truy cập: ${result.message}`);
-          }
+          setDataComment(result);
+          console.log(result);
         } else {
           console.error('Lỗi khi truy cập:', response.statusText);
         }
@@ -150,23 +146,23 @@ export default function FilmDetail() {
                   </div>
                   <hr />
                   <div style={{width:'70%',display:'flex',flexDirection:'column'}}>
-                      <p style={{fontSize:'12px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'12px', color:'#484848',fontWeight:'bold'}}>film_name</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>rate</span> lượt đánh giá được xác thực với số điểm trung bình rate/5</p>
-                      <p style={{fontSize:'12px',margin:'8px',color:'#4e4e4e'}}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{fontSize:'12px', color:'#484848',fontWeight:'bold'}}>8%</span> nhận xét phim không hay.</p>
+                      <p style={{fontSize:'13px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>{data.info.film[0].film_name}</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>{dataComment.numberOfComment}</span> lượt đánh giá được xác thực với số điểm trung bình rate/5</p>
+                      <p style={{fontSize:'13px',margin:'0px 8px 8px 8px',color:'#4e4e4e'}}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>8%</span> nhận xét phim không hay.</p>
                   </div>
               </div>
               <hr className='line' />
-              {dataComment.map(comments => (
+              {dataComment.comment.map(comments => (
                 <div className='list-cmt'>
                   <img src={User_item} className='icon-rate' />
                   <div className='cmt-content'>
-                    <h1>{comments.cutomer_name}</h1>
+                    <h1>{comments.full_name}</h1>
                     <p>
                       {[...Array(comments.star)].map(() => (
                         <img src={Star} className='span-icon-rate' />
                       ))}
                     </p>
-                    <h3>{comments.comment ? comments.comment : 'Đánh giá không được viết bởi người mua'}</h3>
-                    <h5>{comments.date_post}</h5>
+                    <h3>{comments.comments ? comments.comments : 'Đánh giá không được viết bởi người mua'}</h3>
+                    <h5>{comments.date_posted.split("T")[0]}</h5>
                   </div>
                 </div>
               ))}
