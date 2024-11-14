@@ -1,18 +1,17 @@
 import { lazy, Suspense } from 'react';
-import { Outlet, Navigate, useRoutes } from 'react-router-dom';
+import { Outlet, Navigate, createBrowserRouter } from 'react-router-dom';
 
 import Box from '@mui/material/Box';
 import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
 
 import { varAlpha } from '../theme/styles';
 import { DashboardLayout } from '../layouts/dashboard';
-// ----------------------------------------------------------------------
 
+// ----------------------------------------------------------------------
 const HomePage = lazy(() => import('../pages/home'));
 const Page404 = lazy(() => import('../pages/page-not-found'));
-
+const UserPage = lazy(() => import('../pages/user'));
 // ----------------------------------------------------------------------
-
 const renderFallback = (
     <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
         <LinearProgress
@@ -27,8 +26,9 @@ const renderFallback = (
 );
 
 export function Router() {
-    return useRoutes([
+    return createBrowserRouter([
         {
+            path: '/admin',
             element: (
                 <DashboardLayout>
                     <Suspense fallback={renderFallback}>
@@ -38,16 +38,16 @@ export function Router() {
             ),
             children: [
                 { element: <HomePage />, index: true },
-                // { path: 'user', element: <UserPage /> }
+                { path: 'user', element: <UserPage /> }
             ],
         },
         {
-            path: '404',
-            element: <Page404 />,
+            path: '/admin/404',
+            element: <Page404 />
         },
         {
             path: '*',
-            element: <Navigate to="/404" replace />,
+            element: <Navigate to="/admin/404" replace />,
         },
     ]);
 }

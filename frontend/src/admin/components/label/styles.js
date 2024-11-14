@@ -1,9 +1,6 @@
-
 import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
-import { varAlpha, stylesMode } from 'src/theme/styles';
-
-// ----------------------------------------------------------------------
+import { varAlpha, stylesMode } from '../../theme/styles';
 
 export const StyledLabel = styled(Box)(({ theme, ownerState }) => {
     const { color, variant } = ownerState;

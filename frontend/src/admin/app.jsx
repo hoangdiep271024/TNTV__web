@@ -1,35 +1,59 @@
 import './global.css';
 
-import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { lazy, Suspense } from 'react';
+import { Outlet, Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
-import theme from './theme/theme'
+import LinearProgress, { linearProgressClasses } from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
 
-import { lazy } from 'react';
-import { Outlet, Navigate } from 'react-router-dom';
+import { varAlpha } from './theme/styles';
+import theme from './theme/theme'
 
 import { DashboardLayout } from './layouts/dashboard';
 
 const HomePage = lazy(() => import('./pages/home'));
 const Page404 = lazy(() => import('./pages/page-not-found'));
+const UserPage = lazy(() => import('./pages/user'));
 
+
+// ----------------------------------------------------------------------
+const renderFallback = (
+    <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
+        <LinearProgress
+            sx={{
+                width: 1,
+                maxWidth: 320,
+                bgcolor: (theme) => varAlpha(theme.vars.palette.text.primaryChannel, 0.16),
+                [`& .${linearProgressClasses.bar}`]: { bgcolor: 'text.primary' },
+            }}
+        />
+    </Box>
+);
 // ----------------------------------------------------------------------
 const router = createBrowserRouter([
     {
         path: '/admin',
         element: (
             <DashboardLayout>
-                <Outlet />
+                <Suspense fallback={renderFallback}>
+                    <Outlet />
+                </Suspense>
             </DashboardLayout>
         ),
         children: [
             { element: <HomePage />, index: true },
-            { path: '404', element: <Page404 /> },
-            { path: '*', element: <Navigate to="404" replace /> },     // Redirects undefined paths under /admin to /admin/404
+            { path: 'user', element: <UserPage /> },
+            { path: '*', element: <Navigate to="/404" replace /> },
         ],
     },
+    {
+        path: '/404',
+        element: <Page404 />
+    },
+
 ]);
 
 // ----------------------------------------------------------------------

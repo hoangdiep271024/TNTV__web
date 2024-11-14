@@ -70,10 +70,10 @@ function Bap_nuoc({ nextStep, prevStep }) {
                             height: '100px',
                             alignItems: 'center',
                             borderBottom: '1px solid #ccc' ,// Đường viền dưới cho các hàng còn lại
-                            color: 'black'
+                            color: 'black',
                         }}>
                             <span style={{ padding: '10px',color: 'black' }}>{combo.combo_name}</span>
-                            <span style={{ padding: '10px',color: 'black' }}>{combo.combo_price} VND</span>
+                            <span style={{ padding: '10px',color: 'black' }}>{Number(combo.combo_price).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</span>
                             <div style={{
                                 display: 'flex',
                                 alignItems: 'center',
@@ -81,9 +81,9 @@ function Bap_nuoc({ nextStep, prevStep }) {
                                 padding: '10px',
                                 color: 'black'
                             }}>
-                                <button onClick={() => updateComboQuantity(combo.combo_id, -1)}>-</button>
+                                <button onClick={() => updateComboQuantity(combo.combo_id, -1)} style={{width: '24px', height: '24px', backgroundColor: 'red', borderRadius: '100%', fontSize: '20px', textAlign: 'center',display: 'flex', paddingTop: '0px'}}>-</button>
                                 <span>{selectedCombos[combo.combo_id]?.quantity || 0}</span>
-                                <button onClick={() => updateComboQuantity(combo.combo_id, 1)}>+</button>
+                                <button onClick={() => updateComboQuantity(combo.combo_id, 1)} style={{width: '24px', height: '24px', backgroundColor: '#00B300', borderRadius: '100%', fontSize: '20px', textAlign: 'center',display: 'flex', alignItems: 'center'}}>+</button>
                             </div>
                         </li>
                     ))}
@@ -95,7 +95,7 @@ function Bap_nuoc({ nextStep, prevStep }) {
                         <p style={{ fontSize: '18px' }}>{seatData.film_name}</p>
                         <p style={{ fontSize: '15px' }}><strong>{seatData.cinema_name}</strong></p>
                         <p style={{ fontSize: '15px' }}>Suất chiếu: {seatData.show_time} {seatData.show_date}</p>
-                        <p style={{ fontSize: '15px' }}><strong>Phòng chiếu:</strong> {`P${seatData.room_name}`}</p>
+                        <p style={{ fontSize: '15px' }}><strong>Phòng chiếu:</strong> {`P${seatData.room_name.substring(5)}`}</p>
                     </>
                 ) : (
                     <p>Đang tải thông tin suất chiếu...</p>

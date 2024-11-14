@@ -1,5 +1,6 @@
 import express from "express";
 import routerChatBot from "./chatBot.js";
+import routerCinema from "./cinema.js";
 import routerFilm from "./film.js";
 import routerForgotPassword from "./forgotPassword.js";
 import routerLichChieu from "./lichChieu.js";
@@ -26,4 +27,5 @@ router.use("/logOut",routerLogOut)
 router.use("/forgotPassword",routerForgotPassword)
 router.use("/muaVe",routerMuaVe)
 router.use("/orders",routerOrders)
+router.use("/rap",routerCinema)
 export default router;

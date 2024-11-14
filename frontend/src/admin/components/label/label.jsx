@@ -4,9 +4,6 @@ import { useTheme } from '@mui/material/styles';
 import { StyledLabel } from './styles';
 import { labelClasses } from './classes';
 
-// ----------------------------------------------------------------------
-
-// Label component props type definition
 export const Label = forwardRef(({
     children,
     color = 'default',

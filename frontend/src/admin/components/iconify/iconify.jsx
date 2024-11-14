@@ -5,8 +5,6 @@ import Box from '@mui/material/Box';
 
 import { iconifyClasses } from './classes';
 
-// ----------------------------------------------------------------------
-
 export const Iconify = forwardRef(function Iconify(
     { className, width = 20, sx, ...other },
     ref

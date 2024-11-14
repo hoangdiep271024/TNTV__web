@@ -9,6 +9,7 @@ import Auth from "./components/page/Auth";
 import Cinema from "./components/page/Cinema";
 import FilmDetail from "./components/page/FilmDetail";
 import Lich_chieu from "./components/page/Lich_chieu";
+import CinemaTime from "./components/page/CinemaTime";
 function App() {
   return (
     <Router>
@@ -23,6 +24,8 @@ function App() {
         <Route path="/danh_gia/:film_name" element={<FilmComment/>}/>
         <Route path="/mua_ve/:film_name" element={<FilmBuy/>}/>
         <Route path="/rap" element={<Cinema/>}/>
+        <Route path="/rap/:cinema_name" element={<CinemaTime/>}/>
+        
       </Routes>
     </Router>);
 

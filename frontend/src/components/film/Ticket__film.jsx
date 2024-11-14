@@ -1,7 +1,6 @@
 import React from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { Typography } from '@mui/material';
 import FilmList from './FilmList';
 import { useState, useEffect } from 'react';
 import Film_card from './Film_card';

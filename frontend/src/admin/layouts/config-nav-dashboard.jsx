@@ -63,7 +63,7 @@ export const navData = [
     },
     {
         title: 'Sign-out',
-        path: '/admin',
+        path: '/admin/sign-in',
         icon: <ExitIcon />,
     }
 ];

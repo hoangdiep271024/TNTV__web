@@ -2,6 +2,7 @@ import { useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
+import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
 
 import { Iconify } from '../../components/iconify';
@@ -15,8 +16,8 @@ import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { ScrollToTop } from '../../components/ScrollToTop';
 
+import { _myAccount } from '../../_mock'
 // ----------------------------------------------------------------------
-
 export function DashboardLayout({ sx, children, header }) {
     const theme = useTheme();
 
@@ -62,14 +63,16 @@ export function DashboardLayout({ sx, children, header }) {
                             </>
                         ),
                         rightArea: (
-                            <Box gap={1} display="flex" alignItems="center">
-                                <Iconify
-                                    icon="solar:user-circle-bold-duotone"
-                                    width={22}
-                                    sx={{ cursor: 'pointer' }}
-                                    onClick={() => alert('Account icon clicked')} // Replace with desired action
-                                />
-                            </Box>
+                            // <Box gap={1} display="flex" alignItems="center">
+                            //     <Iconify
+                            //         icon="solar:user-circle-bold-duotone"
+                            //         width={22}
+                            //         sx={{ cursor: 'pointer' }}
+                            //         onClick={() => alert('Account icon clicked')} // Replace with desired action
+                            //     />
+                            // </Box>
+                            <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 40, height: 40 }}>
+                            </Avatar>
                         ),
                     }}
                 />

@@ -10,7 +10,7 @@ import corMw from "./middlewares/cors.js";
 const app = express();
 
 import { adminApi } from "./api/admin/index.js";
- 
+
 app.use(session({
   secret: 'your-secret-key',
   resave: false,
@@ -39,15 +39,25 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 
 // tạo api
-app.use('/api',api);
+app.use('/api', api);
 
 adminApi(app);
+
+// Route for the main app
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Serve main index.html
+});
+
+// Route for the admin app
+app.get('/admin', (req, res) => {
+  res.sendFile(path.resolve(distPath, 'dist', 'admin.html')); // Serve admin admin.html
+});
 
 // Các route khác sẽ trả về index.html (SPA)
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Chuyển đổi thành đường dẫn tuyệt đối
 });
 
-app.listen(PORT,()=>{
-    console.log("Server is listening port "+PORT);
+app.listen(PORT, () => {
+  console.log("Server is listening port " + PORT);
 })

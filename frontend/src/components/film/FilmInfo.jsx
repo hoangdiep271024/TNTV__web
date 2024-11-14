@@ -25,13 +25,13 @@ export default function FilmInfo(props) {
      </div>
     
      <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '40vh', marginTop: '10px'}}>
-      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>
         <FavoriteIcon/>
         Thích
         </button>
-      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>Đánh giá</button>
-      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}} onClick={trailerClick}>Trailer</button>
-      <button style={{width:'70px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4}}>Mua vé</button>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Đánh giá</button>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={trailerClick}>Trailer</button>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Mua vé</button>
      </div>
      <Typography style={{ marginTop: '7px', fontSize: '14px'}} >{props.descript}</Typography>
      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '7px'}}>
