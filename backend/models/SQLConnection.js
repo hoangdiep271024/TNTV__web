@@ -7,7 +7,6 @@ const connection = await mysql.createConnection({
     user: 'root', // Tên người dùng của cơ sở dữ liệu
     password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
     database: 'web_phim' // Tên của cơ sở dữ liệu
-
 });
 // Kết nối đến cơ sở dữ liệu
 connection.connect((err) => {

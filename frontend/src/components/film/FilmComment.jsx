@@ -6,6 +6,9 @@ import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
 import FilmDetailTime from './FilmDetailTime';
 import { Typography } from '@mui/material';
+import User_item from '../../../public/user_1.png'
+import Star from '../../../public/star.png'
+import './comment.css'
 
 function createSlug(name) {
   return name
@@ -19,12 +22,45 @@ export default function FilmDetail() {
   const { film_name } = useParams();
   const [selectedArea, setSelectedArea] = useState(null);
   const [data, setData] = useState(null);
+  const [dataComment, setDataCommet] = useState(null);
   const film_id = localStorage.getItem('film_id');
   const theme = useTheme();
 
   const handleAreaChange = (newArea) => {
-    setSelectedArea(newArea); 
+    setSelectedArea(newArea);
   };
+
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/film/filmInfo/getCommend/id=${film_id}`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (response.ok) {
+          const result = await response.json();
+          if (result.success) {
+            setDataCommet(result);
+            console.log(dataComment)
+          } else {
+            console.log(`Truy cập: ${result.message}`);
+          }
+        } else {
+          console.error('Lỗi khi truy cập:', response.statusText);
+        }
+      } catch (error) {
+        console.error('Lỗi mạng:', error);
+      }
+    };
+
+    if (film_id) {
+      fetchData();
+    }
+  }, [film_id]);
+
 
   useEffect(() => {
     const fetchData = async () => {
@@ -83,9 +119,9 @@ export default function FilmDetail() {
   return (
     <>
       {data && (() => {
-        const item = data.info.film[0]; 
+        const item = data.info.film[0];
         const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
-  
+
         return (
           <>
             <FilmInfo
@@ -94,7 +130,7 @@ export default function FilmDetail() {
               type={data.info.categorys[0].category_name}
               descript={item.film_describe}
               evalute="1"
-              release={exactlyDate} 
+              release={exactlyDate}
               time={item.duration}
               age={item.age_limit}
               actors={data.info.actors}
@@ -107,6 +143,34 @@ export default function FilmDetail() {
               <Link to={`/mua_ve/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Mua vé</Link>
             </div>
             <hr style={{ width: "42%", marginLeft: '29%' }} />
+            <div className='cmt-container'>
+              <div className='film-rate'>
+                  <div style={{width:'30%'}}>
+                      <p style={{fontSize:'48px', color:'#00d97e'}}>4.8<span style={{fontSize:'20px', color:'#00d97e'}}>/5</span></p>
+                  </div>
+                  <hr />
+                  <div style={{width:'70%',display:'flex',flexDirection:'column'}}>
+                      <p style={{fontSize:'12px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'12px', color:'#484848',fontWeight:'bold'}}>film_name</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>rate</span> lượt đánh giá được xác thực với số điểm trung bình rate/5</p>
+                      <p style={{fontSize:'12px',margin:'8px',color:'#4e4e4e'}}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{fontSize:'12px', color:'#484848',fontWeight:'bold'}}>8%</span> nhận xét phim không hay.</p>
+                  </div>
+              </div>
+              <hr className='line' />
+              {dataComment.map(comments => (
+                <div className='list-cmt'>
+                  <img src={User_item} className='icon-rate' />
+                  <div className='cmt-content'>
+                    <h1>{comments.cutomer_name}</h1>
+                    <p>
+                      {[...Array(comments.star)].map(() => (
+                        <img src={Star} className='span-icon-rate' />
+                      ))}
+                    </p>
+                    <h3>{comments.comment ? comments.comment : 'Đánh giá không được viết bởi người mua'}</h3>
+                    <h5>{comments.date_post}</h5>
+                  </div>
+                </div>
+              ))}
+            </div>
           </>
         );
       })()}
