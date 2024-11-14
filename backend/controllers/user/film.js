@@ -174,7 +174,7 @@ export const filmShowTimeInfo = async (req, res) => {
     });
 }
 
-export const getCommend = async (req, res) => {
+export const getComment = async (req, res) => {
     const filmId = req.params.id;
     // Truy vấn MySQL
     const query = `
