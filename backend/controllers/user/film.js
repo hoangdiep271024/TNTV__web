@@ -166,10 +166,31 @@ export const filmShowTimeInfo = async (req, res) => {
             postOut[formattedShowDate][cluster_name][cinema_name].show_time.push({
                 show_time: show_time,
                 showtime_id: showtime_id,
-                seatPrice: calculateTicketPrice('0',weekday,show_time)
+                seatPrice: calculateTicketPrice('0', weekday, show_time)
             });
         });
 
         res.json(postOut);
     });
 }
+
+export const getCommend = async (req, res) => {
+    const filmId = req.params.id;
+    // Truy vấn MySQL
+    const query = `
+        select users.user_id, users.full_name, comments, star, date_posted from evaluate
+        left join users on evaluate.user_id = users.user_id
+        where film_id = 1
+    `;
+    connection.query(query, [filmId], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        res.json({
+            numberOfComment: results.length,
+            comment: results
+        });
+    });
+}
+

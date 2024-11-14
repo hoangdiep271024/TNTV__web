@@ -1,7 +1,7 @@
 import mysql from 'mysql2';
 
 // Tạo một kết nối đơn lẻ
-const connection = mysql.createConnection({
+const connection = await mysql.createConnection({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
     port: 3306,
     user: 'root', // Tên người dùng của cơ sở dữ liệu

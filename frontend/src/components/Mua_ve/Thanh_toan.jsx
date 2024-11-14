@@ -28,7 +28,7 @@ const Thanh_toan = ({ nextStep }) => {
 
     // Xử lý khi hết giờ
     const handleTimeOut = async () => {
-        alert('Đã hết giờ giữ ghế! Bạn sẽ được chuyển về trang đặt ghế.');
+        alert('Đã hết giờ giữ ghế! Bạn sẽ được chuyển về trang chủ.');
         await axios.post('/api/payment/huy_giu_ghe', {
             showtime_id: showtime_id,
             bookedSeat: selectedSeats,
@@ -62,7 +62,7 @@ const Thanh_toan = ({ nextStep }) => {
         setLoading(true); // Bắt đầu loading khi nhấn nút Thanh Toán
 
         try {
-            const response = await axios.post('/api/payment', { showtime_id: showtime_id, amount: totalAmount });
+            const response = await axios.post('/api/payment', { showtime_id: showtime_id, amount: totalAmount, selectedSeats: selectedSeats, selectedCombos: selectedCombos });
             if (response.data && response.data.paymentUrl) {
                 // Mở trang mới và chuyển hướng tới URL thanh toán
                 window.location.href = response.data.paymentUrl;

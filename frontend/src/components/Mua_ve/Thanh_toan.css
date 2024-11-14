@@ -87,5 +87,6 @@ color: red;
 }
 
 .first-row {
+    color: none;
     background-color: rgb(211 208 208 / 16%);
 }

@@ -1,21 +1,22 @@
 import crypto from "crypto";
 import https from "https";
+import { isTokenExpired, verifyToken } from '../../middlewares/JWT.js';
 import connection from "../../models/SQLConnection.js";
-async function updateSeatStatus(showtime_id, bookedSeat, reserved_until){
+async function updateSeatStatus(showtime_id, bookedSeat, reserved_until) {
     try {
         // Chuyển đổi bookedSeat thành chuỗi để sử dụng trong câu truy vấn
         const seatIds = bookedSeat.map(seat => seat.seat_id).join(',');
         // Thực hiện join các bảng cần thiết để lấy thông tin
         await connection.promise().query(`
             update seat_status set reserved_until = ? where showtime_id = ? AND seat_id IN (${seatIds})
-        `, [reserved_until,showtime_id]);
+        `, [reserved_until, showtime_id]);
 
     } catch (error) {
         console.error('Lỗi khi cập nhật trạng thái ghế:', error);
     }
 }
 
-export const giuGhe = async(req,res) => {
+export const giuGhe = async (req, res) => {
     const { showtime_id, bookedSeat } = req.body;
     const reserved_until = new Date(Date.now() + 5 * 60 * 1000); // Thời gian hiện tại + 5 phút
     try {
@@ -28,7 +29,7 @@ export const giuGhe = async(req,res) => {
     }
 }
 
-export const huyGiuGhe = async(req,res) => {
+export const huyGiuGhe = async (req, res) => {
     const { showtime_id, bookedSeat } = req.body;
     try {
         // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
@@ -40,80 +41,127 @@ export const huyGiuGhe = async(req,res) => {
     }
 }
 
-export const QRPayment = (req, res) => {
-    const showtime_id = req.body.showtime_id;
+export const QRPayment = async (req, res) => {
+    const { showtime_id, amount: total_amount, selectedSeats, selectedCombos } = req.body;
 
-    var accessKey = 'F8BBA842ECF85';
-    var secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
-    var partnerCode = 'MOMO';
-    var redirectUrl = `http://localhost:8888/thong_tin_ve`;
-    var ipnUrl = 'http://localhost:8888/api/payment/callback';
-    var requestType = "payWithMethod";
-    var amount = req.body.amount;
-    var orderId = partnerCode + new Date().getTime();
-    var requestId = orderId;
-    var extraData = '';
-    var autoCapture = true;
-    var lang = 'vi';
+    try {
+        const token = req.cookies.jwt;
 
-    var rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=pay with MoMo&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
-
-    var signature = crypto.createHmac('sha256', secretKey)
-        .update(rawSignature)
-        .digest('hex');
-
-    const requestBody = JSON.stringify({
-        partnerCode: partnerCode,
-        partnerName: "Test",
-        storeId: "MomoTestStore",
-        requestId: requestId,
-        amount: amount,
-        orderId: orderId,
-        orderInfo: 'pay with MoMo',
-        redirectUrl: redirectUrl,
-        ipnUrl: ipnUrl,
-        lang: lang,
-        requestType: requestType,
-        autoCapture: autoCapture,
-        extraData: extraData,
-        signature: signature
-    });
-
-    const options = {
-        hostname: 'test-payment.momo.vn',
-        port: 443,
-        path: '/v2/gateway/api/create',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/json',
-            'Content-Length': Buffer.byteLength(requestBody)
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            });
         }
-    };
 
-    const paymentReq = https.request(options, paymentRes => {
-        let data = '';
-        paymentRes.on('data', chunk => {
-            data += chunk;
+        if (isTokenExpired(token)) {
+            return res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            });
+        }
+
+        const decoded = verifyToken(token);
+        const user_id = decoded.id;
+
+        // Thêm vào bảng orders
+        const [orderResult] = await connection.promise().query(
+            'INSERT INTO orders (user_id, showtime_id, order_date, total_price) VALUES (?, ?, NOW(), ?)',
+            [user_id, showtime_id, total_amount]
+        );
+
+        const order_id = orderResult.insertId;
+        console.log(order_id);
+
+        // Thêm vào bảng tickets
+        for (const seat of selectedSeats) {
+            await connection.promise().query(
+                'INSERT INTO tickets (order_id, seat_id, ticket_price) VALUES (?, ?, ?)',
+                [order_id, seat.seat_id, seat.price]
+            );
+        }
+
+        // Thêm vào bảng popcorn_orders
+        for (const [comboId, combo] of Object.entries(selectedCombos)) {
+            await connection.promise().query(
+                'INSERT INTO popcorn_orders (order_id, combo_id, combo_quantity) VALUES (?, ?, ?)',
+                [order_id, comboId, combo.quantity]
+            );
+        }
+
+        // trả về link momopay
+        const accessKey = 'F8BBA842ECF85';
+        const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
+        const partnerCode = 'MOMO';
+        const redirectUrl = `http://localhost:8888/thong_tin_ve?order_id=${order_id}`;
+        const ipnUrl = 'http://localhost:8888/api/payment/callback';
+        const requestType = "payWithMethod";
+        const amount = total_amount;
+        const orderId = partnerCode + new Date().getTime();
+        const requestId = orderId;
+        const extraData = '';
+        const autoCapture = true;
+        const lang = 'vi';
+
+        const rawSignature = `accessKey=${accessKey}&amount=${amount}&extraData=${extraData}&ipnUrl=${ipnUrl}&orderId=${orderId}&orderInfo=pay with MoMo&partnerCode=${partnerCode}&redirectUrl=${redirectUrl}&requestId=${requestId}&requestType=${requestType}`;
+        const signature = crypto.createHmac('sha256', secretKey).update(rawSignature).digest('hex');
+
+        const requestBody = JSON.stringify({
+            partnerCode,
+            partnerName: "Test",
+            storeId: "MomoTestStore",
+            requestId,
+            amount,
+            orderId,
+            orderInfo: 'pay with MoMo',
+            redirectUrl,
+            ipnUrl,
+            lang,
+            requestType,
+            autoCapture,
+            extraData,
+            signature
         });
-        paymentRes.on('end', () => {
-            const response = JSON.parse(data);
-            if (response.resultCode === 0) {
-                // Gửi lại URL thanh toán cho frontend
-                res.json({ paymentUrl: response.payUrl, orderId: response.orderId });
-            } else {
-                res.status(500).json({ error: 'Payment initiation failed' });
+
+        const options = {
+            hostname: 'test-payment.momo.vn',
+            port: 443,
+            path: '/v2/gateway/api/create',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Content-Length': Buffer.byteLength(requestBody)
             }
+        };
+
+        const paymentReq = https.request(options, paymentRes => {
+            let data = '';
+            paymentRes.on('data', chunk => {
+                data += chunk;
+            });
+            paymentRes.on('end', () => {
+                const response = JSON.parse(data);
+                if (response.resultCode === 0) {
+                    res.json({ paymentUrl: response.payUrl, orderId: response.orderId });
+                } else {
+                    res.status(500).json({ error: 'Payment initiation failed' });
+                }
+            });
         });
-    });
 
-    paymentReq.on('error', (e) => {
-        console.error(`Problem with request: ${e.message}`);
-        res.status(500).json({ error: 'Internal Server Error' });
-    });
+        paymentReq.on('error', (e) => {
+            console.error(`Problem with request: ${e.message}`);
+            res.status(500).json({ error: 'Internal Server Error' });
+        });
 
-    paymentReq.write(requestBody);
-    paymentReq.end();
+        paymentReq.write(requestBody);
+        paymentReq.end();
+    } catch (error) {
+        console.error('Transaction error:', error);
+        res.status(500).json({ error: 'Failed to create order' });
+    }
 };
+
 
 // API trong backend (ví dụ sử dụng Express.js)
 export const QRPaymentUpdate = async (req, res) => {

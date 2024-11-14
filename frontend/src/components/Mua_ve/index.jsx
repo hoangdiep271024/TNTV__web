@@ -34,7 +34,7 @@ const BookingTicket = () => {
                             prevStep={prevStep}
                         />
                     )}
-                    {step === 2 && <Thanh_toan nextStep={nextStep} prevStep={prevStep} />}
+                    {step === 2 && <Thanh_toan/>}
                 </div>
             </div>
             <div style={{height : '100px'}}></div>
