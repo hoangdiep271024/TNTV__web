@@ -1,25 +1,30 @@
-
-// not important
-export const visuallyHidden = {
-    border: 0,
-    margin: -1,
-    padding: 0,
-    width: '1px',
-    height: '1px',
-    overflow: 'hidden',
-    position: 'absolute',
-    whiteSpace: 'nowrap',
-    clip: 'rect(0 0 0 0)',
-};
+// // not important
+// Style object to visually hide an element but keep it accessible for screen readers.
+// export const visuallyHidden = {
+//     border: 0,
+//     margin: -1,
+//     padding: 0,
+//     width: '1px',
+//     height: '1px',
+//     overflow: 'hidden',
+//     position: 'absolute',
+//     whiteSpace: 'nowrap',
+//     clip: 'rect(0 0 0 0)',
+// };
 
 // ----------------------------------------------------------------------
-// calculates how many empty rows need to be displayed
+// Function to calculate the number of empty rows required at the end of a paginated table
+// - page: the current page number
+// - rowsPerPage: the number of rows per page
+// - arrayLength: total number of items in the array
 export function emptyRows(page, rowsPerPage, arrayLength) {
     return page ? Math.max(0, (1 + page) * rowsPerPage - arrayLength) : 0;
 }
 
 // ----------------------------------------------------------------------
-
+// Comparator for sorting in descending order
+// - a, b: items to compare
+// - orderBy: the property to sort by
 function descendingComparator(a, b, orderBy) {
     if (b[orderBy] < a[orderBy]) {
         return -1;
@@ -31,7 +36,9 @@ function descendingComparator(a, b, orderBy) {
 }
 
 // ----------------------------------------------------------------------
-// for the comparator in applyFilter
+// Returns a comparator function based on the order (asc/desc) and the property to sort by
+// - order: 'asc' or 'desc'
+// - orderBy: the property to sort by
 export function getComparator(order, orderBy) {
     return order === 'desc'
         ? (a, b) => descendingComparator(a, b, orderBy)
@@ -39,18 +46,25 @@ export function getComparator(order, orderBy) {
 }
 
 // ----------------------------------------------------------------------
-
+// Function to apply sorting and filtering to data
+// - inputData: array of objects to filter/sort
+// - comparator: function to sort the array
+// - filterName: filter text for searching by name property
 export function applyFilter({ inputData, comparator, filterName }) {
+    // Stabilize the array by keeping track of original indices
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
+    // Sort the array based on the comparator, maintaining the original index if values are equal
     stabilizedThis.sort((a, b) => {
         const order = comparator(a[0], b[0]);
         if (order !== 0) return order;
         return a[1] - b[1];
     });
 
+    // Map sorted array back to its original structure
     inputData = stabilizedThis.map((el) => el[0]);
 
+    // Apply filtering if filterName is provided
     if (filterName) {
         inputData = inputData.filter(
             (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
