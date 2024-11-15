@@ -180,7 +180,7 @@ export const getCommend = async (req, res) => {
     const query = `
         select users.user_id, users.full_name, comments, star, date_posted from evaluate
         left join users on evaluate.user_id = users.user_id
-        where film_id = 1
+        where film_id = ?
     `;
     connection.query(query, [filmId], (err, results) => {
         if (err) {
