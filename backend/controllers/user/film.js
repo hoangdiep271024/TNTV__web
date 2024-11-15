@@ -37,7 +37,7 @@ export const filmInfo = async (req, res) => {
 
         const queryEvaluate = `Select film_rate,sum_rate from film_evaluate where film_id = ?`;
         const evaluateResults = await new Promise((resolve, reject) => {
-            connection.query(queryFilm, [req.params.id], (err, results) => {
+            connection.query(queryEvaluate, [req.params.id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -180,7 +180,7 @@ export const getComment = async (req, res) => {
     const query = `
         select users.user_id, users.full_name, comments, star, date_posted from evaluate
         left join users on evaluate.user_id = users.user_id
-        where film_id = 1
+        where film_id = ?
     `;
     connection.query(query, [filmId], (err, results) => {
         if (err) {
