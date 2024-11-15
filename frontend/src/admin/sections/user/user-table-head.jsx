@@ -13,6 +13,8 @@ import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@
  * @param {string} orderBy - ID of the column currently being sorted.
  * @param {string} order - Current sorting order, either 'asc' or 'desc'.
  * @param {Function} onSort - Handler for sorting the table by a specific column.
+ * 
+ * @returns {JSX.Element} The rendered table header, including the "Select All" checkbox and sortable column headers.
  */
 export function UserTableHead({
     numSelected,

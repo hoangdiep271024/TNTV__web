@@ -1,24 +1,10 @@
-// // not important
-// Style object to visually hide an element but keep it accessible for screen readers.
-// export const visuallyHidden = {
-//     border: 0,
-//     margin: -1,
-//     padding: 0,
-//     width: '1px',
-//     height: '1px',
-//     overflow: 'hidden',
-//     position: 'absolute',
-//     whiteSpace: 'nowrap',
-//     clip: 'rect(0 0 0 0)',
-// };
-
 // ----------------------------------------------------------------------
 // Function to calculate the number of empty rows required at the end of a paginated table
 // - page: the current page number
 // - rowsPerPage: the number of rows per page
 // - arrayLength: total number of items in the array
 export function emptyRows(page, rowsPerPage, arrayLength) {
-    return page ? Math.max(0, (1 + page) * rowsPerPage - arrayLength) : 0;
+    return Math.max(0, (1 + page) * rowsPerPage - arrayLength);
 }
 
 // ----------------------------------------------------------------------

@@ -6,14 +6,15 @@ import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@
  * This component renders the table header for a movie list with selectable rows and sortable columns.
  * It includes a checkbox to select all rows, column labels, and sorting controls.
  * 
- * Props:
- * - numSelected (number): Number of selected rows.
- * - rowCount (number): Total number of rows.
- * - onSelectAllRows (function): Function to call when the "Select All" checkbox is toggled.
- * - headLabel (array): Array of objects representing column headers. Each object should have `id`, `label`, and optional `align`, `width`, and `minWidth`.
- * - orderBy (string): Column currently sorted by.
- * - order (string): Sort direction, either 'asc' or 'desc'.
- * - onSort (function): Function to call when a column header is clicked for sorting.
+ * @param {number} numSelected - The number of currently selected rows.
+ * @param {number} rowCount - The total number of rows in the table.
+ * @param {Function} onSelectAllRows - Handler for selecting or deselecting all rows.
+ * @param {Array} headLabel - Array of objects representing each column's properties.
+ * @param {string} orderBy - ID of the column currently being sorted.
+ * @param {string} order - Current sorting order, either 'asc' or 'desc'.
+ * @param {Function} onSort - Handler for sorting the table by a specific column.
+ * 
+ * @returns {JSX.Element} The rendered table header, including the "Select All" checkbox and sortable column headers.
  */
 export function MovieTableHead({
     numSelected,
@@ -57,9 +58,8 @@ export function MovieTableHead({
                             {/* Displays column label */}
                             {headCell.label}
 
-                            {/* Visually hidden text for screen readers to announce sort direction */}
                             {orderBy === headCell.id ? (
-                                <Box sx={{ ...visuallyHidden }}>
+                                <Box>
                                     {order === 'desc' ? 'sorted descending' : 'sort ascending'}
                                 </Box>
                             ) : null}
