@@ -8,15 +8,15 @@ import { UserTableHead } from "../user-table-head";
 import { UserTableToolbar } from "../user-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { UserTableRow } from "../user-table-row";
-import { TableEmptyRows } from "../table-empty-rows";
-import { TableNoData } from "../table-no-data";
+import { TableEmptyRows } from "../../table-empty-rows";
+import { TableNoData } from "../../table-no-data";
 
 export function UserView() {
     const table = useTable();
 
     const [filterName, setFilterName] = useState('');
 
-    // Filtering the users based on filtername and sorting order
+    // Filtering the users based on filter name and sorting order
     const dataFiltered = applyFilter({
         inputData: _users,
         comparator: getComparator(table.order, table.orderBy),

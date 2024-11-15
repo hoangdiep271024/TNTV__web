@@ -8,7 +8,7 @@ export default function UserPage() {
     return (
         <>
             <Helmet>
-                <title> {`Users | NHTT Admin Panel`}</title>
+                <title> {`User | NHTT Admin Panel`}</title>
             </Helmet>
 
             <UserView />
