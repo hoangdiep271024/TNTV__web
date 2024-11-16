@@ -492,7 +492,7 @@ export default function FilmDetail() {
         })}
       </Box>
       </Box>
-      <Footer/>
+      {data && <Footer/>}
     </>
   );
 }

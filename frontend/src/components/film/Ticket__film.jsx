@@ -5,7 +5,7 @@ import FilmList from './FilmList';
 import { useState, useEffect } from 'react';
 import Film_card from './Film_card';
 import { useTheme } from "@emotion/react";
-export default function Ticket__film() {
+export default function Ticket__film({ onLoadComplete }) {
   
   const theme = useTheme()
   const [data, setData] = useState([[]]);
@@ -19,10 +19,11 @@ export default function Ticket__film() {
     })
     .then(response => response.json())
     .then(responseData => {
-      setData(responseData); // Lưu dữ liệu vào state
+      setData(responseData); 
+      onLoadComplete(responseData);
     })
     .catch(error => console.error('Error:', error));
-  }, []); 
+  }, [onLoadComplete]); 
   const showingClick = () =>{
     setShowing(true)
   }

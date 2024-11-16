@@ -23,11 +23,11 @@ export default function Cinema() {
   };
   const [data, setData]= useState(null)
   const cinemaClick = (cinema_id, cinema_name, cinema_namee, cinema_address, cluster_name) => {
-    navigate(`/rap/${cinema_name}`)
-    localStorage.setItem('cinema_id', cinema_id)
-    localStorage.setItem('cinema_name', cinema_namee)
-    localStorage.setItem('cinema_address', cinema_address)
-    localStorage.setItem('cluster_name', cluster_name)
+    navigate(`/rap/${cinema_name}`, { state: { cinema_id , cinema_namee, cinema_address, cluster_name} })
+    // localStorage.setItem('cinema_id', cinema_id)
+    // localStorage.setItem('cinema_name', cinema_namee)
+    // localStorage.setItem('cinema_address', cinema_address)
+    // localStorage.setItem('cluster_name', cluster_name)
   }
   useEffect(() => {
     const fetchData = async () => {

@@ -1,5 +1,7 @@
 import dotenv from "dotenv";
 import connection from "../../models/SQLConnection.js";
+import { format } from 'date-fns';
+import { vi } from 'date-fns/locale';
 
 dotenv.config();
 export const cinema = async(req,res)=>{
@@ -36,12 +38,16 @@ function formatDate(dateString) {
     return `${dayName} ${day}/${month}/${year}`;
 }
 
+
 export const cinemaID = async (req, res) => {
     const cinemaId = req.params.cinema_id;
     const query = `
     SELECT 
         films.film_name, 
-        films.film_img, 
+        films.film_img,
+        films.film_id,
+        films.age_limit,
+        films.duration,
         cinemas.cinema_id, 
         cinemas.cinema_name, 
         cinemas.address, 
@@ -55,9 +61,10 @@ export const cinemaID = async (req, res) => {
     INNER JOIN 
         cinemas ON cinemas.cinema_id = showtimes.cinema_id
     WHERE 
-        showtimes.show_date > NOW() 
-        AND DATEDIFF(showtimes.show_date, NOW()) <= 5
-        AND cinemas.cinema_id = ?
+        ((showtimes.show_time >= CURTIME() AND showtimes.show_date = CURDATE()) 
+        OR 
+        (showtimes.show_date > CURDATE() AND DATEDIFF(showtimes.show_date, NOW()) <= 5)) 
+        AND cinemas.cinema_id = ?;
     `;
     
     connection.query(query, [cinemaId], (err, results) => {
@@ -66,25 +73,46 @@ export const cinemaID = async (req, res) => {
             res.status(500).json({ error: 'Server error' });
             return;
         }
+        
         const time = {};
-         
-        results.forEach(row => {
-            const { show_date, show_time, film_name, film_img} = row;
+
+        // Initialize the next 5 days in `time` object
+        for (let i = 0; i <= 5; i++) {
+            const date = new Date();
+            date.setDate(date.getDate() + i);
             
-            if (!time[formatDate(show_date)]) {
-                time[formatDate(show_date)] = [];
+            const formattedDate = format(date, 'EEEE, dd/MM', { locale: vi });
+            time[formattedDate] = "chưa có dữ liệu";
+        }
+
+        // Process query results
+        results.forEach(row => {
+            const { show_date, show_time, film_name, film_img, film_id, showtime_id, duration, age_limit } = row;
+            const formattedDate = format(new Date(show_date), 'EEEE, dd/MM', { locale: vi });
+            
+            if (time[formattedDate] === "chưa có dữ liệu") {
+                time[formattedDate] = {};
+            }
+            
+            if (!time[formattedDate][film_id]) {
+                time[formattedDate][film_id] = {
+                    film_id,
+                    film_name,
+                    film_img,
+                    duration,
+                    age_limit,
+                    showtimes: []
+                };
             }
 
-            time[formatDate(show_date)].push({
-                showtime_id: row.showtime_id,
-                show_time,
-                film: {
-                    film_name,
-                    film_img
-                },
+            // Add showtime to the film's showtimes list
+            time[formattedDate][film_id].showtimes.push({
+                showtime_id,
+                show_time
             });
         });
 
         res.json(time);
     });
 };
+
