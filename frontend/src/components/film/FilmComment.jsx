@@ -10,6 +10,8 @@ import User_item from '../../../public/user_1.png'
 import Star from '../../../public/star.png'
 import './comment.css'
 import { useLocation } from 'react-router-dom';
+import Shared from '../Shared';
+import Footer from '../Footer/Footer';
 
 function createSlug(name) {
   
@@ -116,6 +118,7 @@ export default function FilmDetail() {
 
   return (
     <>
+      <Shared/>
       {data && (() => {
         const item = data.info.film[0];
         const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
@@ -172,6 +175,7 @@ export default function FilmDetail() {
           </>
         );
       })()}
+      <Footer/>
     </>
   );
 }
