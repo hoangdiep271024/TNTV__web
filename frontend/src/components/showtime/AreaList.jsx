@@ -3,13 +3,30 @@ import { useEffect } from "react";
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import { useTheme } from "@mui/material/styles";
+import Button from "@mui/material/Button";
+import { useNavigate } from 'react-router-dom'
 
 export default function AreaList() {
+  const navigate = useNavigate()
   const [areas, setAreas] = useState(null);
   const [areaClick, setAreaClick] = useState(1);
   const [cinemas, setCinemas] = useState(null);
   const theme = useTheme();
-  const fetchData = async () => {
+  const [cinemaID, setCinemaID] = useState(null);
+  const [data, setData] = useState(null)
+  const [dayStates, setDayStates] = useState(null);
+  const handleDayClick = (key) => {
+    setDayStates(key === dayStates ? null : key);
+  };
+  const clickShowtime = (filmName, showtime_id) =>{
+    localStorage.setItem('showtime_id', showtime_id)
+    navigate(`/dat_ve/${filmName}`);
+  }
+  const ClickFilmCard = (film_name, film_id) =>{
+    localStorage.setItem('film_id', film_id)
+    navigate(`/phim/${film_name}`)
+  }
+  const fetchData = async () => { 
     try {
       const response = await fetch(`/api/lichChieu/khuVuc`, {
         method: "POST",
@@ -71,6 +88,36 @@ export default function AreaList() {
       setAreaClick(id);
     }
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch(`/api/rap/cinema_id=${cinemaID}`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+        if (response.ok) {
+          const result = await response.json();
+            console.log(result);
+            setData(result);
+  
+        } else {
+          console.error("Lỗi khi truy cập:", response.statusText);
+        }
+      } catch (error) {
+        console.error("Lỗi mạng:", error);
+      }
+    };
+    if(cinemaID){
+      fetchData()
+    }
+  }, [cinemaID]);
+  const ClickCinema = (id) => {
+    setCinemaID(id)
+    console.log(cinemaID)
+  }
   return (
     <Box
       sx={{ display: "flex", gap: '30px', justifyContent: "center", alignItems: "start", marginTop: "17vh" }}
@@ -211,7 +258,7 @@ export default function AreaList() {
             paddingLeft: '10px',
             '&:hover': {
               backgroundColor: theme.palette.mode === 'dark' ? '#14b5f5' : '#e9eef0',
-            }}}>
+            }}} onClick = {() => ClickCinema(cineItem.cinema_id)}>
               {cineItem.cinema_name ? cineItem.cinema_name : cineItem} 
             </Box>
           ))}
@@ -220,6 +267,261 @@ export default function AreaList() {
     })
 )}
       </Box>
+      {data && <Box>
+        <Box sx={{ width: "600px", display: 'flex', justifyContent: 'center'}}>
+          {data &&
+            Object.keys(data).map((Time, key) => {
+              const lastSpaceIndex = Time.lastIndexOf(" ");
+              const datePart = Time.substring(lastSpaceIndex + 1);
+              const formattedDate = datePart.substring(0, 5).replace("-", "/");
+              const day = key === dayStates;
+              if (day) {
+                console.log(data[Time]);
+              }
+              return (
+                <>
+                  {Time.substring(0, 6) === "Thứ Ha" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ hai</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Thứ Ba" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ ba</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Thứ Tư" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ tư</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Thứ Nă" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ năm</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Thứ Sá" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ sáu</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Thứ Bả" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px'  }}>Thứ bảy</p>
+                    </Box>
+                  )}
+                  {Time.substring(0, 6) === "Chủ Nh" && (
+                    <Box
+                      sx={{
+                        width: "100px",
+                        height: "80px",
+                        cursor: "pointer",
+                        textAlign: "center",
+                        backgroundColor: (theme) =>
+                          day
+                            ? theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db"
+                            : theme.palette.mode === "dark"
+                            ? "#4aacf7"
+                            : "#e8eced",
+                        "&:hover": {
+                          backgroundColor: (theme) =>
+                            theme.palette.mode === "dark"
+                              ? "#0184FA"
+                              : "#d5d7db",
+                        },
+                      }}
+                      onClick={() => handleDayClick(key)}
+                    >
+                      <p style={{ margin: "8px 0" }}>{formattedDate}</p>
+                      <p style={{ margin: "0", fontSize: '14px' }}>Chủ nhật</p>
+                    </Box>
+                  )}
+                </>
+              );
+            })}
+        </Box>
+        <Box sx={{ marginTop: "20px", width: "600px", display: 'flex', justifyContent: 'center' }}>
+        {data && Object.keys(data).map((Time, key) => {
+          const day = key === dayStates;
+          return (<>
+            {day && typeof data[Time] === 'object' && (
+              <Box key={key} sx={{ marginBottom: "10px" , width: '600px'}}>
+                 
+                    {Object.values(data[Time]).map((film, index) => (
+                                <Box key={index} sx={{  minHeight: '200px', display: 'flex', gap: 2, width: '600px', borderRadius: '5px' , border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, paddingLeft: '20px', paddingTop: '20px'}}>
+                                    <img onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} src={film.film_img} style={{width: '100px', height: '160px', objectFit: 'cover',cursor: 'pointer'}}></img>
+                                    <Box>
+                                    <p onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} style={{fontSize: '20px', cursor: 'pointer'}}><strong>{film.film_name}</strong></p>
+                                    <div style={{display: 'flex', gap: '20px', marginTop: '-10px', marginBottom: '17px', fontSize: '14px'}}>
+                                      <div>{`Thời lượng: ${film.duration} phút`}</div>
+                                      <div>{`T${film.age_limit}`}</div>
+                                    </div>
+                                    <Box sx={{display: 'flex' ,flexWrap: 'wrap' , gap: '15px'}}></Box>
+                                    {Array.isArray(film.showtimes) && film.showtimes.map((showTime, key) => (
+                                       <Button style={{border: '1px solid #009688', borderRadius: '3px'}} onClick={() => clickShowtime(film.film_name, showTime.showtime_id)} key={key}>{showTime.show_time.substring(0,5)}</Button>
+        ))}
+                                    </Box>
+                                </Box>
+                            ))}
+              </Box>
+            )}
+            {day && typeof data[Time] !== 'object' && <Box sx={{width: '600px', marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+              
+              <div>Tạm thời chưa có thông tin về lịch chiếu</div>
+              </Box>}
+            </>);
+        })}
+      </Box>
+        
+        
+        
+        </Box>}
     </Box>
   );
+}
+function createSlugg(name) {
+  return name
+    .trim() // Remove leading and trailing whitespace
+    .replace(/\s+/g, '-') // Replace spaces with hyphens
+    .replace(/-+/g, '-'); // Replace multiple hyphens with a single hyphen
 }

@@ -12,7 +12,8 @@ export default function CinemaTime() {
 
   const navigate = useNavigate()
   const clickShowtime = (filmName, showtime_id) =>{
-    navigate(`/dat_ve/${filmName}`, { state: { showtime_id } });
+    localStorage.setItem('showtime_id', showtime_id)
+    navigate(`/dat_ve/${filmName}`);
   }
   const theme = useTheme();
   const cinema_id = location.state?.cinema_id;
@@ -25,7 +26,8 @@ export default function CinemaTime() {
     setDayStates(key === dayStates ? null : key);
   };
   const ClickFilmCard = (film_name, film_id) =>{
-    navigate(`/phim/${film_name}` , {state : {film_id}})
+    localStorage.setItem('film_id', film_id)
+    navigate(`/phim/${film_name}`)
   }
   useEffect(() => {
     const fetchData = async () => {

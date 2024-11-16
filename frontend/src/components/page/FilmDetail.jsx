@@ -24,7 +24,7 @@ export default function FilmDetail() {
   const decodedFilmName = decodeURIComponent(film_name);
 
   const [data, setData] = useState(null);
-  const film_id = location.state?.film_id;
+  const film_id = localStorage.getItem('film_id')
   const theme = useTheme();
   useEffect(() => {
     const fetchData = async () => {

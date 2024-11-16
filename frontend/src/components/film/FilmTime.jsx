@@ -94,7 +94,7 @@ export default function FilmDetail() {
   }, [film_id, selectedArea]);
   const handleNavigate = (showtime_id) => {
     localStorage.setItem('showTime_id', showtime_id);
-    navigate(`/dat_ve/${film_name}`,{ state: { showtime_id: showtime_id } });
+    navigate(`/dat_ve/${film_name}`);
   };
 
   return (
