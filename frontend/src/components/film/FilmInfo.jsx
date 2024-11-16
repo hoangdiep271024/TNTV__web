@@ -9,10 +9,17 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
+import Evaluate from './Evaluate';
+
 export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
+  }
+
+  const [isClickEvaluate, setIsClickEvaluate] = useState(false)
+  const EvaluateClick = () => {
+           setIsClickEvaluate(!isClickEvaluate)
   }
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
@@ -29,7 +36,7 @@ export default function FilmInfo(props) {
         <FavoriteIcon/>
         Thích
         </button>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Đánh giá</button>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={EvaluateClick}>Đánh giá</button>
       <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={trailerClick}>Trailer</button>
       <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Mua vé</button>
      </div>
@@ -103,6 +110,22 @@ export default function FilmInfo(props) {
   ></Box>
      <Trailer/>
      </>}
+
+     {isClickEvaluate && <>
+      <Box
+    sx={{
+      position: "absolute",
+      zIndex: "10",
+      width:'100vw',
+      height: '200vh',
+      backgroundColor: 'rgba(76, 79, 77, 0.5)'
+    }}
+    autoComplete="off"
+    onClick = {EvaluateClick}
+  ></Box>
+     <Evaluate film_name={props.name} img={props.image} />
+     </>}
+
     </Box>
   )
 }

@@ -39,10 +39,10 @@ const Evaluate = (props) => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (!dataRate.comments.trim() && !dataRate.star) {
+        if ((!dataRate.comments.trim() && !dataRate.star)|| (dataRate.comments.trim() && !dataRate.star)) {
             setErorrMessage('Đánh giá không hợp lệ: Vui lòng thêm sao hoặc bình luận!');
             setMessage(null);
-        } else {
+        } else if((dataRate.star && !dataRate.comments.trim()) || (dataRate.star && dataRate.comments.trim())) {
             setMessage('Đánh giá thành công');
             setErorrMessage(null);
             console.log("formdata", dataRate);
