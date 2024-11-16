@@ -7,6 +7,7 @@ import Ticket__film from "../film/Ticket__film";
 import Footer from "../Footer/Footer";
 
 
+
 export default function Auth() {
   const [isTicketLoaded, setIsTicketLoaded] = useState(false);
   const handleTicketLoad = () => {
@@ -26,3 +27,4 @@ export default function Auth() {
     </Box>
   );
 }
+

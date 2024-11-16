@@ -194,3 +194,38 @@ export const getComment = async (req, res) => {
     });
 }
 
+export const phim = async (req, res) => {
+    const { filmType, country, categoryId } = req.body;
+    let query = `
+    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories
+    FROM films
+    INNER JOIN category_film ON category_film.film_id = films.film_id
+    WHERE 1=1 
+    `;
+    let params = [];
+
+    // Chỉ thêm điều kiện nếu tham số có giá trị
+    if (filmType) {
+      query += " AND film_type = ?";
+      params.push(filmType);
+    }
+  
+    if (country) {
+      query += " AND country = ?";
+      params.push(country);
+    }
+  
+    if (categoryId) {
+      query += " AND category_id = ?";
+      params.push(categoryId);
+    }
+    query += " GROUP BY films.film_id";
+    connection.query(query, params, (error, results) => {
+        if (error) {
+          return res.status(500).json({ message: 'Database error', error });
+        }
+        res.json(results);
+      });
+}
+
+

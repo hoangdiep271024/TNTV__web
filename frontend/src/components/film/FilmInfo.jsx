@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import { Typography } from '@mui/material';
@@ -16,11 +16,18 @@ export default function FilmInfo(props) {
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
   }
+<<<<<<< Updated upstream
 
   const [isClickEvaluate, setIsClickEvaluate] = useState(false)
   const EvaluateClick = () => {
            setIsClickEvaluate(!isClickEvaluate)
   }
+=======
+  if(isClickTrailer){ document.body.style.overflow = 'hidden';}
+  else {document.body.style.overflow = 'auto'}
+   
+
+>>>>>>> Stashed changes
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
@@ -103,7 +110,7 @@ export default function FilmInfo(props) {
       zIndex: "10",
       width:'100vw',
       height: '200vh',
-      backgroundColor: 'rgba(76, 79, 77, 0.5)'
+      backgroundColor: 'rgba(76, 79, 77, 0.5)',
     }}
     autoComplete="off"
     onClick = {trailerClick}

@@ -10,6 +10,7 @@ import Cinema from "./components/page/Cinema";
 import FilmDetail from "./components/page/FilmDetail";
 import Lich_chieu from "./components/page/Lich_chieu";
 import CinemaTime from "./components/page/CinemaTime";
+import Films from "./components/page/Films";
 function App() {
   return (
     <Router>
@@ -25,7 +26,7 @@ function App() {
         <Route path="/mua_ve/:film_name" element={<FilmBuy/>}/>
         <Route path="/rap" element={<Cinema/>}/>
         <Route path="/rap/:cinema_name" element={<CinemaTime/>}/>
-        
+        <Route path="/phim" element={<Films/>}/>
       </Routes>
     </Router>);
 
