@@ -6,7 +6,7 @@ dotenv.config();
 
 export const filmShowing = async (req, res) => {
     try {
-        const results = await connection.promise().query('SELECT * FROM films WHERE film_type = 1 or film_type = 2');
+        const results = await connection.promise().query('SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate FROM films f inner join film_evaluate fe on  fe .film_id = f.film_id WHERE film_type = 1 or film_type = 2');
         return res.json(results);
         // Trả kết quả về cho client
     } catch (error) {
