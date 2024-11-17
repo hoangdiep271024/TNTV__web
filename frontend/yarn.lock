@@ -64,15 +64,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@babel/runtime@npm:^7.12.1":
-  version: 7.26.0
-  resolution: "@babel/runtime@npm:7.26.0"
-  dependencies:
-    regenerator-runtime: "npm:^0.14.0"
-  checksum: 10c0/12c01357e0345f89f4f7e8c0e81921f2a3e3e101f06e8eaa18a382b517376520cd2fa8c237726eb094dab25532855df28a7baaf1c26342b52782f6936b07c287
-  languageName: node
-  linkType: hard
-
 "@babel/runtime@npm:^7.12.5, @babel/runtime@npm:^7.18.3, @babel/runtime@npm:^7.22.5, @babel/runtime@npm:^7.23.9, @babel/runtime@npm:^7.5.5, @babel/runtime@npm:^7.8.7":
   version: 7.25.6
   resolution: "@babel/runtime@npm:7.25.6"
@@ -1158,13 +1149,6 @@ __metadata:
   version: 1.0.6
   resolution: "@types/estree@npm:1.0.6"
   checksum: 10c0/cdfd751f6f9065442cd40957c07fd80361c962869aa853c1c2fd03e101af8b9389d8ff4955a43a6fcfa223dd387a089937f95be0f3eec21ca527039fd2d9859a
-  languageName: node
-  linkType: hard
-
-"@types/js-md5@npm:^0.4.2":
-  version: 0.4.3
-  resolution: "@types/js-md5@npm:0.4.3"
-  checksum: 10c0/b4b7a319763d57910efb966ba3ee1be31cf6d8ff14037e8b6b40626bc58ec7316eb56a9b9d7e7098b0ced882497824fa665b364aa4e8fe49dc9bc6b3c63487c8
   languageName: node
   linkType: hard
 
@@ -2662,7 +2646,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1":
+"hoist-non-react-statics@npm:^3.3.1":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -3051,13 +3035,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-md5@npm:^0.7.3":
-  version: 0.7.3
-  resolution: "js-md5@npm:0.7.3"
-  checksum: 10c0/3e7048590c40edb0b8fb290e13a81d6eebbd682c70c520c4853820ae8fe3a3c5e375cfa0ca9a731aa8d8e0ba82cd8f922fea34c737caf72a7f9ab819bb8382a7
-  languageName: node
-  linkType: hard
-
 "js-tokens@npm:^3.0.0 || ^4.0.0, js-tokens@npm:^4.0.0":
   version: 4.0.0
   resolution: "js-tokens@npm:4.0.0"
@@ -3255,19 +3232,6 @@ __metadata:
   dependencies:
     mime-db: "npm:1.52.0"
   checksum: 10c0/82fb07ec56d8ff1fc999a84f2f217aa46cb6ed1033fefaabd5785b9a974ed225c90dc72fff460259e66b95b73648596dbcc50d51ed69cdf464af2d237d3149b2
-  languageName: node
-  linkType: hard
-
-"mini-create-react-context@npm:^0.4.1":
-  version: 0.4.1
-  resolution: "mini-create-react-context@npm:0.4.1"
-  dependencies:
-    "@babel/runtime": "npm:^7.12.1"
-    tiny-warning: "npm:^1.0.3"
-  peerDependencies:
-    prop-types: ^15.0.0
-    react: ^0.14.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/80b8daa8fa6092293547984537c8193093e32d0025d387d8d21b6a2807bbf6f209bceef97eb61c518be9c4f7dfcd077584d1c8dbcd828a0e96b80273a5bad148
   languageName: node
   linkType: hard
 
@@ -3749,15 +3713,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-freeze@npm:^1.0.0":
-  version: 1.0.4
-  resolution: "react-freeze@npm:1.0.4"
-  peerDependencies:
-    react: ">=17.0.0"
-  checksum: 10c0/8f51257c261bfefff86f618e958683536248f708019632d309ee5ebdd52f25d3c130660d06fb6f0f4fdef79f00f8ec7177233a872c2321f7d46b7e77ccc522a1
-  languageName: node
-  linkType: hard
-
 "react-helmet-async@npm:^2.0.5":
   version: 2.0.5
   resolution: "react-helmet-async@npm:2.0.5"
@@ -3782,35 +3737,6 @@ __metadata:
   version: 18.3.1
   resolution: "react-is@npm:18.3.1"
   checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
-  languageName: node
-  linkType: hard
-
-"react-keep-alive@npm:^2.5.2":
-  version: 2.5.2
-  resolution: "react-keep-alive@npm:2.5.2"
-  dependencies:
-    "@types/js-md5": "npm:^0.4.2"
-    hoist-non-react-statics: "npm:^3.3.0"
-    js-md5: "npm:^0.7.3"
-  peerDependencies:
-    react: ">=16.3.0"
-    react-dom: ">=16.3.0"
-    react-router-dom: ">=5.0.0"
-  checksum: 10c0/443a6c4a05b0d499270151016073b371eb4d63b271f827269c6843119f614746508ac4f6634e226feb26957a51cd871238a1ddf647c6325cde6e9e94d8fad8ea
-  languageName: node
-  linkType: hard
-
-"react-router-cache-route@npm:^1.13.0":
-  version: 1.13.0
-  resolution: "react-router-cache-route@npm:1.13.0"
-  dependencies:
-    mini-create-react-context: "npm:^0.4.1"
-    react-freeze: "npm:^1.0.0"
-  peerDependencies:
-    prop-types: ">=15"
-    react: ">=15"
-    react-router-dom: ">=4"
-  checksum: 10c0/bac8af71687eabd2276e722cf5b297a21813985addd83502ac17fe647977e61148f471f5f6fd8a00425a9316fab966040700b02516119fb93156ffc11b633dac
   languageName: node
   linkType: hard
 
@@ -4449,13 +4375,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tiny-warning@npm:^1.0.3":
-  version: 1.0.3
-  resolution: "tiny-warning@npm:1.0.3"
-  checksum: 10c0/ef8531f581b30342f29670cb41ca248001c6fd7975ce22122bd59b8d62b4fc84ad4207ee7faa95cde982fa3357cd8f4be650142abc22805538c3b1392d7084fa
-  languageName: node
-  linkType: hard
-
 "tinybench@npm:^2.9.0":
   version: 2.9.0
   resolution: "tinybench@npm:2.9.0"
@@ -4773,8 +4692,6 @@ __metadata:
     react: "npm:^18.3.1"
     react-dom: "npm:^18.3.1"
     react-helmet-async: "npm:^2.0.5"
-    react-keep-alive: "npm:^2.5.2"
-    react-router-cache-route: "npm:^1.13.0"
     react-router-dom: "npm:^6.26.2"
     simplebar-react: "npm:^3.2.6"
     styled-components: "npm:^6.1.13"
