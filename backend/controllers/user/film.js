@@ -1,7 +1,7 @@
 import dotenv from "dotenv";
+import { isTokenExpired, verifyToken } from '../../middlewares/JWT.js';
 import calculateTicketPrice from "../../middlewares/user/seatPrice.js";
 import connection from "../../models/SQLConnection.js";
-
 dotenv.config();
 
 export const filmShowing = async (req, res) => {
@@ -194,3 +194,37 @@ export const getComment = async (req, res) => {
     });
 }
 
+
+export const postComment = async (req, res) => {
+    const token = req.cookies.jwt;
+
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            })
+        }
+
+        if (isTokenExpired(token)) {
+            res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            })
+        }
+
+        const decoded = verifyToken(token);
+    const user_id = decoded.id
+    const query = `
+       insert into evaluate value (?,?,?,?,Now())
+    `;
+    connection.query(query, [user_id,req.body.film_id,req.body.comment,req.body.star], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Database query failed' });
+        }
+
+        res.json({
+            success: true,
+            message: "Đánh giá thành công"
+        });
+    });
+}
