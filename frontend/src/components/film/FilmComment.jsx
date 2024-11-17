@@ -130,7 +130,7 @@ export default function FilmDetail() {
               name={item.film_name}
               type={data.info.categorys[0].category_name}
               descript={item.film_describe}
-              evalute="1"
+              evalute={data.info.evaluate[0].film_rate}
               release={exactlyDate}
               time={item.duration}
               age={item.age_limit}
@@ -151,7 +151,7 @@ export default function FilmDetail() {
                   </div>
                   <hr />
                   <div style={{width:'70%',display:'flex',flexDirection:'column'}}>
-                      <p style={{fontSize:'13px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>{data.info.film[0].film_name}</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>{dataComment.numberOfComment}</span> lượt đánh giá được xác thực với số điểm trung bình rate/5</p>
+                      <p style={{fontSize:'13px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>{data.info.film[0].film_name}</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>{dataComment.numberOfComment}</span> lượt đánh giá được xác thực với số điểm trung bình {data.info.evaluate[0].film_rate}/5</p>
                       <p style={{fontSize:'13px',margin:'0px 8px 8px 8px',color:'#4e4e4e'}}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>8%</span> nhận xét phim không hay.</p>
                   </div>
               </div>

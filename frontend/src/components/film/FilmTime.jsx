@@ -117,7 +117,7 @@ export default function FilmDetail() {
                 name={item.film_name}
                 type={data.info.categorys[0].category_name}
                 descript={item.film_describe}
-                evalute="1"
+                evalute={data.info.evaluate[0].film_rate}
                 release={exactlyDate}
                 time={item.duration}
                 age={item.age_limit}
