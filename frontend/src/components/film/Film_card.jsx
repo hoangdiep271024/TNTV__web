@@ -18,14 +18,14 @@ export default function Film_card(props) {
   const [index, setIndex] = useState(props.index);
   const navigate = useNavigate(); 
 
-  const handleNavigate = () => {
-    localStorage.setItem('film_id', index);
-  navigate(`/phim/${encodeURIComponent(name)}`);
+  const handleNavigate = (film_name, film_id) => {
+    localStorage.setItem('film_id', film_id)
+  navigate(`/phim/${film_name}`);
   };
 
   return (
     <div 
-      onClick={handleNavigate} 
+      onClick={ () => handleNavigate( encodeURIComponent(createSlug(props.name)), props.index)} 
       style={{ 
         textDecoration: 'none', 
         width: '150px', 

@@ -8,6 +8,8 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useTheme } from "@emotion/react";
 import Footer from "../Footer/Footer";
+import { useLocation } from 'react-router-dom';
+
 function createSlug(name) {
   return name
     .trim()
@@ -17,11 +19,12 @@ function createSlug(name) {
 }
 
 export default function FilmDetail() {
+  const location = useLocation();
   const { film_name } = useParams();
   const decodedFilmName = decodeURIComponent(film_name);
 
   const [data, setData] = useState(null);
-  const film_id = localStorage.getItem("film_id");
+  const film_id = localStorage.getItem('film_id')
   const theme = useTheme();
   useEffect(() => {
     const fetchData = async () => {
@@ -163,7 +166,7 @@ export default function FilmDetail() {
             </>
           );
         })()}
-      <Footer/>
+     {data && <Footer/>}
     </Box>
   );
 }

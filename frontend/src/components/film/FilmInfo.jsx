@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState , useEffect} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
 import { Typography } from '@mui/material';
@@ -9,11 +9,23 @@ import NewReleasesIcon from '@mui/icons-material/NewReleases';
 import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
+import Evaluate from './Evaluate';
+
 export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
   }
+
+  const [isClickEvaluate, setIsClickEvaluate] = useState(false)
+  const EvaluateClick = () => {
+           setIsClickEvaluate(!isClickEvaluate)
+  }
+  
+  if(isClickTrailer){ document.body.style.overflow = 'hidden';}
+  else {document.body.style.overflow = 'auto'}
+   
+
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
@@ -29,7 +41,7 @@ export default function FilmInfo(props) {
         <FavoriteIcon/>
         Thích
         </button>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Đánh giá</button>
+      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={EvaluateClick}>Đánh giá</button>
       <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={trailerClick}>Trailer</button>
       <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Mua vé</button>
      </div>
@@ -96,13 +108,29 @@ export default function FilmInfo(props) {
       zIndex: "10",
       width:'100vw',
       height: '200vh',
-      backgroundColor: 'rgba(76, 79, 77, 0.5)'
+      backgroundColor: 'rgba(76, 79, 77, 0.5)',
     }}
     autoComplete="off"
     onClick = {trailerClick}
   ></Box>
      <Trailer/>
      </>}
+
+     {isClickEvaluate && <>
+      <Box
+    sx={{
+      position: "absolute",
+      zIndex: "10",
+      width:'100vw',
+      height: '200vh',
+      backgroundColor: 'rgba(76, 79, 77, 0.5)'
+    }}
+    autoComplete="off"
+    onClick = {EvaluateClick}
+  ></Box>
+     <Evaluate film_name={props.name} img={props.image} />
+     </>}
+
     </Box>
   )
 }

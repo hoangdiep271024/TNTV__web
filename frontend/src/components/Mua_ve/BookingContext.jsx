@@ -1,11 +1,9 @@
 import axios from 'axios';
 import { createContext, default as React, useContext, useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
 
 const BookingContext = createContext();
 export const BookingProvider = ({ children }) => {
-    const location = useLocation();
-    const showtime_id = location.state?.showtime_id;
+    const showtime_id = localStorage.getItem('showtime_id')
     if(!showtime_id) {
         return (
             <h1>hi</h1>

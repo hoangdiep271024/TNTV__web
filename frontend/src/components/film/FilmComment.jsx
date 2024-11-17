@@ -9,8 +9,12 @@ import { Typography } from '@mui/material';
 import User_item from '../../../public/user_1.png'
 import Star from '../../../public/star.png'
 import './comment.css'
+import { useLocation } from 'react-router-dom';
+import Shared from '../Shared';
+import Footer from '../Footer/Footer';
 
 function createSlug(name) {
+  
   return name
     .trim()
     .replace(/\s*:\s*/g, '-')
@@ -23,8 +27,8 @@ export default function FilmDetail() {
   const [selectedArea, setSelectedArea] = useState(null);
   const [data, setData] = useState(null);
   const [dataComment, setDataComment] = useState(null);
-  const film_id = localStorage.getItem('film_id');
   const theme = useTheme();
+  const film_id = localStorage.getItem('film_id');
 
   const handleAreaChange = (newArea) => {
     setSelectedArea(newArea);
@@ -114,6 +118,7 @@ export default function FilmDetail() {
 
   return (
     <>
+      <Shared/>
       {data && (() => {
         const item = data.info.film[0];
         const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
@@ -170,6 +175,7 @@ export default function FilmDetail() {
           </>
         );
       })()}
+      <Footer/>
     </>
   );
 }

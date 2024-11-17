@@ -50,7 +50,7 @@ export default function Trailer() {
 
 
   return (
-    <Box sx={{top: '100px', left: '200', position: 'absolute', zIndex: '20',  animation: `${flyDown} 0.3s ease-out`,transition: 'linear'}}>
+    <Box sx={{top: '17vh', left: '200', position: 'absolute', zIndex: '20',  animation: `${flyDown} 0.3s ease-out`,transition: 'linear'}}>
     {data && (
         <iframe
           src={convertYouTubeLinkToEmbed(data.info.film[0].film_trailer)}

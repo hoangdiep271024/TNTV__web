@@ -17,6 +17,10 @@ import { DashboardLayout } from './layouts/dashboard';
 const HomePage = lazy(() => import('./pages/home'));
 const Page404 = lazy(() => import('./pages/page-not-found'));
 const UserPage = lazy(() => import('./pages/user'));
+const MoviePage = lazy(() => import('./pages/movie'));
+const CinemaPage = lazy(() => import('./pages/cinema'));
+const ShowtimePage = lazy(() => import('./pages/showtime'));
+const OrderPage = lazy(() => import('./pages/order'));
 
 
 // ----------------------------------------------------------------------
@@ -46,7 +50,9 @@ const router = createBrowserRouter([
         children: [
             { element: <HomePage />, index: true },
             { path: 'user', element: <UserPage /> },
-            { path: '*', element: <Navigate to="/404" replace /> },
+            { path: 'movie', element: <MoviePage /> },
+            { path: 'cinema', element: <CinemaPage /> },
+            { path: '*', element: <Navigate to="/404" replace /> }
         ],
     },
     {
