@@ -76,3 +76,52 @@ export const userInfoUpdate = async (req, res) => {
         return res.status(401).json({ message: "Invalid token", error: error.message });
     }
 }
+
+
+export const userFilmLiked = async (req, res) => {
+    try {
+        const token = req.cookies.jwt;
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            })
+        }
+
+        const decoded = verifyToken(token);
+
+        if (isTokenExpired(token)) {
+            res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            })
+        }
+        const user_id = decoded.id
+        const query =
+            `SELECT 
+                f.film_id,
+                f.film_name,
+                f.film_img,
+                f.Release_date,
+                fe.film_rate
+            FROM 
+                user_like_film ulf
+            JOIN 
+                films f ON ulf.film_id = f.film_id
+            LEFT JOIN 
+                film_evaluate fe ON f.film_id = fe.film_id
+            WHERE 
+                ulf.user_id = ?`
+
+        connection.query(query, [user_id], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+    
+            res.json(results);
+        });
+
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token", error: error.message });
+    }
+}
