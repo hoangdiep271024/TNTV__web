@@ -74,7 +74,7 @@ export default function Ticket__film({ onLoadComplete }) {
               image={item.film_img}
               name={item.film_name}
               date={exactlyDate}
-              rate={item.film_rate}
+              rate={JSON.parse(item.film_rate).toFixed(1)} 
             />
           );
         })}
