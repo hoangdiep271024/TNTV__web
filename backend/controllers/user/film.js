@@ -217,8 +217,7 @@ export const postComment = async (req, res) => {
 
 
     const checkQuery = `
-    SELECT * FROM evaluate WHERE user_id = ? AND film_id = ?
-`;
+    SELECT * FROM evaluate WHERE user_id = ? AND film_id = ?`;
 
     connection.query(checkQuery, [user_id, req.body.film_id], (err, results) => {
         if (err) {
@@ -232,19 +231,20 @@ export const postComment = async (req, res) => {
                 message: "Người dùng chỉ được đánh giá 1 lần"
             });
         }
-    });
 
-    const query = `
+
+        const query = `
        insert into evaluate value (?,?,?,?,Now())
     `;
-    connection.query(query, [user_id, req.body.film_id, req.body.comments, req.body.star], (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Database query failed' });
-        }
+        connection.query(query, [user_id, req.body.film_id, req.body.comments, req.body.star], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
 
-        res.json({
-            success: true,
-            message: "Đánh giá thành công"
+            res.json({
+                success: true,
+                message: "Đánh giá thành công"
+            });
         });
     });
 }
@@ -261,18 +261,18 @@ export const phim = async (req, res) => {
 
     // Chỉ thêm điều kiện nếu tham số có giá trị
     if (filmType) {
-      query += " AND film_type = ?";
-      params.push(filmType);
+        query += " AND film_type = ?";
+        params.push(filmType);
     }
-  
+
     if (country) {
-      query += " AND country = ?";
-      params.push(country);
+        query += " AND country = ?";
+        params.push(country);
     }
-  
+
     if (categoryId) {
-      query += " AND category_id = ?";
-      params.push(categoryId);
+        query += " AND category_id = ?";
+        params.push(categoryId);
     }
     query += " GROUP BY films.film_id";
     connection.query(query, params, (error, results) => {
