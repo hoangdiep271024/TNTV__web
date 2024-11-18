@@ -6,15 +6,15 @@ import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
 import FilmDetailTime from './FilmDetailTime';
 import { Typography } from '@mui/material';
-import User_item from '/user_1.png'
-import Star from '/star.png'
+import User_item from '../../../public/user_1.png'
+import Star from '../../../public/star.png'
 import './comment.css'
 import { useLocation } from 'react-router-dom';
 import Shared from '../Shared';
 import Footer from '../Footer/Footer';
 
 function createSlug(name) {
-
+  
   return name
     .trim()
     .replace(/\s*:\s*/g, '-')
@@ -118,7 +118,7 @@ export default function FilmDetail() {
 
   return (
     <>
-      <Shared />
+      <Shared/>
       {data && (() => {
         const item = data.info.film[0];
         const exactlyDate = item.Release_date.substring(8, 10) + '/' + item.Release_date.substring(5, 7) + '/' + item.Release_date.substring(0, 4);
@@ -146,14 +146,14 @@ export default function FilmDetail() {
             <hr style={{ width: "42%", marginLeft: '29%' }} />
             <div className='cmt-container'>
               <div className='film-rate'>
-                <div style={{ width: '30%' }}>
-                  <p style={{ fontSize: '48px', color: '#00d97e' }}>4.8<span style={{ fontSize: '20px', color: '#00d97e' }}>/5</span></p>
-                </div>
-                <hr />
-                <div style={{ width: '70%', display: 'flex', flexDirection: 'column' }}>
-                  <p style={{ fontSize: '13px', margin: '8px', color: '#4e4e4e' }}><span style={{ fontSize: '13px', color: '#484848', fontWeight: 'bold' }}>{data.info.film[0].film_name}</span> nhận được <span style={{ fontSize: '14px', color: '#484848', fontWeight: 'bold' }}>{dataComment.numberOfComment}</span> lượt đánh giá được xác thực với số điểm trung bình {data.info.evaluate[0].film_rate}/5</p>
-                  <p style={{ fontSize: '13px', margin: '0px 8px 8px 8px', color: '#4e4e4e' }}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{ fontSize: '13px', color: '#484848', fontWeight: 'bold' }}>8%</span> nhận xét phim không hay.</p>
-                </div>
+                  <div style={{width:'30%'}}>
+                      <p style={{fontSize:'48px', color:'#00d97e'}}>{data.info.evaluate[0].film_rate}<span style={{fontSize:'20px', color:'#00d97e'}}>/5</span></p>
+                  </div>
+                  <hr />
+                  <div style={{width:'70%',display:'flex',flexDirection:'column'}}>
+                      <p style={{fontSize:'13px',margin:'8px',color:'#4e4e4e'}}><span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>{data.info.film[0].film_name}</span> nhận được <span style={{fontSize:'14px', color:'#484848',fontWeight:'bold'}}>{dataComment.numberOfComment}</span> lượt đánh giá được xác thực với số điểm trung bình {data.info.evaluate[0].film_rate}/5</p>
+                      <p style={{fontSize:'13px',margin:'0px 8px 8px 8px',color:'#4e4e4e'}}>Đa số người xem đánh giá tích cực về bộ phim. Chỉ <span style={{fontSize:'13px', color:'#484848',fontWeight:'bold'}}>8%</span> nhận xét phim không hay.</p>
+                  </div>
               </div>
               <hr className='line' />
               {dataComment.comment.map(comments => (
@@ -175,7 +175,7 @@ export default function FilmDetail() {
           </>
         );
       })()}
-      <Footer />
+      <Footer/>
     </>
   );
 }
