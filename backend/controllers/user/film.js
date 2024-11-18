@@ -251,7 +251,7 @@ export const postComment = async (req, res) => {
 export const phim = async (req, res) => {
     const { filmType, country, categoryId } = req.body;
     let query = `
-    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories, films.film_id, films.film_img, films.Release_date,MAX(film_evaluate.film_rate) AS film_rate
+    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories, films.film_id, films.film_img, films.Release_date,MAX(film_evaluate.film_rate) AS film_rate, films.film_name
     FROM films
     INNER JOIN category_film ON category_film.film_id = films.film_id
     inner join film_evaluate on films.film_id = film_evaluate.film_id
