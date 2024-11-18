@@ -137,7 +137,7 @@ const MyAccount = () => {
                                     />
                                 )
                             })) : (
-                            <p style={{ marginLeft: '5px', marginTop: '16px' }}>Bạn chưa có bộ sư tập phim</p>
+                            <p style={{ marginLeft: '5px', marginTop: '11px',fontFamily:'Roboto', fontSize:'16px' }}>Bạn chưa có bộ sư tập phim</p>
                         )}
                     </div>
                 )}
@@ -181,7 +181,7 @@ const MyAccount = () => {
                                 )
                             })
                         ) : (
-                            <p style={{ marginLeft: '5px', marginTop: '16px' }}>Bạn Chưa Có đơn Hàng Nào Cả</p> // Thêm thông báo khi không có đơn hàng
+                            <p style={{ marginLeft: '5px', marginTop: '16px' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
                         )}
                     </div>
                 )}

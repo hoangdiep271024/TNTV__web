@@ -147,7 +147,7 @@ export default function FilmDetail() {
             <div className='cmt-container'>
               <div className='film-rate'>
                   <div style={{width:'30%'}}>
-                      <p style={{fontSize:'48px', color:'#00d97e'}}>4.8<span style={{fontSize:'20px', color:'#00d97e'}}>/5</span></p>
+                      <p style={{fontSize:'48px', color:'#00d97e'}}>{data.info.evaluate[0].film_rate}<span style={{fontSize:'20px', color:'#00d97e'}}>/5</span></p>
                   </div>
                   <hr />
                   <div style={{width:'70%',display:'flex',flexDirection:'column'}}>
