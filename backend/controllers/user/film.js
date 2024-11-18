@@ -217,7 +217,7 @@ export const postComment = async (req, res) => {
     const query = `
        insert into evaluate value (?,?,?,?,Now())
     `;
-    connection.query(query, [user_id,req.body.film_id,req.body.comment,req.body.star], (err, results) => {
+    connection.query(query, [user_id,req.body.film_id,req.body.comments,req.body.star], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
         }

@@ -51,7 +51,7 @@ const getOrders = async (req, res) => {
         );
 
         if (orderData.length === 0) {
-            return res.status(404).json({ message: "Không có đơn hàng nào được tìm thấy" });
+            return res.json(orderData);
         }
 
         // Lấy thông tin chi tiết cho từng order
