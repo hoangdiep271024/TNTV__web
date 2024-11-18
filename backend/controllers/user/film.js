@@ -231,26 +231,27 @@ export const postComment = async (req, res) => {
 export const phim = async (req, res) => {
     const { filmType, country, categoryId } = req.body;
     let query = `
-    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories
+    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories, films.film_id, films.film_img, films.Release_date,MAX(film_evaluate.film_rate) AS film_rate
     FROM films
     INNER JOIN category_film ON category_film.film_id = films.film_id
+    inner join film_evaluate on films.film_id = film_evaluate.film_id
     WHERE 1=1 
     `;
     let params = [];
 
     // Chỉ thêm điều kiện nếu tham số có giá trị
-    if (filmType) {
-      query += " AND film_type = ?";
+    if (  filmType   && filmType !== '4') {
+      query += " AND films.film_type = ?";
       params.push(filmType);
     }
   
-    if (country) {
-      query += " AND country = ?";
+    if ( country  && country !== '2') {
+      query += " AND films.country = ?";
       params.push(country);
     }
   
-    if (categoryId) {
-      query += " AND category_id = ?";
+    if ( categoryId && categoryId !== '18') {
+      query += " AND category_film.category_id = ?";
       params.push(categoryId);
     }
     query += " GROUP BY films.film_id";

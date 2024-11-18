@@ -50,7 +50,7 @@ export default function Film_card(props) {
         </Typography>
         <div style={{display:'flex'}}>
           <span style={{color: theme.palette.mode === "light" ? "#807d77" : "white", fontSize: '13px'}}>{props.rate}</span>
-          <StarIcon style={{ color: theme.palette.mode === "light" ? "yellow" : "white" , marginTop:'-1px',height:'18px',width:'18px',marginRight:'-6px'}} />
+          <StarIcon style={{ color: theme.palette.mode === "light" ? "#f6d805" : "white" , marginTop:'-1px',height:'18px',width:'18px',marginRight:'-6px'}} />
         </div>
       </div>
     </div>

@@ -29,6 +29,9 @@ export default function Films() {
             }));
           };
           useEffect(() => {
+            handleSubmit();
+        }, []);
+          useEffect(() => {
             if (formData.filmType || formData.country || formData.categoryId) {
               handleSubmit();
             }
@@ -54,7 +57,7 @@ export default function Films() {
           <option value="8">Khoa Học Viễn Tưởng</option>
           <option value="9">Bí Ẩn</option>
           <option value="10">Giả Tưởng</option>
-          <option value="11">Lãng Mạng</option>
+          <option value="11">Lãng Mạn</option>
           <option value="12">Drama</option>
           <option value="13">Giật Gân</option>
           <option value="14">Âm Nhạc</option>

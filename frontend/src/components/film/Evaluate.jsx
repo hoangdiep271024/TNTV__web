@@ -59,11 +59,10 @@ const Evaluate = (props) => {
                   if (data.success) {
                     setMessage('Đánh giá thành công');
                     setErorrMessage(null); 
-                    console.log("formdata", dataRate);
+                    setTimeout(() => window.location.reload(), 1500);
                   } else {
                     setErorrMessage(data.message);
                     setMessage(null);
-                    console.log(data);
                   }
                 } else {
                   console.error('Lỗi:', response.statusText);
