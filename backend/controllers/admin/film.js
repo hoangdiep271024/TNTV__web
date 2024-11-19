@@ -122,8 +122,7 @@ export const detail = async (req, res) => {
 // [POST] /admin/films/create
 export const create = async (req, res) => {
     try {
-        let { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
-        film_img = JSON.stringify(film_img);
+        let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
 
         const countResult = await connection.promise().query(
             `SELECT COUNT(*) as count FROM films`,
@@ -136,7 +135,7 @@ export const create = async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const film = await new Promise((resolve, reject) => {
-            connection.query(queryFilm, [filmId, film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country], (err, results) => {
+            connection.query(queryFilm, [filmId, film_name, res.locals.url, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -203,7 +202,7 @@ export const create = async (req, res) => {
         if (film) {
             res.status(201).json({
                 message: "Film created successfully",
-                filmId: film[0], // ID của bản ghi mới được tạo
+                filmId: film.insertId, // ID của bản ghi mới được tạo
             });
         } else {
             res.status(500).json({
@@ -220,23 +219,43 @@ export const create = async (req, res) => {
 }
 
 // [PATCH] /admin/films/edit/:id
-export const edit = async (req, res) => {
+export const editPatch = async (req, res) => {
     try {
         const filmId = parseInt(req.params.id);
-  
-        const { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
 
-        // Update bảng film
-        const queryUpdateFilm = `
-            UPDATE films
-            SET film_name = ?, film_img = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
-            WHERE film_id = ?`;
-        await new Promise((resolve, reject) => {
-            connection.query(queryUpdateFilm, [film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+        // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
+        if(res.locals.url == "") {
+            let { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } =  req.body;
+
+            // Update bảng film
+            const queryUpdateFilm = `
+                UPDATE films
+                SET film_name = ?, film_img = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
+                WHERE film_id = ?`;
+            await new Promise((resolve, reject) => {
+                connection.query(queryUpdateFilm, [film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
+        
+        } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
+            let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } =  req.body;
+
+            // Update bảng film
+            const queryUpdateFilm = `
+                UPDATE films
+                SET film_name = ?, film_img = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
+                WHERE film_id = ?`;
+            await new Promise((resolve, reject) => {
+                connection.query(queryUpdateFilm, [film_name, res.locals.url, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+        }
+
+        let { categories, directors, actors } = req.body;
 
         // Update bảng actor_film(nếu có)
         if(actors) {

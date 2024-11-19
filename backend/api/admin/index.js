@@ -4,6 +4,7 @@ import cinemaRoutes from "../../api/admin/cinema.js";
 import roomRoutes from "../../api/admin/room.js";
 import showTimeRoutes from "../../api/admin/showtime.js";
 import orderRoutes from "../../api/admin/order.js";
+import userRoutes from "./user.js";
 
 export const adminApi = (app) => {
 
@@ -18,4 +19,6 @@ export const adminApi = (app) => {
     app.use(`/${PATH_ADMIN}/showtimes`, showTimeRoutes);
 
     app.use(`/${PATH_ADMIN}/orders`, orderRoutes)
+
+    app.use(`/${PATH_ADMIN}/users`, userRoutes)
 }

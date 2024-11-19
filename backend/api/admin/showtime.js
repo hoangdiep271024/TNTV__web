@@ -10,7 +10,7 @@ showTimeRoutes.get("/detail/:showTimeId", controller.detail);
 
 showTimeRoutes.post("/create", controller.create);
 
-showTimeRoutes.patch("/edit/:showTimeId", controller.edit);
+showTimeRoutes.patch("/edit/:showTimeId", controller.editPatch);
 
 showTimeRoutes.delete("/delete/:showTimeId", controller.deleteItem);
 

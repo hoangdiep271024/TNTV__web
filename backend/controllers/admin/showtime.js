@@ -180,7 +180,7 @@ export const create = async (req, res) => {
 }
 
 // [PATCH] /admin/showtimes/edit/:showTimeId
-export const edit = async (req, res) => {
+export const editPatch = async (req, res) => {
     try {
         const showTimeId = parseInt(req.params.showTimeId);
   

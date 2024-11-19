@@ -11,23 +11,33 @@ filmRoutes.get("/", controller.index);
 filmRoutes.get("/detail/:id", controller.detail);
 
 filmRoutes.post(
-    "/create", upload.single("film_img"), async (req, res) =>{
-        const b64 = Buffer.from(req.file.buffer).toString("base64");
-        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-        const cldRes = await handleUpload(dataURI);
-        const url = cldRes.url
-        controller.create
-    }
+    "/create", upload.single("film_img"), async (req, res, next) =>{
+        res.locals.url = "";
+        if(req.file) {
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+            const cldRes = await handleUpload(dataURI);
+            const url = cldRes.url;
+            res.locals.url = url;
+        }
+        next();
+    },
+    controller.create
 );
 
 filmRoutes.patch(
-    "/edit/:id",  upload.single("film_img"), async (req, res) =>{
-        const b64 = Buffer.from(req.file.buffer).toString("base64");
-        let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
-        const cldRes = await handleUpload(dataURI);
-        const url = cldRes.url
-        controller.create
-    }
+    "/edit/:id", upload.single("film_img"), async (req, res, next) =>{
+        res.locals.url = "";
+        if(req.file) {
+            const b64 = Buffer.from(req.file.buffer).toString("base64");
+            let dataURI = "data:" + req.file.mimetype + ";base64," + b64;
+            const cldRes = await handleUpload(dataURI);
+            const url = cldRes.url;
+            res.locals.url = url;
+        }
+        next();
+    },
+    controller.editPatch
 );
 
 filmRoutes.delete("/delete/:id", controller.deleteFilm);

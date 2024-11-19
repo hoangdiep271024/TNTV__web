@@ -156,7 +156,7 @@ export const create = async (req, res) => {
 }
 
 // [PATCH] /admin/films/edit/:cinemaId
-export const edit = async (req, res) => {
+export const editPatch = async (req, res) => {
     try {
         const cinemaId = parseInt(req.params.cinemaId);
   

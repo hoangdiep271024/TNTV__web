@@ -10,7 +10,7 @@ cinemaRoutes.get("/detail/:cinemaId", controller.detail);
 
 cinemaRoutes.post("/create", controller.create);
 
-cinemaRoutes.patch("/edit/:cinemaId", controller.edit);
+cinemaRoutes.patch("/edit/:cinemaId", controller.editPatch);
 
 cinemaRoutes.delete("/delete/:cinemaId", controller.deleteItem);
 

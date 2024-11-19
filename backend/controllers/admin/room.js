@@ -135,7 +135,7 @@ export const create = async (req, res) => {
 }
 
 // [PATCH] /admin/rooms/edit/:roomId
-export const edit = async (req, res) => {
+export const editPatch = async (req, res) => {
     try {
         const roomId = parseInt(req.params.roomId);
   
