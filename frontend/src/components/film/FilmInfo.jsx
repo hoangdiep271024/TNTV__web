@@ -16,18 +16,16 @@ export default function FilmInfo(props) {
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
   }
-<<<<<<< Updated upstream
 
   const [isClickEvaluate, setIsClickEvaluate] = useState(false)
   const EvaluateClick = () => {
            setIsClickEvaluate(!isClickEvaluate)
   }
-=======
+  
   if(isClickTrailer){ document.body.style.overflow = 'hidden';}
   else {document.body.style.overflow = 'auto'}
    
 
->>>>>>> Stashed changes
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>

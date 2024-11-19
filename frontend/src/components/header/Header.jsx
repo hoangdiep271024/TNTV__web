@@ -12,9 +12,11 @@ import { useState, useEffect } from "react";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { useNavigate } from "react-router-dom";
 
 const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
+  const navigate = useNavigate();
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -22,6 +24,11 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const handleClose = () => {
     setAnchorEl(null);
   };
+
+  const handleClickMyAccount = () => {
+    navigate(`/account/${userInfor.full_name}`)
+  };
+
   const handleCloseProfile = () => {
     setAnchorEl(null);
     onProfileClick();
@@ -201,7 +208,7 @@ const logOutClick = async(e) => {
               }}
             >
               <MenuItem onClick={handleCloseProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClickMyAccount}>My account</MenuItem>
             </Menu>
           </div>
             // <div style={{cursor: 'pointer',marginLeft: '15px',display:'flex', alignItems: 'center', justifyContent:'center', gap :'5px', width:'auto', whiteSpace: 'nowrap', fontSize: '17px'}}>
