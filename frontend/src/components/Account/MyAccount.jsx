@@ -133,7 +133,7 @@ const MyAccount = () => {
                                         image={items.film_img}
                                         name={items.film_name}
                                         date={exactlyDate}
-                                        rate={items.film_rate}
+                                        rate={JSON.parse(items.film_rate).toFixed(1)}
                                     />
                                 )
                             })) : (

@@ -93,7 +93,7 @@ export default function FilmDetail() {
     }
   }, [film_id, selectedArea]);
   const handleNavigate = (showtime_id) => {
-    localStorage.setItem('showTime_id', showtime_id);
+    localStorage.setItem('showtime_id', showtime_id);
     navigate(`/dat_ve/${film_name}`);
   };
 
@@ -117,7 +117,7 @@ export default function FilmDetail() {
                 name={item.film_name}
                 type={data.info.categorys[0].category_name}
                 descript={item.film_describe}
-                evalute={data.info.evaluate[0].film_rate}
+                evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
                 release={exactlyDate}
                 time={item.duration}
                 age={item.age_limit}
