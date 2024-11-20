@@ -1,4 +1,17 @@
 // ----------------------------------------------------------------------
+export const visuallyHidden = {
+    border: 0,
+    margin: -1,
+    padding: 0,
+    width: '1px',
+    height: '1px',
+    overflow: 'hidden',
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    clip: 'rect(0 0 0 0)',
+}
+
+// ----------------------------------------------------------------------
 // Function to calculate the number of empty rows required at the end of a paginated table
 // - page: the current page number
 // - rowsPerPage: the number of rows per page

@@ -1,4 +1,5 @@
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { visuallyHidden } from "../utils";
 
 /**
  * UserTableHead Component
@@ -54,7 +55,7 @@ export function UserTableHead({
                         >
                             {headCell.label}
                             {orderBy === headCell.id ? (
-                                <Box>
+                                <Box sx={{ ...visuallyHidden }}>
                                     {order === 'desc' ? 'sorted descending' : 'sort ascending'}
                                 </Box>
                             ) : null}
