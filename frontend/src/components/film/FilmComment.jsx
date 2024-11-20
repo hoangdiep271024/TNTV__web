@@ -174,7 +174,7 @@ export default function FilmDetail() {
           </>
         );
       })()}
-      {dataComment && <Footer/>}
+      {dataComment && <Footer/> }
     </>
   );
 }
