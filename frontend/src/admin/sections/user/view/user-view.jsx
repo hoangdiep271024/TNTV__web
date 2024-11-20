@@ -4,12 +4,14 @@ import { _users } from '../../../_mock/_data'
 import { DashboardContent } from '../../../layouts/dashboard'
 import { Box, Button, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
 import { Iconify } from "../../../components/iconify";
+
 import { UserTableHead } from "../user-table-head";
 import { UserTableToolbar } from "../user-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { UserTableRow } from "../user-table-row";
 import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
+import { useTable } from "../use-table";
 
 /**
  * UserView Component
@@ -21,7 +23,7 @@ export function UserView() {
     // Custom hook to handle table state and functions (pagination, selection, sorting)
     const table = useTable();
 
-    // State for the filter name used to filter the users by their name
+    // State variable to manage the filter criteria for filtering users by their name
     const [filterName, setFilterName] = useState('');
 
     // Filter and sort the list of users based on the current filter and sort settings
@@ -119,78 +121,4 @@ export function UserView() {
             </Card>
         </DashboardContent>
     )
-}
-
-/**
- * Custom hooks to manage table state and actions
- * 
- * This hook handles the state and callbacks for managing table interactions,
- * including pagination, row selection, sorting, and resetting the page when needed.
- * 
- * @returns Object containing table state and helper functions.
- */
-export function useTable() {
-    const [page, setPage] = useState(0); // Current page number
-    const [orderBy, setOrderBy] = useState('name'); // Column to sort by
-    const [rowsPerPage, setRowsPerPage] = useState(5); // Rows per page
-    const [selected, setSelected] = useState([]); // Selected row IDs
-    const [order, setOrder] = useState('asc'); // Sort order
-
-    // Toggle sorting order based on column header click
-    const onSort = useCallback(
-        (id) => { // id of the column being clicked
-            const isAsc = orderBy === id && order === 'asc';
-            setOrder(isAsc ? 'desc' : 'asc');
-            setOrderBy(id);
-        },
-        [order, orderBy]
-    );
-
-    // Select or deselect all rows
-    const onSelectAllRows = useCallback((checked, newSelecteds) => {
-        if (checked) {
-            setSelected(newSelecteds);
-            return;
-        }
-        setSelected([]);
-    }, []);
-
-    // Toggle selection for a single row
-    const onSelectRow = useCallback((inputValue) => {
-        const newSelected = selected.includes(inputValue)
-            ? selected.filter((value) => value !== inputValue)
-            : [...selected, inputValue];
-
-        setSelected(newSelected);
-    }, [selected]);
-
-    // Reset page to first page
-    const onResetPage = useCallback(() => {
-        setPage(0);
-    }, []);
-
-    // Change to a specific page
-    const onChangePage = useCallback((event, newPage) => {
-        setPage(newPage);
-    }, []);
-
-    // Change number of rows per page and reset to first page
-    const onChangeRowsPerPage = useCallback((event) => {
-        setRowsPerPage(parseInt(event.target.value, 10)); // base-10 number
-        onResetPage();
-    }, [onResetPage]);
-
-    return {
-        page,
-        orderBy,
-        rowsPerPage,
-        selected,
-        order,
-        onSort,
-        onSelectAllRows,
-        onSelectRow,
-        onResetPage,
-        onChangePage,
-        onChangeRowsPerPage
-    };
 }

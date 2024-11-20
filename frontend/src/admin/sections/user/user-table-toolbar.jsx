@@ -48,13 +48,7 @@ export function UserTableToolbar({ numSelected, filterName, onFilterName }) {
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>
-            ) : (
-                <Tooltip title="Filter list">
-                    <IconButton>
-                        <Iconify icon="ic:round-filter-list" />
-                    </IconButton>
-                </Tooltip>
-            )}
+            ) : null}
         </Toolbar>
     );
 }

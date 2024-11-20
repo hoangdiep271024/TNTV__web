@@ -3,16 +3,16 @@ import { emptyRows, getComparator, applyFilter } from './utils';
 
 // Tests for emptyRows
 describe('emptyRows', () => {
-    it('Trả về giá trị đúng số hàng trống khi có ít item hơn số hàng mỗi trang', () => {
+    it('returns correct number of empty rows when rowsPerPage > number of items', () => {
         expect(emptyRows(0, 10, 5)).toBe(5);
     });
 
-    it('Trả về 0 khi số item vừa đủ chia hết cho số hàng mỗi trang', () => {
-        expect(emptyRows(0, 5, 5)).toBe(0);
+    it('returns 0 when number of items divides evenly by rowsPerPage', () => {
+        expect(emptyRows(1, 5, 10)).toBe(0);
     });
 
-    it('Trả về 0 vì có nhiều item hơn số hàng mỗi trang', () => {
-        expect(emptyRows(0, 5, 10)).toBe(0);
+    it('returns 0 when rowsPerPage < number of items', () => {
+        expect(emptyRows(0, 5, 13)).toBe(0);
     });
 });
 
