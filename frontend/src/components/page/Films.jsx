@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react'
 import Shared from "../Shared";
 import Footer from '../Footer/Footer';
 import Box from '@mui/material/Box';
+import { useTheme } from "@emotion/react";
+import FilmList from '../film/FilmList';
+import Film_card from '../film/Film_card';
+import BasicPagination from '../film/BasicPagination';
 
 export default function Films() {
     const [formData, setFormData] = useState({
@@ -18,7 +22,7 @@ export default function Films() {
         body: JSON.stringify(formData),
       })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => setDataa(data))
         .catch(error => console.error('Error:', error));
     }
         const handleChange = (e) => {
@@ -75,7 +79,53 @@ export default function Films() {
           </select>
     
     </Box>
+    {dataa && <Ticket__film data = {dataa}></Ticket__film>}
     {dataa && <Footer/>}
    </Box>
   )
+}
+
+function Ticket__film({data}) {
+
+  const theme = useTheme();
+  const [currentPage, setCurrentPage] = useState(1);
+  const filmsPerPage = 16;
+  const handlePageChange = (event, value) => {
+    setCurrentPage(value);
+  };
+  const currentData = data
+
+  const indexOfLastFilm = currentPage * filmsPerPage;
+  const indexOfFirstFilm = indexOfLastFilm - filmsPerPage;
+  const currentFilms = currentData.slice(indexOfFirstFilm, indexOfLastFilm);
+
+  const totalPages = Math.max(Math.ceil(currentData.length / filmsPerPage), 1);
+
+  return (
+    <Box sx={{width: '100vw', marginTop: '2vh'}}>
+
+      <FilmList>
+        {currentFilms.map(item => {
+          const datee = item.Release_date.substring(0, 10);
+          const year = datee.substring(0, 4);
+          const month = datee.substring(5, 7);
+          const day = datee.substring(8, 10);
+          const exactlyDate = `${day}/${month}`;
+          return (
+            <Film_card
+              key={item.film_id}  
+              index={item.film_id}  
+              image={item.film_img}
+              name={item.film_name}
+              date={exactlyDate}
+              rate={JSON.parse(item.film_rate).toFixed(1)} 
+            />
+          );
+        })}
+      </FilmList>
+
+      {data && <Box sx={{width: '100vw', display: 'flex', justifyContent: 'center'}}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
+      
+    </Box>
+  );
 }

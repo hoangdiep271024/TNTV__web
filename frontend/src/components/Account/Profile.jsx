@@ -34,21 +34,6 @@ export default function Profile() {
       const [file, setFile] = useState(null);
       const [preview, setPreview] = useState(null);
       const [uploadStatus, setUploadStatus] = useState('');
-    // Hàm xử lý khi chọn file
-    // const handleFileChange = (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onloadend = () => {
-    //             setImage(reader.result); 
-    //             setFormData((prevData) => ({
-    //                 ...prevData,
-    //                 user__img: reader.result // Cập nhật hình ảnh trong formData
-    //             }));
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // };
     const handleFileChange = (e) => {
       const selectedFile = e.target.files[0];
       setFile(selectedFile);
