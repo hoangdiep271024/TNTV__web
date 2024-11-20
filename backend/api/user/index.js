@@ -12,7 +12,7 @@ import routerQRPayment from "./QRPayment.js";
 import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
 import routerUserInfo from "./userInfo.js";
-
+import routerLike from "./Like.js";
 const router = express.Router()
 
 router.use("/lichChieu", routerLichChieu)
@@ -28,4 +28,5 @@ router.use("/forgotPassword",routerForgotPassword)
 router.use("/muaVe",routerMuaVe)
 router.use("/orders",routerOrders)
 router.use("/rap",routerCinema)
+router.use("/like",routerLike)
 export default router;

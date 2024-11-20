@@ -19,8 +19,9 @@
 
 .acc_content img {
     width: 13%;
+    height: 13%;
     object-fit: cover;
-    border-radius: 50%;
+    border-radius: 100%;
     border: 5px solid white;
 }
 

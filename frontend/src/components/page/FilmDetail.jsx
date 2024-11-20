@@ -83,6 +83,7 @@ export default function FilmDetail() {
                 age={item.age_limit}
                 actors={data.info.actors}
                 directors={data.info.directors}
+                film_id = {item.film_id}
               />
               <div
                 style={{

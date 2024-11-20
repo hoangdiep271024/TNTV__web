@@ -165,7 +165,7 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
     <SubmitButton type="submit" value="Đăng nhập" />
   </div>
 </form>
-      <div style={{display: 'flex', fontSize:'13px'}}>
+      <div style={{display: 'flex', fontSize:'13px', marginTop: '10px'}}>
         <p style={{color:'grey', marginLeft:'16%'}}>Chưa có tài khoản?</p>
         <p style={{color:'#207ee3', cursor:'pointer', marginLeft:'3px' }} onClick={onSetAccClick} >Đăng kí ngay!</p>
       </div>
