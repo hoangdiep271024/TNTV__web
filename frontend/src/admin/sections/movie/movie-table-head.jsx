@@ -1,4 +1,5 @@
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { visuallyHidden } from "../utils";
 
 /**
  * MovieTableHead Component
@@ -59,7 +60,7 @@ export function MovieTableHead({
                             {headCell.label}
 
                             {orderBy === headCell.id ? (
-                                <Box>
+                                <Box sx={{ ...visuallyHidden }}>
                                     {order === 'desc' ? 'sorted descending' : 'sort ascending'}
                                 </Box>
                             ) : null}

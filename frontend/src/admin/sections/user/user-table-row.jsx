@@ -3,9 +3,11 @@ import { useCallback, useState } from "react";
 
 import { Label } from '../../components/label';
 import { Iconify } from '../../components/iconify'
+import { useNavigate } from "react-router-dom";
 
 export function UserTableRow({ row, selected, onSelectRow }) {
     const [openPopover, setOpenPopover] = useState(null);
+    const navigate = useNavigate();
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -14,6 +16,11 @@ export function UserTableRow({ row, selected, onSelectRow }) {
     const handleClosePopover = useCallback(() => {
         setOpenPopover(null);
     }, []);
+
+    const handleEdit = () => {
+        handleClosePopover();
+        navigate('/admin/user/${row.id}')
+    }
 
     return (
         <>
@@ -68,7 +75,7 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover}>
+                        <MenuItem onClick={handleEdit}>
                             <Iconify icon="solar:pen-bold" />
                             Edit
                         </MenuItem>

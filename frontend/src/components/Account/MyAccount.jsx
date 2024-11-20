@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Shared from '../Shared';
 import Footer from '../Footer/Footer';
-import Acc_banner from '../../../public/tix-banner.png'
+import Acc_banner from '/tix-banner.png'
 import './acc.css'
 import Film_card from '../film/Film_card';
 import { useNavigate } from 'react-router-dom';
