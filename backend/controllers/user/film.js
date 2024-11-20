@@ -178,7 +178,7 @@ export const getComment = async (req, res) => {
     const filmId = req.params.id;
     // Truy vấn MySQL
     const query = `
-        select users.user_id, users.full_name, comments, star, date_posted from evaluate
+        select users.user_id, users.user_img, users.full_name, comments, star, date_posted from evaluate
         left join users on evaluate.user_id = users.user_id
         where film_id = ?
     `;

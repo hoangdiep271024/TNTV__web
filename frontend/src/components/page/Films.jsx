@@ -8,6 +8,7 @@ import Film_card from '../film/Film_card';
 import BasicPagination from '../film/BasicPagination';
 
 export default function Films() {
+  const theme = useTheme()
     const [formData, setFormData] = useState({
         filmType: '',
         country: '',
@@ -79,6 +80,7 @@ export default function Films() {
           </select>
     
     </Box>
+    {dataa && <div style={{ marginTop: '20px', fontSize: '30px', marginLeft: '10%', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444'}}>DANH SÁCH PHIM {'>>'}</div>}
     {dataa && <Ticket__film data = {dataa}></Ticket__film>}
     {dataa && <Footer/>}
    </Box>
