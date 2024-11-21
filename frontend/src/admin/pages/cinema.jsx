@@ -1,17 +1,17 @@
-// import { Helmet } from 'react-helmet-async';
+import { Helmet } from 'react-helmet-async';
 
-// import { CinemaView } from '../sections/cinema/view';
+import { CinemaView } from '../sections/cinema/view';
 
-// // ----------------------------------------------------------------------
+// ----------------------------------------------------------------------
 
-// export default function CinemaPage() {
-//     return (
-//         <>
-//             <Helmet>
-//                 <title> {`Cinema | NHTT Admin Panel`}</title>
-//             </Helmet>
+export default function CinemaPage() {
+    return (
+        <>
+            <Helmet>
+                <title> {`Cinema | NHTT Admin Panel`}</title>
+            </Helmet>
 
-//             <CinemaView />
-//         </>
-//     );
-// }
+            <CinemaView />
+        </>
+    );
+}
