@@ -140,18 +140,18 @@ const ClickActor = (actor_id) => {
      <Typography>{props.type}</Typography>
      </div>
     
-     <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '40vh', marginTop: '10px'}}>
-     {!liked && <button onClick = {Like} style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
+     <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '45vh', marginTop: '10px'}}>
+     {!liked && <button onClick = {Like} style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
         <FavoriteIcon/>
         Thích
         </button>} 
-      {liked && <button onClick={unLike} style={{width:'100px', height:'30px', backgroundColor: 'white', color: '#EF4444', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
+      {liked && <button onClick={unLike} style={{width:'120px', height:'30px', backgroundColor: 'white', color: '#EF4444', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
         <FavoriteIcon style={{color: '#EF4444'}}/>
         Thích
         </button>}
-      <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={EvaluateClick}>Đánh giá</button>
-      <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={trailerClick}>Trailer</button>
-      <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>Mua vé</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={EvaluateClick}>Đánh giá</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={trailerClick}>Trailer</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>Mua vé</button>
      </div>
      <Typography style={{ marginTop: '7px', fontSize: '14px'}} >{props.descript}</Typography>
      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '7px'}}>
