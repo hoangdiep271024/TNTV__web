@@ -40,7 +40,8 @@ export default function FilmInfo(props) {
       }
   
       const data = await response.json();
-      console.log(data);
+        setLiked(data.liked)
+
     } catch (error) {
       console.error('Error fetching likeCheck:', error);
     }
@@ -48,6 +49,57 @@ export default function FilmInfo(props) {
   useEffect(() => {
     likeCheckFetch();
   }, []);
+
+  const unLike = async () => {
+    try {
+      const response = await fetch(`/api/like/unlike/film_id=${props.film_id}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+        setLiked(data.liked)
+
+    } catch (error) {
+      console.error('Error fetching likeCheck:', error);
+    }
+  };
+
+  const Like = async () => {
+    try {
+      const response = await fetch(`/api/like/film_id=${props.film_id}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+        setLiked(data.liked)
+
+    } catch (error) {
+      console.error('Error fetching likeCheck:', error);
+    }
+  };
+
+
+
+
+// useEffect(() => {
+//   console.log(liked)
+// }, [liked])
+
+
   return (
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
@@ -59,10 +111,14 @@ export default function FilmInfo(props) {
      </div>
     
      <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '40vh', marginTop: '10px'}}>
-      <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
+     {!liked && <button onClick = {Like} style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
         <FavoriteIcon/>
         Thích
-        </button>
+        </button>} 
+      {liked && <button onClick={unLike} style={{width:'100px', height:'30px', backgroundColor: 'white', color: '#EF4444', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
+        <FavoriteIcon style={{color: '#EF4444'}}/>
+        Thích
+        </button>}
       <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={EvaluateClick}>Đánh giá</button>
       <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={trailerClick}>Trailer</button>
       <button style={{width:'100px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>Mua vé</button>
