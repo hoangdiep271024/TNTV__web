@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Shared from "../Shared";
-import FilmDetailTime from "./FilmDetailTime";
-import FilmInfo from "./FilmInfo";
+import FilmDetailTime from "../film/FilmDetailTime";
+import FilmInfo from "../film/FilmInfo";
 
 function createSlug(name) {
   return name

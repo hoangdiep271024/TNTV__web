@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import FilmInfo from './FilmInfo';
+import FilmInfo from '../film/FilmInfo';
 import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
-import FilmDetailTime from './FilmDetailTime';
+import FilmDetailTime from '../film/FilmDetailTime';
 import { Typography } from '@mui/material';
 import Star from '../../../public/star.png'
-import './comment.css'
+import '../film/comment.css'
 import { useLocation } from 'react-router-dom';
 import Shared from '../Shared';
 import Footer from '../Footer/Footer';

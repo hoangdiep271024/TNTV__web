@@ -13,6 +13,14 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
+function createSlug(name) {
+  
+  return name
+    .trim()
+    .replace(/\s*:\s*/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,7 +34,7 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   };
 
   const handleClickMyAccount = () => {
-    navigate(`/account/${userInfor.full_name}`)
+    navigate(`/account/${encodeURIComponent(createSlug(userInfor.full_name))}`)
   };
 
   const handleCloseProfile = () => {
