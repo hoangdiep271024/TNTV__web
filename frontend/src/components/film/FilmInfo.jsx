@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { Typography } from '@mui/material';
+import { Typography, keyframes  } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -10,6 +10,7 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
 import Evaluate from './Evaluate';
+import Alert from '@mui/material/Alert';
 
 export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
@@ -20,6 +21,7 @@ export default function FilmInfo(props) {
   const EvaluateClick = () => {
            setIsClickEvaluate(!isClickEvaluate)
   }
+  const [message ,setMessage] = useState(null)
   
   if(isClickTrailer){ document.body.style.overflow = 'hidden';}
   else {document.body.style.overflow = 'auto'}
@@ -85,22 +87,39 @@ export default function FilmInfo(props) {
       }
   
       const data = await response.json();
+      if (data.message === 'Người dùng chưa đăng nhập' || data.message === 'Người dùng hết phiên đăng nhập'){
+        setMessage('Vui lòng đăng nhập để thao tác')
+      }
         setLiked(data.liked)
 
     } catch (error) {
       console.error('Error fetching likeCheck:', error);
     }
   };
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 2000); // 2 giây
 
-
-
-
-// useEffect(() => {
-//   console.log(liked)
-// }, [liked])
-
-
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+  const flyDown = keyframes`
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
   return (
+    <>
+     {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '40%', position: 'absolute', zIndex:'20', top: '40px', left:'30%', animation: `${flyDown} 0.5s ease-out`}}>
+            {message}
+          </Alert>} 
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
      <div style={{alignItems: 'start', width: '45vw', textWrap: 'wrap'}}>
@@ -210,5 +229,6 @@ export default function FilmInfo(props) {
      </>}
 
     </Box>
+    </>
   )
 }
