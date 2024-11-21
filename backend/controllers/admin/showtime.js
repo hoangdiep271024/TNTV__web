@@ -59,55 +59,65 @@ export const index = async (req, res) => {
 // [GET] /admin/showtimes/detail/:showTimeId
 export const detail = async (req, res) => {
     try {
-        const showTimeId = parseInt(req.params.showTimeId);
+        const showTimeId = req.params.showTimeId;
 
         const showTimeInfo = {};
     
         const queryShowTime = `Select * from showtimes where showtime_id = ?`;
-        showTimeInfo.showtime = await new Promise((resolve, reject) => {
+        const showTime = await new Promise((resolve, reject) => {
             connection.query(queryShowTime, [showTimeId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        showTimeInfo.showTime = showTime;
 
-        // Truy vấn film_name từ film_id trong bảng showtimes
-        const queryFilm = `Select f.film_id, f.film_name
+        if(showTime.length > 0) {
+            // Truy vấn film_name từ film_id trong bảng showtimes
+            const queryFilm = `Select f.film_id, f.film_name
                             from films as f
                             inner join showtimes as st on st.film_id = f.film_id
                             where st.showtime_id = ?`;
-        showTimeInfo.film = await new Promise((resolve, reject) => {
-            connection.query(queryFilm, [showTimeId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            showTimeInfo.film = await new Promise((resolve, reject) => {
+                connection.query(queryFilm, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
 
-        // Truy vấn cinema_name từ cinema_id trong bảng showtimes
-        const queryCinema = `Select c.cinema_id, c.cinema_name
-                            from cinemas as c
-                            inner join showtimes as st on st.cinema_id = c.cinema_id
-                            where st.showtime_id = ?`
-        showTimeInfo.cinema = await new Promise((resolve, reject) => {
-            connection.query(queryCinema, [showTimeId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            // Truy vấn cinema_name từ cinema_id trong bảng showtimes
+            const queryCinema = `Select c.cinema_id, c.cinema_name
+                    from cinemas as c
+                    inner join showtimes as st on st.cinema_id = c.cinema_id
+                    where st.showtime_id = ?`
+            showTimeInfo.cinema = await new Promise((resolve, reject) => {
+                connection.query(queryCinema, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
 
-        // Truy vấn room_name từ room_id trong bảng showtimes
-        const queryRoom = `Select r.room_id, r.room_name
-                            from rooms as r
-                            inner join showtimes as st on st.room_id = r.room_id
-                            where st.showtime_id = ?`
-        showTimeInfo.room = await new Promise((resolve, reject) => {
-            connection.query(queryRoom, [showTimeId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            // Truy vấn room_name từ room_id trong bảng showtimes
+            const queryRoom = `Select r.room_id, r.room_name
+                    from rooms as r
+                    inner join showtimes as st on st.room_id = r.room_id
+                    where st.showtime_id = ?`
+            showTimeInfo.room = await new Promise((resolve, reject) => {
+                connection.query(queryRoom, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
-        
-        res.json(showTimeInfo);
+
+            res.json(showTimeInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "ShowTime not found"
+                }
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(404).json({
@@ -175,6 +185,87 @@ export const create = async (req, res) => {
     } else {
         res.status(500).json({
             message: "Error creating Showtime",
+        });
+    }
+}
+
+// [GET] /admin/showtimes/edit/:showTimeId
+export const edit = async (req, res) => {
+    try {
+        const showTimeId = req.params.showTimeId;
+
+        const showTimeInfo = {};
+    
+        const queryShowTime = `Select * from showtimes where showtime_id = ?`;
+        const showTime = await new Promise((resolve, reject) => {
+            connection.query(queryShowTime, [showTimeId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+        showTimeInfo.showTime = showTime;
+
+        if(showTime.length > 0) {
+            // Truy vấn film_name từ film_id trong bảng showtimes
+            const queryFilm = `Select f.film_id, f.film_name
+                            from films as f
+                            inner join showtimes as st on st.film_id = f.film_id
+                            where st.showtime_id = ?`;
+            showTimeInfo.film = await new Promise((resolve, reject) => {
+                connection.query(queryFilm, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            // Truy vấn cinema_name từ cinema_id trong bảng showtimes
+            const queryCinema = `Select c.cinema_id, c.cinema_name
+                    from cinemas as c
+                    inner join showtimes as st on st.cinema_id = c.cinema_id
+                    where st.showtime_id = ?`
+            showTimeInfo.cinema = await new Promise((resolve, reject) => {
+                connection.query(queryCinema, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            // Truy vấn room_name từ room_id trong bảng showtimes
+            const queryRoom = `Select r.room_id, r.room_name
+                    from rooms as r
+                    inner join showtimes as st on st.room_id = r.room_id
+                    where st.showtime_id = ?`
+            showTimeInfo.room = await new Promise((resolve, reject) => {
+                connection.query(queryRoom, [showTimeId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const [films] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+            const [cinemas] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+            const [rooms] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+
+            res.json({
+                showTimeInfo: showTimeInfo,
+                filmsToChoose: films,
+                cinemasToChoose: cinemas,
+                roomsToChoose: rooms
+            });
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Showtime not found"
+                }
+            });
+        }
+
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Error editing Showtime",
+            error: error
         });
     }
 }

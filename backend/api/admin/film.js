@@ -25,6 +25,8 @@ filmRoutes.post(
     controller.create
 );
 
+filmRoutes.get("/edit/:id", controller.edit);
+
 filmRoutes.patch(
     "/edit/:id", upload.single("film_img"), async (req, res, next) =>{
         res.locals.url = "";

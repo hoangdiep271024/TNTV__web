@@ -64,36 +64,45 @@ export const detail = async (req, res) => {
         const cinemaInfo = {};
 
         const queryCinema = `Select * from cinemas where cinemas.cinema_id = ?`;
-        cinemaInfo.cinema = await new Promise((resolve, reject) => {
+        const cinema = await new Promise((resolve, reject) => {
             connection.query(queryCinema, [cinemaId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        cinemaInfo.cinema = cinema;
 
-        const queryCluster = `Select cc.cluster_id,cc.cluster_name
-                            from cinema_clusters as cc
-                            inner join cinemas as c on cc.cluster_id = c.cluster_id
-                            where c.cinema_id = ?`;
-        cinemaInfo.clusters = await new Promise((resolve, reject) => {
-            connection.query(queryCluster, [cinemaId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+        if(cinema.length > 0) {
+            const queryCluster = `Select cc.cluster_id,cc.cluster_name
+                                from cinema_clusters as cc
+                                inner join cinemas as c on cc.cluster_id = c.cluster_id
+                                where c.cinema_id = ?`;
+            cinemaInfo.clusters = await new Promise((resolve, reject) => {
+                connection.query(queryCluster, [cinemaId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
 
-        const queryRegion = `Select r.region_id,r.region_name
-                            from regions as r
-                            inner join cinemas as c on r.region_id = c.region_id
-                            where c.cinema_id = ?`;
-        cinemaInfo.regions = await new Promise((resolve, reject) => {
-            connection.query(queryRegion, [cinemaId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            const queryRegion = `Select r.region_id,r.region_name
+                        from regions as r
+                        inner join cinemas as c on r.region_id = c.region_id
+                        where c.cinema_id = ?`;
+            cinemaInfo.regions = await new Promise((resolve, reject) => {
+                connection.query(queryRegion, [cinemaId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
-        
-        res.json(cinemaInfo);
+            res.json(cinemaInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Cinema not found"
+                }
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(404).json({
@@ -151,6 +160,70 @@ export const create = async (req, res) => {
     } else {
         res.status(500).json({
             message: "Error creating cinema",
+        });
+    }
+}
+
+// [GET] /admin/films/edit/:cinemaId
+export const edit = async (req, res) => {
+    try {
+        const cinemaId = parseInt(req.params.cinemaId);
+
+        const cinemaInfo = {};
+
+        const queryCinema = `Select * from cinemas where cinemas.cinema_id = ?`;
+        const cinema = await new Promise((resolve, reject) => {
+            connection.query(queryCinema, [cinemaId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+        cinemaInfo.cinema = cinema;
+
+        if(cinema.length > 0) {
+            const queryCluster = `Select cc.cluster_id,cc.cluster_name
+                                from cinema_clusters as cc
+                                inner join cinemas as c on cc.cluster_id = c.cluster_id
+                                where c.cinema_id = ?`;
+            cinemaInfo.clusters = await new Promise((resolve, reject) => {
+                connection.query(queryCluster, [cinemaId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const queryRegion = `Select r.region_id,r.region_name
+                        from regions as r
+                        inner join cinemas as c on r.region_id = c.region_id
+                        where c.cinema_id = ?`;
+            cinemaInfo.regions = await new Promise((resolve, reject) => {
+                connection.query(queryRegion, [cinemaId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const [clusters] = await connection.promise().query(`SELECT * FROM cinema_clusters`);
+            const [regions] = await connection.promise().query(`SELECT * FROM regions`);
+            
+            res.json({
+                cinemaInfo: cinemaInfo,
+                clustersToChoose: clusters,
+                regionsToChoose: regions
+            });
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Cinema not found"
+                }
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Error editing cinema",
+            error: error
         });
     }
 }

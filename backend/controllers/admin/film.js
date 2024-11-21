@@ -67,50 +67,61 @@ export const detail = async (req, res) => {
 
         const queryFilm = `Select * from films where films.film_id = ?`;
     
-        filmInfo.film = await new Promise((resolve, reject) => {
+        const film = await new Promise((resolve, reject) => {
             connection.query(queryFilm, [filmId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        filmInfo.film = film;
 
-        const queryActor = `Select A.actor_id,A.actor_name
+        if(film.length > 0) {
+            const queryActor = `Select A.actor_id,A.actor_name
                             from actors as A
                             inner join actor_film as AF on A.actor_id = AF.actor_id
                             inner join films as F on AF.film_id = F.film_id
                             where F.film_id = ?`;
-        filmInfo.actors = await new Promise((resolve, reject) => {
-            connection.query(queryActor, [filmId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            filmInfo.actors = await new Promise((resolve, reject) => {
+                connection.query(queryActor, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
 
-        const queryDirector = `Select D.director_id,D.director_name
-                                from directors as D
-                                inner join director_film as DF on D.director_id = DF.director_id
-                                inner join films as F on DF.film_id = F.film_id
-                                where F.film_id = ?`;
-        filmInfo.directors = await new Promise((resolve, reject) => {
-            connection.query(queryDirector, [filmId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            const queryDirector = `Select D.director_id,D.director_name
+                                    from directors as D
+                                    inner join director_film as DF on D.director_id = DF.director_id
+                                    inner join films as F on DF.film_id = F.film_id
+                                    where F.film_id = ?`;
+            filmInfo.directors = await new Promise((resolve, reject) => {
+                connection.query(queryDirector, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
 
-        const queryCategory = `Select C.category_id,C.category_name
-                                from categorys as C
-                                inner join category_film as CF on C.category_id = CF.category_id
-                                inner join films as F on CF.film_id = F.film_id
-                                where F.film_id = ?`;
-        filmInfo.categories = await new Promise((resolve, reject) => {
-            connection.query(queryCategory, [filmId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            const queryCategory = `Select C.category_id,C.category_name
+                                    from categorys as C
+                                    inner join category_film as CF on C.category_id = CF.category_id
+                                    inner join films as F on CF.film_id = F.film_id
+                                    where F.film_id = ?`;
+            filmInfo.categories = await new Promise((resolve, reject) => {
+                connection.query(queryCategory, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
+
+            res.json(filmInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Film not found"
+                }
+            });
+        }
         
-        res.json(filmInfo);
     } catch (error) {
         console.log(error);
         res.status(404).json({
@@ -215,6 +226,89 @@ export const create = async (req, res) => {
             message:  "Error creating film",
             error: error
         });
+    }
+}
+
+// [GET] /admin/films/edit/:id
+export const edit = async (req, res) => {
+    try {
+        const filmId = req.params.id;
+
+        // filmInfo để đổ data cũ ra giao diện
+        const filmInfo = {};
+
+        const queryFilm = `Select * from films where films.film_id = ?`;
+    
+        const film = await new Promise((resolve, reject) => {
+            connection.query(queryFilm, [filmId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+        filmInfo.film = film;
+
+        if(film.length > 0) {
+            const queryActor = `Select A.actor_id,A.actor_name
+                            from actors as A
+                            inner join actor_film as AF on A.actor_id = AF.actor_id
+                            inner join films as F on AF.film_id = F.film_id
+                            where F.film_id = ?`;
+            filmInfo.actors = await new Promise((resolve, reject) => {
+                connection.query(queryActor, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const queryDirector = `Select D.director_id,D.director_name
+                                    from directors as D
+                                    inner join director_film as DF on D.director_id = DF.director_id
+                                    inner join films as F on DF.film_id = F.film_id
+                                    where F.film_id = ?`;
+            filmInfo.directors = await new Promise((resolve, reject) => {
+                connection.query(queryDirector, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const queryCategory = `Select C.category_id,C.category_name
+                                    from categorys as C
+                                    inner join category_film as CF on C.category_id = CF.category_id
+                                    inner join films as F on CF.film_id = F.film_id
+                                    where F.film_id = ?`;
+            filmInfo.categories = await new Promise((resolve, reject) => {
+                connection.query(queryCategory, [filmId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            // Đổ actors, directors, categories ra để admin chọn được thay thế cái cũ
+            const [actors] = await connection.promise().query(`Select actor_id, actor_name from actors`);
+            const [directors] = await connection.promise().query(`Select director_id, director_name from directors`);
+            const [categories] = await connection.promise().query(`Select category_id, category_name from categorys`);
+
+            res.json({
+                filmInfo: filmInfo,
+                actorToChoose: actors,
+                directorToChoose: directors,
+                categoryToChoose: categories,
+            });
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Film not found"
+                }
+            });
+        }
+    } catch(error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Error editing film",
+            error: error
+        })
     }
 }
 

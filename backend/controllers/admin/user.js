@@ -57,35 +57,80 @@ export const detail = async (req, res) => {
 
         // Truy vấn user
         const queryUser = `SELECT * FROM users WHERE user_id = ?`;
-        userInfo.user = await new Promise((resolve, reject) => {
+        const user = await new Promise((resolve, reject) => {
             connection.query(queryUser, [userId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        userInfo.user = user;
 
-        const queryOrder = 
-        `SELECT o.*, f.film_name, c.cinema_name, r.room_name, s.show_date, pc.combo_name, po.combo_quantity, pc.combo_price
-        FROM users u
-        JOIN orders o ON u.user_id = o.user_id
-        JOIN showtimes s ON o.showtime_id = s.showtime_id
-        JOIN cinemas c ON s.cinema_id = c.cinema_id
-        JOIN rooms r ON s.room_id = r.room_id
-        JOIN films f on s.film_id = f.film_id
-        JOIN popcorn_orders po ON o.order_id = po.order_id
-        JOIN popcorn_combos pc ON po.combo_id = pc.combo_id
-        WHERE u.user_id = ?`;
-        userInfo.order = await new Promise((resolve, reject) => {
-            connection.query(queryOrder, [userId], (err, results) => {
+        if(user.length > 0) {
+            const queryOrder = 
+                `SELECT o.*, f.film_name, c.cinema_name, r.room_name, s.show_date, pc.combo_name, po.combo_quantity, pc.combo_price
+                FROM users u
+                JOIN orders o ON u.user_id = o.user_id
+                JOIN showtimes s ON o.showtime_id = s.showtime_id
+                JOIN cinemas c ON s.cinema_id = c.cinema_id
+                JOIN rooms r ON s.room_id = r.room_id
+                JOIN films f on s.film_id = f.film_id
+                JOIN popcorn_orders po ON o.order_id = po.order_id
+                JOIN popcorn_combos pc ON po.combo_id = pc.combo_id
+                WHERE u.user_id = ?`;
+            userInfo.order = await new Promise((resolve, reject) => {
+                connection.query(queryOrder, [userId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            userInfo.order[0].combo_total_price = userInfo.order[0].combo_price * userInfo.order[0].combo_quantity;
+            delete userInfo.order[0].combo_price;
+            
+            res.json(userInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "User not found"
+                }
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(404).json({
+            message: "Not Found"
+        });
+    }
+}
+
+// [GET] /admin/users/edit/:userId
+export const edit = async (req, res) => {
+    try {
+        const userId = parseInt(req.params.userId);
+
+        const userInfo = {};
+
+        // Truy vấn user
+        const queryUser = `SELECT * FROM users WHERE user_id = ?`;
+        const user = await new Promise((resolve, reject) => {
+            connection.query(queryUser, [userId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        userInfo.user = user;
 
-        userInfo.order[0].combo_total_price = userInfo.order[0].combo_price * userInfo.order[0].combo_quantity;
-        delete userInfo.order[0].combo_price;
-        
-        res.json(userInfo);
+        if(user.length > 0) {            
+            res.json(userInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "User not found"
+                }
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(404).json({
@@ -101,8 +146,7 @@ export const editPatch = async (req, res) => {
 
         // Không gửi ảnh khác lên
         if(res.locals.url == "") {
-            let { username, password, user_img, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
-            let hashedPassword = await bcryptjs.hash(password, 11);
+            let { username, user_img, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
             if(sex == "male") sex = 1;
             else sex = 2;
             if(role == "user") role = 0;
@@ -111,18 +155,17 @@ export const editPatch = async (req, res) => {
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
-                SET username = ?, password = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
+                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
                 WHERE user_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateUser, [username, hashedPassword, user_img, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
+                connection.query(queryUpdateUser, [username, user_img, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
             });
 
         } else { // Có gửi ảnh khác lên
-            let { username, password, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
-            let hashedPassword = await bcryptjs.hash(password, 11);
+            let { username, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
             if(sex == "male") sex = 1;
             else sex = 2;
             if(role == "user") role = 0;
@@ -131,10 +174,10 @@ export const editPatch = async (req, res) => {
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
-                SET username = ?, password = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
+                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
                 WHERE user_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateUser, [username, hashedPassword, res.locals.url, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
+                connection.query(queryUpdateUser, [username, res.locals.url, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
@@ -148,7 +191,7 @@ export const editPatch = async (req, res) => {
         console.log(error);
         res.status(500).json({
             message: "Not Found",
-            error: error.message
+            error: error
         });
     }
 }
