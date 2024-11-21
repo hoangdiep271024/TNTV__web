@@ -14,6 +14,7 @@ import routerUploadImage from "./uploadImage.js";
 import routerUserInfo from "./userInfo.js";
 import routerLike from "./Like.js";
 import routerActor from "./actor.js";
+import routerDirector from "./director.js";
 const router = express.Router()
 
 router.use("/lichChieu", routerLichChieu)
@@ -31,4 +32,5 @@ router.use("/orders",routerOrders)
 router.use("/rap",routerCinema)
 router.use("/like",routerLike)
 router.use("/actor", routerActor)
+router.use("/director", routerDirector)
 export default router;

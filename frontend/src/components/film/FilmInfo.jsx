@@ -191,7 +191,7 @@ const ClickActor = (actor_id) => {
       {props.actors.map((actor, index) => {
   return (
     <span key={actor.actor_id}>
-      <Link onClick={() => ClickActor(actor.actor_id)} to={`/actor/${encodeURIComponent(createSlug(actor.actor_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link onClick={() => ClickActor(actor.actor_id)} to={`/dien_vien/${encodeURIComponent(createSlug(actor.actor_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {actor.actor_name}
       </Link>
       {index < props.actors.length - 1 && <span>, </span>}
@@ -202,7 +202,7 @@ const ClickActor = (actor_id) => {
       {props.directors.map((director, index) => {
   return (
     <span key={director.director_id}>
-      <Link to={`/director/${director.director_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link to={`/dao_dien/${director.director_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {director.director_name}
       </Link>
     </span>

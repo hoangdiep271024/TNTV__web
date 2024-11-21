@@ -13,6 +13,7 @@ import CinemaTime from "./components/page/CinemaTime";
 import Films from "./components/page/Films";
 import MyAccount from "./components/page/MyAccount";
 import Actor from "./components/page/Actor";
+import Director from "./components/page/Director";
 function App() {
   return (
     <Router>
@@ -30,7 +31,8 @@ function App() {
         <Route path="/rap/:cinema_name" element={<CinemaTime/>}/>
         <Route path="/phim" element={<Films/>}/>
         <Route path="/account/:user_name" element={<MyAccount/>}/>
-        <Route path="/actor/:actor_name" element={<Actor/>}/>
+        <Route path="/dien_vien/:actor_name" element={<Actor/>}/>
+        <Route path="/dao_dien/:direor_name" element={<Director/>}/>
       </Routes>
     </Router>);
 

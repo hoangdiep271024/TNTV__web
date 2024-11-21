@@ -1,8 +1,8 @@
 import dotenv from "dotenv";
 import connection from "../../models/SQLConnection.js";
 dotenv.config();
-export const actor = async (req, res) => {
-    const actor_id = req.params.actor_id;
+export const director = async (req, res) => {
+    const director_id = req.params.director_id;
     
     let query = `
     SELECT 
@@ -29,7 +29,7 @@ export const actor = async (req, res) => {
         actors.actor_id
     `;
     
-    connection.query(query, [actor_id], (error, results) => {
+    connection.query(query, [director_id], (error, results) => {
         if (error) {
             console.error('Error in SELECT query:', error);
             return res.status(500).json({ error: 'Internal server error' });
