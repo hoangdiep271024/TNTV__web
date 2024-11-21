@@ -1,4 +1,4 @@
-import express from "express";
+import express, { Router } from "express";
 import routerChatBot from "./chatBot.js";
 import routerCinema from "./cinema.js";
 import routerFilm from "./film.js";
@@ -13,6 +13,7 @@ import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
 import routerUserInfo from "./userInfo.js";
 import routerLike from "./Like.js";
+import routerActor from "./actor.js";
 const router = express.Router()
 
 router.use("/lichChieu", routerLichChieu)
@@ -29,4 +30,5 @@ router.use("/muaVe",routerMuaVe)
 router.use("/orders",routerOrders)
 router.use("/rap",routerCinema)
 router.use("/like",routerLike)
+router.use("/actor", routerActor)
 export default router;

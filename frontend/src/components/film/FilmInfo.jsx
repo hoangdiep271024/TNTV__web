@@ -11,6 +11,14 @@ import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
 import Evaluate from './Evaluate';
 import Alert from '@mui/material/Alert';
+function createSlug(name) {
+  
+  return name
+    .trim()
+    .replace(/\s*:\s*/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
@@ -115,6 +123,9 @@ export default function FilmInfo(props) {
     opacity: 1;
   }
 `;
+const ClickActor = (actor_id) => {
+  localStorage.setItem('actor_id', actor_id)
+}
   return (
     <>
      {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '40%', position: 'absolute', zIndex:'20', top: '40px', left:'30%', animation: `${flyDown} 0.5s ease-out`}}>
@@ -180,7 +191,7 @@ export default function FilmInfo(props) {
       {props.actors.map((actor, index) => {
   return (
     <span key={actor.actor_id}>
-      <Link to={`/actor/${actor.actor_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link onClick={() => ClickActor(actor.actor_id)} to={`/actor/${encodeURIComponent(createSlug(actor.actor_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {actor.actor_name}
       </Link>
       {index < props.actors.length - 1 && <span>, </span>}

@@ -12,6 +12,7 @@ import Lich_chieu from "./components/page/Lich_chieu";
 import CinemaTime from "./components/page/CinemaTime";
 import Films from "./components/page/Films";
 import MyAccount from "./components/page/MyAccount";
+import Actor from "./components/page/Actor";
 function App() {
   return (
     <Router>
@@ -29,6 +30,7 @@ function App() {
         <Route path="/rap/:cinema_name" element={<CinemaTime/>}/>
         <Route path="/phim" element={<Films/>}/>
         <Route path="/account/:user_name" element={<MyAccount/>}/>
+        <Route path="/actor/:actor_name" element={<Actor/>}/>
       </Routes>
     </Router>);
 
