@@ -21,11 +21,11 @@ const MoviePage = lazy(() => import('./pages/movie'));
 const CinemaPage = lazy(() => import('./pages/cinema'));
 const ShowtimePage = lazy(() => import('./pages/showtime'));
 const OrderPage = lazy(() => import('./pages/order'));
+const RoomPage = lazy(() => import('./pages/room'));
 
 const EditUserPage = lazy(() => import('./pages/edit-user'));
 const OrderDetailsPage = lazy(() => import('./pages/order-details'))
 
-// ----------------------------------------------------------------------
 const renderFallback = (
     <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
         <LinearProgress
@@ -38,7 +38,7 @@ const renderFallback = (
         />
     </Box>
 );
-// ----------------------------------------------------------------------
+
 const router = createBrowserRouter([
     {
         path: '/admin',
@@ -59,6 +59,7 @@ const router = createBrowserRouter([
             { path: 'showtime', element: <ShowtimePage /> },
             { path: 'order', element: <OrderPage /> },
             { path: 'order/:id', element: <OrderDetailsPage /> },
+            { path: 'room', element: <RoomPage /> },
             { path: '*', element: <Navigate to="/404" replace /> }
         ],
     },
