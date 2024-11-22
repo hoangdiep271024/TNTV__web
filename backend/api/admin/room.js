@@ -10,7 +10,9 @@ roomRoutes.get("/detail/:roomId", controller.detail);
 
 roomRoutes.post("/create", controller.create);
 
-roomRoutes.patch("/edit/:roomId", controller.edit);
+roomRoutes.get("/edit/:roomId", controller.edit);
+
+roomRoutes.patch("/edit/:roomId", controller.editPatch);
 
 roomRoutes.delete("/delete/:roomId", controller.deleteItem);
 

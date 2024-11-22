@@ -15,22 +15,19 @@
     border-radius: 8px;
     background-color: white;
     box-shadow: 0px 4px 8px rgba(85, 85, 85, 0.1);
+    padding-left: 10px;
 }
 
-.icon-rate{
-    width: 16px;
-    height: 16px;
-    object-fit: cover;
-    margin-right: 8px;
-    margin-top: 3px;
-}
 
 .span-icon-rate{
     width: 10px;
     height: 10px;
     margin-right: 3px;
 }
-
+.cmt-content{
+    margin-left: 12px;
+    margin-top: 8px;
+}
 .cmt-content h1 , .cmt-content h3 , .cmt-content h5 , .cmt-content p{
     font-family: 'Montserrat', sans-serif;
 }

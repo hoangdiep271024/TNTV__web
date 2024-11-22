@@ -6,8 +6,8 @@ import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Shared from "../Shared";
-import FilmDetailTime from "./FilmDetailTime";
-import FilmInfo from "./FilmInfo";
+import FilmDetailTime from "../film/FilmDetailTime";
+import FilmInfo from "../film/FilmInfo";
 
 function createSlug(name) {
   return name
@@ -93,7 +93,7 @@ export default function FilmDetail() {
     }
   }, [film_id, selectedArea]);
   const handleNavigate = (showtime_id) => {
-    localStorage.setItem('showTime_id', showtime_id);
+    localStorage.setItem('showtime_id', showtime_id);
     navigate(`/dat_ve/${film_name}`);
   };
 
@@ -115,9 +115,9 @@ export default function FilmDetail() {
               <FilmInfo
                 image={item.film_img}
                 name={item.film_name}
-                type={data.info.categorys[0].category_name}
+                type={data.info.categorys}
                 descript={item.film_describe}
-                evalute="1"
+                evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
                 release={exactlyDate}
                 time={item.duration}
                 age={item.age_limit}

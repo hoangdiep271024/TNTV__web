@@ -6,7 +6,7 @@ dotenv.config();
 
 export const filmShowing = async (req, res) => {
     try {
-        const results = await connection.promise().query('SELECT * FROM films WHERE film_type = 1 or film_type = 2');
+        const results = await connection.promise().query('SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate FROM films f inner join film_evaluate fe on  fe .film_id = f.film_id WHERE film_type = 1 or film_type = 2');
         return res.json(results);
         // Trả kết quả về cho client
     } catch (error) {
@@ -178,7 +178,7 @@ export const getComment = async (req, res) => {
     const filmId = req.params.id;
     // Truy vấn MySQL
     const query = `
-        select users.user_id, users.full_name, comments, star, date_posted from evaluate
+        select users.user_id, users.user_img, users.full_name, comments, star, date_posted from evaluate
         left join users on evaluate.user_id = users.user_id
         where film_id = ?
     `;
@@ -198,68 +198,89 @@ export const getComment = async (req, res) => {
 export const postComment = async (req, res) => {
     const token = req.cookies.jwt;
 
-        if (!token) {
-            return res.json({
-                message: "Người dùng chưa đăng nhập",
-                success: false
-            })
-        }
+    if (!token) {
+        return res.json({
+            message: "Người dùng chưa đăng nhập",
+            success: false
+        })
+    }
 
-        if (isTokenExpired(token)) {
-            res.json({
-                message: "Người dùng hết phiên đăng nhập",
-                success: false
-            })
-        }
+    if (isTokenExpired(token)) {
+        res.json({
+            message: "Người dùng hết phiên đăng nhập",
+            success: false
+        })
+    }
 
-        const decoded = verifyToken(token);
+    const decoded = verifyToken(token);
     const user_id = decoded.id
-    const query = `
-       insert into evaluate value (?,?,?,?,Now())
-    `;
-    connection.query(query, [user_id,req.body.film_id,req.body.comment,req.body.star], (err, results) => {
+
+
+    const checkQuery = `
+    SELECT * FROM evaluate WHERE user_id = ? AND film_id = ?`;
+
+    connection.query(checkQuery, [user_id, req.body.film_id], (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Database query failed' });
         }
 
-        res.json({
-            success: true,
-            message: "Đánh giá thành công"
+        if (results.length > 0) {
+            // Người dùng đã đánh giá phim này
+            return res.json({
+                success: false,
+                message: "Người dùng chỉ được đánh giá 1 lần"
+            });
+        }
+
+
+        const query = `
+       insert into evaluate value (?,?,?,?,Now())
+    `;
+        connection.query(query, [user_id, req.body.film_id, req.body.comments, req.body.star], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+
+            res.json({
+                success: true,
+                message: "Đánh giá thành công"
+            });
         });
     });
 }
 export const phim = async (req, res) => {
     const { filmType, country, categoryId } = req.body;
     let query = `
-    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories
+    SELECT films.film_id, GROUP_CONCAT(category_film.category_id) AS categories, films.film_id, films.film_img, films.Release_date,MAX(film_evaluate.film_rate) AS film_rate, films.film_name
     FROM films
     INNER JOIN category_film ON category_film.film_id = films.film_id
+    inner join film_evaluate on films.film_id = film_evaluate.film_id
     WHERE 1=1 
     `;
     let params = [];
 
     // Chỉ thêm điều kiện nếu tham số có giá trị
     if (filmType) {
-      query += " AND film_type = ?";
-      params.push(filmType);
+        query += " AND film_type = ?";
+        params.push(filmType);
     }
-  
+
     if (country) {
-      query += " AND country = ?";
-      params.push(country);
+        query += " AND country = ?";
+        params.push(country);
     }
-  
+
     if (categoryId) {
-      query += " AND category_id = ?";
-      params.push(categoryId);
+        query += " AND category_id = ?";
+        params.push(categoryId);
     }
     query += " GROUP BY films.film_id";
     connection.query(query, params, (error, results) => {
         if (error) {
-          return res.status(500).json({ message: 'Database error', error });
+            return res.status(500).json({ message: 'Database error', error });
         }
         res.json(results);
-      });
+    });
 }
 
 

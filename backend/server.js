@@ -29,12 +29,11 @@ const distPath = path.join(__dirname, '../frontend');
 
 
 //set up
-app.use(express.urlencoded({ extended: false }))
+app.use(express.urlencoded({ extended: true }))
 app.use(json());
 app.use(cookieParser());
 app.set('trust proxy', 1)
 app.options('*', corMw);
-app.use(bodyParser.json());
 
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 

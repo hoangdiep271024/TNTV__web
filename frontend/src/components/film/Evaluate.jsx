@@ -5,6 +5,7 @@ import Alert from '@mui/material/Alert';
 
 const Evaluate = (props) => {
     const [dataRate, setDataRate] = useState({
+        film_id: localStorage.getItem('film_id'),
         comments: '',
         star: ''
     });
@@ -43,9 +44,32 @@ const Evaluate = (props) => {
             setErorrMessage('Đánh giá không hợp lệ: Vui lòng thêm sao hoặc bình luận!');
             setMessage(null);
         } else if((dataRate.star && !dataRate.comments.trim()) || (dataRate.star && dataRate.comments.trim())) {
-            setMessage('Đánh giá thành công');
-            setErorrMessage(null);
-            console.log("formdata", dataRate);
+            e.preventDefault();
+            try {
+                const response = await fetch('/api/film/filmInfo/postComment', {
+                  method: 'POST',
+                  headers: {
+                    'Content-Type': 'application/json',
+                  },
+                  body: JSON.stringify(dataRate)
+                });
+                
+                if (response.ok) {
+                  const data = await response.json();
+                  if (data.success) {
+                    setMessage('Đánh giá thành công');
+                    setErorrMessage(null); 
+                    setTimeout(() => window.location.reload(), 1500);
+                  } else {
+                    setErorrMessage(data.message);
+                    setMessage(null);
+                  }
+                } else {
+                  console.error('Lỗi:', response.statusText);
+                }
+              } catch (error) {
+                console.error('Lỗi mạng:', error);
+              }
         }
     }
 

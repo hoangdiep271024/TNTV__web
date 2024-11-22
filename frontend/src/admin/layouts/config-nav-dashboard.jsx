@@ -36,11 +36,11 @@ export const navData = [
         path: '/admin/cinema',
         icon: <CinemaIcon />,
     },
-    {
-        title: 'Schedule',
-        path: '/admin/schedule',
-        icon: <ScheduleIcon />,
-    },
+    // {
+    //     title: 'Schedule',
+    //     path: '/admin/schedule',
+    //     icon: <ScheduleIcon />,
+    // },
     {
         title: 'Showtime',
         path: '/admin/showtime',

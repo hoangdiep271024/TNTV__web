@@ -15,13 +15,13 @@ export default function HomePage() {
             <DashboardContent>
                 <Box sx={{ padding: 4, textAlign: 'center' }}>
                     <Typography variant="h4" gutterBottom>
-                        Welcome to the Dashboard!
+                        Chào mừng bạn đến với Bảng điều khiển!
                     </Typography>
                     <Typography variant="body1" sx={{ marginBottom: 3 }}>
-                        Here you can manage your data and view analytics.
+                        Tại đây bạn có thể quản lý và xem các phân tích và thống kê về dữ liệu.
                     </Typography>
-                    <Button variant="contained" color="primary" href="/admin">
-                        Get Started
+                    <Button variant="outlined" color="primary" href="/admin">
+                        Bắt đầu ngay
                     </Button>
                 </Box>
             </DashboardContent>

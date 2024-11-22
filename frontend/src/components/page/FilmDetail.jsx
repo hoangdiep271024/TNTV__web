@@ -75,14 +75,15 @@ export default function FilmDetail() {
               <FilmInfo
                 image={item.film_img}
                 name={item.film_name}
-                type={data.info.categorys[0].category_name}
+                type={data.info.categorys}
                 descript={item.film_describe}
-                evalute="1"
+                evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
                 release={exactlyDate}
                 time={item.duration}
                 age={item.age_limit}
                 actors={data.info.actors}
                 directors={data.info.directors}
+                film_id = {item.film_id}
               />
               <div
                 style={{

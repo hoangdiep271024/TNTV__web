@@ -22,6 +22,8 @@ const CinemaPage = lazy(() => import('./pages/cinema'));
 const ShowtimePage = lazy(() => import('./pages/showtime'));
 const OrderPage = lazy(() => import('./pages/order'));
 
+const EditUserPage = lazy(() => import('./pages/edit-user'));
+const OrderDetailsPage = lazy(() => import('./pages/order-details'))
 
 // ----------------------------------------------------------------------
 const renderFallback = (
@@ -44,17 +46,33 @@ const router = createBrowserRouter([
             <DashboardLayout>
                 <Suspense fallback={renderFallback}>
                     <Outlet />
+                    {/* <HomePage /> */}
                 </Suspense>
             </DashboardLayout>
         ),
         children: [
             { element: <HomePage />, index: true },
             { path: 'user', element: <UserPage /> },
+            { path: 'user/:id', element: <EditUserPage /> },
             { path: 'movie', element: <MoviePage /> },
             { path: 'cinema', element: <CinemaPage /> },
+            { path: 'showtime', element: <ShowtimePage /> },
+            { path: 'order', element: <OrderPage /> },
+            { path: 'order/:id', element: <OrderDetailsPage /> },
             { path: '*', element: <Navigate to="/404" replace /> }
         ],
     },
+    // {
+    //     path: '/admin/user',
+    //     element: (
+    //         <DashboardLayout>
+    //             <Suspense fallback={renderFallback}>
+    //                 <Outlet />
+    //                 <UserPage />
+    //             </Suspense>
+    //         </DashboardLayout>
+    //     )
+    // },
     {
         path: '/404',
         element: <Page404 />

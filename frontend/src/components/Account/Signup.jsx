@@ -159,17 +159,20 @@ const [okMessage, setOkMessage]= useState('')
         <br/>
         <input className="birthday" onChange={handleChange}  name="birthday" type="date" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
-         <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
-          <p style={{color:'black'}}>Giới tính:</p>
-         <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} type="radio" name="sex" value="male"/>
-    Nam
-  </label>
-  <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} type="radio" name="sex" value="female"/>
-    Nữ
-  </label>
-         </div>
+         <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '10px' }}>
+  <label style={{ color: 'black', margin: 0 }}>Giới tính:</label>
+  <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+    <label style={{ color: 'black', display: 'flex', alignItems: 'center', gap: '4px' , margin: '0'}}>
+      <input className='sex' onChange={handleChange} type="radio" name="sex" value="male" />
+      Nam
+    </label>
+    <label style={{ color: 'black', display: 'flex', alignItems: 'center', gap: '4px',  margin: '0' }}>
+      <input className='sex' onChange={handleChange} type="radio" name="sex" value="female" />
+      Nữ
+    </label>
+  </div>
+</div>
+<br></br>
          <label className="password__label" style={{color:'#000'}}>Mật khẩu</label>
          <br/>
          <input className="Password" onChange={handleChange}  name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>

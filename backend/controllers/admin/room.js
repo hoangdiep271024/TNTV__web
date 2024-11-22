@@ -64,25 +64,35 @@ export const detail = async (req, res) => {
         const roomInfo = {};
     
         const queryRoom = `Select * from rooms where rooms.room_id = ?`;
-        roomInfo.room = await new Promise((resolve, reject) => {
+        const room = await new Promise((resolve, reject) => {
             connection.query(queryRoom, [roomId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
-
-        const queryCinema = `Select c.cinema_id, c.cinema_name, c.address
+        roomInfo.room = room;
+        
+        if(room.length > 0) {
+            const queryCinema = `Select c.cinema_id, c.cinema_name, c.address
                             from cinemas as c
                             inner join rooms as r on c.cinema_id = r.cinema_id
                             where r.room_id = ?`;
-        roomInfo.cinema = await new Promise((resolve, reject) => {
-            connection.query(queryCinema, [roomId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+            roomInfo.cinema = await new Promise((resolve, reject) => {
+                connection.query(queryCinema, [roomId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
             });
-        });
-        
-        res.json(roomInfo);
+            
+            res.json(roomInfo);
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Room not found"
+                }
+            });
+        }
     } catch (error) {
         console.log(error);
         res.status(404).json({
@@ -134,8 +144,59 @@ export const create = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/rooms/edit/:roomId
+// [GET] /admin/rooms/edit/:roomId
 export const edit = async (req, res) => {
+    try {
+        const roomId = req.params.roomId;
+
+        const roomInfo = {};
+    
+        const queryRoom = `Select * from rooms where rooms.room_id = ?`;
+        const room = await new Promise((resolve, reject) => {
+            connection.query(queryRoom, [roomId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
+        roomInfo.room = room;
+
+        if(room.length > 0) {
+            const queryCinema = `Select c.cinema_id, c.cinema_name, c.address
+                                from cinemas as c
+                                inner join rooms as r on c.cinema_id = r.cinema_id
+                                where r.room_id = ?`;
+            roomInfo.cinema = await new Promise((resolve, reject) => {
+                connection.query(queryCinema, [roomId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
+            const [cinemas] = await connection.promise().query(`SELECT cinema_id, cinema_name FROM cinemas`);
+
+            res.json({
+                roomInfo: roomInfo,
+                cinemasToChoose: cinemas
+            })
+        }
+        else {
+            res.json({
+                messages: {
+                    error: "Room not found"
+                }
+            });
+        }
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Error editing room",
+            error: error
+        });
+    }
+}
+
+// [PATCH] /admin/rooms/edit/:roomId
+export const editPatch = async (req, res) => {
     try {
         const roomId = parseInt(req.params.roomId);
   

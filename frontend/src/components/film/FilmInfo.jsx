@@ -1,7 +1,7 @@
 import React, { useState , useEffect} from 'react'
 import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { Typography } from '@mui/material';
+import { Typography, keyframes  } from '@mui/material';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import StarIcon from '@mui/icons-material/Star';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
@@ -10,40 +10,163 @@ import SupervisedUserCircleIcon from '@mui/icons-material/SupervisedUserCircle';
 import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
 import Evaluate from './Evaluate';
+import Alert from '@mui/material/Alert';
+function createSlug(name) {
+  
+  return name
+    .trim()
+    .replace(/\s*:\s*/g, '-')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+}
 
 export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
   }
-
   const [isClickEvaluate, setIsClickEvaluate] = useState(false)
   const EvaluateClick = () => {
            setIsClickEvaluate(!isClickEvaluate)
   }
+  const [message ,setMessage] = useState(null)
   
   if(isClickTrailer){ document.body.style.overflow = 'hidden';}
   else {document.body.style.overflow = 'auto'}
    
+  const [liked, setLiked] = useState(null)
+  const likeCheckFetch = async () => {
+    try {
+      const response = await fetch(`/api/like/likeCheck/film_id=${props.film_id}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+       
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+        setLiked(data.liked)
 
+    } catch (error) {
+      console.error('Error fetching likeCheck:', error);
+    }
+  };
+  useEffect(() => {
+    likeCheckFetch();
+  }, []);
+
+  const unLike = async () => {
+    try {
+      const response = await fetch(`/api/like/unlike/film_id=${props.film_id}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+        setLiked(data.liked)
+
+    } catch (error) {
+      console.error('Error fetching likeCheck:', error);
+    }
+  };
+
+  const Like = async () => {
+    try {
+      const response = await fetch(`/api/like/film_id=${props.film_id}`, {
+        method: 'POST', 
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+  
+      const data = await response.json();
+      if (data.message === 'Người dùng chưa đăng nhập' || data.message === 'Người dùng hết phiên đăng nhập'){
+        setMessage('Vui lòng đăng nhập để thao tác')
+      }
+        setLiked(data.liked)
+
+    } catch (error) {
+      console.error('Error fetching likeCheck:', error);
+    }
+  };
+  useEffect(() => {
+    if (message) {
+      const timer = setTimeout(() => {
+        setMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timer);
+    }
+  }, [message]);
+  const flyDown = keyframes`
+  from {
+    transform: translateY(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+`;
+const ClickActor = (actor_id) => {
+  localStorage.setItem('actor_id', actor_id)
+}
+const ClickDirector = (director_id) => {
+  localStorage.setItem('director_id', director_id)
+}
+const ClickType =(category_id) => {
+  localStorage.setItem('category_id', category_id)
+}
   return (
+    <>
+     {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '40%', position: 'absolute', zIndex:'20', top: '40px', left:'30%', animation: `${flyDown} 0.5s ease-out`}}>
+            {message}
+          </Alert>} 
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>
      <img src= {props.image} style={{width: 'auto', height: '30vh', objectFit: 'cover'}}></img>
      <div style={{alignItems: 'start', width: '45vw', textWrap: 'wrap'}}>
      <Typography variant="h5" component="h5" sx={{ fontWeight: 'bold'}}>{props.name}</Typography>
      <div style={{display: 'flex', justifyContent:'start', gap: '5px', alignItems:'center'}}>
       <Typography>Thể loại:</Typography>
-     <Typography>{props.type}</Typography>
+      {props.type.map((typee, index) => {
+  return (
+    <span key={typee.category_id}>
+      <Link onClick={ () => ClickType(typee.category_id)} to={`/the_loai/${encodeURIComponent(createSlug(typee.category_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+        {typee.category_name}
+      </Link>
+      {index < props.type.length - 1 && <span>, </span>}
+    </span>
+  );
+})}
      </div>
     
-     <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '40vh', marginTop: '10px'}}>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>
+     <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '45vh', marginTop: '10px'}}>
+     {!liked && <button onClick = {Like} style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
         <FavoriteIcon/>
         Thích
-        </button>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={EvaluateClick}>Đánh giá</button>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}} onClick={trailerClick}>Trailer</button>
-      <button style={{width:'80px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '15px'}}>Mua vé</button>
+        </button>} 
+      {liked && <button onClick={unLike} style={{width:'120px', height:'30px', backgroundColor: 'white', color: '#EF4444', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>
+        <FavoriteIcon style={{color: '#EF4444'}}/>
+        Thích
+        </button>}
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={EvaluateClick}>Đánh giá</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={trailerClick}>Trailer</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>Mua vé</button>
      </div>
      <Typography style={{ marginTop: '7px', fontSize: '14px'}} >{props.descript}</Typography>
      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '7px'}}>
@@ -83,7 +206,7 @@ export default function FilmInfo(props) {
       {props.actors.map((actor, index) => {
   return (
     <span key={actor.actor_id}>
-      <Link to={`/actor/${actor.actor_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link onClick={() => ClickActor(actor.actor_id)} to={`/dien_vien/${encodeURIComponent(createSlug(actor.actor_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {actor.actor_name}
       </Link>
       {index < props.actors.length - 1 && <span>, </span>}
@@ -94,7 +217,7 @@ export default function FilmInfo(props) {
       {props.directors.map((director, index) => {
   return (
     <span key={director.director_id}>
-      <Link to={`/director/${director.director_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link onClick={() => ClickDirector(director.director_id)} to={`/dao_dien/${encodeURIComponent(createSlug(director.director_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {director.director_name}
       </Link>
     </span>
@@ -132,5 +255,6 @@ export default function FilmInfo(props) {
      </>}
 
     </Box>
+    </>
   )
 }

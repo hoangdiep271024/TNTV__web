@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import Box from '@mui/material/Box';
-import FilmInfo from './FilmInfo';
+import FilmInfo from '../film/FilmInfo';
 import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
 import Footer from '../Footer/Footer';
@@ -92,9 +92,9 @@ export default function FilmDetail() {
             <FilmInfo
               image={item.film_img}
               name={item.film_name}
-              type={data.info.categorys[0].category_name}
+              type={data.info.categorys}
               descript={item.film_describe}
-              evalute="1"
+              evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
               release={exactlyDate} 
               time={item.duration}
               age={item.age_limit}

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Typography } from '@mui/material';
-import FavoriteIcon from '@mui/icons-material/Favorite';
+import StarIcon from '@mui/icons-material/Star';
 import { useTheme } from "@emotion/react";
 import { useNavigate } from 'react-router-dom'; // Thay vì Link
 import { useState } from 'react';
@@ -48,8 +48,9 @@ export default function Film_card(props) {
         <Typography style={{ color: theme.palette.mode === "light" ? "#807d77" : "white", fontSize: '13px' }}>
           {props.date}
         </Typography>
-        <div>
-          <FavoriteIcon style={{ color: theme.palette.mode === "light" ? "red" : "white" }} />
+        <div style={{display:'flex'}}>
+          <span style={{color: theme.palette.mode === "light" ? "#807d77" : "white", fontSize: '13px'}}>{props.rate}</span>
+          <StarIcon style={{ color: theme.palette.mode === "light" ? "#f6d805" : "white" , marginTop:'-1px',height:'18px',width:'18px',marginRight:'-6px'}} />
         </div>
       </div>
     </div>
