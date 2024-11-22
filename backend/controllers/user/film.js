@@ -263,3 +263,38 @@ export const phim = async (req, res) => {
 }
 
 
+export const filmSearchByName = async(req,res) =>{
+     // Lấy từ khóa tìm kiếm từ query string
+  const searchQuery = req.body.q;
+  
+  if (!searchQuery) {
+    return res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
+  }
+
+  // SQL truy vấn theo tên phim
+  const query = `
+    SELECT film_type, film_id, film_name, film_img, film_trailer, Release_date, 
+           film_describe, age_limit, duration, country
+    FROM films
+    WHERE film_name LIKE ?
+  `;
+
+  // Thực hiện truy vấn
+  connection.query(query, [`%${searchQuery}%`], (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu.' });
+    }
+
+    // Phân loại kết quả theo film_type
+    const filmsByType = results.reduce((acc, film) => {
+      if (!acc[film.film_type]) {
+        acc[film.film_type] = [];
+      }
+      acc[film.film_type].push(film);
+      return acc;
+    }, {});
+
+    // Trả về kết quả
+    res.json(filmsByType);
+  });
+}

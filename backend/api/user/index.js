@@ -28,4 +28,27 @@ router.use("/forgotPassword",routerForgotPassword)
 router.use("/muaVe",routerMuaVe)
 router.use("/orders",routerOrders)
 router.use("/rap",routerCinema)
+
+
+import connection from '../../models/SQLConnection.js';
+router.use("/UpdateNew", async(req,res) => {
+    try {
+        const content = req.new_content
+        const id = req.new_id
+        const query =
+            `Update news set new_content = ? where new_id = ?`
+
+        connection.query(query, [content, id], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+    
+            res.json(results);
+        });
+
+    } catch (error) {
+        return res.status(401).json({ error: error.message });
+    }
+})
+
 export default router;
