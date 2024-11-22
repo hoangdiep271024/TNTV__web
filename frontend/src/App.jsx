@@ -14,6 +14,7 @@ import Films from "./components/page/Films";
 import MyAccount from "./components/page/MyAccount";
 import Actor from "./components/page/Actor";
 import Director from "./components/page/Director";
+import Category from "./components/page/Category";
 function App() {
   return (
     <Router>
@@ -32,7 +33,8 @@ function App() {
         <Route path="/phim" element={<Films/>}/>
         <Route path="/account/:user_name" element={<MyAccount/>}/>
         <Route path="/dien_vien/:actor_name" element={<Actor/>}/>
-        <Route path="/dao_dien/:direor_name" element={<Director/>}/>
+        <Route path="/dao_dien/:diretor_name" element={<Director/>}/>
+        <Route path="/the_loai/:category_name" element={<Category/>}/>
       </Routes>
     </Router>);
 

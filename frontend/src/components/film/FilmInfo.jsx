@@ -126,6 +126,12 @@ export default function FilmInfo(props) {
 const ClickActor = (actor_id) => {
   localStorage.setItem('actor_id', actor_id)
 }
+const ClickDirector = (director_id) => {
+  localStorage.setItem('director_id', director_id)
+}
+const ClickType =(category_id) => {
+  localStorage.setItem('category_id', category_id)
+}
   return (
     <>
      {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '40%', position: 'absolute', zIndex:'20', top: '40px', left:'30%', animation: `${flyDown} 0.5s ease-out`}}>
@@ -137,7 +143,16 @@ const ClickActor = (actor_id) => {
      <Typography variant="h5" component="h5" sx={{ fontWeight: 'bold'}}>{props.name}</Typography>
      <div style={{display: 'flex', justifyContent:'start', gap: '5px', alignItems:'center'}}>
       <Typography>Thể loại:</Typography>
-     <Typography>{props.type}</Typography>
+      {props.type.map((typee, index) => {
+  return (
+    <span key={typee.category_id}>
+      <Link onClick={ () => ClickType(typee.category_id)} to={`/the_loai/${encodeURIComponent(createSlug(typee.category_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+        {typee.category_name}
+      </Link>
+      {index < props.type.length - 1 && <span>, </span>}
+    </span>
+  );
+})}
      </div>
     
      <div style={{display: 'flex', justifyContent: 'start', gap: '10px', width: '45vh', marginTop: '10px'}}>
@@ -202,7 +217,7 @@ const ClickActor = (actor_id) => {
       {props.directors.map((director, index) => {
   return (
     <span key={director.director_id}>
-      <Link to={`/dao_dien/${director.director_id}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
+      <Link onClick={() => ClickDirector(director.director_id)} to={`/dao_dien/${encodeURIComponent(createSlug(director.director_name))}`} style={{ color: '#53dce0', textDecoration: 'none' }}>
         {director.director_name}
       </Link>
     </span>
