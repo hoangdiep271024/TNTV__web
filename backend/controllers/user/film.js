@@ -319,3 +319,41 @@ export const filmSearchByName = async(req,res) =>{
     res.json(filmsByType);
   });
 }
+
+
+export const filmType = async (req, res) => {
+    const { category_id } = req.params;
+
+    // Validate category_id
+    if (!category_id) {
+        return res.status(400).json({ message: 'category_id is required' });
+    }
+
+    let query = `
+    SELECT 
+        films.film_id,
+        films.film_name,
+        films.film_img,
+        films.Release_date,
+        film_evaluate.film_rate,
+        category_film.category_id
+    FROM films
+    INNER JOIN category_film ON category_film.film_id = films.film_id
+    INNER JOIN film_evaluate ON film_evaluate.film_id = films.film_id
+    WHERE category_film.category_id = ?
+    `;
+
+    connection.query(query, [category_id], (error, results) => {
+        if (error) {
+            console.error('Database error:', error); 
+            return res.status(500).json({ message: 'Database error', error });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No films found for this category' });
+        }
+        res.json(results);
+    });
+};
+
+
+
