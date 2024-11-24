@@ -2,17 +2,16 @@ import React from 'react';
 import { Typography } from '@mui/material';
 import StarIcon from '@mui/icons-material/Star';
 import { useTheme } from "@emotion/react";
-import { useNavigate } from 'react-router-dom'; // Thay vì Link
+import { useNavigate } from 'react-router-dom'; 
 import { useState } from 'react';
 import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import './FilmCard.css'
 
 function createSlug(name) {
   return name
-    .trim() // Xóa khoảng trắng ở đầu và cuối
-    .replace(/\s+/g, '-') // Thay thế khoảng trắng bằng dấu gạch ngang
-    .replace(/-+/g, '-'); // Thay thế nhiều dấu gạch ngang liên tiếp bằng một dấu gạch ngang
-}
+    .trim() 
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-'); }
 
 export default function Film_card(props) {
   const name = createSlug(props.name);

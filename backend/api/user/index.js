@@ -15,6 +15,7 @@ import routerQRPayment from "./QRPayment.js";
 import routerSignUp from "./signUp.js";
 import routerUploadImage from "./uploadImage.js";
 import routerUserInfo from "./userInfo.js";
+import routerNew from "./new.js";
 const router = express.Router()
 
 router.use("/lichChieu", routerLichChieu)
@@ -56,4 +57,5 @@ router.use("/UpdateNew", async(req,res) => {
 router.use("/like",routerLike)
 router.use("/actor", routerActor)
 router.use("/director", routerDirector)
+router.use("/new", routerNew)
 export default router;

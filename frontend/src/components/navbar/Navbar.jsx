@@ -11,7 +11,7 @@ const Navbar = () => {
             <Link href="mua_ve" underline="none">Mua vé</Link>
             <Link href="/phim" underline="none">Phim</Link>
             <Link href="/rap" underline="none">Rạp</Link>
-            <Link href="#" underline="none">Tin tức</Link>
+            <Link href="/tin_tuc" underline="none">Tin tức</Link>
         </Box>
     );
 };
