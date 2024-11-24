@@ -35,8 +35,8 @@ router.use("/rap",routerCinema)
 import connection from '../../models/SQLConnection.js';
 router.use("/UpdateNew", async(req,res) => {
     try {
-        const content = req.new_content
-        const id = req.new_id
+        const content = req.body.new_content
+        const id = req.body.new_id
         const query =
             `Update news set new_content = ? where new_id = ?`
 
