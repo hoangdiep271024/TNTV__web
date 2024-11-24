@@ -15,6 +15,7 @@ import MyAccount from "./components/page/MyAccount";
 import Actor from "./components/page/Actor";
 import Director from "./components/page/Director";
 import Category from "./components/page/Category";
+import BuyTicket from "./components/page/BuyTicket";
 function App() {
   return (
     <Router>
@@ -35,6 +36,8 @@ function App() {
         <Route path="/dien_vien/:actor_name" element={<Actor/>}/>
         <Route path="/dao_dien/:diretor_name" element={<Director/>}/>
         <Route path="/the_loai/:category_name" element={<Category/>}/>
+        <Route path="/mua_ve" element={<BuyTicket/>}/>
+
       </Routes>
     </Router>);
 

@@ -74,8 +74,8 @@ export default function Films() {
     </select>
     <select onChange={handleChange} className="country" value={formData.country} name="country" style={{ marginLeft: '10vw', outline: 'none', borderRadius: '7px', border: '1px solid #e6e4e3', height: '35px', width: '10vw', fontSize: '17px', paddingLeft: '7px'}}>
           <option value="" selected hidden>Quốc gia</option>
-          <option value="0">Việt Nam</option>
-          <option value="1">Quốc gia khác</option>
+          <option value="1">Việt Nam</option>
+          <option value="0">Quốc gia khác</option>
           <option value="2">Tất cả</option>
           </select>
     

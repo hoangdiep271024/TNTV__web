@@ -4,6 +4,8 @@ import StarIcon from '@mui/icons-material/Star';
 import { useTheme } from "@emotion/react";
 import { useNavigate } from 'react-router-dom'; // Thay vì Link
 import { useState } from 'react';
+import PlayCircleIcon from '@mui/icons-material/PlayCircle';
+import './FilmCard.css'
 
 function createSlug(name) {
   return name
@@ -36,11 +38,16 @@ export default function Film_card(props) {
         color: theme.palette.mode === "light" ? "black" : "white" 
       }}
     >
+      <div style={{position: 'relative', cursor: 'pointer', overflow: 'hidden', height: 'auto', width: '150px', zIndex:'2', alignItems: 'center', display: 'flex', justifyContent:'center'}} className='filmImagediv'>
       <img 
-        style={{ borderRadius: '4px', width: '150px', height: 'auto', objectFit: 'cover' }} 
+        style={{ borderRadius: '4px', width: '150px', height: 'auto', objectFit: 'cover', transition: 'transform 0.3s ease' }} 
         src={props.image} 
         alt={props.name} 
+        className='filmImage'
       />
+       <PlayCircleIcon className='icon' style={{position: 'absolute', zIndex: '3', color: '#EF4444', fontSize: '55px',transition: 'opacity 0.3s ease'}}/>
+      </div>
+      
       <Typography style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '800' }}>
         {props.name}
       </Typography>
