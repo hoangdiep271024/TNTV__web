@@ -13,7 +13,10 @@ export default function Lich_chieu() {
       }}
     >
       <Shared></Shared>
+      <Box sx ={{marginTop: '17vh'}}>
       <AreaList></AreaList>
+      </Box>
+      
       <Footer/>
       </Box>
     </>
