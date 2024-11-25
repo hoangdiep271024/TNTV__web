@@ -8,7 +8,7 @@ export const filmShowing = async (req, res) => {
     try {
         const results = await connection.promise().query('SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate FROM films f inner join film_evaluate fe on  fe .film_id = f.film_id WHERE film_type = 1 or film_type = 2');
         return res.json(results);
-        // Trả kết quả về cho client
+        
     } catch (error) {
         console.error('Lỗi:', error.message);
         res.status(500).json({ error: error.message }); // Xử lý lỗi
@@ -260,17 +260,17 @@ export const phim = async (req, res) => {
     let params = [];
 
     // Chỉ thêm điều kiện nếu tham số có giá trị
-    if (filmType) {
+    if (filmType && filmType !== '4') {
         query += " AND film_type = ?";
         params.push(filmType);
     }
 
-    if (country) {
+    if (country && country !== '2') {
         query += " AND country = ?";
         params.push(country);
     }
 
-    if (categoryId) {
+    if (categoryId && categoryId !== '18') {
         query += " AND category_id = ?";
         params.push(categoryId);
     }
@@ -319,3 +319,41 @@ export const filmSearchByName = async(req,res) =>{
     res.json(filmsByType);
   });
 }
+
+
+export const filmType = async (req, res) => {
+    const { category_id } = req.params;
+
+    // Validate category_id
+    if (!category_id) {
+        return res.status(400).json({ message: 'category_id is required' });
+    }
+
+    let query = `
+    SELECT 
+        films.film_id,
+        films.film_name,
+        films.film_img,
+        films.Release_date,
+        film_evaluate.film_rate,
+        category_film.category_id
+    FROM films
+    INNER JOIN category_film ON category_film.film_id = films.film_id
+    INNER JOIN film_evaluate ON film_evaluate.film_id = films.film_id
+    WHERE category_film.category_id = ?
+    `;
+
+    connection.query(query, [category_id], (error, results) => {
+        if (error) {
+            console.error('Database error:', error); 
+            return res.status(500).json({ message: 'Database error', error });
+        }
+        if (results.length === 0) {
+            return res.status(404).json({ message: 'No films found for this category' });
+        }
+        res.json(results);
+    });
+};
+
+
+
