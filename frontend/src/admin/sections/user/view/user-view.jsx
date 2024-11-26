@@ -40,7 +40,7 @@ export function UserView() {
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={5}>
                 <Typography variant="h4" flexGrow={1}>
-                    Users
+                    Quản lý người dùng
                 </Typography>
                 {/* <Button
                     variant="contained"
@@ -74,11 +74,11 @@ export function UserView() {
                                     table.onSelectAllRows(checked, _users.map((user) => user.id))
                                 }
                                 headLabel={[
-                                    { id: 'name', label: 'Name' },
+                                    { id: 'name', label: 'Tên người dùng' },
                                     { id: 'email', label: 'Email' },
-                                    { id: 'phonenumber', label: 'Phone Number' },
-                                    { id: 'role', label: 'Role' },
-                                    { id: 'status', label: 'Status' },
+                                    { id: 'phonenumber', label: 'Số điện thoại' },
+                                    { id: 'role', label: 'Vai trò' },
+                                    { id: 'status', label: 'Trạng thái' },
                                     { id: '' },
                                 ]}
                             />

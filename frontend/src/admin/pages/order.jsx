@@ -8,7 +8,7 @@ export default function OrderPage() {
     return (
         <>
             <Helmet>
-                <title> {`Order | NHTT Admin Panel`}</title>
+                <title> {`Order | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <OrderView />

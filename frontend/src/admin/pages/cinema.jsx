@@ -8,7 +8,7 @@ export default function CinemaPage() {
     return (
         <>
             <Helmet>
-                <title> {`Cinema | NHTT Admin Panel`}</title>
+                <title> {`Cinema | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <CinemaView />

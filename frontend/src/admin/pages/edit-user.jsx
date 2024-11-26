@@ -11,7 +11,7 @@ export default function EditUserPage() {
     return (
         <>
             <Helmet>
-                <title> {`Edit User Details | NHTT Admin Panel`}</title>
+                <title> {`Edit User Details | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <EditUserView userId={id} />

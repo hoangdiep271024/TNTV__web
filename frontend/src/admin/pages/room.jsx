@@ -8,7 +8,7 @@ export default function RoomPage() {
     return (
         <>
             <Helmet>
-                <title> {`Room | NHTT Admin Panel`}</title>
+                <title> {`Room | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <RoomView />

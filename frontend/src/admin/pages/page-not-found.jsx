@@ -8,7 +8,7 @@ export default function ErrorPage() {
     return (
         <>
             <Helmet>
-                <title> {`404 page not found! | Error Page | NHTT Admin Panel`}</title>
+                <title> {`404 page not found! | Error Page | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <NotFoundView />

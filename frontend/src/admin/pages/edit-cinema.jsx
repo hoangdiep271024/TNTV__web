@@ -1,17 +1,17 @@
 import { Helmet } from 'react-helmet-async';
 
-import { UserView } from '../sections/user/view';
+import { EditCinemaView } from '../sections/cinema/view';
 
 // ----------------------------------------------------------------------
 
-export default function UserPage() {
+export default function EditCinemaPage() {
     return (
         <>
             <Helmet>
-                <title> {`User | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Edit Cinema | NHTT Admin Panel`}</title>
             </Helmet>
 
-            <UserView />
+            <EditCinemaPage />
         </>
     );
 }

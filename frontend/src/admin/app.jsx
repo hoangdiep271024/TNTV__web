@@ -25,6 +25,10 @@ const RoomPage = lazy(() => import('./pages/room'));
 
 const EditUserPage = lazy(() => import('./pages/edit-user'));
 const OrderDetailsPage = lazy(() => import('./pages/order-details'))
+const CreateMoviePage = lazy(() => import('./pages/create-movie'))
+const EditMoviePage = lazy(() => import('./pages/edit-movie'))
+const CreateCinemaPage = lazy(() => import('./pages/create-cinema'))
+const EditCinemaPage = lazy(() => import('./pages/edit-cinema'))
 
 const renderFallback = (
     <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">

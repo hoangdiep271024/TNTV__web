@@ -9,7 +9,7 @@ export default function HomePage() {
     return (
         <>
             <Helmet>
-                <title>{`Home | NHTT Admin Panel`}</title>
+                <title>{`Home | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <DashboardContent>
