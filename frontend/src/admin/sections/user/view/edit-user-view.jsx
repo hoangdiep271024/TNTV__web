@@ -183,7 +183,6 @@ export function EditUserView({ userId }) {
                     </form>
                 </CardContent>
 
-                {/* Snackbar for better alert */}
                 <Snackbar
                     open={snackbarOpen}
                     autoHideDuration={3000}
