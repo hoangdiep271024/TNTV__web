@@ -17,6 +17,7 @@ import Director from "./components/page/Director";
 import Category from "./components/page/Category";
 import BuyTicket from "./components/page/BuyTicket";
 import New from "./components/page/New";
+import NewDetail from "./components/page/NewDetail";
 function App() {
   return (
     <Router>
@@ -39,6 +40,7 @@ function App() {
         <Route path="/the_loai/:category_name" element={<Category/>}/>
         <Route path="/mua_ve" element={<BuyTicket/>}/>
         <Route path="/tin_tuc" element={<New/>}/>
+        <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
 
       </Routes>
     </Router>);
