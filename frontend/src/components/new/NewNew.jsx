@@ -43,7 +43,7 @@ export default function NewNew() {
     <>
     {data && <Box sx={{display: 'flex', width: '80%', marginLeft: '10%', height: 'auto', gap: '3.5%', marginTop: '20px'}}>
    <div style={{width: '60%', position: 'relative', zIndex: '1', cursor: 'pointer'}} onClick={() => ClickNew(data[data.length -1].new_id, data[data.length -1].new_header)}>
-    <img src= {data[data.length -1].new_img} style={{width: '100%', height: 'auto', objectFit: 'cover'}}></img>
+    <img src= {data[data.length -1].new_img} style={{width: '100%', height: 'auto', maxHeight: '45vh', objectFit: 'cover'}}></img>
     <div style={{width: '100%',backgroundColor: '#EF4444',position: 'absolute', fontSize: '23px', zIndex: '3', paddingLeft: '2%',whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', fontWeight: '800', color: 'white', textDecoration: 'underline', marginTop: '0'}}>{data[data.length -1].new_header}</div>
     </div>
     <div style={{width: '45%', height: 'auto', minHeight: '60vh', paddingY: '10px', borderRadius: '7px', overflow: 'hidden', border: `1.2px solid ${theme.palette.mode === 'dark' ? '#b0b5b1' : '#888a89'}`}}>
