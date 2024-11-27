@@ -137,14 +137,18 @@ export const create = async (req, res) => {
     const showTimeId =  totalShowTimes + 1;
 
     // Truy vấn film_id từ film_name
-    const queryFilm = `Select film_id from films where film_name = ?`
+    const queryFilm = `Select film_id, duration from films where film_name = ?`
     const filmInfo = await new Promise((resolve, reject) => {
         connection.query(queryFilm, [film_name], (err, results) => {
             if (err) return reject(err);
             resolve(results);
         });
     });
+    if (filmInfo.length == 0) {
+        return res.status(400).json({ message: "Film not found" });
+    }
     const filmId = filmInfo[0].film_id;
+    const filmDuration = filmInfo[0].duration;
 
     // Truy vấn room_id từ room_name
     const queryRoom = `Select room_id from rooms where room_name = ?`
@@ -154,6 +158,9 @@ export const create = async (req, res) => {
             resolve(results);
         });
     });
+    if (roomInfo.length == 0) {
+        return res.status(400).json({ message: "Room not found" });
+    }
     const roomId = roomInfo[0].room_id;
 
     // Truy vấn cinema_id từ cinema_name
@@ -164,7 +171,43 @@ export const create = async (req, res) => {
             resolve(results);
         });
     });
+    if (cinemaInfo.length == 0) {
+        return res.status(400).json({ message: "Cinema not found" });
+    }
     const cinemaId = cinemaInfo[0].cinema_id;
+
+    // Kiểm tra xem showtime mới có trùng thời gian với các showtime đã tồn tại không
+    const queryCheckOverlap = `
+            SELECT * FROM showtimes 
+            WHERE room_id = ? AND cinema_id = ? 
+            AND (
+                (show_date = ? AND 
+                 (
+                     (show_time <= ? AND ADDTIME(show_time, SEC_TO_TIME(? * 60)) > ?) OR
+                     (show_time >= ? AND show_time < ADDTIME(?, SEC_TO_TIME(? * 60)))
+                 )
+                )
+            )
+        `;
+    const overlapCheck = await new Promise((resolve, reject) => {
+        connection.query(
+            queryCheckOverlap,
+            [
+                roomId, cinemaId, 
+                show_date, 
+                show_time, filmDuration, show_time,
+                show_time, show_time, filmDuration
+            ],
+            (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            }
+        );
+    });
+
+    if (overlapCheck.length > 0) {
+        return res.status(400).json({ message: "Showtime conflicts with an existing showtime in this room and cinema" });
+    }
 
     // Lưu data vào bảng showtimes
     const queryInsertShowTime = `INSERT INTO showtimes (showtime_id, film_id, room_id, cinema_id, show_date, show_time)
@@ -278,14 +321,18 @@ export const editPatch = async (req, res) => {
         const { film_name, room_name, cinema_name, show_date, show_time } =  req.body;
 
         // Truy vấn film_id từ film_name
-        const queryFilm = `Select film_id from films where film_name = ?`
+        const queryFilm = `Select film_id, duration from films where film_name = ?`
         const filmInfo = await new Promise((resolve, reject) => {
             connection.query(queryFilm, [film_name], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
+        if (filmInfo.length == 0) {
+            return res.status(400).json({ message: "Film not found" });
+        }
         const filmId = filmInfo[0].film_id;
+        const filmDuration = filmInfo[0].duration;
 
         // Truy vấn room_id từ room_name
         const queryRoom = `Select room_id from rooms where room_name = ?`
@@ -295,6 +342,9 @@ export const editPatch = async (req, res) => {
                 resolve(results);
             });
         });
+        if (roomInfo.length == 0) {
+            return res.status(400).json({ message: "Room not found" });
+        }
         const roomId = roomInfo[0].room_id;
 
         // Truy vấn cinema_id từ cinema_name
@@ -305,7 +355,43 @@ export const editPatch = async (req, res) => {
                 resolve(results);
             });
         });
+        if (cinemaInfo.length == 0) {
+            return res.status(400).json({ message: "Cinema not found" });
+        }
         const cinemaId = cinemaInfo[0].cinema_id;
+
+        // Kiểm tra xem showtime mới có trùng thời gian với các showtime đã tồn tại không
+        const queryCheckOverlap = `
+            SELECT * FROM showtimes 
+            WHERE room_id = ? AND cinema_id = ? 
+            AND (
+                (show_date = ? AND 
+                (
+                    (show_time <= ? AND ADDTIME(show_time, SEC_TO_TIME(? * 60)) > ?) OR
+                    (show_time >= ? AND show_time < ADDTIME(?, SEC_TO_TIME(? * 60)))
+                )
+                )
+            )
+            `;
+        const overlapCheck = await new Promise((resolve, reject) => {
+            connection.query(
+                queryCheckOverlap,
+                [
+                    roomId, cinemaId, 
+                    show_date, 
+                    show_time, filmDuration, show_time,
+                    show_time, show_time, filmDuration
+                ],
+                (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                }
+            );
+        });
+
+        if (overlapCheck.length > 0) {
+            return res.status(400).json({ message: "Showtime conflicts with an existing showtime in this room and cinema" });
+        }
 
         const queryUpdateShowTime = `UPDATE showtimes
                                 SET film_id = ?, room_id = ?, cinema_id = ?, show_date = ?, show_time = ?
@@ -332,6 +418,14 @@ export const editPatch = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const showTimeId = req.params.showTimeId;
+
+        const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE showtime_id = ?`;
+        await new Promise((resolve, reject) => {
+            connection.query(queryDeleteSeatStatus, [showTimeId], (err, results) => {
+                if (err) return reject(err);
+                resolve(results);
+            });
+        });
 
         const queryDeleteShowTime = `DELETE FROM showtimes WHERE showtime_id = ?`;
         await new Promise((resolve, reject) => {
