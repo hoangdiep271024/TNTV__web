@@ -1,5 +1,4 @@
 import connection from "../../models/SQLConnection.js";
-import bcryptjs from "bcryptjs";
 
 // [GET] /admin/users
 export const index = async (req, res) => {
