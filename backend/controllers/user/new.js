@@ -85,3 +85,24 @@ export const NewDetail = async (req, res) => {
         return res.json(results);
     });
 };
+
+export const NewRelate = async (req, res) => {  
+    const film_id = req.params.film_id
+    let query = `
+    select * from news
+    where film_id= ?
+    `;
+    
+    connection.query(query, [film_id],(error, results) => {
+        if (error) {
+            console.error('Error in SELECT query:', error);
+            return res.status(500).json({ error: 'Internal server error' });
+        }
+        
+        if (results.length === 0) {
+            return res.status(404).json({ error: 'Actor not found' });
+        }
+        
+        return res.json(results);
+    });
+};
