@@ -1,4 +1,4 @@
-import { Avatar, Box, Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow } from "@mui/material";
+import { Avatar, Box, Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 
 import { Label } from '../../components/label';
@@ -32,7 +32,9 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                 <TableCell component="th" scope="row">
                     <Box gap={2} display="flex" alignItems="center">
                         <Avatar alt={row.name} src={row.avatarUrl} />
-                        {row.name}
+                        <Typography variant="body2" fontWeight="bold">
+                            {row.name}
+                        </Typography>
                     </Box>
                 </TableCell>
 
@@ -43,7 +45,7 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                 <TableCell>{row.role}</TableCell>
 
                 <TableCell>
-                    <Label color={(row.status === "banned" && 'error') || 'success'}>{row.status}</Label>
+                    <Label color={(row.status === "inactive" && 'error') || 'success'}>{row.status}</Label>
                 </TableCell>
 
                 <TableCell align="right">

@@ -2,7 +2,7 @@ import { setFont, pxToRem, responsiveFontSizes } from '../styles/utils';
 
 // ----------------------------------------------------------------------
 
-export const defaultFont = 'DM Sans Variable';
+export const defaultFont = 'Open Sans Variable';
 
 export const primaryFont = setFont(defaultFont);
 

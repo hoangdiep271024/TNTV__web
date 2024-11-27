@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
 import { _users } from '../../../_mock/_data'
 import { DashboardContent } from '../../../layouts/dashboard'
-import { Box, Button, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
+import { Box, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
 import { Iconify } from "../../../components/iconify";
 
 import { UserTableHead } from "../user-table-head";
@@ -19,6 +19,7 @@ import { useTable } from "../use-table";
  * sorting, and pagination. This list allows users to be selected, filtered by name, 
  * and displayed across multiple pages with adjustable rows per page
  */
+
 export function UserView() {
     // Custom hook to handle table state and functions (pagination, selection, sorting)
     const table = useTable();
@@ -42,13 +43,6 @@ export function UserView() {
                 <Typography variant="h4" flexGrow={1}>
                     Quản lý người dùng
                 </Typography>
-                {/* <Button
-                    variant="contained"
-                    color="inherit"
-                    startIcon={<Iconify icon="mingcute:add-line" />}
-                >
-                    New user
-                </Button> */}
             </Box>
 
             <Card>
@@ -96,10 +90,10 @@ export function UserView() {
                                     />
                                 ))}
 
-                                <TableEmptyRows
+                                {/* <TableEmptyRows
                                     height={68}
                                     emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                                />
+                                /> */}
 
                                 {/* Message for no matching data based on filter */}
                                 {notFound && <TableNoData searchQuery={filterName} />}

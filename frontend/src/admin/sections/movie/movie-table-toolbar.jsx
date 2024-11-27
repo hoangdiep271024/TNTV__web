@@ -44,7 +44,7 @@ export function MovieTableToolbar({ numSelected, filterName, onFilterName }) {
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Search user..."
+                    placeholder="Tìm kiếm phim..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />

@@ -12,6 +12,9 @@
  * @returns {JSX.Element|null} A TableRow with empty cells if `emptyRows` is greater than 0, 
  * otherwise, returns null.
  */
+
+import { TableRow, TableCell } from "@mui/material";
+
 export function TableEmptyRows({ emptyRows, height, sx, ...other }) {
     if (!emptyRows) {
         return null;

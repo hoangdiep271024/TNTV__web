@@ -560,6 +560,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource-variable/open-sans@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@fontsource-variable/open-sans@npm:5.1.0"
+  checksum: 10c0/69305a8cdfacf681f055ae4b8b3c785bdf2820b56befedc4791039b437d3b448d516f1bd4076b95034b355a529a62404733b4698052027adb199fbc8113dc49d
+  languageName: node
+  linkType: hard
+
 "@fontsource/barlow@npm:^5.1.0":
   version: 5.1.0
   resolution: "@fontsource/barlow@npm:5.1.0"
@@ -5435,6 +5442,7 @@ __metadata:
     "@emotion/styled": "npm:^11.11.0"
     "@eslint/js": "npm:^9.9.0"
     "@fontsource-variable/dm-sans": "npm:^5.1.0"
+    "@fontsource-variable/open-sans": "npm:^5.1.0"
     "@fontsource/barlow": "npm:^5.1.0"
     "@iconify/react": "npm:^5.0.2"
     "@mui/icons-material": "npm:5.13.7"

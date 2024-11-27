@@ -1,7 +1,7 @@
 import './global.css';
 
 import { lazy, Suspense } from 'react';
-import { Outlet, Navigate, createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Outlet, Navigate, createBrowserRouter, RouterProvider, BrowserRouter, Routes, Route } from 'react-router-dom';
 
 import { Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -37,60 +37,59 @@ const renderFallback = (
                 width: 1,
                 maxWidth: 320,
                 bgcolor: (theme) => varAlpha(theme.vars.palette.text.primaryChannel, 0.16),
-                [`& .${linearProgressClasses.bar}`]: { bgcolor: 'text.primary' },
+                // [`& .${linearProgressClasses.bar}`]: { bgcolor: 'text.primary' },
             }}
         />
     </Box>
 );
 
-const router = createBrowserRouter([
-    {
-        path: '/admin',
-        element: (
-            <DashboardLayout>
-                <Suspense fallback={renderFallback}>
-                    <Outlet />
-                    {/* <HomePage /> */}
-                </Suspense>
-            </DashboardLayout>
-        ),
-        children: [
-            { element: <HomePage />, index: true },
-            { path: 'user', element: <UserPage /> },
-            { path: 'user/:id', element: <EditUserPage /> },
-            { path: 'movie', element: <MoviePage /> },
-            { path: 'cinema', element: <CinemaPage /> },
-            { path: 'showtime', element: <ShowtimePage /> },
-            { path: 'order', element: <OrderPage /> },
-            { path: 'order/:id', element: <OrderDetailsPage /> },
-            { path: 'room', element: <RoomPage /> },
-            { path: '*', element: <Navigate to="/404" replace /> }
-        ],
-    },
-    // {
-    //     path: '/admin/user',
-    //     element: (
-    //         <DashboardLayout>
-    //             <Suspense fallback={renderFallback}>
-    //                 <Outlet />
-    //                 <UserPage />
-    //             </Suspense>
-    //         </DashboardLayout>
-    //     )
-    // },
-    {
-        path: '/404',
-        element: <Page404 />
-    },
+function Layout() {
+    return (
+        <DashboardLayout>
+            <Suspense fallback={renderFallback}>
+                <Outlet />
+                {/* <HomePage /> */}
+            </Suspense>
+        </DashboardLayout>
+    );
+}
 
-]);
+// const router = createBrowserRouter([
+//     {
+//         path: '/admin/',
+//         element: <Layout />,
+//         errorElement: <Page404 />,
+//         children: [
+//             { element: <HomePage />, index: true },
+//             { path: 'user', element: <UserPage /> },
+//             { path: 'user/:id', element: <EditUserPage /> },
+//             { path: 'movie', element: <MoviePage /> },
+//             { path: 'cinema', element: <CinemaPage /> },
+//             { path: 'showtime', element: <ShowtimePage /> },
+//             { path: 'order', element: <OrderPage /> },
+//             { path: 'order/:id', element: <OrderDetailsPage /> },
+//             { path: 'room', element: <RoomPage /> },
+//             { path: '*', element: <Page404 /> }
+//         ],
+//     },
+// ]);
 
 // ----------------------------------------------------------------------
 export default function App() {
     return (
         <CssVarsProvider theme={theme}>
             <CssBaseline />
-            <RouterProvider router={router} />
+            {/* <RouterProvider router={router} /> */}
+            <BrowserRouter>
+                <Routes>
+                    <Route path="/admin" element={<Layout />}>
+                        <Route index element={<HomePage />} />
+                        <Route path='user' element={<UserPage />} />
+                        <Route path='user/:id' element={<EditUserPage />} />
+                        <Route path='movie' element={<MoviePage />} />
+                    </Route>
+                </Routes>
+            </BrowserRouter>
         </CssVarsProvider>
     );
 }

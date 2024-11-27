@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem } from "@mui/material";
+import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert } from "@mui/material";
 
 export function EditUserView({ userId }) {
 
@@ -14,7 +14,7 @@ export function EditUserView({ userId }) {
     });
 
     const roleOptions = ["user", "admin"];
-    const statusOptions = ["active", "banned"];
+    const statusOptions = ["active", "inactive"];
 
     //     // Fetch user data based on userId
     //     useEffect(() => {
@@ -54,6 +54,12 @@ export function EditUserView({ userId }) {
         console.log("Form data submitted:", formData);
     }
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
     const handleCancel = () => {
         setFormData({
             username: "",
@@ -64,7 +70,7 @@ export function EditUserView({ userId }) {
             status: "active",
         });
 
-        alert("Changes were not saved.");
+        setSnackbarOpen(true);
         window.location.reload();
     }
 
@@ -176,6 +182,18 @@ export function EditUserView({ userId }) {
                         </Grid>
                     </form>
                 </CardContent>
+
+                {/* Snackbar for better alert */}
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: "100%" }}>
+                        Các thay đổi chưa được lưu
+                    </Alert>
+                </Snackbar>
             </Card>
         </DashboardContent>
     )

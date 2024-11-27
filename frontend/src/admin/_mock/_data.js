@@ -39,8 +39,52 @@ export const _users = [...Array(24)].map((_, index) => ({
     name: _fullNames(index),
     email: _emails(index),
     phonenumber: _phoneNumbers(index),
-    status: index % 4 ? 'active' : 'banned',
+    status: index % 4 ? 'active' : 'inactive',
     role: index % 24 ? 'user' : 'admin'
+}));
+
+export const _movies = [...Array(12)].map((_, index) => ({
+    id: `movie-${index + 1}`,
+    name: [
+        'The Silent Horizon',
+        'Eternal Shadows',
+        'Chasing Infinity',
+        'Forgotten Realm',
+        'The Last Symphony',
+        'Starlight Echoes',
+        'Winds of Tomorrow',
+        'Echoes of the Past',
+        'The Crimson Pact',
+        'Whispers in the Dark',
+        'Boundless Journey',
+        'Fragments of Time'
+    ][index],
+    description: [
+        'A thrilling story of survival in the unknown reaches of space.',
+        'A gripping tale of courage amidst an eternal war between light and darkness.',
+        'A quest to uncover the mysteries of the universe with stunning visuals.',
+        'An epic fantasy about a hero’s journey to save a forgotten kingdom.',
+        'A heartwarming drama centered around the power of music and love.',
+        'An inspiring sci-fi adventure of hope and redemption among the stars.',
+        'A captivating story of resilience in a post-apocalyptic world.',
+        'A drama exploring the unbreakable ties of family and memory.',
+        'A dark fantasy tale of forbidden alliances and ancient magic.',
+        'A spine-chilling mystery that blurs the line between dreams and reality.',
+        'An exhilarating adventure of discovery and uncharted lands.',
+        'A touching narrative about the passage of time and human connections.'
+    ][index],
+    film_type: ['Action', 'Drama', 'Sci-Fi', 'Fantasy', 'Romance', 'Adventure', 'Thriller', 'Drama', 'Fantasy', 'Horror', 'Adventure', 'Romance'][index],
+    age_limit: [13, 16, 18, 7, 13, 13, 16, 18, 13, 16, 18, 7][index],
+    duration: [
+        120, 110, 100, 91,
+        90, 108, 89, 70,
+        120, 111, 94, 90
+    ][index],
+    release_date: [
+        '2024-01-12', '2023-09-18', '2022-06-25', '2023-11-08',
+        '2022-03-19', '2023-07-14', '2024-02-05', '2023-10-10',
+        '2022-08-30', '2023-12-22', '2024-04-15', '2023-05-20'
+    ][index]
 }));
 
 
