@@ -87,6 +87,230 @@ export const _movies = [...Array(12)].map((_, index) => ({
     ][index]
 }));
 
+export const _cinemas = [...Array(10)].map((_, index) => ({
+    id: `cinema-${index + 1}`,
+    name: [
+        'Starlight Multiplex',
+        'Galaxy Cinema',
+        'Nova Film Center',
+        'Eclipse Theatres',
+        'Cosmos Cineplex',
+        'Lunar Screens',
+        'Aurora Movieplex',
+        'Infinity Cinemas',
+        'Vivid Cinehall',
+        'Dreamscape Theatres'
+    ][index],
+    address: [
+        '123 Main Street, Downtown City',
+        '45 Star Lane, Uptown District',
+        '678 Broad Avenue, Midtown Central',
+        '901 Sunset Boulevard, West End',
+        '23 Moonrise Drive, Eastside Area',
+        '87 Nova Plaza, Outer Ring',
+        '19 Stellar Way, Skyline Heights',
+        '303 Infinity Road, New City Zone',
+        '56 Bright Street, City Core',
+        '412 Horizon Parkway, Suburban Belt'
+    ][index],
+    cinema_cluster: [
+        'Cluster A',
+        'Cluster A',
+        'Cluster B',
+        'Cluster B',
+        'Cluster C',
+        'Cluster C',
+        'Cluster D',
+        'Cluster D',
+        'Cluster E',
+        'Cluster E'
+    ][index],
+    region: [
+        'North',
+        'North',
+        'Central',
+        'Central',
+        'East',
+        'East',
+        'South',
+        'South',
+        'West',
+        'West'
+    ][index]
+}));
+
+export const _showtimes = [...Array(15)].map((_, index) => ({
+    id: `showtime-${index + 1}`,
+    movie_name: [
+        'The Silent Horizon',
+        'Eternal Shadows',
+        'Chasing Infinity',
+        'Forgotten Realm',
+        'The Last Symphony',
+        'Starlight Echoes',
+        'Winds of Tomorrow',
+        'Echoes of the Past',
+        'The Crimson Pact',
+        'Whispers in the Dark',
+        'Boundless Journey',
+        'Fragments of Time',
+        'The Silent Horizon',
+        'Eternal Shadows',
+        'Chasing Infinity'
+    ][index % 12],
+    cinema_name: [
+        'Starlight Multiplex',
+        'Galaxy Cinema',
+        'Nova Film Center',
+        'Eclipse Theatres',
+        'Cosmos Cineplex',
+        'Lunar Screens',
+        'Aurora Movieplex',
+        'Infinity Cinemas',
+        'Vivid Cinehall',
+        'Dreamscape Theatres',
+        'Galaxy Cinema',
+        'Starlight Multiplex',
+        'Infinity Cinemas',
+        'Cosmos Cineplex',
+        'Dreamscape Theatres'
+    ][index % 10],
+    room_name: [
+        'Room A', 'Room B', 'Room C',
+        'Room D', 'Room E', 'Room F',
+        'Room G', 'Room H', 'Room I',
+        'Room J', 'Room K', 'Room L'
+    ][index % 12],
+    date: [
+        '2024-01-12', '2023-09-18', '2022-06-25',
+        '2023-11-08', '2022-03-19', '2023-07-14',
+        '2024-02-05', '2023-10-10', '2022-08-30',
+        '2023-12-22', '2024-04-15', '2023-05-20',
+        '2024-01-12', '2023-09-18', '2022-06-25'
+    ][index % 12],
+    showtime: [
+        '10:00', '12:30', '15:00',
+        '17:30', '20:00', '09:45',
+        '13:15', '16:45', '19:15',
+        '21:00', '11:30', '14:00',
+        '18:00', '19:45', '21:30'
+    ][index % 15]
+}));
+
+export const _rooms = [...Array(15)].map((_, index) => ({
+    room_name: [
+        'Room A', 'Room B', 'Room C',
+        'Room D', 'Room E', 'Room F',
+        'Room G', 'Room H', 'Room I',
+        'Room J', 'Room K', 'Room L',
+        'Room M', 'Room N', 'Room O'
+    ][index % 15],
+    cinema_name: [
+        'Starlight Multiplex',
+        'Galaxy Cinema',
+        'Nova Film Center',
+        'Eclipse Theatres',
+        'Cosmos Cineplex',
+        'Lunar Screens',
+        'Aurora Movieplex',
+        'Infinity Cinemas',
+        'Vivid Cinehall',
+        'Dreamscape Theatres',
+        'Starlight Multiplex',
+        'Infinity Cinemas',
+        'Galaxy Cinema',
+        'Cosmos Cineplex',
+        'Dreamscape Theatres'
+    ][index % 10]
+}));
+
+
+export const _orders = [...Array(15)].map((_, index) => ({
+    order_id: `order-${index + 1}`,
+    movie_name: [
+        'The Silent Horizon',
+        'Eternal Shadows',
+        'Chasing Infinity',
+        'Forgotten Realm',
+        'The Last Symphony',
+        'Starlight Echoes',
+        'Winds of Tomorrow',
+        'Echoes of the Past',
+        'The Crimson Pact',
+        'Whispers in the Dark',
+        'Boundless Journey',
+        'Fragments of Time',
+        'The Silent Horizon',
+        'Eternal Shadows',
+        'Chasing Infinity'
+    ][index % 12],
+    cinema_name: [
+        'Starlight Multiplex',
+        'Galaxy Cinema',
+        'Nova Film Center',
+        'Eclipse Theatres',
+        'Cosmos Cineplex',
+        'Lunar Screens',
+        'Aurora Movieplex',
+        'Infinity Cinemas',
+        'Vivid Cinehall',
+        'Dreamscape Theatres',
+        'Galaxy Cinema',
+        'Starlight Multiplex',
+        'Infinity Cinemas',
+        'Cosmos Cineplex',
+        'Dreamscape Theatres'
+    ][index % 10],
+    room_name: [
+        'Room A', 'Room B', 'Room C',
+        'Room D', 'Room E', 'Room F',
+        'Room G', 'Room H', 'Room I',
+        'Room J', 'Room K', 'Room L'
+    ][index % 12],
+    show_date: [
+        '2024-01-12T17:00:00.000Z',
+        '2023-09-18T17:00:00.000Z',
+        '2022-06-25T17:00:00.000Z',
+        '2023-11-08T17:00:00.000Z',
+        '2022-03-19T17:00:00.000Z',
+        '2023-07-14T17:00:00.000Z',
+        '2024-02-05T17:00:00.000Z',
+        '2023-10-10T17:00:00.000Z',
+        '2022-08-30T17:00:00.000Z',
+        '2023-12-22T17:00:00.000Z',
+        '2024-04-15T17:00:00.000Z',
+        '2023-05-20T17:00:00.000Z',
+        '2024-01-12T17:00:00.000Z',
+        '2023-09-18T17:00:00.000Z',
+        '2022-06-25T17:00:00.000Z'
+    ][index % 15],
+    total_price: [
+        150, 120, 200, 180,
+        100, 130, 170, 220,
+        140, 160, 190, 250,
+        180, 200, 110
+    ][index % 15],
+    order_date: [
+        '2023-12-01T17:00:00.000Z',
+        '2023-12-02T17:00:00.000Z',
+        '2023-12-03T17:00:00.000Z',
+        '2023-12-04T17:00:00.000Z',
+        '2023-12-05T17:00:00.000Z',
+        '2023-12-06T17:00:00.000Z',
+        '2023-12-07T17:00:00.000Z',
+        '2023-12-08T17:00:00.000Z',
+        '2023-12-09T17:00:00.000Z',
+        '2023-12-10T17:00:00.000Z',
+        '2023-12-11T17:00:00.000Z',
+        '2023-12-12T17:00:00.000Z',
+        '2023-12-13T17:00:00.000Z',
+        '2023-12-14T17:00:00.000Z',
+        '2023-12-15T17:00:00.000Z'
+    ][index % 15]
+}));
+
+
+
 
 
 
