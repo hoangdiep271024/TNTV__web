@@ -42,7 +42,7 @@ export const navData = [
     //     icon: <ScheduleIcon />,
     // },
     {
-        title: 'Quản lý lịch chiếu',
+        title: 'Quản lý suất chiếu',
         path: '/admin/showtime',
         icon: <ShowtimeIcon />,
     },
