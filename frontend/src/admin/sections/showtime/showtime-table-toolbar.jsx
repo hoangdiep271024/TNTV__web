@@ -4,9 +4,9 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-
 import { Iconify } from '../../components/iconify';
 
+// delete all selected button handler <=> onDeleteSelected
 export function ShowtimeTableToolbar({ numSelected, filterName, onFilterName }) {
     return (
         <Toolbar

@@ -206,6 +206,7 @@ export const _rooms = [...Array(15)].map((_, index) => ({
         'Room J', 'Room K', 'Room L',
         'Room M', 'Room N', 'Room O'
     ][index % 15],
+    cinema_id: `cinema-${index + 1}`,
     cinema_name: [
         'Starlight Multiplex',
         'Galaxy Cinema',
@@ -227,7 +228,7 @@ export const _rooms = [...Array(15)].map((_, index) => ({
 
 
 export const _orders = [...Array(15)].map((_, index) => ({
-    id: `order-${index + 1}`,
+    order_id: `order_id-${index + 1}`,
     movie_name: [
         'The Silent Horizon',
         'Eternal Shadows',

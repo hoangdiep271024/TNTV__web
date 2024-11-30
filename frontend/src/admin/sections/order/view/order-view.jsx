@@ -3,14 +3,16 @@ import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
 import { _orders } from "../../../_mock";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Box, Button, Table, TableContainer, Typography } from "@mui/material";
-import { Iconify } from "../../../components/iconify";
+import { Card, Box, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
 import { OrderTableToolbar } from "../order-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { OrderTableHead } from "../order-table-head";
 import { OrderTableRow } from "../order-table-row";
+import { TableNoData } from "../../table-no-data";
 
 // click order_id to open order-detail page
+// select all bug 
+
 export function OrderView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
@@ -26,7 +28,7 @@ export function OrderView() {
     return (
         <DashboardContent>
             <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h4">
+                <Typography variant="h2">
                     Quản lý đơn hàng
                 </Typography>
             </Box>
@@ -51,15 +53,16 @@ export function OrderView() {
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectedAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, _orders.map((order) => order.id))
+                                    table.onSelectAllRows(checked, _orders.map((order) => order.order_id))
                                 }}
                                 headLabel={[
-                                    { id: 'id', label: 'Mã đơn hàng' },
+                                    { id: 'order_id', label: 'Mã đơn hàng' },
                                     { id: 'movie_name', label: 'Tên phim' },
                                     { id: 'cinema_name', label: 'Tên rạp chiếu phim' },
                                     { id: 'room_name', label: 'Tên phòng chiếu phim' },
                                     { id: 'show_date', label: 'Ngày chiếu' },
-                                    { id: 'total_price', label: 'Tổng giá trị đơn hàng' },
+                                    { id: 'total_price', label: 'Giá trị đơn hàng' },
+                                    { id: 'order_date', label: 'Ngày đặt hàng' },
                                     { id: '' }
                                 ]}
                             />
@@ -70,10 +73,10 @@ export function OrderView() {
                                     table.page * table.rowsPerPage + table.rowsPerPage
                                 ).map((row) => (
                                     <OrderTableRow
-                                        key={row.id}
+                                        key={row.order_id}
                                         row={row}
-                                        selected={table.selected.includes(row.id)}
-                                        onSelectRow={() => table.onSelectRow(row.id)}
+                                        selected={table.selected.includes(row.order_id)}
+                                        onSelectRow={() => table.onSelectRow(row.order_id)}
                                     />
                                 ))}
 
@@ -86,7 +89,7 @@ export function OrderView() {
                 <TablePagination
                     component="div"
                     page={table.page}
-                    count={_cinemas.length}
+                    count={_orders.length}
                     rowsPerPage={table.rowsPerPage}
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}

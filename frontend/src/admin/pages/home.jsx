@@ -14,7 +14,7 @@ export default function HomePage() {
 
             <DashboardContent>
                 <Box sx={{ padding: 4, textAlign: 'center' }}>
-                    <Typography variant="h4" gutterBottom>
+                    <Typography variant="h2" gutterBottom>
                         Chào mừng bạn đến với Bảng điều khiển!
                     </Typography>
                     <Typography variant="body1" sx={{ marginBottom: 3 }}>

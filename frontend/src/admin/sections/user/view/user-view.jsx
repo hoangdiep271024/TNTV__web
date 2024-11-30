@@ -34,7 +34,7 @@ export function UserView() {
     return (
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={5}>
-                <Typography variant="h4" flexGrow={1}>
+                <Typography variant="h2" flexGrow={1}>
                     Quản lý người dùng
                 </Typography>
             </Box>

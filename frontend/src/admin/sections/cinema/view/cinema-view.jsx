@@ -28,13 +28,13 @@ export function CinemaView() {
     return (
         <DashboardContent>
             <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h4">
+                <Typography variant="h2">
                     Quản lý rạp chiếu phim
                 </Typography>
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="success"
+                    color="info"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm rạp chiếu phim

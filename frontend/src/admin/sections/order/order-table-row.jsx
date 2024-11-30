@@ -1,20 +1,10 @@
-import { Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
+import { Checkbox, IconButton, TableCell, TableRow, Typography } from "@mui/material";
 import { Iconify } from '../../components/iconify'
 
-// delete button handle to delete order
+// delete button handle to delete-order
 // click order_id to open order details
 
 export function OrderTableRow({ row, selected, onSelectRow }) {
-    const [openPopover, setOpenPopover] = useState(null);
-
-    const handleOpenPopover = useCallback((event) => {
-        setOpenPopover(event.currentTarget);
-    }, []);
-
-    const handleClosePopover = useCallback(() => {
-        setOpenPopover(null);
-    }, []);
 
     return (
         <>
@@ -25,7 +15,7 @@ export function OrderTableRow({ row, selected, onSelectRow }) {
 
                 <TableCell>
                     <Typography variant="body2" fontWeight="bold">
-                        {row.id}
+                        {row.order_id}
                     </Typography>
                 </TableCell>
 
@@ -36,41 +26,17 @@ export function OrderTableRow({ row, selected, onSelectRow }) {
                 <TableCell>{row.total_price}</TableCell>
                 <TableCell>{row.order_date}</TableCell>
 
-                <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover}>
-                        <Iconify icon="eva:more-vertical-fill" />
-                    </IconButton>
-                </TableCell>
-
-                <Popover
-                    open={Boolean(openPopover)}
-                    anchorEl={openPopover}
-                    onClose={handleClosePopover}
-                    anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
-                    transformOrigin={{ vertical: 'top', horizontal: 'right' }}
-                >
-                    <MenuList
-                        disablePadding
+                <TableCell>
+                    <IconButton
+                        // onClick={handleDelete}
                         sx={{
-                            p: 0.5,
-                            gap: 0.5,
-                            width: 140,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            [`& .${menuItemClasses.root}`]: {
-                                px: 1,
-                                gap: 2,
-                                borderRadius: 0.75,
-                                [`&. ${menuItemClasses.selected}`]: { bgcolor: 'action.selected' },
-                            },
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
-                            <Iconify icon="solar:trash-bin-trash-bold" />
-                            Delete
-                        </MenuItem>
-                    </MenuList>
-                </Popover>
+                        <Iconify icon="solar:trash-bin-trash-bold" />
+                    </IconButton>
+                </TableCell>
             </TableRow>
         </>
     )

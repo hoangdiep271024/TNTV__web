@@ -18,7 +18,6 @@ export function EditMovieView() {
         actors: "",
     })
     const [snackbarOpen, setSnackbarOpen] = useState(false);
-
     const filmTypeOptions = ["Đang chiếu", "Sắp phát hành"];
 
     const handleSnackbarClose = () => {
@@ -27,7 +26,7 @@ export function EditMovieView() {
     return (
         <DashboardContent>
             <Card>
-                <CardHeader title="Tạo phim mới" />
+                <CardHeader title="Chỉnh sửa thông tin phim" />
                 <CardContent>
 
                 </CardContent>

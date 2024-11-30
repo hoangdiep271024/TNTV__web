@@ -1,7 +1,6 @@
 import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
 import { visuallyHidden } from "../utils";
 
-
 export function ShowtimeTableHead({
     numSelected,
     rowCount,

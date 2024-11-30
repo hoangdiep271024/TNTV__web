@@ -30,7 +30,7 @@ export function MovieView() {
     return (
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={5}>
-                <Typography variant="h4">
+                <Typography variant="h2">
                     Quản lý phim
                 </Typography>
                 <Box flexGrow={1} />
