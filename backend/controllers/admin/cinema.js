@@ -280,24 +280,32 @@ export const editPatch = async (req, res) => {
 // [PATCH] /admin/cinemas/delete/:cinemaId
 export const deleteItem = async (req, res) => {
     try {
-        const cinemaId = req.params.cinemaId;
+        const cinemaIds = req.body.cinemaIds || [req.params.cinemaId]; // Chấp nhận một hoặc nhiều cinema_id
 
-        const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id = ?`;
+        if (!cinemaIds || cinemaIds.length === 0) {
+            return res.status(400).json({
+                message: "No cinema IDs provided",
+            });
+        }
+
+        const placeholders = cinemaIds.map(() => '?').join(',');
+        const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id IN (${placeholders})`;
+
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteCinema, [cinemaId], (err, results) => {
+            connection.query(queryDeleteCinema, cinemaIds, (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
 
         res.status(200).json({
-            message: "Cinema and related records deleted successfully",
+            message: `Cinemas with IDs ${cinemaIds.join(', ')} deleted successfully`,
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            message: "Error deleting cinema",
+            message: "Error deleting cinemas",
             error: error.message,
         });
     }
-}
+};

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { hook } from "../../movie/hook";
+import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
 import { _cinemas } from "../../../_mock";
 import { DashboardContent } from "../../../layouts/dashboard";
@@ -12,6 +12,7 @@ import { TableNoData } from "../../table-no-data";
 import { CinemaTableRow } from "../cinema-table-row";
 
 // add-cinema button to move to create-cinema page
+// click cinema name to open edit-cinema page
 export function CinemaView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
@@ -19,7 +20,7 @@ export function CinemaView() {
     const dataFiltered = applyFilter({
         inputData: _cinemas,
         comparator: getComparator(table.order, table.orderBy),
-        filterName,
+        filterName
     });
 
     const notFound = !dataFiltered.length && filterName;

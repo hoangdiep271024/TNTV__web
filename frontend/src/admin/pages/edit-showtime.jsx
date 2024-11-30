@@ -8,7 +8,7 @@ export default function EditShowtimePage() {
     return (
         <>
             <Helmet>
-                <title> {`Edit Showtime | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Chỉnh sửa thông tin suất chiếu | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <EditShowtimePage />

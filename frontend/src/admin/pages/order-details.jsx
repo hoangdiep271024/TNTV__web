@@ -11,7 +11,7 @@ export default function OrderPage() {
     return (
         <>
             <Helmet>
-                <title> {`Order Details | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Thông tin chi tiết đơn hàng | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <OrderDetailsView orderId={id} />

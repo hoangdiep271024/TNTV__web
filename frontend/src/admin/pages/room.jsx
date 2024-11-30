@@ -8,7 +8,7 @@ export default function RoomPage() {
     return (
         <>
             <Helmet>
-                <title> {`Room | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Quản lý phòng chiếu phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <RoomView />

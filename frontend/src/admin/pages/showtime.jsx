@@ -8,7 +8,7 @@ export default function ShowtimePage() {
     return (
         <>
             <Helmet>
-                <title> {`Showtime | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Quản lý suất chiếu phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <ShowtimeView />

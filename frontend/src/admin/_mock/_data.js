@@ -198,6 +198,7 @@ export const _showtimes = [...Array(15)].map((_, index) => ({
 }));
 
 export const _rooms = [...Array(15)].map((_, index) => ({
+    id: `room-${index + 1}`,
     room_name: [
         'Room A', 'Room B', 'Room C',
         'Room D', 'Room E', 'Room F',
@@ -226,7 +227,7 @@ export const _rooms = [...Array(15)].map((_, index) => ({
 
 
 export const _orders = [...Array(15)].map((_, index) => ({
-    order_id: `order-${index + 1}`,
+    id: `order-${index + 1}`,
     movie_name: [
         'The Silent Horizon',
         'Eternal Shadows',

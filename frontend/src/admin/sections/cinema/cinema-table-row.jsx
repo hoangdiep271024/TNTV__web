@@ -45,7 +45,6 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
 
                 <TableCell>
                     <Typography
-                        variant="body2"
                         sx={{
                             cursor: 'pointer',
                             textDecoration: 'underline',

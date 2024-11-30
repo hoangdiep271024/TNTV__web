@@ -8,7 +8,7 @@ export default function CreateCinemaPage() {
     return (
         <>
             <Helmet>
-                <title> {`Create Cinema | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Tạo rạp chiếu phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <CreateCinemaPage />

@@ -8,7 +8,7 @@ export default function MoviePage() {
     return (
         <>
             <Helmet>
-                <title> {`Movie | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Quản lý phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <MovieView />

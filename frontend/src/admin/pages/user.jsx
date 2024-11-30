@@ -8,7 +8,7 @@ export default function UserPage() {
     return (
         <>
             <Helmet>
-                <title> {`User | Trang quản trị website bán vé xem phim NHTT`}</title>
+                <title> {`Quản lý người dùng | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
             <UserView />

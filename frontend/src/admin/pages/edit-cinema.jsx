@@ -8,7 +8,7 @@ export default function EditCinemaPage() {
     return (
         <>
             <Helmet>
-                <title> {`Edit Cinema | NHTT Admin Panel`}</title>
+                <title> {`Chỉnh sửa thông tin rạp chiếu phim | NHTT Admin Panel`}</title>
             </Helmet>
 
             <EditCinemaPage />
