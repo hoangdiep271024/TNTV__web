@@ -87,6 +87,10 @@ export default function App() {
                         <Route path='user' element={<UserPage />} />
                         <Route path='user/:id' element={<EditUserPage />} />
                         <Route path='movie' element={<MoviePage />} />
+                        <Route path='cinema' element={<CinemaPage />} />
+                        <Route path='showtime' element={<ShowtimePage />} />
+                        <Route path='room' element={<RoomPage />} />
+                        <Route path='order' element={<OrderPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

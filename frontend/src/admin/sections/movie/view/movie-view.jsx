@@ -7,12 +7,12 @@ import { _movies } from "../../../_mock";
 import { hook } from "../hook";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
 import { MovieTableHead } from "../movie-table-head";
-import { UserTableHead } from "../../user/user-table-head";
 import { MovieTableRow } from "../movie-table-row";
 import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
 import { Scrollbar } from "../../../components/scrollbar";
 
+// add-movie button to move to create-movie page
 export function MovieView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
@@ -43,14 +43,13 @@ export function MovieView() {
                 </Button>
             </Box>
 
-
             <Card>
                 <MovieTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
                     onFilterName={(event) => {
                         setFilterName(event.target.value);
-                        table.onResetPage(); // Reset table page when filter changes
+                        table.onResetPage();
                     }}
                 />
 
@@ -64,7 +63,7 @@ export function MovieView() {
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, _movies.map((user) => user.id))
+                                    table.onSelectAllRows(checked, _movies.map((movie) => movie.id))
                                 }
                                 headLabel={[
                                     { id: 'name', label: 'Tên phim' },
@@ -110,7 +109,6 @@ export function MovieView() {
                     onRowsPerPageChange={table.onChangeRowsPerPage}
                 />
             </Card>
-
         </DashboardContent>
     );
 }

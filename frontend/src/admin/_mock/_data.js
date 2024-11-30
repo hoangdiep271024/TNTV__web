@@ -112,31 +112,31 @@ export const _cinemas = [...Array(10)].map((_, index) => ({
         '303 Infinity Road, New City Zone',
         '56 Bright Street, City Core',
         '412 Horizon Parkway, Suburban Belt'
-    ][index],
-    cinema_cluster: [
-        'Cluster A',
-        'Cluster A',
-        'Cluster B',
-        'Cluster B',
-        'Cluster C',
-        'Cluster C',
-        'Cluster D',
-        'Cluster D',
-        'Cluster E',
-        'Cluster E'
-    ][index],
-    region: [
-        'North',
-        'North',
-        'Central',
-        'Central',
-        'East',
-        'East',
-        'South',
-        'South',
-        'West',
-        'West'
     ][index]
+    // ,cinema_cluster: [
+    //     'Cluster A',
+    //     'Cluster A',
+    //     'Cluster B',
+    //     'Cluster B',
+    //     'Cluster C',
+    //     'Cluster C',
+    //     'Cluster D',
+    //     'Cluster D',
+    //     'Cluster E',
+    //     'Cluster E'
+    // ][index],
+    // region: [
+    //     'North',
+    //     'North',
+    //     'Central',
+    //     'Central',
+    //     'East',
+    //     'East',
+    //     'South',
+    //     'South',
+    //     'West',
+    //     'West'
+    // ][index]
 }));
 
 export const _showtimes = [...Array(15)].map((_, index) => ({

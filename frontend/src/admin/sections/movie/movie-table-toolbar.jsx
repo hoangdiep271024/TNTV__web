@@ -55,7 +55,7 @@ export function MovieTableToolbar({ numSelected, filterName, onFilterName }) {
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton>
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>

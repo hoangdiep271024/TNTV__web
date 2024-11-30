@@ -3,6 +3,9 @@ import { useCallback, useState } from "react";
 
 import { Iconify } from '../../components/iconify'
 
+// edit button handle
+// delete button handle
+// click name to open movie details
 
 export function MovieTableRow({ row, selected, onSelectRow }) {
     const [openPopover, setOpenPopover] = useState(null);

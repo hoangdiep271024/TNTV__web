@@ -1,6 +1,6 @@
 import connection from "../../models/SQLConnection.js";
 
-// [GET] /admin/films
+// [GET] /admin/cinemas
 export const index = async (req, res) => {
     // SELECT * FROM cinemas;
 
@@ -20,12 +20,12 @@ export const index = async (req, res) => {
 
     // Phân trang
     let limitItems = 10;
-    if(req.query.limitItems) {
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -43,8 +43,8 @@ export const index = async (req, res) => {
         SELECT * FROM cinemas
         WHERE cinema_name LIKE ?
         ORDER BY ${sortKey} ${sortValue}
-        LIMIT :?
-        OFFSET :?`;
+        LIMIT ?
+        OFFSET ?`;
 
     const cinemas = await new Promise((resolve, reject) => {
         connection.query(query, [keyword, limitItems, skip], (err, results) => {
@@ -52,7 +52,7 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(cinemas);
 };
 
@@ -72,7 +72,7 @@ export const detail = async (req, res) => {
         });
         cinemaInfo.cinema = cinema;
 
-        if(cinema.length > 0) {
+        if (cinema.length > 0) {
             const queryCluster = `Select cc.cluster_id,cc.cluster_name
                                 from cinema_clusters as cc
                                 inner join cinemas as c on cc.cluster_id = c.cluster_id
@@ -113,13 +113,13 @@ export const detail = async (req, res) => {
 
 // [POST] /admin/cinemas/create
 export const create = async (req, res) => {
-    const { cinema_name, cluster_name, region_name, address } =  req.body;
+    const { cinema_name, cluster_name, region_name, address } = req.body;
 
     const countResult = await connection.promise().query(
         `SELECT COUNT(*) as count FROM cinemas`,
     );
     const totalCinemas = countResult[0][0].count;
-    const cinemaId =  totalCinemas + 1;
+    const cinemaId = totalCinemas + 1;
 
     // Truy vấn cluster_id từ cluster_name
     const queryCluster = `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = ?`;
@@ -180,7 +180,7 @@ export const edit = async (req, res) => {
         });
         cinemaInfo.cinema = cinema;
 
-        if(cinema.length > 0) {
+        if (cinema.length > 0) {
             const queryCluster = `Select cc.cluster_id,cc.cluster_name
                                 from cinema_clusters as cc
                                 inner join cinemas as c on cc.cluster_id = c.cluster_id
@@ -205,7 +205,7 @@ export const edit = async (req, res) => {
 
             const [clusters] = await connection.promise().query(`SELECT * FROM cinema_clusters`);
             const [regions] = await connection.promise().query(`SELECT * FROM regions`);
-            
+
             res.json({
                 cinemaInfo: cinemaInfo,
                 clustersToChoose: clusters,
@@ -232,8 +232,8 @@ export const edit = async (req, res) => {
 export const editPatch = async (req, res) => {
     try {
         const cinemaId = parseInt(req.params.cinemaId);
-  
-        const { cinema_name, cluster_name, region_name, address } =  req.body;
+
+        const { cinema_name, cluster_name, region_name, address } = req.body;
 
         // Truy vấn cluster_id từ cluster_name
         const queryCluster = `SELECT cluster_id FROM cinema_clusters WHERE cluster_name = ?`;
@@ -255,12 +255,12 @@ export const editPatch = async (req, res) => {
         });
         const regionId = regionInfo[0].region_id;
 
-        const queryUpdateCinema = 
+        const queryUpdateCinema =
             `UPDATE cinemas
             SET cinema_name = ?, cluster_id = ?, region_id = ?, address = ?
             WHERE cinema_id = ?`;
         await new Promise((resolve, reject) => {
-            connection.query(queryUpdateCinema, [cinema_name, clusterId,  regionId, address, cinemaId], (err, results) => {
+            connection.query(queryUpdateCinema, [cinema_name, clusterId, regionId, address, cinemaId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -281,7 +281,7 @@ export const editPatch = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const cinemaId = req.params.cinemaId;
-    
+
         const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id = ?`;
         await new Promise((resolve, reject) => {
             connection.query(queryDeleteCinema, [cinemaId], (err, results) => {

@@ -13,12 +13,6 @@ import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
 import { useTable } from "../use-table";
 
-/**
- * UserView Component
- * @returns A component that displays a list of users with options for filtering, 
- * sorting, and pagination. This list allows users to be selected, filtered by name, 
- * and displayed across multiple pages with adjustable rows per page
- */
 
 export function UserView() {
     // Custom hook to handle table state and functions (pagination, selection, sorting)

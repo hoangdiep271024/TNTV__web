@@ -7,6 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { Iconify } from '../../components/iconify';
 
+// delete all selected button handler
 export function OrderTableToolbar({ numSelected, filterName, onFilterName }) {
     return (
         <Toolbar
@@ -30,7 +31,7 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName }) {
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Tìm kiếm người dùng..."
+                    placeholder="Tìm kiếm đơn hàng..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
@@ -41,7 +42,7 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName }) {
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton>
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
