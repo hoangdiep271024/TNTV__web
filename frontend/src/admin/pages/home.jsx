@@ -1,10 +1,8 @@
 import { Helmet } from 'react-helmet-async';
-
 import { DashboardContent } from '../layouts/dashboard';
 import { Box, Typography, Button } from '@mui/material';
 
 // ----------------------------------------------------------------------
-
 export default function HomePage() {
     return (
         <>

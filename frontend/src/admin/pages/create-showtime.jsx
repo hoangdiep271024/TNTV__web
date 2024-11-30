@@ -1,9 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-
 import { CreateShowtimeView } from '../sections/showtime/view';
 
 // ----------------------------------------------------------------------
-
 export default function CreateShowtimePage() {
     return (
         <>

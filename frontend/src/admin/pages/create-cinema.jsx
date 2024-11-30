@@ -1,9 +1,7 @@
 import { Helmet } from 'react-helmet-async';
-
 import { CreateCinemaView } from '../sections/cinema/view';
 
 // ----------------------------------------------------------------------
-
 export default function CreateCinemaPage() {
     return (
         <>

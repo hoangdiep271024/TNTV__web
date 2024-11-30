@@ -4,11 +4,10 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-
 import { Iconify } from '../../components/iconify';
 
-// delete all selected handler (and change filter on the filterlist)
-export function CinemaTableToolbar({ numSelected, filterName, onFilterName, onDeleteSelected }) {
+// delete all selected button handler <=> onDeleteSelected
+export function RoomTableToolbar({ numSelected, filterName, onFilterName }) {
     return (
         <Toolbar
             sx={{
@@ -31,7 +30,7 @@ export function CinemaTableToolbar({ numSelected, filterName, onFilterName, onDe
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Tìm kiếm rạp chiếu phim..."
+                    placeholder="Tìm kiếm phòng chiếu..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
@@ -43,7 +42,7 @@ export function CinemaTableToolbar({ numSelected, filterName, onFilterName, onDe
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton onClick={onDeleteSelected}>
+                    <IconButton>
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

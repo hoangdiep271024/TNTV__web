@@ -1,6 +1,5 @@
 import { Helmet } from 'react-helmet-async';
-
-import { RoomView } from '../sections/room/room-view';
+import { RoomView } from '../sections/room/view/room-view';
 
 // ----------------------------------------------------------------------
 

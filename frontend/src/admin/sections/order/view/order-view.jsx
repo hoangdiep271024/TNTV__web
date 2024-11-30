@@ -94,6 +94,7 @@ export function OrderView() {
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}
                     onRowsPerPageChange={table.onChangeRowsPerPage}
+                    labelRowsPerPage="Số dòng mỗi trang:"
                 />
             </Card>
         </DashboardContent>

@@ -36,7 +36,7 @@ export function MovieView() {
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="success"
+                    color="success.main"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm phim
@@ -107,6 +107,7 @@ export function MovieView() {
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}
                     onRowsPerPageChange={table.onChangeRowsPerPage}
+                    labelRowsPerPage="Số dòng mỗi trang:"
                 />
             </Card>
         </DashboardContent>

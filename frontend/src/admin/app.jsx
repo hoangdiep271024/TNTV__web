@@ -24,11 +24,14 @@ const OrderPage = lazy(() => import('./pages/order'));
 const RoomPage = lazy(() => import('./pages/room'));
 
 const EditUserPage = lazy(() => import('./pages/edit-user'));
-const OrderDetailsPage = lazy(() => import('./pages/order-details'))
-const CreateMoviePage = lazy(() => import('./pages/create-movie'))
-const EditMoviePage = lazy(() => import('./pages/edit-movie'))
-const CreateCinemaPage = lazy(() => import('./pages/create-cinema'))
-const EditCinemaPage = lazy(() => import('./pages/edit-cinema'))
+const OrderDetailsPage = lazy(() => import('./pages/order-details'));
+const CreateMoviePage = lazy(() => import('./pages/create-movie'));
+const EditMoviePage = lazy(() => import('./pages/edit-movie'));
+const CreateCinemaPage = lazy(() => import('./pages/create-cinema'));
+const EditCinemaPage = lazy(() => import('./pages/edit-cinema'));
+const CreateShowtimePage = lazy(() => import('./pages/create-showtime'));
+const EditShowtimePage = lazy(() => import('./pages/edit-showtime'))
+
 
 const renderFallback = (
     <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
@@ -91,6 +94,13 @@ export default function App() {
                         <Route path='showtime' element={<ShowtimePage />} />
                         <Route path='room' element={<RoomPage />} />
                         <Route path='order' element={<OrderPage />} />
+                        <Route path='movie/create' element={<CreateMoviePage />} />
+                        <Route path='movie/:id' element={<EditMoviePage />} />
+                        <Route path='cinema/create' element={<CreateCinemaPage />} />
+                        <Route path='cinema/:id' element={<EditCinemaPage />} />
+                        <Route path='showtime/create' element={<CreateShowtimePage />} />
+                        <Route path='showtime/:id' element={<EditShowtimePage />} />
+                        <Route path='order/:id' element={<OrderDetailsPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

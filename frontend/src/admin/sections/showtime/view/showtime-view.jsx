@@ -33,7 +33,7 @@ export function ShowtimeView() {
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="info"
+                    color="success.main"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm suất chiếu phim
@@ -100,6 +100,7 @@ export function ShowtimeView() {
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}
                     onRowsPerPageChange={table.onChangeRowsPerPage}
+                    labelRowsPerPage="Số dòng mỗi trang:"
                 />
             </Card>
         </DashboardContent>

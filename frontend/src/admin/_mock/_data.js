@@ -226,7 +226,6 @@ export const _rooms = [...Array(15)].map((_, index) => ({
     ][index % 10]
 }));
 
-
 export const _orders = [...Array(15)].map((_, index) => ({
     order_id: `order_id-${index + 1}`,
     movie_name: [

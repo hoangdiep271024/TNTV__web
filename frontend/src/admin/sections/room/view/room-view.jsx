@@ -1,27 +1,24 @@
 import { useState } from "react";
 import { hook } from "../hook";
+import { _rooms } from "../../../_mock";
 import { applyFilter, getComparator } from "../../utils";
-import { _cinemas } from "../../../_mock";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Box, Button, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
+import { Box, Button, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
 import { Iconify } from "../../../components/iconify";
-import { CinemaTableToolbar } from "../cinema-table-toolbar";
+import { RoomTableToolbar } from "../room-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
-import { CinemaTableHead } from "../cinema-table-head";
-import { TableNoData } from "../../table-no-data";
-import { CinemaTableRow } from "../cinema-table-row";
+import { RoomTableHead } from "../room-table-head";
+import { RoomTableRow } from "../room-table-row";
 
-// add-cinema button to move to create-cinema page
-// click cinema name to open edit-cinema page
-export function CinemaView() {
+export function RoomView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
 
     const dataFiltered = applyFilter({
-        inputData: _cinemas,
+        inputData: _rooms,
         comparator: getComparator(table.order, table.orderBy),
         filterName
-    });
+    })
 
     const notFound = !dataFiltered.length && filterName;
 
@@ -29,20 +26,12 @@ export function CinemaView() {
         <DashboardContent>
             <Box display='flex' alignItems="center" mb={5}>
                 <Typography variant="h2">
-                    Quản lý rạp chiếu phim
+                    Quản lý phòng chiếu phim
                 </Typography>
-                <Box flexGrow={1} />
-                <Button
-                    variant="contained"
-                    color="success.main"
-                    startIcon={<Iconify icon="mingcute:add-line" />}
-                >
-                    Thêm rạp chiếu phim
-                </Button>
             </Box>
 
             <Card>
-                <CinemaTableToolbar
+                <RoomTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
                     onFilterName={(event) => {
@@ -54,18 +43,18 @@ export function CinemaView() {
                 <Scrollbar>
                     <TableContainer sx={{ overflow: 'unset' }}>
                         <Table sx={{ minWidth: 800 }}>
-                            <CinemaTableHead
+                            <RoomTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={_cinemas.length}
+                                rowCount={_rooms.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, _cinemas.map((cinema) => cinema.id))
+                                    table.onSelectAllRows(checked, _rooms.map((room) => room.id))
                                 }}
                                 headLabel={[
-                                    { id: 'name', label: 'Tên rạp chiếu phim' },
-                                    { id: 'address', label: 'Địa chỉ' },
+                                    { id: 'room_name', label: 'Tên phòng chiếu phim' },
+                                    { id: 'cinema_name', label: 'Tên rạp chiếu phim' },
                                     { id: '' }
                                 ]}
                             />
@@ -75,7 +64,7 @@ export function CinemaView() {
                                     table.page * table.rowsPerPage,
                                     table.page * table.rowsPerPage + table.rowsPerPage
                                 ).map((row) => (
-                                    <CinemaTableRow
+                                    <RoomTableRow
                                         key={row.id}
                                         row={row}
                                         selected={table.selected.includes(row.id)}
@@ -92,7 +81,7 @@ export function CinemaView() {
                 <TablePagination
                     component="div"
                     page={table.page}
-                    count={_cinemas.length}
+                    count={_rooms.length}
                     rowsPerPage={table.rowsPerPage}
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}
@@ -101,5 +90,6 @@ export function CinemaView() {
                 />
             </Card>
         </DashboardContent>
-    );
+    )
+
 }
