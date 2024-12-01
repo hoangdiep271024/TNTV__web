@@ -8,7 +8,7 @@ export const filmShowing = async (req, res) => {
     try {
         const results = await connection.promise().query('SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate FROM films f inner join film_evaluate fe on  fe .film_id = f.film_id WHERE film_type = 1 or film_type = 2');
         return res.json(results);
-        
+
     } catch (error) {
         console.error('Lỗi:', error.message);
         res.status(500).json({ error: error.message }); // Xử lý lỗi
@@ -255,7 +255,6 @@ export const phim = async (req, res) => {
     FROM films
     INNER JOIN category_film ON category_film.film_id = films.film_id
     inner join film_evaluate on films.film_id = film_evaluate.film_id
-    WHERE 1=1 
     `;
     let params = [];
 
@@ -284,38 +283,38 @@ export const phim = async (req, res) => {
 }
 
 
-export const filmSearchByName = async(req,res) =>{
-     // Lấy từ khóa tìm kiếm từ query string
-  const searchQuery = req.body.q;
-  
-  if (!searchQuery) {
-    return res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
-  }
-  const query = `
-    SELECT film_type, film_id, film_name, film_img, film_trailer, Release_date, 
-           film_describe, age_limit, duration, country
-    FROM films
-    WHERE film_name LIKE ?
+export const filmSearchByName = async (req, res) => {
+    // Lấy từ khóa tìm kiếm từ query string
+    const searchQuery = req.body.q;
+
+    if (!searchQuery) {
+        return res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
+    }
+    const query = `
+    SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate 
+    FROM films f 
+    inner join film_evaluate fe on  fe .film_id = f.film_id 
+    WHERE film.film_name like ?
   `;
 
-  // Thực hiện truy vấn
-  connection.query(query, [`%${searchQuery}%`], (err, results) => {
-    if (err) {
-      return res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu.' });
-    }
+    // Thực hiện truy vấn
+    connection.query(query, [`%${searchQuery}%`], (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Lỗi khi truy vấn cơ sở dữ liệu.' });
+        }
 
-    // Phân loại kết quả theo film_type
-    const filmsByType = results.reduce((acc, film) => {
-      if (!acc[film.film_type]) {
-        acc[film.film_type] = [];
-      }
-      acc[film.film_type].push(film);
-      return acc;
-    }, {});
+        // Phân loại kết quả theo film_type
+        const filmsByType = results.reduce((acc, film) => {
+            if (!acc[film.film_type]) {
+                acc[film.film_type] = [];
+            }
+            acc[film.film_type].push(film);
+            return acc;
+        }, {});
 
-    // Trả về kết quả
-    res.json(filmsByType);
-  });
+        // Trả về kết quả
+        res.json(filmsByType);
+    });
 }
 
 
@@ -343,7 +342,7 @@ export const filmType = async (req, res) => {
 
     connection.query(query, [category_id], (error, results) => {
         if (error) {
-            console.error('Database error:', error); 
+            console.error('Database error:', error);
             return res.status(500).json({ message: 'Database error', error });
         }
         if (results.length === 0) {
