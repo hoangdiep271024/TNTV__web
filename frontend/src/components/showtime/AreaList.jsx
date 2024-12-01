@@ -120,10 +120,10 @@ export default function AreaList() {
   }
   return (
     <Box
-      sx={{ display: "flex", gap: '30px', justifyContent: "center", alignItems: "start", marginTop: "17vh" }}
+      sx={{ display: "flex", gap: '30px', justifyContent: "center", alignItems: "start" }}
     >
       <Box >
-        <div
+        {areas && <div
           style={{
             color: "white",
             width: "300px",
@@ -141,7 +141,7 @@ export default function AreaList() {
           }}
         >
           Khu vực
-        </div>
+        </div>}
         {areas &&
           areas.map((area, key) => {
             return (

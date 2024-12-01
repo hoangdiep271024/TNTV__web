@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem } from "@mui/material";
+import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert } from "@mui/material";
 
 export function EditUserView({ userId }) {
 
@@ -14,7 +14,7 @@ export function EditUserView({ userId }) {
     });
 
     const roleOptions = ["user", "admin"];
-    const statusOptions = ["active", "banned"];
+    const statusOptions = ["active", "inactive"];
 
     //     // Fetch user data based on userId
     //     useEffect(() => {
@@ -54,6 +54,12 @@ export function EditUserView({ userId }) {
         console.log("Form data submitted:", formData);
     }
 
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleSnackbarClose = () => {
+        setSnackbarOpen(false);
+    };
+
     const handleCancel = () => {
         setFormData({
             username: "",
@@ -64,14 +70,14 @@ export function EditUserView({ userId }) {
             status: "active",
         });
 
-        alert("Changes were not saved.");
+        setSnackbarOpen(true);
         window.location.reload();
     }
 
     return (
         <DashboardContent>
             <Card>
-                <CardHeader title="Edit User Details" />
+                <CardHeader title="Chỉnh sửa thông tin người dùng" />
                 <CardContent>
                     <form onSubmit={handleSubmit}>
                         <Grid container spacing={2}>
@@ -80,7 +86,7 @@ export function EditUserView({ userId }) {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Username"
+                                    label="Tên người dùng"
                                     name="username"
                                     value={formData.username}
                                     onChange={handleChange}
@@ -105,7 +111,7 @@ export function EditUserView({ userId }) {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Avatar URL"
+                                    label="Ảnh đại diện"
                                     name="avatar"
                                     value={formData.avatar}
                                     onChange={handleChange}
@@ -117,7 +123,7 @@ export function EditUserView({ userId }) {
                             <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
-                                    label="Phone Number"
+                                    label="Số điện thoại"
                                     name="phoneNumber"
                                     value={formData.phoneNumber}
                                     onChange={handleChange}
@@ -130,7 +136,7 @@ export function EditUserView({ userId }) {
                                 <TextField
                                     fullWidth
                                     select
-                                    label="Role"
+                                    label="Vai trò"
                                     name="role"
                                     value={formData.role}
                                     onChange={handleChange}
@@ -148,7 +154,7 @@ export function EditUserView({ userId }) {
                                 <TextField
                                     fullWidth
                                     select
-                                    label="Status"
+                                    label="Trạng thái"
                                     name="status"
                                     value={formData.status}
                                     onChange={handleChange}
@@ -165,17 +171,28 @@ export function EditUserView({ userId }) {
                         <Grid container spacing={2} mt={2}>
                             <Grid item>
                                 <Button type="submit" variant="contained" color="primary">
-                                    Save
+                                    Lưu
                                 </Button>
                             </Grid>
                             <Grid item>
                                 <Button variant="outlined" color="error" onClick={handleCancel}>
-                                    Cancel
+                                    Hủy bỏ
                                 </Button>
                             </Grid>
                         </Grid>
                     </form>
                 </CardContent>
+
+                <Snackbar
+                    open={snackbarOpen}
+                    autoHideDuration={3000}
+                    onClose={handleSnackbarClose}
+                    anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
+                >
+                    <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: "100%" }}>
+                        Các thay đổi chưa được lưu
+                    </Alert>
+                </Snackbar>
             </Card>
         </DashboardContent>
     )

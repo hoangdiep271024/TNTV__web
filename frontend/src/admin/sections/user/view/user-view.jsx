@@ -1,8 +1,8 @@
-import { useCallback, useState } from "react";
+import { useState } from "react";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
 import { _users } from '../../../_mock/_data'
 import { DashboardContent } from '../../../layouts/dashboard'
-import { Box, Button, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
+import { Box, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
 import { Iconify } from "../../../components/iconify";
 
 import { UserTableHead } from "../user-table-head";
@@ -13,12 +13,7 @@ import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
 import { useTable } from "../use-table";
 
-/**
- * UserView Component
- * @returns A component that displays a list of users with options for filtering, 
- * sorting, and pagination. This list allows users to be selected, filtered by name, 
- * and displayed across multiple pages with adjustable rows per page
- */
+
 export function UserView() {
     // Custom hook to handle table state and functions (pagination, selection, sorting)
     const table = useTable();
@@ -39,16 +34,9 @@ export function UserView() {
     return (
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={5}>
-                <Typography variant="h4" flexGrow={1}>
-                    Users
+                <Typography variant="h2" flexGrow={1}>
+                    Quản lý người dùng
                 </Typography>
-                {/* <Button
-                    variant="contained"
-                    color="inherit"
-                    startIcon={<Iconify icon="mingcute:add-line" />}
-                >
-                    New user
-                </Button> */}
             </Box>
 
             <Card>
@@ -74,11 +62,11 @@ export function UserView() {
                                     table.onSelectAllRows(checked, _users.map((user) => user.id))
                                 }
                                 headLabel={[
-                                    { id: 'name', label: 'Name' },
+                                    { id: 'name', label: 'Tên người dùng' },
                                     { id: 'email', label: 'Email' },
-                                    { id: 'phonenumber', label: 'Phone Number' },
-                                    { id: 'role', label: 'Role' },
-                                    { id: 'status', label: 'Status' },
+                                    { id: 'phonenumber', label: 'Số điện thoại' },
+                                    { id: 'role', label: 'Vai trò' },
+                                    { id: 'status', label: 'Trạng thái' },
                                     { id: '' },
                                 ]}
                             />
@@ -96,10 +84,10 @@ export function UserView() {
                                     />
                                 ))}
 
-                                <TableEmptyRows
+                                {/* <TableEmptyRows
                                     height={68}
                                     emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
-                                />
+                                /> */}
 
                                 {/* Message for no matching data based on filter */}
                                 {notFound && <TableNoData searchQuery={filterName} />}
@@ -117,6 +105,7 @@ export function UserView() {
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}
                     onRowsPerPageChange={table.onChangeRowsPerPage}
+                    labelRowsPerPage="Số dòng mỗi trang:"
                 />
             </Card>
         </DashboardContent>

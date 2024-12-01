@@ -34,16 +34,16 @@ export default function ChatBot({closeClick}) {
     <div className="chatbot-container">
         <div className="chatbot-box">
           <div className="chatbot-header">
-            <div style={{display: 'flex',gap: '10px',alignItems: 'center'}}>
+            <div style={{display: 'flex',gap: '10px',alignItems: 'center', height: 'auto', minHeight :'50px', paddingLeft: '10px'}}>
             <img src='/6098491.png' style={{
               width:'40px',
               height: '40px',
             }}></img>
-            <p>Trợ lí ảo Lilias</p>
+            <div>Trợ lí ảo Lilias</div>
             </div>
 
             
-            <CloseIcon style={{marginLeft: '22%', cursor: 'pointer'}} onClick={closeClick}></CloseIcon>
+            <CloseIcon style={{marginLeft: '22%', cursor: 'pointer', position: 'absolute', right: '10px'}} onClick={closeClick}></CloseIcon>
             </div>
           <div className="chatbot-messages">
             {messages.map((message, index) => (

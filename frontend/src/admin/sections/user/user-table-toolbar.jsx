@@ -25,14 +25,14 @@ export function UserTableToolbar({ numSelected, filterName, onFilterName }) {
         >
             {numSelected > 0 ? (
                 <Typography component="div" variant="subtitle1">
-                    {numSelected} selected
+                    {numSelected} đã chọn
                 </Typography>
             ) : (
                 <OutlinedInput
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Search user..."
+                    placeholder="Tìm kiếm người dùng..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
@@ -43,7 +43,7 @@ export function UserTableToolbar({ numSelected, filterName, onFilterName }) {
             )}
 
             {numSelected > 0 ? (
-                <Tooltip title="Delete">
+                <Tooltip title="Xóa">
                     <IconButton>
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>

@@ -15,6 +15,10 @@ import MyAccount from "./components/page/MyAccount";
 import Actor from "./components/page/Actor";
 import Director from "./components/page/Director";
 import Category from "./components/page/Category";
+import BuyTicket from "./components/page/BuyTicket";
+import New from "./components/page/New";
+import NewDetail from "./components/page/NewDetail";
+import Search from "./components/page/Search";
 function App() {
   return (
     <Router>
@@ -35,6 +39,11 @@ function App() {
         <Route path="/dien_vien/:actor_name" element={<Actor/>}/>
         <Route path="/dao_dien/:diretor_name" element={<Director/>}/>
         <Route path="/the_loai/:category_name" element={<Category/>}/>
+        <Route path="/mua_ve" element={<BuyTicket/>}/>
+        <Route path="/tin_tuc" element={<New/>}/>
+        <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
+        <Route path="/tim_kiem/:searchQuery" element={<Search/>}/>
+
       </Routes>
     </Router>);
 

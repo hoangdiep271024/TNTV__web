@@ -1,4 +1,4 @@
-import { Avatar, Box, Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow } from "@mui/material";
+import { Avatar, Box, Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 
 import { Label } from '../../components/label';
@@ -32,18 +32,32 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                 <TableCell component="th" scope="row">
                     <Box gap={2} display="flex" alignItems="center">
                         <Avatar alt={row.name} src={row.avatarUrl} />
-                        {row.name}
+                        <Typography variant="subtitle1" fontWeight="bold">
+                            {row.name}
+                        </Typography>
                     </Box>
                 </TableCell>
 
-                <TableCell>{row.email}</TableCell>
-
-                <TableCell>{row.phonenumber}</TableCell>
-
-                <TableCell>{row.role}</TableCell>
+                <TableCell>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        {row.email}
+                    </Typography>
+                </TableCell>
 
                 <TableCell>
-                    <Label color={(row.status === "banned" && 'error') || 'success'}>{row.status}</Label>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        {row.phonenumber}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Typography variant="body2" sx={{ color: 'text.primary' }} noWrap>
+                        {row.role}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Label color={(row.status === "inactive" && 'error') || 'success'}>{row.status}</Label>
                 </TableCell>
 
                 <TableCell align="right">
@@ -77,11 +91,11 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                     >
                         <MenuItem onClick={handleEdit}>
                             <Iconify icon="solar:pen-bold" />
-                            Edit
+                            Chỉnh sửa
                         </MenuItem>
                         <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
                             <Iconify icon="solar:trash-bin-trash-bold" />
-                            Delete
+                            Xóa
                         </MenuItem>
                     </MenuList>
                 </Popover>

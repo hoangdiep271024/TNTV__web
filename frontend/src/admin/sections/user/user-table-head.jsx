@@ -1,6 +1,3 @@
-import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
-import { visuallyHidden } from "../utils";
-
 /**
  * UserTableHead Component
  * 
@@ -17,6 +14,10 @@ import { visuallyHidden } from "../utils";
  * 
  * @returns {JSX.Element} The rendered table header, including the "Select All" checkbox and sortable column headers.
  */
+
+import { Box, Checkbox, TableCell, TableHead, TableRow, TableSortLabel } from "@mui/material";
+import { visuallyHidden } from "../utils";
+
 export function UserTableHead({
     numSelected,
     rowCount,

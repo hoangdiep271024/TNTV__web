@@ -18,5 +18,12 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     setupFiles: "./src/admin/testSetup.js"
-  }
+  },
+  // server: {
+  //   fs: {
+  //     // Ensure admin.html is accessible in dev mode
+  //     allow: ['.'],
+  //   },
+  //   middlewareMode: false, // Ensure Vite handles requests directly
+  // }
 })

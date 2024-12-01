@@ -44,7 +44,7 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
 
     try {
       const response = await fetch('/api/login', {
-        method: 'POST',
+        method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
         },

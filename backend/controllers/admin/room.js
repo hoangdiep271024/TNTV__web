@@ -20,12 +20,12 @@ export const index = async (req, res) => {
 
     // Phân trang
     let limitItems = 5;
-    if(req.query.limitItems) {
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -39,9 +39,11 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const query = 
-        `SELECT * FROM rooms
-        WHERE room_name LIKE ? 
+    const query = `
+        SELECT rooms.*, cinemas.cinema_name
+        FROM rooms
+        LEFT JOIN cinemas ON rooms.cinema_id = cinemas.cinema_id
+        WHERE rooms.room_name LIKE ? 
         ORDER BY ${sortKey} ${sortValue}
         LIMIT ?
         OFFSET ?`;
@@ -52,7 +54,7 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(rooms);
 };
 
@@ -62,7 +64,7 @@ export const detail = async (req, res) => {
         const roomId = parseInt(req.params.roomId);
 
         const roomInfo = {};
-    
+
         const queryRoom = `Select * from rooms where rooms.room_id = ?`;
         const room = await new Promise((resolve, reject) => {
             connection.query(queryRoom, [roomId], (err, results) => {
@@ -71,8 +73,8 @@ export const detail = async (req, res) => {
             });
         });
         roomInfo.room = room;
-        
-        if(room.length > 0) {
+
+        if (room.length > 0) {
             const queryCinema = `Select c.cinema_id, c.cinema_name, c.address
                             from cinemas as c
                             inner join rooms as r on c.cinema_id = r.cinema_id
@@ -83,7 +85,7 @@ export const detail = async (req, res) => {
                     resolve(results);
                 });
             });
-            
+
             res.json(roomInfo);
         }
         else {
@@ -103,16 +105,16 @@ export const detail = async (req, res) => {
 
 // [POST] /admin/rooms/create
 export const create = async (req, res) => {
-    const { room_name, cinema_name } =  req.body;
+    const { room_name, cinema_name } = req.body;
 
     const countResult = await connection.promise().query(
         `SELECT COUNT(*) as count FROM rooms`,
     );
     const totalRooms = countResult[0][0].count;
-    const roomId =  totalRooms + 1;
+    const roomId = totalRooms + 1;
 
     // Truy vấn cinema_id từ cinema_name
-    const  queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
+    const queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
     const cinemaInfo = await new Promise((resolve, reject) => {
         connection.query(queryCinema, [cinema_name], (err, results) => {
             if (err) return reject(err);
@@ -150,7 +152,7 @@ export const edit = async (req, res) => {
         const roomId = req.params.roomId;
 
         const roomInfo = {};
-    
+
         const queryRoom = `Select * from rooms where rooms.room_id = ?`;
         const room = await new Promise((resolve, reject) => {
             connection.query(queryRoom, [roomId], (err, results) => {
@@ -160,7 +162,7 @@ export const edit = async (req, res) => {
         });
         roomInfo.room = room;
 
-        if(room.length > 0) {
+        if (room.length > 0) {
             const queryCinema = `Select c.cinema_id, c.cinema_name, c.address
                                 from cinemas as c
                                 inner join rooms as r on c.cinema_id = r.cinema_id
@@ -199,11 +201,11 @@ export const edit = async (req, res) => {
 export const editPatch = async (req, res) => {
     try {
         const roomId = parseInt(req.params.roomId);
-  
-        const { room_name, cinema_name } =  req.body;
+
+        const { room_name, cinema_name } = req.body;
 
         // Truy vấn cinema_id từ cinema_name
-        const  queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
+        const queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
         const cinemaInfo = await new Promise((resolve, reject) => {
             connection.query(queryCinema, [cinema_name], (err, results) => {
                 if (err) return reject(err);

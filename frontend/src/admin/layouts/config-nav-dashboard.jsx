@@ -22,17 +22,17 @@ const CinemaIcon = TheatersTwoToneIcon;
 
 export const navData = [
     {
-        title: 'Dashboard',
+        title: 'Tổng quan',
         path: '/admin',
         icon: <DashboardIcon />,
     },
     {
-        title: 'Movie',
+        title: 'Quản lý phim',
         path: '/admin/movie',
         icon: <MovieIcon />,
     },
     {
-        title: 'Cinema',
+        title: 'Quản lý rạp chiếu',
         path: '/admin/cinema',
         icon: <CinemaIcon />,
     },
@@ -42,28 +42,29 @@ export const navData = [
     //     icon: <ScheduleIcon />,
     // },
     {
-        title: 'Showtime',
+        title: 'Quản lý suất chiếu',
         path: '/admin/showtime',
         icon: <ShowtimeIcon />,
     },
     {
-        title: 'Room',
+        title: 'Quản lý phòng chiếu',
         path: '/admin/room',
         icon: <RoomIcon />,
     },
     {
-        title: 'Order',
+        title: 'Quản lý đơn hàng',
         path: '/admin/order',
         icon: <OrderIcon />,
     },
     {
-        title: 'User',
+        title: 'Quản lý người dùng',
         path: '/admin/user',
         icon: <UserIcon />,
     },
     {
-        title: 'Sign-out',
-        path: '/admin/sign-in',
+        // đăng xuất ra khỏi màn hình quản trị viên, quay về màn hình web chính
+        title: 'Đăng xuất',
+        path: '/admin/sign-out',
         icon: <ExitIcon />,
     }
 ];
