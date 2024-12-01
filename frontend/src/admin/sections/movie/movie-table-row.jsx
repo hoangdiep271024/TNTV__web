@@ -1,4 +1,4 @@
-import { Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
+import { Checkbox, Chip, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 
 import { Iconify } from '../../components/iconify'
@@ -38,13 +38,32 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="bold">
+                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
                         {row.name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography
+                    <Tooltip title={row.description} placement="top" arrow>
+                        <Typography
+                            sx={{
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                color: isDescriptionExpanded ? 'primary.main' : 'text.secondary',
+                                display: 'inline-block',
+                                maxWidth: isDescriptionExpanded ? 'none' : 200,
+                                whiteSpace: isDescriptionExpanded ? 'normal' : 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}
+                            onClick={toggleDescription}
+                        >
+                            {isDescriptionExpanded
+                                ? row.description
+                                : truncateText(row.description, 20)}
+                        </Typography>
+                    </Tooltip>
+                    {/* <Typography
                         sx={{
                             cursor: 'pointer',
                             textDecoration: 'underline',
@@ -52,19 +71,45 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                         onClick={toggleDescription}
                     >
                         {isDescriptionExpanded ? row.description : truncateText(row.description, 20)}
+                    </Typography> */}
+                </TableCell>
+
+                <TableCell>
+                    <Chip
+                        label={row.film_type}
+                        color={row.film_type === 'Feature' ? 'primary' : 'secondary'}
+                        size="small"
+                        sx={{ fontWeight: 'bold' }}
+                    />
+                </TableCell>
+
+                <TableCell>
+                    <Typography
+                        variant="body2"
+                        sx={{
+                            fontWeight: 'medium',
+                            textAlign: 'center',
+                            color: row.age_limit >= 18 ? 'error.main' : 'text.primary',
+                        }}
+                    >
+                        {row.age_limit}+
                     </Typography>
                 </TableCell>
 
-                <TableCell>{row.film_type}</TableCell>
+                <TableCell>
+                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                        {row.duration} phút
+                    </Typography>
+                </TableCell>
 
-                <TableCell>{row.age_limit}</TableCell>
-
-                <TableCell>{row.duration}</TableCell>
-
-                <TableCell>{row.release_date}</TableCell>
+                <TableCell>
+                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                        {new Date(row.release_date).toLocaleDateString()}
+                    </Typography>
+                </TableCell>
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover}>
+                    <IconButton onClick={handleOpenPopover} size="small">
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>

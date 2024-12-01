@@ -58,8 +58,8 @@ export function OrderView() {
                                 headLabel={[
                                     { id: 'order_id', label: 'Mã đơn hàng' },
                                     { id: 'movie_name', label: 'Tên phim' },
-                                    { id: 'cinema_name', label: 'Tên rạp chiếu phim' },
-                                    { id: 'room_name', label: 'Tên phòng chiếu phim' },
+                                    { id: 'cinema_name', label: 'Tên rạp chiếu' },
+                                    { id: 'room_name', label: 'Tên phòng chiếu' },
                                     { id: 'show_date', label: 'Ngày chiếu' },
                                     { id: 'total_price', label: 'Giá trị đơn hàng' },
                                     { id: 'order_date', label: 'Ngày đặt hàng' },

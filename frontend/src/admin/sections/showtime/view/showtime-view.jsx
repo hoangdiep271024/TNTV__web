@@ -33,10 +33,10 @@ export function ShowtimeView() {
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="success.main"
+                    color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
-                    Thêm suất chiếu phim
+                    Thêm suất chiếu
                 </Button>
             </Box>
 
@@ -65,8 +65,8 @@ export function ShowtimeView() {
                                 headLabel={[
                                     { id: 'id', label: 'ID suất chiếu' },
                                     { id: 'movie_name', label: 'Tên phim' },
-                                    { id: 'cinema_name', label: 'Tên rạp chiếu phim' },
-                                    { id: 'room_name', label: 'Tên phòng chiếu phim' },
+                                    { id: 'cinema_name', label: 'Tên rạp chiếu' },
+                                    { id: 'room_name', label: 'Tên phòng chiếu' },
                                     { id: 'date', label: 'Ngày chiếu' },
                                     { id: 'showtime', label: 'Giờ chiếu' },
                                     { id: '' }

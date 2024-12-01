@@ -40,7 +40,9 @@ export const index = async (req, res) => {
     // Hết Sắp xếp theo tiêu chí
 
     const query = `
-        SELECT * FROM cinemas
+        SELECT cinemas.*, cinema_clusters.cluster_name
+        FROM cinemas
+        JOIN cinema_clusters ON cinemas.cluster_id = cinema_clusters.cluster_id
         WHERE cinema_name LIKE ?
         ORDER BY ${sortKey} ${sortValue}
         LIMIT ?

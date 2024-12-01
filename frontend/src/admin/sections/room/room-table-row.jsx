@@ -25,15 +25,20 @@ export function RoomTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="bold">
+                    <Typography variant="subtitle1" fontWeight="bold" sx={{ color: 'text.primary' }} noWrap>
                         {row.room_name}
                     </Typography>
                 </TableCell>
 
-                <TableCell>{row.cinema_name}</TableCell>
+                <TableCell>
+                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                        {row.cinema_name}
+                    </Typography>
+                </TableCell>
+
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover}>
+                    <IconButton onClick={handleOpenPopover} size="small">
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>

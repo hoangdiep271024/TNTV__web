@@ -53,8 +53,8 @@ export function RoomView() {
                                     table.onSelectAllRows(checked, _rooms.map((room) => room.id))
                                 }}
                                 headLabel={[
-                                    { id: 'room_name', label: 'Tên phòng chiếu phim' },
-                                    { id: 'cinema_name', label: 'Tên rạp chiếu phim' },
+                                    { id: 'room_name', label: 'Tên phòng chiếu' },
+                                    { id: 'cinema_name', label: 'Tên rạp chiếu' },
                                     { id: '' }
                                 ]}
                             />

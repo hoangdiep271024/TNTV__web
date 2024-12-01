@@ -34,10 +34,10 @@ export function CinemaView() {
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="success.main"
+                    color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
-                    Thêm rạp chiếu phim
+                    Thêm rạp chiếu
                 </Button>
             </Box>
 
@@ -64,8 +64,9 @@ export function CinemaView() {
                                     table.onSelectAllRows(checked, _cinemas.map((cinema) => cinema.id))
                                 }}
                                 headLabel={[
-                                    { id: 'name', label: 'Tên rạp chiếu phim' },
+                                    { id: 'name', label: 'Tên rạp chiếu' },
                                     { id: 'address', label: 'Địa chỉ' },
+                                    { id: 'cluster', label: 'Cụm rạp' },
                                     { id: '' }
                                 ]}
                             />

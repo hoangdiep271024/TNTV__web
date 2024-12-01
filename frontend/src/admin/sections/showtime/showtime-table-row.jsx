@@ -25,19 +25,43 @@ export function ShowtimeTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="bold">
+                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
                         {row.id}
                     </Typography>
                 </TableCell>
 
-                <TableCell>{row.movie_name}</TableCell>
-                <TableCell>{row.cinema_name}</TableCell>
-                <TableCell>{row.room_name}</TableCell>
-                <TableCell>{row.date}</TableCell>
-                <TableCell>{row.showtime}</TableCell>
+                <TableCell>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.primary' }} noWrap>
+                        {row.movie_name}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.secondary' }} noWrap>
+                        {row.cinema_name}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.secondary' }} noWrap>
+                        {row.room_name}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                        {new Date(row.date).toLocaleDateString()}
+                    </Typography>
+                </TableCell>
+
+                <TableCell>
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                        {row.showtime}
+                    </Typography>
+                </TableCell>
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover}>
+                    <IconButton onClick={handleOpenPopover} size="small">
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>

@@ -1,4 +1,4 @@
-import { Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
+import { Checkbox, Chip, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
 
@@ -37,13 +37,30 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="bold">
+                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
                         {row.name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography
+                    <Tooltip title={row.address} placement="top" arrow>
+                        <Typography
+                            sx={{
+                                cursor: 'pointer',
+                                textDecoration: 'underline',
+                                color: isAddressExpanded ? 'primary.main' : 'text.secondary',
+                                display: 'inline-block',
+                                maxWidth: isAddressExpanded ? 'none' : 200,
+                                whiteSpace: isAddressExpanded ? 'normal' : 'nowrap',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                            }}
+                            onClick={toggleAddress}
+                        >
+                            {row.address}
+                        </Typography>
+                    </Tooltip>
+                    {/* <Typography
                         sx={{
                             cursor: 'pointer',
                             textDecoration: 'underline',
@@ -51,11 +68,20 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                         onClick={toggleAddress}
                     >
                         {isAddressExpanded ? row.address : truncateText(row.address, 20)}
-                    </Typography>
+                    </Typography> */}
+                </TableCell>
+
+                <TableCell>
+                    <Chip
+                        label={row.cluster_name}
+                        color="primary"
+                        size="small"
+                        sx={{ fontWeight: 'bold' }}
+                    />
                 </TableCell>
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover}>
+                    <IconButton onClick={handleOpenPopover} size="small">
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>

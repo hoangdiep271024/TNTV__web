@@ -36,7 +36,7 @@ export function MovieView() {
                 <Box flexGrow={1} />
                 <Button
                     variant="contained"
-                    color="success.main"
+                    color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm phim
