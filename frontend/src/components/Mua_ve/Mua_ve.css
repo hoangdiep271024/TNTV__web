@@ -14,9 +14,10 @@ html,body {
     top: 190px;
     font-family: Arial, sans-serif;
     width: 100%;
-    height: 545px;
+    height: 645px;
     margin: auto;
-    padding: 20px;
+    padding-top: 40px;
+    padding-bottom: 80px;
 }
 .book-info{
     position: absolute;
@@ -27,7 +28,7 @@ html,body {
     width: 400px;
     padding: 15px 20px 0px 20px;
     font-size: small;
-    top: 100px;
+    top: 120px;
     background-color: white;
     color: black;
 }
@@ -35,7 +36,7 @@ html,body {
 .sum-price{
     position: absolute;
     left: 975px;
-    top: 300px;
+    top: 320px;
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -49,7 +50,7 @@ html,body {
 #back{
     position: absolute;
     left: 975px;
-    top: 410px;
+    top: 430px;
     margin: 15px;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -63,7 +64,7 @@ html,body {
 #tiep-tuc{
     position: absolute;
     left: 1075px;
-    top: 410px;
+    top: 430px;
     margin: 15px;
     outline: none;
     border-radius: 8px;
@@ -93,7 +94,7 @@ color: red;
     margin-top: 20px;
     grid-template-columns: repeat(1, 1fr);
     grid-template-rows: repeat(10, 1fr); /* Chia đều thành 10 hàng */
-    top: 100px;
+    top: 120px;
     color: black;
 }
 
@@ -117,7 +118,7 @@ color: red;
     grid-template-columns: repeat(12, 1fr); /* 8 ghế trong mỗi hàng */
     grid-template-rows: repeat(10, 1fr); /* Chia đều thành 10 hàng */
     margin-top: 20px;
-    top:100px
+    top:120px
 }
 
 .seat {
@@ -148,7 +149,7 @@ color: red;
     position: relative;
     top: 5px;
     width: 700px;
-    left: 250px;
+    left: 275px;
 }
 
 .ghe-info{
@@ -157,7 +158,7 @@ color: red;
     align-items: center; /* Căn giữa theo chiều dọc */
     position: relative;
     width: 700px;
-    left: 250px;
+    left: 275px;
     height: 50px;
 }
 .available {

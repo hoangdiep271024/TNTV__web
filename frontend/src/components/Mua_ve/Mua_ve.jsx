@@ -5,16 +5,16 @@ import "./Mua_ve.css";
 
 import { default as React } from 'react';
 
-const Mua_ve = ({ nextStep}) => {
-    
+const Mua_ve = ({ nextStep }) => {
 
-    const { seatTotalAmount, setSeatTotalAmount, popcornTotalAmount, selectedSeats, setSelectedSeats,seatData } = useBooking();
+
+    const { seatTotalAmount, setSeatTotalAmount, popcornTotalAmount, selectedSeats, setSelectedSeats, seatData } = useBooking();
     const handleSeatClick = (seat) => {
         if (seat.seat_status === 1 || (seat.reserved_until && new Date(seat.reserved_until) > new Date())) return;
-    
+
         const pairSeat = findPairSeat(seat);
         const isSelected = selectedSeats.some(selectedSeat => selectedSeat.seat_id === seat.seat_id);
-    
+
         let updatedSeats;
         if (isSelected) {
             updatedSeats = selectedSeats.filter(
@@ -29,13 +29,13 @@ const Mua_ve = ({ nextStep}) => {
                 ? [...selectedSeats, seatWithSeatName, { ...pairSeat, seat_name: "ghe_doi" }]
                 : [...selectedSeats, seatWithSeatName];
         }
-    
+
         setSelectedSeats(updatedSeats);
-    
+
         const newTotalPrice = updatedSeats.reduce((total, seat) => total + seat.price, 0);
         setSeatTotalAmount(newTotalPrice);
     };
-    
+
 
     // Hàm để tìm ghế đôi (ghế liền kề) trong hàng 'K' có seat_type = 2
     const findPairSeat = (seat) => {
@@ -64,16 +64,41 @@ const Mua_ve = ({ nextStep}) => {
 
             <div className="sum-price" style={{ marginBottom: '15px' }}>
                 <p style={{ fontSize: '15px', fontWeight: '800' }}>TỔNG ĐƠN HÀNG:</p>
-                <p style={{ fontSize: '15px' }}>{(seatTotalAmount+popcornTotalAmount).toLocaleString()}đ</p>
+                <p style={{ fontSize: '15px' }}>{(seatTotalAmount + popcornTotalAmount).toLocaleString()}đ</p>
             </div>
             <button id="back">
                 ←
             </button>
-            <button id="tiep-tuc" onClick={() => {
-                if (selectedSeats.length > 0) {
-                    nextStep();
-                }
-            }}>
+            <button
+                id="tiep-tuc"
+                onClick={async () => {
+                    if (selectedSeats.length > 0) {
+                        try {
+                            // Gửi request POST đến endpoint "/api/userInfo"
+                            const response = await fetch('/api/userInfo', {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                credentials: 'include', // Đảm bảo cookie được gửi cùng request
+                            });
+
+                            const data = await response.json();
+
+                            if (data.success === false) {
+                                // Hiển thị alert nếu success là false
+                                alert('Hãy đăng nhập để thực hiện thao tác này');
+                            } else {
+                                // Tiếp tục bước tiếp theo nếu user đã đăng nhập
+                                nextStep();
+                            }
+                        } catch (error) {
+                            console.error('Lỗi khi gửi request:', error);
+                            alert('Đã xảy ra lỗi, vui lòng thử lại sau!');
+                        }
+                    }
+                }}
+            >
                 Tiếp tục
             </button>
             <div className="ghe-info">
@@ -84,7 +109,7 @@ const Mua_ve = ({ nextStep}) => {
                 <div>Ghế bạn chọn</div>
                 <div id='đang được giữ' style={{ background: 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)', width: '25px', height: '25px', margin: '10px' }}></div>
                 <div>Đang được giữ</div>
-                <div id="da-ban" style={{ background: 'repeating-linear-gradient(0deg, hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .1) 10px, hsla(0, 0%, 0%, .1) 0, hsla(0, 0%, 60%, .6) 1px)',width: '25px', height: '25px', margin: '10px' }}></div>
+                <div id="da-ban" style={{ background: 'repeating-linear-gradient(0deg, hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .1) 10px, hsla(0, 0%, 0%, .1) 0, hsla(0, 0%, 60%, .6) 1px)', width: '25px', height: '25px', margin: '10px' }}></div>
                 <div>Đã bán</div>
             </div>
             <div className="man-hinh">MÀN HÌNH</div>
@@ -122,7 +147,7 @@ const Mua_ve = ({ nextStep}) => {
                                 background: isReserved
                                     ? 'repeating-linear-gradient(45deg, hsla(0, 0%, 60%, .4), hsla(0, 0%, 60%, .4) 10px, hsla(0, 0%, 60%, .6) 0, hsla(0, 0%, 60%, .6) 20px)'
                                     : seat.seat_status === 1 ? 'repeating-linear-gradient(0deg, hsla(0, 0%, 0%, .4), hsla(0, 0%, 0%, .1) 10px, hsla(0, 0%, 0%, .1) 0, hsla(0, 0%, 60%, .6) 1px)'
-                                    : 'none',
+                                        : 'none',
                                 backgroundColor: isSelected
                                     ? '#00b300'
                                     : seat.seat_type === 0

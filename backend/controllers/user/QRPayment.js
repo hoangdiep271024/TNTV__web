@@ -64,42 +64,17 @@ export const QRPayment = async (req, res) => {
         const decoded = verifyToken(token);
         const user_id = decoded.id;
 
-        // Thêm vào bảng orders
-        const [orderResult] = await connection.promise().query(
-            'INSERT INTO orders (user_id, showtime_id, order_date, total_price) VALUES (?, ?, NOW(), ?)',
-            [user_id, showtime_id, total_amount]
-        );
-
-        const order_id = orderResult.insertId;
-        console.log(order_id);
-
-        // Thêm vào bảng tickets
-        for (const seat of selectedSeats) {
-            await connection.promise().query(
-                'INSERT INTO tickets (order_id, seat_id, ticket_price) VALUES (?, ?, ?)',
-                [order_id, seat.seat_id, seat.price]
-            );
-        }
-
-        // Thêm vào bảng popcorn_orders
-        for (const [comboId, combo] of Object.entries(selectedCombos)) {
-            await connection.promise().query(
-                'INSERT INTO popcorn_orders (order_id, combo_id, combo_quantity) VALUES (?, ?, ?)',
-                [order_id, comboId, combo.quantity]
-            );
-        }
-
         // trả về link momopay
         const accessKey = 'F8BBA842ECF85';
         const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
         const partnerCode = 'MOMO';
-        const redirectUrl = `http://localhost:8888/thong_tin_ve?order_id=${order_id}`;
+        const redirectUrl = `http://localhost:8888/thong_tin_ve`;
         const ipnUrl = 'http://localhost:8888/api/payment/callback';
         const requestType = "payWithMethod";
         const amount = total_amount;
         const orderId = partnerCode + new Date().getTime();
         const requestId = orderId;
-        const extraData = '';
+        const extraData = JSON.stringify({ user_id, showtime_id, selectedSeats, selectedCombos });;
         const autoCapture = true;
         const lang = 'vi';
 
@@ -163,19 +138,51 @@ export const QRPayment = async (req, res) => {
 };
 
 
-// API trong backend (ví dụ sử dụng Express.js)
-export const QRPaymentUpdate = async (req, res) => {
-    const { orderId, resultCode, amount } = req.body;
+export const callback = async (req, res) => {
+    const { orderId, resultCode, extraData } = req.body;
+
     try {
-        // Xử lý logic cập nhật vào database
-        if (resultCode === '0') {
-            await updatePaymentStatus(orderId, 'PAID'); // Cập nhật trạng thái thành công
+        if (resultCode === 0) { // Thanh toán thành công
+            const { user_id, showtime_id, selectedSeats, selectedCombos } = JSON.parse(extraData);
+
+            // Thêm vào bảng orders
+            const [orderResult] = await connection.promise().query(
+                'INSERT INTO orders (user_id, showtime_id, order_date, total_price) VALUES (?, ?, NOW(), ?)',
+                [user_id, showtime_id, req.body.amount]
+            );
+
+            const order_id = orderResult.insertId;
+
+            // Thêm vào bảng tickets
+            for (const seat of selectedSeats) {
+                await connection.promise().query(
+                    'INSERT INTO tickets (order_id, seat_id, ticket_price) VALUES (?, ?, ?)',
+                    [order_id, seat.seat_id, seat.price]
+                );
+            }
+
+            // Cập nhật bảng seat_status
+            const seatIds = selectedSeats.map(seat => seat.seat_id); // Lấy danh sách seat_id
+            await connection.promise().query(
+                'UPDATE seats SET seat_status = 1 WHERE seat_id IN (?)',
+                [seatIds]
+            );
+
+            // Thêm vào bảng popcorn_orders
+            for (const [comboId, combo] of Object.entries(selectedCombos)) {
+                await connection.promise().query(
+                    'INSERT INTO popcorn_orders (order_id, combo_id, combo_quantity) VALUES (?, ?, ?)',
+                    [order_id, comboId, combo.quantity]
+                );
+            }
+
+            return res.status(200).json({ message: 'Payment successful and order created.' });
         } else {
-            await updatePaymentStatus(orderId, 'FAILED'); // Cập nhật trạng thái thất bại
+            console.log('Payment failed or canceled:', req.body);
+            return res.status(400).json({ message: 'Payment failed or canceled.' });
         }
-        res.status(200).json({ message: 'Cập nhật trạng thái thành công' });
     } catch (error) {
-        console.error('Lỗi khi cập nhật thanh toán:', error);
-        res.status(500).json({ message: 'Lỗi server' });
+        console.error('Error in callback:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
     }
 };

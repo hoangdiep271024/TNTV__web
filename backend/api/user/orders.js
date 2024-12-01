@@ -1,7 +1,7 @@
 import express from "express";
-import getOrders from "../../controllers/user/orders.js";
+import { getLastestOrder, getOrders } from "../../controllers/user/orders.js";
 
 const routerOrders = express.Router()
 routerOrders.post("/",getOrders)
-
+routerOrders.post("/getLastestOrder",getLastestOrder)
 export default routerOrders;

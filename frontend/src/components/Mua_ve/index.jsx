@@ -37,7 +37,6 @@ const BookingTicket = () => {
                     {step === 2 && <Thanh_toan/>}
                 </div>
             </div>
-            <div style={{height : '100px'}}></div>
             <div className="progress-bars" style={{paddingTop: "20px"}}>
                     <div className={`step ${step === 0 ? 'active' : ''}`}> <i class = "fe fe-grid"></i><span>Chọn Ghế</span></div>
                     <div className='step-between'>»</div>
