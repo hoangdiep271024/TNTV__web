@@ -291,8 +291,6 @@ export const filmSearchByName = async(req,res) =>{
   if (!searchQuery) {
     return res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
   }
-
-  // SQL truy vấn theo tên phim
   const query = `
     SELECT film_type, film_id, film_name, film_img, film_trailer, Release_date, 
            film_describe, age_limit, duration, country

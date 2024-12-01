@@ -18,6 +18,7 @@ import Category from "./components/page/Category";
 import BuyTicket from "./components/page/BuyTicket";
 import New from "./components/page/New";
 import NewDetail from "./components/page/NewDetail";
+import Search from "./components/page/Search";
 function App() {
   return (
     <Router>
@@ -41,6 +42,7 @@ function App() {
         <Route path="/mua_ve" element={<BuyTicket/>}/>
         <Route path="/tin_tuc" element={<New/>}/>
         <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
+        <Route path="/tim_kiem/:searchQuery" element={<Search/>}/>
 
       </Routes>
     </Router>);

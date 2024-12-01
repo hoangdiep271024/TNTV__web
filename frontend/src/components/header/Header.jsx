@@ -29,6 +29,15 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value); 
+  };
+  const handleSubmit = (e) => {
+    navigate(`/tim_kiem/${encodeURIComponent(createSlug(searchQuery))}`)
+    localStorage.setItem('searchQuery', searchQuery);
+  };
+  
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -106,12 +115,13 @@ const logOutClick = async(e) => {
         width: "100vw",
         display: "flex",
         alignItems: "center",
+        justifyContent: 'space-around'
       }}
     >
       <Box
         sx={{
           marginLeft: "5px",
-          width: "100%",
+          width: "60%",
           display: "flex",
           alignItems: "center",
           gap: 0.6,
@@ -126,12 +136,14 @@ const logOutClick = async(e) => {
           NHTT Movie Tickets
         </Typography>
       </Box>
-      <Box sx={{ alignItems: "center" }}>
+      <Box sx={{ alignItems: "center" , marginLeft: '-5%'}}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <form onSubmit={handleSubmit}>
         <TextField
   id="outlined-search"
   label="Search..."
   type="search"
+  onChange={handleChange}
   InputLabelProps={{
     style: {
       fontFamily: "Arial",
@@ -143,7 +155,7 @@ const logOutClick = async(e) => {
   InputProps={{
     endAdornment: (
       <InputAdornment position="end">
-        <SearchIcon sx={{ cursor: "pointer" }} />
+        <SearchIcon sx={{ cursor: "pointer" }} onClick = {handleSubmit}/>
       </InputAdornment>
     ),
     sx: {
@@ -160,6 +172,7 @@ const logOutClick = async(e) => {
     },
   }}
 />
+</form>
 
 {!login && (<Button
             sx={{
