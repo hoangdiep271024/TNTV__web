@@ -11,7 +11,7 @@ export default function EditCinemaPage() {
                 <title> {`Chỉnh sửa thông tin rạp chiếu phim | NHTT Admin Panel`}</title>
             </Helmet>
 
-            <EditCinemaPage cinemaId={id} />
+            <EditCinemaView cinemaId={id} />
         </>
     );
 }

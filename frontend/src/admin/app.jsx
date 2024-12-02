@@ -14,24 +14,24 @@ import theme from './theme/theme'
 
 import { DashboardLayout } from './layouts/dashboard';
 
-const HomePage = lazy(() => import('./pages/home'));
-const Page404 = lazy(() => import('./pages/page-not-found'));
-const UserPage = lazy(() => import('./pages/user'));
-const MoviePage = lazy(() => import('./pages/movie'));
-const CinemaPage = lazy(() => import('./pages/cinema'));
-const ShowtimePage = lazy(() => import('./pages/showtime'));
-const OrderPage = lazy(() => import('./pages/order'));
-const RoomPage = lazy(() => import('./pages/room'));
+import HomePage from './pages/home';
+import MoviePage from './pages/movie';
+import UserPage from './pages/user';
+import CinemaPage from './pages/cinema';
+import ShowtimePage from './pages/showtime';
+import RoomPage from './pages/room';
+import OrderPage from './pages/order';
 
 const EditUserPage = lazy(() => import('./pages/edit-user'));
-const OrderDetailsPage = lazy(() => import('./pages/order-details'));
 const CreateMoviePage = lazy(() => import('./pages/create-movie'));
 const EditMoviePage = lazy(() => import('./pages/edit-movie'));
 const CreateCinemaPage = lazy(() => import('./pages/create-cinema'));
 const EditCinemaPage = lazy(() => import('./pages/edit-cinema'));
 const CreateShowtimePage = lazy(() => import('./pages/create-showtime'));
-const EditShowtimePage = lazy(() => import('./pages/edit-showtime'))
+const EditShowtimePage = lazy(() => import('./pages/edit-showtime'));
 
+const Page404 = lazy(() => import('./pages/page-not-found'));
+const OrderDetailsPage = lazy(() => import('./pages/order-details'));
 
 const renderFallback = (
     <Box display="flex" alignItems="center" justifyContent="center" flex="1 1 auto">
@@ -85,22 +85,22 @@ export default function App() {
             {/* <RouterProvider router={router} /> */}
             <BrowserRouter>
                 <Routes>
-                    <Route path="/admin" element={<Layout />}>
+                    <Route path="admin" element={<Layout />}>
                         <Route index element={<HomePage />} />
-                        <Route path='user' element={<UserPage />} />
-                        <Route path='user/:id' element={<EditUserPage />} />
-                        <Route path='movie' element={<MoviePage />} />
-                        <Route path='cinema' element={<CinemaPage />} />
-                        <Route path='showtime' element={<ShowtimePage />} />
-                        <Route path='room' element={<RoomPage />} />
-                        <Route path='order' element={<OrderPage />} />
-                        <Route path='movie/create' element={<CreateMoviePage />} />
-                        <Route path='movie/:id' element={<EditMoviePage />} />
-                        <Route path='cinema/create' element={<CreateCinemaPage />} />
-                        <Route path='cinema/:id' element={<EditCinemaPage />} />
-                        <Route path='showtime/create' element={<CreateShowtimePage />} />
-                        <Route path='showtime/:id' element={<EditShowtimePage />} />
-                        <Route path='order/:id' element={<OrderDetailsPage />} />
+                        <Route path="user" element={<UserPage />} />
+                        <Route path="user/:id" element={<EditUserPage />} />
+                        <Route path="movie" element={<MoviePage />} />
+                        <Route path="movie/create" element={<CreateMoviePage />} />
+                        <Route path="movie/:id" element={<EditMoviePage />} />
+                        <Route path="cinema" element={<CinemaPage />} />
+                        <Route path="cinema/create" element={<CreateCinemaPage />} />
+                        <Route path="cinema/:id" element={<EditCinemaPage />} />
+                        <Route path="showtime" element={<ShowtimePage />} />
+                        <Route path="showtime/create" element={<CreateShowtimePage />} />
+                        <Route path="showtime/:id" element={<EditShowtimePage />} />
+                        <Route path="room" element={<RoomPage />} />
+                        <Route path="order" element={<OrderPage />} />
+                        <Route path="order/:id" element={<OrderDetailsPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>
