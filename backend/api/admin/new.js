@@ -10,6 +10,8 @@ newsRoutes.get("/", controller.index);
 
 newsRoutes.get("/detail/:newId", controller.detail);
 
+newsRoutes.get("/create", controller.create);
+
 newsRoutes.post(
     "/create", upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
@@ -22,7 +24,7 @@ newsRoutes.post(
         }
         next();
     },
-    controller.create);
+    controller.createPost);
 
 newsRoutes.get("/edit/:newId", controller.edit);
 

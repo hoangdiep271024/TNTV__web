@@ -113,8 +113,28 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/cinemas/create
+// [GET] /admin/cinemas/create
 export const create = async (req, res) => {
+    try {
+        const [clusters] = await connection.promise().query(`SELECT * FROM cinema_clusters`);
+        const [regions] = await connection.promise().query(`SELECT * FROM regions`);
+
+        res.json({
+            clustersToChoose: clusters,
+            regionsToChoose: regions
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error creating cinema",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/cinemas/create
+export const createPost = async (req, res) => {
     const { cinema_name, cluster_name, region_name, address } = req.body;
 
     const countResult = await connection.promise().query(

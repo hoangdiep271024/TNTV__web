@@ -82,8 +82,25 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/news/create
+// [GET] /admin/news/create
 export const create = async (req, res) => {
+    try {
+        const [filmToChoose] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+        res.status(200).json({
+            filmToChoose: filmToChoose
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error creating new",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/news/create
+export const createPost = async (req, res) => {
     try {
         let { film_name, new_content, new_time, new_header, new_footer} =  req.body;
 
@@ -159,7 +176,7 @@ export const edit = async (req, res) => {
             });
             New[0].filmName = film[0].film_name;
 
-            const filmToChoose = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+            const [filmToChoose] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
             res.status(200).json({
                 New: New[0],
                 filmToChoose: filmToChoose

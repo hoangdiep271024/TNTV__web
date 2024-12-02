@@ -8,7 +8,9 @@ showTimeRoutes.get("/", controller.index);
 
 showTimeRoutes.get("/detail/:showTimeId", controller.detail);
 
-showTimeRoutes.post("/create", controller.create);
+showTimeRoutes.get("/create", controller.create)
+
+showTimeRoutes.post("/create", controller.createPost);
 
 showTimeRoutes.get("/edit/:showTimeId", controller.edit);
 

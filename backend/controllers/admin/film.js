@@ -130,8 +130,31 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/films/create
+// [GET] /admin/films/create
 export const create = async (req, res) => {
+    try {
+        // Đổ actors, directors, categories ra để admin chọn được thay thế cái cũ
+        const [actors] = await connection.promise().query(`Select actor_id, actor_name from actors`);
+        const [directors] = await connection.promise().query(`Select director_id, director_name from directors`);
+        const [categories] = await connection.promise().query(`Select category_id, category_name from categorys`);
+
+        res.json({
+            actorToChoose: actors,
+            directorToChoose: directors,
+            categoryToChoose: categories,
+        });
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error creating film",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/films/create
+export const createPost = async (req, res) => {
     try {
         let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } =  req.body;
 

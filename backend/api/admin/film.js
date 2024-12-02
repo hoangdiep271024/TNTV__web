@@ -10,6 +10,8 @@ filmRoutes.get("/", controller.index);
 
 filmRoutes.get("/detail/:id", controller.detail);
 
+filmRoutes.get("/create", controller.create);
+
 filmRoutes.post(
     "/create", upload.single("film_img"), async (req, res, next) =>{
         res.locals.url = "";
@@ -22,7 +24,7 @@ filmRoutes.post(
         }
         next();
     },
-    controller.create
+    controller.createPost
 );
 
 filmRoutes.get("/edit/:id", controller.edit);
