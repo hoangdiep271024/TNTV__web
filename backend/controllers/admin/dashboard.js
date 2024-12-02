@@ -10,16 +10,16 @@ export const index = async (req, res) => {
 
         const queryOrder = `SELECT COUNT(*) AS totalOrders FROM orders WHERE MONTH(order_date) = ? AND YEAR(order_date) = ?`;
         const queryRevenue = `SELECT SUM(total_price) AS totalRevenue FROM orders WHERE MONTH(order_date) = ? AND YEAR(order_date) = ?`;
-        // const queryNewUser = `SELECT COUNT(*) AS newUsers FROM users WHERE MONTH(created_at) = ? AND YEAR(created_at) = ?`;
+        const queryNewUser = `SELECT COUNT(*) AS newUsers FROM users WHERE MONTH(date) = ? AND YEAR(date) = ?`;
 
         const [orderResult] = await connection.promise().query(queryOrder, [month, year]);
         const [revenueResult] = await connection.promise().query(queryRevenue, [month, year]);
-        // const [newUserResult] = await connection.query(queryNewUser, [month, year]);
+        const [newUserResult] = await connection.query(queryNewUser, [month, year]);
 
         const statistic = {
             order: orderResult[0].totalOrders || 0,
             revenue: revenueResult[0].totalRevenue || 0,
-            // newUser: newUserResult[0].newUsers || 0,
+            newUser: newUserResult[0].newUsers || 0,
         };
 
         // Tổng vé và doanh thu theo film

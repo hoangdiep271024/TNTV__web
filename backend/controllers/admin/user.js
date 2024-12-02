@@ -4,6 +4,16 @@ import connection from "../../models/SQLConnection.js";
 export const index = async (req, res) => {
     // SELECT * FROM users;
 
+    // Lọc theo trạng thái
+    const status = req.query.status;
+    let userStatus = '(status = 1 OR status = 0)';
+
+    if(status) {
+        if(status == "Hoạt động") userStatus = 'status = 1';
+        else if(status == "Không hoạt động") userStatus = 'status = 0';
+    }
+    // Hết lọc theo trạng thái
+
     // Tìm kiếm
     const keyword = req.query.keyword ? `%${req.query.keyword}%` : '%'; // Nếu không có từ khóa, tìm tất cả
     // Hết Tìm kiếm
@@ -33,6 +43,7 @@ export const index = async (req, res) => {
         `SELECT *
         FROM users
         WHERE username LIKE ?
+        AND ${userStatus}
         ORDER BY ${sortKey} ${sortValue} 
         LIMIT ?
         OFFSET ?`;
@@ -145,7 +156,7 @@ export const editPatch = async (req, res) => {
 
         // Không gửi ảnh khác lên
         if(res.locals.url == "") {
-            let { username, user_img, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
+            let { username, user_img, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
             if(sex == "male") sex = 1;
             else sex = 2;
             if(role == "user") role = 0;
@@ -154,17 +165,17 @@ export const editPatch = async (req, res) => {
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
-                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
+                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?, status = ?
                 WHERE user_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateUser, [username, user_img, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
+                connection.query(queryUpdateUser, [username, user_img, email, phone_number, full_name, sex, date_of_birth, role, status, userId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
             });
 
         } else { // Có gửi ảnh khác lên
-            let { username, email, phone_number, full_name, sex, date_of_birth, role } =  req.body;
+            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
             if(sex == "male") sex = 1;
             else sex = 2;
             if(role == "user") role = 0;
@@ -173,10 +184,10 @@ export const editPatch = async (req, res) => {
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
-                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?
+                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?, status = ?
                 WHERE user_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateUser, [username, res.locals.url, email, phone_number, full_name, sex, date_of_birth, role, userId], (err, results) => {
+                connection.query(queryUpdateUser, [username, res.locals.url, email, phone_number, full_name, sex, date_of_birth, role, status, userId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
@@ -234,3 +245,101 @@ export const deleteItem = async (req, res) => {
         });
     }
 }
+
+// [PATCH] /admin/users/change-role/:userId
+export const changeRole = async (req, res) => {
+    try {
+        const userId  = req.params.userId;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const [userResult] = await connection.promise().query(
+            'SELECT role FROM users WHERE user_id = ?', [userId]
+        );
+
+        if (userResult.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const currentRole = userResult[0].role;
+
+        const newRole = currentRole == 0 ? 1 : 0;
+
+        const [updateResult] = await connection.promise().query(
+            'UPDATE users SET role = ? WHERE user_id = ?', 
+            [newRole, userId]
+        );
+
+        if (updateResult.affectedRows > 0) {
+            res.status(200).json({ 
+                code: 200,
+                message: "User role changed successfully", 
+                newRole: newRole 
+            });
+        } else {
+            res.status(500).json({
+                code: 500,
+                message: "Failed to update user role" 
+            });
+        }
+
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({ 
+            code: 500,
+            message: "Error changing user role", 
+            error: error.message
+        });
+    }
+};
+
+// [PATCH] /admin/users/change-role/:userId
+export const changeStatus = async (req, res) => {
+    try {
+        const userId  = req.params.userId;
+
+        if (!userId) {
+            return res.status(400).json({ message: "User ID is required" });
+        }
+
+        const [userResult] = await connection.promise().query(
+            'SELECT status FROM users WHERE user_id = ?', [userId]
+        );
+
+        if (userResult.length === 0) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        const currentStatus = userResult[0].status;
+
+        const newStatus = currentStatus == 0 ? 1 : 0;
+
+        const [updateResult] = await connection.promise().query(
+            'UPDATE users SET status = ? WHERE user_id = ?', 
+            [newStatus, userId]
+        );
+
+        if (updateResult.affectedRows > 0) {
+            res.status(200).json({ 
+                code: 200,
+                message: "User Status changed successfully", 
+                newStatus: newStatus 
+            });
+        } else {
+            res.status(500).json({
+                code: 500,
+                message: "Failed to update user status" 
+            });
+        }
+
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({ 
+            code: 500,
+            message: "Error changing user status", 
+            error: error.message
+        });
+    }
+};
