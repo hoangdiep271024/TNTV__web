@@ -94,11 +94,17 @@ export const create = async (req, res) => {
         const newId =  totalNews + 1;
 
         const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
+        if(film.length < 0) {
+            return res.status(500).json({
+                message:  "Film doesn't exist.\nPlease choose film again!",
+                error: error
+            });
+        }
         const filmId = film[0].film_id;
 
-        // Lưu data vào bảng films
+        // Lưu data vào bảng news
         const queryNews = `INSERT INTO news 
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         const New = await new Promise((resolve, reject) => {
             connection.query(queryNews, [newId, filmId, new_content, res.locals.url, new_time, new_header, new_footer], (err, results) => {
