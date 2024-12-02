@@ -181,13 +181,6 @@ export const edit = async (req, res) => {
     }
 }
 
-export const test = async (req, res) => {
-    const newId = req.params.newId;
-        
-    const deleteResult = await connection.promise().query(`DELETE FROM news WHERE new_id = ?`, [newId]);
-    console.log(deleteResult[0].affectedRows);
-}
-
 // [PATCH] /admin/news/edit/:newId
 export const editPatch = async (req, res) => {
     try {

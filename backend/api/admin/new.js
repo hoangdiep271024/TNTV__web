@@ -26,7 +26,6 @@ newsRoutes.post(
 
 newsRoutes.get("/edit/:newId", controller.edit);
 
-newsRoutes.get("/test/:newId", controller.test);
 newsRoutes.patch(
     "/edit/:newId", upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
