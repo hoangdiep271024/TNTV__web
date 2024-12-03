@@ -12,7 +12,7 @@ export default function EditMoviePage() {
                 <title> {`Chỉnh sửa thông tin phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
-            <EditMoviePage movieId={id} />
+            <EditMovieView movieId={id} />
         </>
     );
 }

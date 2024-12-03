@@ -11,6 +11,7 @@ import { MovieTableRow } from "../movie-table-row";
 import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
 import { Scrollbar } from "../../../components/scrollbar";
+import { Link, useNavigate } from "react-router-dom";
 
 // add-movie button to move to create-movie page
 export function MovieView() {
@@ -27,6 +28,11 @@ export function MovieView() {
     // Determine if there are no users that match the filter
     const notFound = !dataFiltered.length && filterName;
 
+    // const navigate = useNavigate();
+    // const toCreateMoviePage = () => {
+    //     navigate('/admin/movie/create');
+    // }
+
     return (
         <DashboardContent>
             <Box display="flex" alignItems="center" mb={5}>
@@ -37,6 +43,8 @@ export function MovieView() {
                 <Button
                     variant="contained"
                     color="success"
+                    component={Link}
+                    to="/admin/movie/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm phim
@@ -70,7 +78,7 @@ export function MovieView() {
                                     { id: 'description', label: 'Mô tả' },
                                     { id: 'film_type', label: 'Thể loại chính' },
                                     { id: 'age_limit', label: 'Giới hạn độ tuổi' },
-                                    { id: 'duration', label: 'Thời lượng (phút)' },
+                                    { id: 'duration', label: 'Thời lượng' },
                                     { id: 'release_date', label: 'Ngày phát hành' },
                                     { id: '' }
                                 ]}

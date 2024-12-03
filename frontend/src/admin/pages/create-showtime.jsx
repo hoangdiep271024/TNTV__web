@@ -9,7 +9,7 @@ export default function CreateShowtimePage() {
                 <title> {`Tạo suất chiếu | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
-            <CreateShowtimePage />
+            <CreateShowtimeView />
         </>
     );
 }
