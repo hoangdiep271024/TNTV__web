@@ -342,15 +342,15 @@ export const editPatch = async (req, res) => {
 
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
         if(res.locals.url == "") {
-            let { film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } =  req.body;
+            let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } =  req.body;
 
             // Update bảng film
             const queryUpdateFilm = `
                 UPDATE films
-                SET film_name = ?, film_img = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
+                SET film_name = ?, film_trailer = ?, Release_date = ?, film_describe = ?, age_limit = ?, duration = ?, film_type = ?, country = ?
                 WHERE film_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateFilm, [film_name, film_img, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
+                connection.query(queryUpdateFilm, [film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, filmId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });

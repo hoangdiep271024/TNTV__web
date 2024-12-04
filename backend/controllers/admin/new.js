@@ -205,10 +205,10 @@ export const editPatch = async (req, res) => {
 
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
         if (res.locals.url == "") {
-            let { film_name, new_content, new_image, new_time, new_header, new_footer } = req.body;
+            let { film_name, new_content, new_time, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
-            if (film.length < 0) {
+            if (film.length == 0) {
                 return res.status(500).json({
                     message: "Film doesn't exist\nPlease choose film again",
                     error: error
@@ -219,10 +219,10 @@ export const editPatch = async (req, res) => {
             // Update bảng news
             const queryUpdateNew = `
                 UPDATE news
-                SET film_id = ?, new_content = ?, new_image = ?, new_time = ?, new_header = ?, new_footer = ?
+                SET film_id = ?, new_content = ?, new_time = ?, new_header = ?, new_footer = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, new_image, new_time, new_header, new_footer, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, new_time, new_header, new_footer, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
@@ -232,7 +232,7 @@ export const editPatch = async (req, res) => {
             let { film_name, new_content, new_time, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
-            if (film.length < 0) {
+            if (film.length == 0) {
                 return res.status(500).json({
                     message: "Film doesn't exist\nPlease choose film again",
                     error: error

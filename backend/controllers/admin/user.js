@@ -156,7 +156,7 @@ export const editPatch = async (req, res) => {
 
         // Không gửi ảnh khác lên
         if(res.locals.url == "") {
-            let { username, user_img, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
+            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
             if(sex == "male") sex = 1;
             else sex = 2;
             if(role == "user") role = 0;
@@ -165,10 +165,10 @@ export const editPatch = async (req, res) => {
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
-                SET username = ?, user_img = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?, status = ?
+                SET username = ?, email = ?, phone_number = ?, full_name = ?, sex = ?, date_of_birth = ?, role = ?, status = ?
                 WHERE user_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateUser, [username, user_img, email, phone_number, full_name, sex, date_of_birth, role, status, userId], (err, results) => {
+                connection.query(queryUpdateUser, [username, email, phone_number, full_name, sex, date_of_birth, role, status, userId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
