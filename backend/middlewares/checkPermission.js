@@ -1,9 +1,12 @@
+import connection from "../models/SQLConnection";
+import { verifyToken, isTokenExpired } from "./JWT";
+import systemConfig from "../config/systemConfig";
 import dotenv from "dotenv";
 dotenv.config();
 
 const SECRET_CODE = process.env.SECRET_CODE
 
-export const checkPermisson = (req,res,next) => {
+export const checkPermisson = async (req,res,next) => {
     try {
         // // buoc 1: nguoi dung dang nhap hay chua
         // // let token = null;
@@ -46,6 +49,32 @@ export const checkPermisson = (req,res,next) => {
         //     res.clearCookie("sessionId")
         //     res.render("index.html")
         // }
+
+        if(!req.cookies.jwt) {
+            return res.status(401).json({
+                messages: "Unauthorized\nPlease login first!"
+            });
+        }
+
+        const userId = verifyToken(req.cookies.jwt);
+
+        // Nếu token expired hoặc không hợp lệ thì userId sẽ null
+        if(!userId || isTokenExpired(req.cookies.jwt)) {
+            return res.status(401).json({
+                messages: "Token is expired or invalid\nPlease login first!"
+            });
+        }
+    
+        const [user] = await connection.promise().query(`SELECT * FROM users WHERE user_id = ?`, [userId.id])
+    
+        if(user.length == 0){
+            return res.status(401).json({
+                messages: "Token is expired or invalid\nPlease login first!"
+            });
+        }
+    
+        res.locals.user = user;
+
         next();
     } catch (error) {
         console.log(error)

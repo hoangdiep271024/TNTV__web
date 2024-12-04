@@ -8,6 +8,8 @@ import userRoutes from "./user.js";
 import dashboardRoutes from "./dashboard.js";
 import newsRoutes from "./new.js";
 
+import { checkPermisson } from "../../middlewares/checkPermission.js";
+
 export const adminApi = (app) => {
 
     const PATH_ADMIN = `${systemConfig.prefixAdmin}`;
