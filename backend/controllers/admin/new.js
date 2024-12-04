@@ -10,12 +10,12 @@ export const index = async (req, res) => {
 
     // Phân trang
     let limitItems = 5;
-    if(req.query.limitItems) {
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -29,7 +29,7 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const queryNew = 
+    const queryNew =
         `SELECT *
         FROM news
         WHERE new_header LIKE ?
@@ -43,14 +43,14 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(news);
 }
 
 // [GET] /admin/news/detail/:newId
 export const detail = async (req, res) => {
     const newId = req.params.newId;
-    
+
     // truy vấn news
     const queryNews = `SELECT * FROM news WHERE new_id = ?`;
     const New = await new Promise((resolve, reject) => {
@@ -62,7 +62,7 @@ export const detail = async (req, res) => {
 
     const filmId = New[0].film_id;
 
-    if(New.length > 0) {
+    if (New.length > 0) {
         const queryFilm = `SELECT * FROM films WHERE film_id = ?`;
         const film = await new Promise((resolve, reject) => {
             connection.query(queryFilm, [filmId], (err, results) => {
@@ -102,18 +102,18 @@ export const create = async (req, res) => {
 // [POST] /admin/news/create
 export const createPost = async (req, res) => {
     try {
-        let { film_name, new_content, new_time, new_header, new_footer} =  req.body;
+        let { film_name, new_content, new_time, new_header, new_footer } = req.body;
 
         const countResult = await connection.promise().query(
             `SELECT COUNT(*) as count FROM news`,
         );
         const totalNews = countResult[0][0].count;
-        const newId =  totalNews + 1;
+        const newId = totalNews + 1;
 
         const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
-        if(film.length < 0) {
+        if (film.length === 0) {
             return res.status(500).json({
-                message:  "Film doesn't exist.\nPlease choose film again!",
+                message: "Film doesn't exist.\nPlease choose film again!",
                 error: error
             });
         }
@@ -144,7 +144,7 @@ export const createPost = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(501).json({
-            message:  "Error creating New",
+            message: "Error creating New",
             error: error
         });
     }
@@ -154,7 +154,7 @@ export const createPost = async (req, res) => {
 export const edit = async (req, res) => {
     try {
         const newId = req.params.newId;
-    
+
         // truy vấn news
         const queryNews = `SELECT * FROM news WHERE new_id = ?`;
         const New = await new Promise((resolve, reject) => {
@@ -166,7 +166,7 @@ export const edit = async (req, res) => {
 
         const filmId = New[0].film_id;
 
-        if(New.length > 0) {
+        if (New.length > 0) {
             const queryFilm = `SELECT * FROM films WHERE film_id = ?`;
             const film = await new Promise((resolve, reject) => {
                 connection.query(queryFilm, [filmId], (err, results) => {
@@ -204,13 +204,13 @@ export const editPatch = async (req, res) => {
         const newId = parseInt(req.params.newId);
 
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
-        if(res.locals.url == "") {
-            let { film_name, new_content, new_image, new_time, new_header, new_footer } =  req.body;
+        if (res.locals.url == "") {
+            let { film_name, new_content, new_image, new_time, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
-            if(film.length < 0) {
+            if (film.length < 0) {
                 return res.status(500).json({
-                    message:  "Film doesn't exist\nPlease choose film again",
+                    message: "Film doesn't exist\nPlease choose film again",
                     error: error
                 });
             }
@@ -227,14 +227,14 @@ export const editPatch = async (req, res) => {
                     resolve(results);
                 });
             });
-        
+
         } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
-            let { film_name, new_content, new_time, new_header, new_footer } =  req.body;
+            let { film_name, new_content, new_time, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
-            if(film.length < 0) {
+            if (film.length < 0) {
                 return res.status(500).json({
-                    message:  "Film doesn't exist\nPlease choose film again",
+                    message: "Film doesn't exist\nPlease choose film again",
                     error: error
                 });
             }
@@ -259,7 +259,7 @@ export const editPatch = async (req, res) => {
     } catch (error) {
         console.log(error);
         res.status(501).json({
-            message:  "Error edit New",
+            message: "Error edit New",
             error: error
         });
     }
@@ -269,12 +269,12 @@ export const editPatch = async (req, res) => {
 export const deleteItem = async (req, res) => {
     try {
         const newId = req.params.newId;
-        
+
         const deleteResult = await connection.promise().query(`DELETE FROM news WHERE new_id = ?`, [newId]);
 
-        if(deleteResult.affectedRows < 0){
+        if (deleteResult.affectedRows < 0) {
             return res.status(501).json({
-                message:  "New deleted doesn't exist",
+                message: "New deleted doesn't exist",
             });
         }
 
@@ -284,7 +284,7 @@ export const deleteItem = async (req, res) => {
     } catch (error) {
         console(error);
         res.status(501).json({
-            message:  "Error deleting New",
+            message: "Error deleting New",
             error: error
         });
     }

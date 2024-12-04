@@ -25,7 +25,7 @@ const ArticleIcon = ArticleTwoToneIcon;
 export const navData = [
     {
         title: 'Tổng quan',
-        path: '/admin',
+        path: '/admin/dashboard',
         icon: <DashboardIcon />,
     },
     {
@@ -65,7 +65,7 @@ export const navData = [
     },
     {
         title: 'Quản lý bài viết',
-        path: '/admin/article',
+        path: '/admin/news',
         icon: <ArticleIcon />,
     },
     {

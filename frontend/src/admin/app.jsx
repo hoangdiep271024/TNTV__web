@@ -21,6 +21,8 @@ import CinemaPage from './pages/cinema';
 import ShowtimePage from './pages/showtime';
 import RoomPage from './pages/room';
 import OrderPage from './pages/order';
+import NewsPage from './pages/news';
+import DashboardPage from './pages/dashboard';
 
 const EditUserPage = lazy(() => import('./pages/edit-user'));
 const CreateMoviePage = lazy(() => import('./pages/create-movie'));
@@ -101,6 +103,8 @@ export default function App() {
                         <Route path="room" element={<RoomPage />} />
                         <Route path="order" element={<OrderPage />} />
                         <Route path="order/:id" element={<OrderDetailsPage />} />
+                        <Route path="news" element={<NewsPage />} />
+                        <Route path="dashboard" element={<DashboardPage />} />
                     </Route>
                 </Routes>
             </BrowserRouter>

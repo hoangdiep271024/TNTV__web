@@ -1,6 +1,7 @@
 import { Helmet } from 'react-helmet-async';
 import { DashboardContent } from '../layouts/dashboard';
 import { Box, Typography, Button } from '@mui/material';
+import { Link } from 'react-router-dom';
 
 // ----------------------------------------------------------------------
 export default function HomePage() {
@@ -18,7 +19,7 @@ export default function HomePage() {
                     <Typography variant="body1" sx={{ marginBottom: 3 }}>
                         Tại đây bạn có thể quản lý và xem các phân tích và thống kê về dữ liệu của trang web.
                     </Typography>
-                    <Button variant="outlined" color="primary" href="/admin/dashboard">
+                    <Button component={Link} to="/admin/dashboard" variant="outlined" color="primary">
                         Bắt đầu ngay
                     </Button>
                 </Box>

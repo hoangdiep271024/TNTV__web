@@ -14,7 +14,7 @@ export const index = async (req, res) => {
 
         const [orderResult] = await connection.promise().query(queryOrder, [month, year]);
         const [revenueResult] = await connection.promise().query(queryRevenue, [month, year]);
-        const [newUserResult] = await connection.query(queryNewUser, [month, year]);
+        const [newUserResult] = await connection.promise().query(queryNewUser, [month, year]);
 
         const statistic = {
             order: orderResult[0].totalOrders || 0,
@@ -26,19 +26,19 @@ export const index = async (req, res) => {
 
         // Phân trang
         let limitItems = 8;
-        if(req.query.limitItems) {
+        if (req.query.limitItems) {
             limitItems = parseInt(`${req.query.limitItems}`);
         }
 
         let page = 1;
-        if(req.query.page) {
+        if (req.query.page) {
             page = parseInt(`${req.query.page}`);
         }
 
         const skip = (page - 1) * limitItems;
         // Hết phân trang
 
-        const queryFilm_Ticket_Revenue = 
+        const queryFilm_Ticket_Revenue =
             `SELECT 
             f.film_id,
             f.film_name,

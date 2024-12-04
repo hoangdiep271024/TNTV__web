@@ -7,6 +7,7 @@ import { fileURLToPath } from 'url';
 import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
 const app = express();
+app.use(corMw);
 
 import { adminApi } from "./api/admin/index.js";
 
