@@ -29,4 +29,8 @@ userRoutes.patch(
 
 userRoutes.delete("/delete/:userId", controller.deleteItem);
 
+userRoutes.patch("/change-role/:userId", controller.changeRole);
+
+userRoutes.patch("/change-status/:userId", controller.changeStatus);
+
 export default userRoutes;

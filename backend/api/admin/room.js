@@ -8,7 +8,9 @@ roomRoutes.get("/", controller.index);
 
 roomRoutes.get("/detail/:roomId", controller.detail);
 
-roomRoutes.post("/create", controller.create);
+roomRoutes.get("/create", controller.create)
+
+roomRoutes.post("/create", controller.createPost);
 
 roomRoutes.get("/edit/:roomId", controller.edit);
 

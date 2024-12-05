@@ -13,7 +13,7 @@ export default function Actor() {
     const[data, setData]= useState()
     const fetchActorData = async () => {
       try {
-        const response = await fetch(`/api/actor/actor_id=${actor_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/actor/actor_id=${actor_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

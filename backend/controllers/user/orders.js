@@ -2,7 +2,7 @@ import connection from "../../models/SQLConnection.js";
 
 import { isTokenExpired, verifyToken } from '../../middlewares/JWT.js';
 export const getOrders = async (req, res) => {
-    const token = req.cookies.jwt;
+    const token = req.body.jwt;
 
         if (!token) {
             return res.json({
@@ -112,25 +112,25 @@ export const getOrders = async (req, res) => {
 
 export const getLastestOrder = async (req, res) => {
     try {
-        // const token = req.cookies.jwt;
+        const token = req.body.jwt;
 
-        // // Kiểm tra token
-        // if (!token) {
-        //     return res.json({
-        //         message: "Người dùng chưa đăng nhập",
-        //         success: false
-        //     });
-        // }
+        // Kiểm tra token
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            });
+        }
 
-        // if (isTokenExpired(token)) {
-        //     return res.json({
-        //         message: "Người dùng hết phiên đăng nhập",
-        //         success: false
-        //     });
-        // }
+        if (isTokenExpired(token)) {
+            return res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            });
+        }
 
-        // const decoded = verifyToken(token);
-        const user_id = 6;
+        const decoded = verifyToken(token);
+        const user_id = decoded.id;
         // Truy vấn thông tin đơn hàng mới nhất trong vòng 1 ngày trước hôm nay
         // const query1 = `
         //     SELECT 

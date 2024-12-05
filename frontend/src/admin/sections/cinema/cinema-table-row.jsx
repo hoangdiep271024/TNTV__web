@@ -1,14 +1,33 @@
-import { Checkbox, Chip, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
+import { Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
+import { useNavigate } from "react-router-dom";
+
+// const deleteCinema = async (id) => {
+//     try {
+//         const response = await fetch(`http://localhost:8888/api/admin/cinemas/delete/${id}`, {
+//             method: 'PATCH',
+//         });
+
+//         if (!response.ok) {
+//             throw new Error('Failed to delete cinema');
+//         }
+
+//         return true;
+//     } catch (error) {
+//         console.error("Error deleting cinema:", error);
+//         return false;
+//     }
+// }
 
 // edit button handle
 // delete button handle
 // click name to open cinema details
-
+// onDelete prop
 export function CinemaTableRow({ row, selected, onSelectRow }) {
     const [openPopover, setOpenPopover] = useState(null);
     const [isAddressExpanded, setAddressExpanded] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -28,6 +47,28 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
         }
         return text;
     };
+
+    const navigate = useNavigate();
+    const handleEditButton = () => {
+        navigate(`/admin/cinema/${row.id}`);
+    }
+
+    const handleDeleteButton = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    }
+
+    const handleConfirmDelete = async () => {
+        const success = await deleteCinema(row.id);
+        if (success) {
+            onDelete(row.id);
+        }
+        setOpenDialog(false);
+    }
+
 
     return (
         <>
@@ -57,7 +98,9 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                             }}
                             onClick={toggleAddress}
                         >
-                            {row.address}
+                            {isAddressExpanded
+                                ? row.address
+                                : truncateText(row.address, 20)}
                         </Typography>
                     </Tooltip>
                     {/* <Typography
@@ -109,17 +152,34 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'primary.main' }}>
+                        <MenuItem onClick={handleEditButton} sx={{ color: 'primary.main' }}>
                             <Iconify icon="solar:pen-bold" />
                             Chỉnh sửa
                         </MenuItem>
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+                        <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>
                             <Iconify icon="solar:trash-bin-trash-bold" />
                             Xóa
                         </MenuItem>
                     </MenuList>
                 </Popover>
             </TableRow>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn có chắc chắn muốn xóa rạp chiếu <strong>{row.name}</strong> không?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error">
+                        Xóa
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }

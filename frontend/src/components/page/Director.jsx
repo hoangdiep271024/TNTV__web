@@ -13,7 +13,7 @@ export default function Director() {
     const[data, setData]= useState()
     const fetchDirectorData = async () => {
       try {
-        const response = await fetch(`/api/director/director_id=${director_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/director/director_id=${director_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

@@ -32,7 +32,7 @@ export default function CinemaTime() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/rap/cinema_id=${cinema_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/cinema_id=${cinema_id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

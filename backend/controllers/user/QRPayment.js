@@ -45,7 +45,7 @@ export const QRPayment = async (req, res) => {
     const { showtime_id, amount: total_amount, selectedSeats, selectedCombos } = req.body;
 
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
 
         if (!token) {
             return res.json({

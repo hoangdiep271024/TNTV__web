@@ -4,7 +4,7 @@ import connection from '../../models/SQLConnection.js';
 dotenv.config();
 export const userInfo = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
 
         if (!token) {
             return res.json({
@@ -45,7 +45,7 @@ export const userInfo = async (req, res) => {
 
 export const userInfoUpdate = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
         if (!token) {
             return res.json({
                 message: "Người dùng chưa đăng nhập",
@@ -80,7 +80,7 @@ export const userInfoUpdate = async (req, res) => {
 
 export const userFilmLiked = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
         if (!token) {
             return res.json({
                 message: "Người dùng chưa đăng nhập",

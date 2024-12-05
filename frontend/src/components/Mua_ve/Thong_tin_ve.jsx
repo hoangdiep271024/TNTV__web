@@ -19,7 +19,7 @@ function Thong_tin_ve() {
         // Fetch seat data
         const fetchOrderInfo = async () => {
             try {
-                const response = await axios.post(`/api/orders/getLastestOrder`);
+                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`);
                 setOrderInfo(response.data.order); // Lưu thông tin đơn hàng vào state
                 setLoading(false); // Đánh dấu việc load dữ liệu xong
             } catch (error) {

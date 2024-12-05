@@ -15,7 +15,7 @@ export default function Films() {
         categoryId: '',
       });
       const [dataa, setDataa] = useState(null)
-      const handleSubmit = () => {fetch('/api/film/phim', {
+      const handleSubmit = () => {fetch(`${import.meta.env.VITE_API_URL}/api/film/phim`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

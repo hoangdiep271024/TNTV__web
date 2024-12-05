@@ -12,7 +12,7 @@ export default function EditShowtimePage() {
                 <title> {`Chỉnh sửa thông tin suất chiếu | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
-            <EditShowtimePage showtimeId={id} />
+            <EditShowtimeView showtimeId={id} />
         </>
     );
 }

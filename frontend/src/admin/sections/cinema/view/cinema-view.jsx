@@ -10,6 +10,7 @@ import { Scrollbar } from "../../../components/scrollbar";
 import { CinemaTableHead } from "../cinema-table-head";
 import { TableNoData } from "../../table-no-data";
 import { CinemaTableRow } from "../cinema-table-row";
+import { Link } from "react-router-dom";
 
 // add-cinema button to move to create-cinema page
 // click cinema name to open edit-cinema page
@@ -35,6 +36,8 @@ export function CinemaView() {
                 <Button
                     variant="contained"
                     color="success"
+                    component={Link}
+                    to="/admin/cinema/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm rạp chiếu

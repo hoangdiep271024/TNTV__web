@@ -10,7 +10,7 @@ export default function FilmDetailTime({ onAreaChange }) {
 
   const fetchData = async () => {
     try {
-      const response = await fetch(`/api/lichChieu/khuVuc`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

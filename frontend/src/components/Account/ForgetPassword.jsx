@@ -59,7 +59,7 @@ export default function ForgetPassword() {
       const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-          const response = await fetch('/api/forgotPassword', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/forgotPassword`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -93,7 +93,7 @@ export default function ForgetPassword() {
       const handleSubmitt = async (e) => {
         e.preventDefault();
        try {
-         const response = await fetch('/api/forgotPassword/check', {
+         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/forgotPassword/check`, {
            method: 'POST',
            headers: {
              'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export default function ForgetPassword() {
      const handleSubmittt = async (e) => {
       e.preventDefault();
      try {
-       const response = await fetch('/api/forgotPassword/changePassword', {
+       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/forgotPassword/changePassword`, {
          method: 'POST',
          headers: {
            'Content-Type': 'application/json',

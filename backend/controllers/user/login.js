@@ -59,12 +59,14 @@ const login = async (req, res) => {
         if (user.role === 0) {
             return res.json({
                 message: "user",
-                success: true
+                success: true,
+                jwt: token
             });
         } else {
             return res.json({
                 message: "admin",
-                success: true
+                success: true,
+                jwt: token
             });
         }
         

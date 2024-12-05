@@ -55,7 +55,7 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const [userInfor, setUserInfor] = useState([]);
   
   useEffect(() => {
-    fetch('/api/userInfo', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -70,6 +70,7 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
         else{
           setLogin(false)
         }
+        console.log(responseData)
         
       })
       .catch(error => console.error('Error:', error));

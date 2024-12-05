@@ -32,7 +32,7 @@ export default function Cinema() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/rap/region_id=${selectedArea?.region_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/region_id=${selectedArea?.region_id}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

@@ -16,7 +16,7 @@ export default function Ticket__film({ onLoadComplete }) {
   const filmsPerPage = 16;
 
   useEffect(() => {
-    fetch('/api/film/filmShowing', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/film/filmShowing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

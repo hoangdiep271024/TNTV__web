@@ -196,7 +196,7 @@ export const getComment = async (req, res) => {
 
 
 export const postComment = async (req, res) => {
-    const token = req.cookies.jwt;
+    const token = req.body.jwt;
 
     if (!token) {
         return res.json({

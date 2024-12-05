@@ -37,7 +37,7 @@ export default function FilmInfo(props) {
   const [liked, setLiked] = useState(null)
   const likeCheckFetch = async () => {
     try {
-      const response = await fetch(`/api/like/likeCheck/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/likeCheck/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ export default function FilmInfo(props) {
 
   const unLike = async () => {
     try {
-      const response = await fetch(`/api/like/unlike/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/unlike/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
@@ -83,7 +83,7 @@ export default function FilmInfo(props) {
 
   const Like = async () => {
     try {
-      const response = await fetch(`/api/like/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',

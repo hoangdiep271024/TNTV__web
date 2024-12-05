@@ -1,19 +1,19 @@
 import express from "express";
 
-import * as controller from "../../controllers/admin/film.js";
+import * as controller from "../../controllers/admin/new.js";
 
 import { handleUpload, upload } from "../../middlewares/uploadCloud.js";
 
-const filmRoutes = express.Router()
+const newsRoutes = express.Router()
 
-filmRoutes.get("/", controller.index);
+newsRoutes.get("/", controller.index);
 
-filmRoutes.get("/detail/:id", controller.detail);
+newsRoutes.get("/detail/:newId", controller.detail);
 
-filmRoutes.get("/create", controller.create);
+newsRoutes.get("/create", controller.create);
 
-filmRoutes.post(
-    "/create", upload.single("film_img"), async (req, res, next) =>{
+newsRoutes.post(
+    "/create", upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
         if(req.file) {
             const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -24,13 +24,12 @@ filmRoutes.post(
         }
         next();
     },
-    controller.createPost
-);
+    controller.createPost);
 
-filmRoutes.get("/edit/:id", controller.edit);
+newsRoutes.get("/edit/:newId", controller.edit);
 
-filmRoutes.patch(
-    "/edit/:id", upload.single("film_img"), async (req, res, next) =>{
+newsRoutes.patch(
+    "/edit/:newId", upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
         if(req.file) {
             const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -44,6 +43,6 @@ filmRoutes.patch(
     controller.editPatch
 );
 
-filmRoutes.delete("/delete/:id", controller.deleteFilm);
+newsRoutes.delete("/delete/:newId", controller.deleteItem);
 
-export default filmRoutes;
+export default newsRoutes;

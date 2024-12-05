@@ -12,7 +12,7 @@ export default function Category() {
   const[data, setData]= useState()
   const fetchCategoryData = async () => {
     try {
-      const response = await fetch(`/api/film/category_id=${category_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/category_id=${category_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

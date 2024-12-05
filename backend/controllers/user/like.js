@@ -1,9 +1,9 @@
 import dotenv from "dotenv";
-import connection from "../../models/SQLConnection.js";
 import { isTokenExpired, verifyToken } from '../../middlewares/JWT.js';
+import connection from "../../models/SQLConnection.js";
 dotenv.config();
 export const likeCheck = async (req, res) => {
-  const token = req.cookies.jwt;
+  const token = req.body.jwt;
 
   if (!token) {
     return res.json({
@@ -37,7 +37,7 @@ if (isTokenExpired(token)) {
 }
 
 export const unLike = async (req, res) => {
-  const token = req.cookies.jwt;
+  const token = req.body.jwt;
 
   if (!token) {
     return res.json({
@@ -79,7 +79,7 @@ if (isTokenExpired(token)) {
 }
 
 export const Like = async (req, res) => {
-  const token = req.cookies.jwt;
+  const token = req.body.jwt;
 
   if (!token) {
     return res.json({

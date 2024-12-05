@@ -20,7 +20,7 @@ export const BookingProvider = ({ children }) => {
 
     useEffect(() => {
         // Fetch seat data
-        axios.post(`/api/muaVe/showtime_id=${showtime_id}`)
+        axios.post(`${import.meta.env.VITE_API_URL}/api/muaVe/showtime_id=${showtime_id}`)
             .then(response => {
                 setSeatData(response.data);
                 setSeatLoading(false);
@@ -33,7 +33,7 @@ export const BookingProvider = ({ children }) => {
 
     useEffect(() => {
         // Fetch popcorn data
-        axios.post(`/api/muaVe/popcornInfo`)
+        axios.post(`${import.meta.env.VITE_API_URL}/api/muaVe/popcornInfo`)
             .then(response => {
                 setPopcornData(response.data);
                 setPopcornLoading(false);

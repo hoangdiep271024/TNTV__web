@@ -9,6 +9,7 @@ import { Scrollbar } from "../../../components/scrollbar";
 import { ShowtimeTableHead } from "../showtime-table-head";
 import { ShowtimeTableRow } from "../showtime-table-row";
 import { Iconify } from "../../../components/iconify";
+import { TableNoData } from "../../table-no-data";
 
 // add-showtime button to move to create-showtime page
 // click showtime-id to open edit-showtime page
