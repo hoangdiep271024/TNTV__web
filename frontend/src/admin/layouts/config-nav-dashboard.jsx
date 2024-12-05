@@ -20,8 +20,6 @@ const ExitIcon = ExitToAppTwoToneIcon;
 const CinemaIcon = TheatersTwoToneIcon;
 const ArticleIcon = ArticleTwoToneIcon;
 
-// ----------------------------------------------------------------------
-
 export const navData = [
     {
         title: 'Tổng quan',
@@ -69,9 +67,8 @@ export const navData = [
         icon: <ArticleIcon />,
     },
     {
-        // đăng xuất ra khỏi màn hình quản trị viên, quay về màn hình web chính
         title: 'Đăng xuất',
-        path: '/admin/sign-out',
+        path: '/auth',
         icon: <ExitIcon />,
     }
 ];

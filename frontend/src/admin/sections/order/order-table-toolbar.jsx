@@ -30,7 +30,7 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName }) {
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Tìm kiếm đơn hàng..."
+                    placeholder="Tìm kiếm..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />

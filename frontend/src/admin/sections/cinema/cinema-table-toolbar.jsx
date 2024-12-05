@@ -7,8 +7,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 
 import { Iconify } from '../../components/iconify';
 
-// delete all selected handler (and change filter on the filterlist)
 export function CinemaTableToolbar({ numSelected, filterName, onFilterName, onDeleteSelected }) {
+
     return (
         <Toolbar
             sx={{
@@ -31,7 +31,7 @@ export function CinemaTableToolbar({ numSelected, filterName, onFilterName, onDe
                     fullWidth
                     value={filterName}
                     onChange={onFilterName}
-                    placeholder="Tìm kiếm rạp chiếu phim..."
+                    placeholder="Tìm kiếm..."
                     startAdornment={
                         <InputAdornment position="start">
                             <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />

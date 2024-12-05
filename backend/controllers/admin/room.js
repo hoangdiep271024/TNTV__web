@@ -111,7 +111,7 @@ export const create = async (req, res) => {
         res.json({
             cinemasToChoose: cinemas
         })
-    } catch(error) {
+    } catch (error) {
         console.error(error);
         res.status(500).json({
             message: "Error creating room",
@@ -252,7 +252,7 @@ export const editPatch = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/rooms/delete/:roomId
+// [DELETE] /admin/rooms/delete/:roomId
 export const deleteItem = async (req, res) => {
     try {
         const roomId = req.params.roomId;
