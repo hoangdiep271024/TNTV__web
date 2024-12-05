@@ -3,28 +3,31 @@ import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
 import { Link, useNavigate } from "react-router-dom";
 
-// const deleteMovie = async (id) => {
-//     try {
-//         const response = await fetch(`http://localhost:8888/api/admin/films/delete/${id}`, {
-//             method: 'PATCH',
-//         });
+const deleteMovie = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:8888/api/admin/films/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
 
-//         if (!response.ok) {
-//             throw new Error('Failed to delete movie');
-//         }
+        });
 
-//         return true;
-//     } catch (error) {
-//         console.error("Error deleting movie:", error);
-//         return false;
-//     }
-// }
+        if (!response.ok) {
+            throw new Error('Failed to delete movie');
+        }
 
-// delete button handle
+        return true;
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        return false;
+    }
+}
+
 // onDelete prop
-export function MovieTableRow({ row, selected, onSelectRow }) {
+export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
-    const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
@@ -34,17 +37,6 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
     const handleClosePopover = useCallback(() => {
         setOpenPopover(null);
     }, []);
-
-    const toggleDescription = () => {
-        setDescriptionExpanded((prev) => !prev);
-    };
-
-    const truncateText = (text, length) => {
-        if (text.length > length) {
-            return `${text.substring(0, length)}...`;
-        }
-        return text;
-    };
 
     const navigate = useNavigate();
     const handleEditButton = () => {

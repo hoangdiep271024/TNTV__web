@@ -1,32 +1,61 @@
-import { Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
+import { Box, Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
-// const deleteCinema = async (id) => {
-//     try {
-//         const response = await fetch(`http://localhost:8888/api/admin/cinemas/delete/${id}`, {
-//             method: 'PATCH',
-//         });
+const deleteCinema = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:8888/api/admin/cinemas/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            credentials: 'include',
+        });
 
-//         if (!response.ok) {
-//             throw new Error('Failed to delete cinema');
-//         }
+        if (!response.ok) {
+            throw new Error('Failed to delete cinema');
+        }
 
-//         return true;
-//     } catch (error) {
-//         console.error("Error deleting cinema:", error);
-//         return false;
-//     }
-// }
+        return true;
+    } catch (error) {
+        console.error("Error deleting cinema:", error);
 
-// edit button handle
-// delete button handle
-// click name to open cinema details
-// onDelete prop
-export function CinemaTableRow({ row, selected, onSelectRow }) {
+        return false;
+    }
+};
+
+function getBadgeStyle(clusterName) {
+    switch (clusterName) {
+        case 'CGV Cinemas':
+            return { backgroundColor: '#2196f3', color: '#fff' }; // Blue
+        case 'Beta Cinemas':
+            return { backgroundColor: '#f50057', color: '#fff' }; // Pink
+        case 'Lotte Cinemas':
+            return { backgroundColor: '#4caf50', color: '#fff' }; // Green
+        case 'Cinestar':
+            return { backgroundColor: '#ff5722', color: '#fff' }; // Orange
+        case 'Mega GS Cinemas':
+            return { backgroundColor: '#ffc107', color: '#000' }; // Yellow
+        case 'Dcine':
+            return { backgroundColor: '#9c27b0', color: '#fff' }; // Purple
+        case 'Đống Đa Cinema':
+            return { backgroundColor: '#795548', color: '#fff' }; // Brown
+        case 'Starlight':
+            return { backgroundColor: '#00bcd4', color: '#fff' }; // Cyan
+        case 'Rio Cinemas':
+            return { backgroundColor: '#8bc34a', color: '#fff' }; // Light Green
+        case 'Touch Cinema':
+            return { backgroundColor: '#ff9800', color: '#fff' }; // Deep Orange
+        case 'Cinemax':
+            return { backgroundColor: '#607d8b', color: '#fff' }; // Blue Gray
+        default:
+            return { backgroundColor: '#e0e0e0', color: '#000' }; // Gray for unknown clusters
+    }
+}
+
+export function CinemaTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
-    const [isAddressExpanded, setAddressExpanded] = useState(false);
     const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
@@ -37,20 +66,9 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
         setOpenPopover(null);
     }, []);
 
-    const toggleAddress = () => {
-        setAddressExpanded((prev) => !prev);
-    };
-
-    const truncateText = (text, length) => {
-        if (text.length > length) {
-            return `${text.substring(0, length)}...`;
-        }
-        return text;
-    };
-
     const navigate = useNavigate();
     const handleEditButton = () => {
-        navigate(`/admin/cinema/${row.id}`);
+        navigate(`/admin/cinema/${row.cinema_id}`);
     }
 
     const handleDeleteButton = () => {
@@ -62,13 +80,12 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
     }
 
     const handleConfirmDelete = async () => {
-        const success = await deleteCinema(row.id);
+        const success = await deleteCinema(row.cinema_id);
         if (success) {
-            onDelete(row.id);
+            onDelete(row.cinema_id);
         }
         setOpenDialog(false);
     }
-
 
     return (
         <>
@@ -78,49 +95,32 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                        {row.name}
-                    </Typography>
-                </TableCell>
-
-                <TableCell>
-                    <Tooltip title={row.address} placement="top" arrow>
-                        <Typography
-                            sx={{
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                                color: isAddressExpanded ? 'primary.main' : 'text.secondary',
-                                display: 'inline-block',
-                                maxWidth: isAddressExpanded ? 'none' : 200,
-                                whiteSpace: isAddressExpanded ? 'normal' : 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                            onClick={toggleAddress}
-                        >
-                            {isAddressExpanded
-                                ? row.address
-                                : truncateText(row.address, 20)}
-                        </Typography>
-                    </Tooltip>
-                    {/* <Typography
-                        sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                        }}
-                        onClick={toggleAddress}
+                    <Link
+                        to={`/admin/cinema/${row.cinema_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
                     >
-                        {isAddressExpanded ? row.address : truncateText(row.address, 20)}
-                    </Typography> */}
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.cinema_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
+                <CinemaAddressCell row={row} />
+
                 <TableCell>
-                    <Chip
-                        label={row.cluster_name}
-                        color="primary"
-                        size="small"
-                        sx={{ fontWeight: 'bold' }}
-                    />
+                    <Box
+                        component="span"
+                        sx={{
+                            ...getBadgeStyle(row.cluster_name),
+                            padding: '2px 8px',
+                            borderRadius: '8px',
+                            fontWeight: 'bold',
+                            fontSize: '0.875rem',
+                            display: 'inline-block',
+                        }}
+                    >
+                        {row.cluster_name}
+                    </Box>
                 </TableCell>
 
                 <TableCell align="right">
@@ -168,7 +168,7 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
                 <DialogTitle>Xác nhận xóa</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Bạn có chắc chắn muốn xóa rạp chiếu <strong>{row.name}</strong> không?
+                        Bạn có chắc chắn muốn xóa rạp chiếu <strong>{row.cinema_name}</strong> không?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -182,4 +182,45 @@ export function CinemaTableRow({ row, selected, onSelectRow }) {
             </Dialog>
         </>
     )
+}
+
+export function CinemaAddressCell({ row }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const openDialog = () => setIsDialogOpen(true);
+    const closeDialog = () => setIsDialogOpen(false);
+
+    return (
+        <TableCell>
+            <Tooltip title={row.address} placement="top" arrow>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        display: 'inline-block',
+                        maxWidth: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                    onClick={openDialog}
+                >
+                    {row.address}
+                </Typography>
+            </Tooltip>
+
+            <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="sm" fullWidth>
+                <DialogTitle>Địa chỉ</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">{row.address}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog} color="primary">
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </TableCell>
+    );
 }

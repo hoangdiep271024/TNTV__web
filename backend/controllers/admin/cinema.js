@@ -19,7 +19,7 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 10;
+    let limitItems = 200;
     if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
@@ -250,7 +250,7 @@ export const edit = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/films/edit/:cinemaId
+// [PATCH] /admin/cinemas/edit/:cinemaId
 export const editPatch = async (req, res) => {
     try {
         const cinemaId = parseInt(req.params.cinemaId);
@@ -299,34 +299,33 @@ export const editPatch = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/cinemas/delete/:cinemaId
+// [DELETE] /admin/cinemas/delete/:cinemaId
 export const deleteItem = async (req, res) => {
     try {
-        const cinemaIds = req.body.cinemaIds || [req.params.cinemaId]; // Chấp nhận một hoặc nhiều cinema_id
+        const cinemaId = req.params.cinemaId;
 
-        if (!cinemaIds || cinemaIds.length === 0) {
+        if (!cinemaId) {
             return res.status(400).json({
-                message: "No cinema IDs provided",
+                message: "No cinema ID provided",
             });
         }
 
-        const placeholders = cinemaIds.map(() => '?').join(',');
-        const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id IN (${placeholders})`;
+        const queryDeleteCinema = `DELETE FROM cinemas WHERE cinema_id = ?`;
 
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteCinema, cinemaIds, (err, results) => {
+            connection.query(queryDeleteCinema, [cinemaId], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
         });
 
         res.status(200).json({
-            message: `Cinemas with IDs ${cinemaIds.join(', ')} deleted successfully`,
+            message: `Cinema with ID ${cinemaId} deleted successfully`,
         });
     } catch (error) {
         console.error(error);
         res.status(500).json({
-            message: "Error deleting cinemas",
+            message: "Error deleting cinema",
             error: error.message,
         });
     }
