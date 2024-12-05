@@ -2,7 +2,7 @@ import { DashboardContent } from "../../../layouts/dashboard";
 import { Box, Button, Card, CircularProgress, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from '@mui/material';
 import { Iconify } from "../../../components/iconify";
 import { MovieTableToolbar } from "../movie-table-toolbar";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { hook } from "../hook";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
 import { MovieTableHead } from "../movie-table-head";
@@ -17,6 +17,17 @@ export function MovieView() {
     const [filterName, setFilterName] = useState('');
     const [movies, setMovies] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('film_name');
+    const [dataFiltered, setDataFiltered] = useState([]);
+
+    const handleFilterName = (event) => {
+        setFilterName(event.target.value);
+        table.onResetPage();
+    }
+
+    const handleFilterChange = (newFilter) => {
+        setSelectedFilter(newFilter);
+    };
 
     useEffect(() => {
         const fetchMovies = async () => {
@@ -45,12 +56,18 @@ export function MovieView() {
         fetchMovies();
     }, []);
 
-    // Filter and sort the list of users based on the current filter and sort settings
-    const dataFiltered = applyFilter({
-        inputData: movies,
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-    });
+    const filteredData = useMemo(() => {
+        return applyFilter({
+            inputData: movies,
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+            attribute: selectedFilter
+        });
+    }, [movies, table.order, table.orderBy, filterName, selectedFilter])
+
+    useEffect(() => {
+        setDataFiltered(filteredData);
+    }, [filteredData]);
 
     const notFound = !dataFiltered.length && filterName;
 
@@ -76,10 +93,9 @@ export function MovieView() {
                 <MovieTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
-                    onFilterName={(event) => {
-                        setFilterName(event.target.value);
-                        table.onResetPage();
-                    }}
+                    selectedFilter={selectedFilter}
+                    onFilterName={handleFilterName}
+                    onFilterChange={handleFilterChange}
                 />
 
                 <Scrollbar>
@@ -92,12 +108,12 @@ export function MovieView() {
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, movies.map((movie) => movie.id))
+                                    table.onSelectAllRows(checked, movies.map((movie) => movie.film_id))
                                 }
                                 headLabel={[
                                     { id: 'name', label: 'Tên phim' },
                                     { id: 'film_describe', label: 'Mô tả' },
-                                    { id: 'film_type', label: 'Thể loại chính' },
+                                    { id: 'film_type', label: 'Trạng thái' },
                                     { id: 'age_limit', label: 'Giới hạn độ tuổi' },
                                     { id: 'duration', label: 'Thời lượng' },
                                     { id: 'Release_date', label: 'Ngày phát hành' },

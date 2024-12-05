@@ -1,7 +1,7 @@
 import { Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 // const deleteMovie = async (id) => {
 //     try {
@@ -21,7 +21,6 @@ import { useNavigate } from "react-router-dom";
 // }
 
 // delete button handle
-// click name to open movie details
 // onDelete prop
 export function MovieTableRow({ row, selected, onSelectRow }) {
     const [openPopover, setOpenPopover] = useState(null);
@@ -61,9 +60,9 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
     }
 
     const handleConfirmDelete = async () => {
-        const success = await deleteMovie(row.id);
+        const success = await deleteMovie(row.film_id);
         if (success) {
-            onDelete(row.id);
+            onDelete(row.film_id);
         }
         setOpenDialog(false);
     }
@@ -76,9 +75,15 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="bold" noWrap>
-                        {row.film_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/movie/${row.film_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.film_name}
+                        </Typography>
+                    </Link>
+
                 </TableCell>
 
                 <MovieDescriptionCell row={row} />

@@ -44,7 +44,7 @@ export function getComparator(order, orderBy) {
 // - inputData: array of objects to filter/sort
 // - comparator: function to sort the array
 // - filterName: filter text for searching by name property
-export function applyFilter({ inputData, comparator, filterName }) {
+export function applyFilter({ inputData, comparator, filterName, attribute }) {
     // Stabilize the array by keeping track of original indices
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -59,10 +59,21 @@ export function applyFilter({ inputData, comparator, filterName }) {
     inputData = stabilizedThis.map((el) => el[0]);
 
     // Apply filtering if filterName is provided
-    if (filterName) {
-        inputData = inputData.filter(
-            (data) => data.name && data.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-        );
+    if (filterName && attribute) {
+        const normalizeText = (text) => {
+            return text
+                .normalize('NFD') // Normalize to decompose characters into their base and accent components
+                .replace(/[\u0300-\u036f]/g, '') // Remove the diacritical marks (accents)
+                .toLowerCase(); // Convert to lowercase
+        };
+
+        inputData = inputData.filter((data) => {
+            const dataValue = data[attribute] ? data[attribute].toLowerCase() : '';
+            const normalizedDataValue = normalizeText(dataValue);
+            const normalizedFilterName = normalizeText(filterName);
+
+            return normalizedDataValue.indexOf(normalizedFilterName) !== -1;
+        });
     }
 
     return inputData;
