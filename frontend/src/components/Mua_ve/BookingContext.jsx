@@ -18,9 +18,9 @@ export const BookingProvider = ({ children }) => {
     const [seatLoading, setSeatLoading] = useState(true);
     const [popcornLoading, setPopcornLoading] = useState(true);
 
-    useEffect(async () => {
+    useEffect(() => {
         // Fetch seat data
-        await axios.post(`/api/muaVe/showtime_id=${showtime_id}`)
+        axios.post(`/api/muaVe/showtime_id=${showtime_id}`)
             .then(response => {
                 setSeatData(response.data);
                 setSeatLoading(false);
