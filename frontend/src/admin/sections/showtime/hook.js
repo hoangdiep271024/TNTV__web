@@ -50,6 +50,7 @@ export function hook() {
         orderBy,
         rowsPerPage,
         selected,
+        setSelected,
         order,
         onSort,
         onSelectAllRows,
