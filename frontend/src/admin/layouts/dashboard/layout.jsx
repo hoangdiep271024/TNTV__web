@@ -1,12 +1,9 @@
 import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
-
 import { Iconify } from '../../components/iconify';
-
 import { Main } from './main';
 import { layoutClasses } from '../classes';
 import { NavMobile, NavDesktop } from './nav';
@@ -15,9 +12,8 @@ import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { ScrollToTop } from '../../components/ScrollToTop';
-
 import { _myAccount } from '../../_mock'
-// ----------------------------------------------------------------------
+
 export function DashboardLayout({ sx, children, header }) {
     const theme = useTheme();
 
@@ -27,9 +23,7 @@ export function DashboardLayout({ sx, children, header }) {
 
     return (
         <LayoutSection
-            /** **************************************
-             * Header
-             *************************************** */
+            //Header
             headerSection={
                 <HeaderSection
                     layoutQuery={layoutQuery}
@@ -77,19 +71,13 @@ export function DashboardLayout({ sx, children, header }) {
                     }}
                 />
             }
-            /** **************************************
-             * Sidebar
-             *************************************** */
+            //Sidebar
             sidebarSection={
                 <NavDesktop data={navData} layoutQuery={layoutQuery} />
             }
-            /** **************************************
-             * Footer
-             *************************************** */
+            //Footer
             footerSection={null}
-            /** **************************************
-             * Style
-             *************************************** */
+            //Style
             cssVars={{
                 '--layout-nav-vertical-width': '300px',
                 '--layout-dashboard-content-pt': theme.spacing(1),

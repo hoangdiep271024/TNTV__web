@@ -1,22 +1,23 @@
 import { useEffect } from 'react';
-
 import Box from '@mui/material/Box';
 import ListItem from '@mui/material/ListItem';
 import { useTheme } from '@mui/material/styles';
 import ListItemButton from '@mui/material/ListItemButton';
 import Drawer, { drawerClasses } from '@mui/material/Drawer';
-
 import { usePathname } from '../../routes/hooks';
 import { RouterLink } from '../../routes/components';
-
 import { varAlpha } from '../../theme/styles';
-
 import { Scrollbar } from '../../components/scrollbar';
-import { IconButton } from '@mui/material';
+import { Link } from 'react-router-dom';
 
-// ----------------------------------------------------------------------
 export function NavContent({ data, slots, sx }) {
     const pathname = usePathname();
+
+    const handleLogout = (path) => {
+        if (path === '/auth') {
+            window.location.href = '/auth';
+        }
+    }
 
     return (
         <>
@@ -26,14 +27,16 @@ export function NavContent({ data, slots, sx }) {
                 <Box component="nav" display="flex" flex="1 1 auto" flexDirection="column" sx={sx}>
                     <Box component="ul" gap={0.5} display="flex" flexDirection="column">
                         {data.map((item) => {
+
                             const isActived = item.path === pathname;
 
                             return (
                                 <ListItem disableGutters disablePadding key={item.title}>
                                     <ListItemButton
                                         disableGutters
-                                        component={RouterLink}
-                                        href={item.path}
+                                        component={Link}
+                                        to={item.path}
+                                        onClick={() => handleLogout(item.path)}
                                         sx={{
                                             pl: 2,
                                             py: 1,
@@ -74,12 +77,7 @@ export function NavContent({ data, slots, sx }) {
     );
 }
 
-export function NavDesktop({
-    sx,
-    data,
-    slots,
-    layoutQuery,
-}) {
+export function NavDesktop({ sx, data, slots, layoutQuery }) {
     const theme = useTheme();
 
     return (
@@ -108,15 +106,7 @@ export function NavDesktop({
     );
 }
 
-// ----------------------------------------------------------------------
-
-export function NavMobile({
-    sx,
-    data,
-    open,
-    slots,
-    onClose,
-}) {
+export function NavMobile({ sx, data, open, slots, onClose }) {
     const pathname = usePathname();
 
     useEffect(() => {
@@ -127,8 +117,8 @@ export function NavMobile({
 
     return (
         <Drawer
-            open={open} // Controls the open state of the drawer
-            onClose={onClose} // Function to close the drawer
+            open={open}
+            onClose={onClose}
             sx={{
                 [`& .${drawerClasses.paper}`]: {
                     pt: 2.5,
