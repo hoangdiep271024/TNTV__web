@@ -1,4 +1,3 @@
-// ----------------------------------------------------------------------
 export const visuallyHidden = {
     border: 0,
     margin: -1,
@@ -11,7 +10,6 @@ export const visuallyHidden = {
     clip: 'rect(0 0 0 0)',
 }
 
-// ----------------------------------------------------------------------
 // Function to calculate the number of empty rows required at the end of a paginated table
 // - page: the current page number
 // - rowsPerPage: the number of rows per page
@@ -20,7 +18,6 @@ export function emptyRows(page, rowsPerPage, arrayLength) {
     return Math.max(0, (1 + page) * rowsPerPage - arrayLength);
 }
 
-// ----------------------------------------------------------------------
 // Comparator for sorting in descending order
 // - a, b: items to compare
 // - orderBy: the property to sort by
@@ -34,7 +31,6 @@ function descendingComparator(a, b, orderBy) {
     return 0;
 }
 
-// ----------------------------------------------------------------------
 // Returns a comparator function based on the order (asc/desc) and the property to sort by
 // - order: 'asc' or 'desc'
 // - orderBy: the property to sort by
@@ -44,12 +40,11 @@ export function getComparator(order, orderBy) {
         : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// ----------------------------------------------------------------------
 // Function to apply sorting and filtering to data
 // - inputData: array of objects to filter/sort
 // - comparator: function to sort the array
 // - filterName: filter text for searching by name property
-export function applyFilter({ inputData, comparator, filterName }) {
+export function applyFilter({ inputData, comparator, filterName, attribute }) {
     // Stabilize the array by keeping track of original indices
     const stabilizedThis = inputData.map((el, index) => [el, index]);
 
@@ -64,10 +59,21 @@ export function applyFilter({ inputData, comparator, filterName }) {
     inputData = stabilizedThis.map((el) => el[0]);
 
     // Apply filtering if filterName is provided
-    if (filterName) {
-        inputData = inputData.filter(
-            (user) => user.name.toLowerCase().indexOf(filterName.toLowerCase()) !== -1
-        );
+    if (filterName && attribute) {
+        const normalizeText = (text) => {
+            return text
+                .normalize('NFD') // Normalize to decompose characters into their base and accent components
+                .replace(/[\u0300-\u036f]/g, '') // Remove the diacritical marks (accents)
+                .toLowerCase(); // Convert to lowercase
+        };
+
+        inputData = inputData.filter((data) => {
+            const dataValue = data[attribute] ? data[attribute].toLowerCase() : '';
+            const normalizedDataValue = normalizeText(dataValue);
+            const normalizedFilterName = normalizeText(filterName);
+
+            return normalizedDataValue.indexOf(normalizedFilterName) !== -1;
+        });
     }
 
     return inputData;

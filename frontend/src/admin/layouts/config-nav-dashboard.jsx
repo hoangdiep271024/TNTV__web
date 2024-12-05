@@ -3,27 +3,29 @@ import MovieTwoToneIcon from '@mui/icons-material/MovieTwoTone';
 import EventNoteTwoToneIcon from '@mui/icons-material/EventNoteTwoTone';
 import EditCalendarTwoToneIcon from '@mui/icons-material/EditCalendarTwoTone';
 import EventSeatTwoToneIcon from '@mui/icons-material/EventSeatTwoTone';
-import ReceiptTwoToneIcon from '@mui/icons-material/ReceiptTwoTone';
+import BookOnlineTwoToneIcon from '@mui/icons-material/BookOnlineTwoTone';
 import PersonTwoToneIcon from '@mui/icons-material/PersonTwoTone';
 import ExitToAppTwoToneIcon from '@mui/icons-material/ExitToAppTwoTone';
 import TheatersTwoToneIcon from '@mui/icons-material/TheatersTwoTone';
+import ArticleTwoToneIcon from '@mui/icons-material/ArticleTwoTone';
 
 const DashboardIcon = DashboardTwoToneIcon;
 const MovieIcon = MovieTwoToneIcon;
 const ScheduleIcon = EventNoteTwoToneIcon;
 const ShowtimeIcon = EditCalendarTwoToneIcon;
 const RoomIcon = EventSeatTwoToneIcon;
-const OrderIcon = ReceiptTwoToneIcon;
+const OrderIcon = BookOnlineTwoToneIcon;
 const UserIcon = PersonTwoToneIcon;
 const ExitIcon = ExitToAppTwoToneIcon;
 const CinemaIcon = TheatersTwoToneIcon;
+const ArticleIcon = ArticleTwoToneIcon;
 
 // ----------------------------------------------------------------------
 
 export const navData = [
     {
         title: 'Tổng quan',
-        path: '/admin',
+        path: '/admin/dashboard',
         icon: <DashboardIcon />,
     },
     {
@@ -60,6 +62,11 @@ export const navData = [
         title: 'Quản lý người dùng',
         path: '/admin/user',
         icon: <UserIcon />,
+    },
+    {
+        title: 'Quản lý bài viết',
+        path: '/admin/news',
+        icon: <ArticleIcon />,
     },
     {
         // đăng xuất ra khỏi màn hình quản trị viên, quay về màn hình web chính

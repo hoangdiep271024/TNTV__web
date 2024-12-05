@@ -6,6 +6,9 @@ import showTimeRoutes from "../../api/admin/showtime.js";
 import orderRoutes from "../../api/admin/order.js";
 import userRoutes from "./user.js";
 import dashboardRoutes from "./dashboard.js";
+import newsRoutes from "./new.js";
+
+// import { checkPermisson } from "../../middlewares/checkPermission.js";
 
 export const adminApi = (app) => {
 
@@ -19,9 +22,11 @@ export const adminApi = (app) => {
 
     app.use(`/${PATH_ADMIN}/showtimes`, showTimeRoutes);
 
-    app.use(`/${PATH_ADMIN}/orders`, orderRoutes)
+    app.use(`/${PATH_ADMIN}/orders`, orderRoutes);
 
-    app.use(`/${PATH_ADMIN}/users`, userRoutes)
+    app.use(`/${PATH_ADMIN}/users`, userRoutes);
 
-    app.use(`/${PATH_ADMIN}/dashboard`, dashboardRoutes)
+    app.use(`/${PATH_ADMIN}/dashboard`, dashboardRoutes);
+
+    app.use(`/${PATH_ADMIN}/news`, newsRoutes);
 }

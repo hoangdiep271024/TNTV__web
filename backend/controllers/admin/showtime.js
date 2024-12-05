@@ -126,8 +126,29 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/showtimes/create
+// [GET] /admin/showtimes/create
 export const create = async (req, res) => {
+    try {
+        const [films] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+        const [cinemas] = await connection.promise().query(`SELECT cinema_id, cinema_name FROM cinemas`);
+        const [rooms] = await connection.promise().query(`SELECT room_id, room_name FROM rooms`);
+
+        res.json({
+            filmsToChoose: films,
+            cinemasToChoose: cinemas,
+            roomsToChoose: rooms
+        });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({
+            message: "Error creating showtime",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/showtimes/create
+export const createPost = async (req, res) => {
     const { film_name, room_name, cinema_name, show_date, show_time } =  req.body;
 
     const countResult = await connection.promise().query(
@@ -286,8 +307,8 @@ export const edit = async (req, res) => {
             });
 
             const [films] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
-            const [cinemas] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
-            const [rooms] = await connection.promise().query(`SELECT film_id, film_name FROM films`);
+            const [cinemas] = await connection.promise().query(`SELECT cinema_id, cinema_name FROM cinemas`);
+            const [rooms] = await connection.promise().query(`SELECT room_id, room_name FROM rooms`);
 
             res.json({
                 showTimeInfo: showTimeInfo,

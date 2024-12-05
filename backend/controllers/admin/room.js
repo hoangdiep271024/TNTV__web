@@ -103,8 +103,25 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/rooms/create
+// [GET] /admin/rooms/create
 export const create = async (req, res) => {
+    try {
+        const [cinemas] = await connection.promise().query(`SELECT cinema_id, cinema_name FROM cinemas`);
+
+        res.json({
+            cinemasToChoose: cinemas
+        })
+    } catch(error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error creating room",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/rooms/create
+export const createPost = async (req, res) => {
     const { room_name, cinema_name } = req.body;
 
     const countResult = await connection.promise().query(

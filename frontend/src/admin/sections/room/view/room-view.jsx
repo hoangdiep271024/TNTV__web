@@ -9,6 +9,7 @@ import { RoomTableToolbar } from "../room-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { RoomTableHead } from "../room-table-head";
 import { RoomTableRow } from "../room-table-row";
+import { TableNoData } from "../../table-no-data";
 
 export function RoomView() {
     const table = hook();

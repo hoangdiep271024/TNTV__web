@@ -8,7 +8,9 @@ cinemaRoutes.get("/", controller.index);
 
 cinemaRoutes.get("/detail/:cinemaId", controller.detail);
 
-cinemaRoutes.post("/create", controller.create);
+cinemaRoutes.get("/create", controller.create)
+
+cinemaRoutes.post("/create", controller.createPost);
 
 cinemaRoutes.get("/edit/:cinemaId", controller.edit);
 

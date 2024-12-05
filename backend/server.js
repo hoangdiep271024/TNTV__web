@@ -8,6 +8,7 @@ import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
 import cors from "cors";
 const app = express();
+app.use(corMw);
 
 import { adminApi } from "./api/admin/index.js";
 
