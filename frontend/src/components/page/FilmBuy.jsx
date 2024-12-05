@@ -40,7 +40,7 @@ export default function FilmDetail() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/film/filmInfo/id=${film_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -69,7 +69,7 @@ export default function FilmDetail() {
   useEffect(() => {
     const fetchCinemas = async () => {
       try {
-        const response = await fetch(`/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -94,7 +94,7 @@ export default function FilmDetail() {
     const fetchCinemas = async () => {
       try {
         const response = await fetch(
-          `/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`,
+          `${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`,
           {
             method: "POST",
             headers: {

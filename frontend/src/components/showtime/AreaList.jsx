@@ -28,7 +28,7 @@ export default function AreaList() {
   }
   const fetchData = async () => { 
     try {
-      const response = await fetch(`/api/lichChieu/khuVuc`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -52,7 +52,7 @@ export default function AreaList() {
   const fetchCinema = async () => {
     try {
       const response = await fetch(
-        `/api/lichChieu/khuVuc/khuVuc_id=${areaClick}`,
+        `${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc/khuVuc_id=${areaClick}`,
         {
           method: "POST",
           headers: {
@@ -92,7 +92,7 @@ export default function AreaList() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(`/api/rap/cinema_id=${cinemaID}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/cinema_id=${cinemaID}`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

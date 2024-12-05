@@ -22,7 +22,7 @@ export default function New() {
 
   const fetchNewVietnam = async () => {
     try {
-      const response = await fetch(`/api/new/vietnam`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/vietnam`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -45,7 +45,7 @@ export default function New() {
 
   const fetchNewAboard = async () => {
     try {
-      const response = await fetch(`/api/new/aboard`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/aboard`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

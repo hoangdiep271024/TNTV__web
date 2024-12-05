@@ -18,7 +18,7 @@ export default function NewDetail() {
   const [dataRelate, setDataRelate] = useState();
   const fetchNewDetail = async () => {
     try {
-      const response = await fetch(`/api/new/new_id=${new_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/new_id=${new_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -41,7 +41,7 @@ export default function NewDetail() {
 
   const fetchNewRelate = async (film_id) => {
     try {
-      const response = await fetch(`/api/new/film_id=${film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/film_id=${film_id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

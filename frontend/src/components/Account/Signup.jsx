@@ -54,7 +54,7 @@ const [okMessage, setOkMessage]= useState('')
     }
 
     try {
-      const response = await fetch('/api/signUp', {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/signUp`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -51,7 +51,7 @@ export default function Profile() {
       
       try {
         setUploadStatus('Đang tải lên...');
-        const response = await axios.post('/api/uploadImage', formData, {
+        const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/uploadImage`, formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -117,7 +117,7 @@ export default function Profile() {
       };
       const handleSubmit = async () => {
         try {
-          const response = await fetch('/api/userInfo/update', {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/userInfo/update`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
@@ -200,11 +200,11 @@ export default function Profile() {
          <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
           <p style={{color:'black'}}>Giới tính:</p>
          <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="1" checked={formData.sex == '1'}/>
+    <input style ={{padding: '0'}} className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="1" checked={formData.sex == '1'}/>
     Nam
   </label>
   <label style={{color: 'black'}}>
-    <input className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="2" checked={formData.sex == '2'}/>
+    <input style ={{padding: '0'}} className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="2" checked={formData.sex == '2'}/>
     Nữ
   </label>
          </div>

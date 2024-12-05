@@ -6,6 +6,7 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
+import cors from "cors";
 const app = express();
 
 import { adminApi } from "./api/admin/index.js";
@@ -32,7 +33,9 @@ app.use(express.urlencoded({ extended: true }))
 app.use(json());
 app.use(cookieParser());
 app.set('trust proxy', 1)
-app.options('*', corMw);
+// app.options('*', corMw);
+
+app.use(cors())
 
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 

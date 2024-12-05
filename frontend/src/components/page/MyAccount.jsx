@@ -39,7 +39,7 @@ const MyAccount = () => {
     };
 
     useEffect(() => {
-        fetch('/api/userInfo', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -60,7 +60,7 @@ const MyAccount = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/userInfo/filmLiked', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/userInfo/filmLiked`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -81,7 +81,7 @@ const MyAccount = () => {
     }, []);
 
     useEffect(() => {
-        fetch('/api/orders', {
+        fetch(`${import.meta.env.VITE_API_URL}/api/orders`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

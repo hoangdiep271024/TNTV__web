@@ -15,7 +15,7 @@ export default function NewNew() {
     const [data, setData] = useState()
     const fetchNewData = async () => {
         try {
-          const response = await fetch(`/api/new`, {
+          const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

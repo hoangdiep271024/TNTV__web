@@ -12,7 +12,7 @@ const theme= useTheme()
     const fetchData = async (e) => {
 
        try {
-         const response = await fetch('/api/film/searchFilm', {
+         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/searchFilm`, {
            method: 'POST', 
            headers: {
              'Content-Type': 'application/json',
