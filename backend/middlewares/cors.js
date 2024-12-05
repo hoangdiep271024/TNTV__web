@@ -3,15 +3,17 @@ import cors from "cors";
 const whitelist = new Set(['https://example.org', 'http://localhost:5173']);
 
 const corOptions = {
-    optionsSuccesStatus: 200,
+    optionsSuccessStatus: 200, // Sửa lỗi chính tả từ `optionsSuccesStatus`
     origin: function (origin, callback) {
-        if (whitelist.has(origin)) {
+        // Cho phép khi `origin` là null hoặc nằm trong whitelist
+        if (!origin || whitelist.has(origin)) {
             callback(null, true);
         } else {
             callback(new Error("Not allowed by CORS"));
         }
     },
-    credentials: true
-}
+    credentials: true,
+};
+
 
 export default cors(corOptions);

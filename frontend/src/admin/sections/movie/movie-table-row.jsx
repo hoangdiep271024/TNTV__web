@@ -20,7 +20,6 @@ import { useNavigate } from "react-router-dom";
 //     }
 // }
 
-// edit button handle
 // delete button handle
 // click name to open movie details
 // onDelete prop
@@ -50,7 +49,7 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
 
     const navigate = useNavigate();
     const handleEditButton = () => {
-        navigate(`/admin/movie/${row.id}`);
+        navigate(`/admin/movie/${row.film_id}`);
     }
 
     const handleDeleteButton = () => {
@@ -77,47 +76,19 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                        {row.name}
+                    <Typography variant="body2" fontWeight="bold" noWrap>
+                        {row.film_name}
                     </Typography>
                 </TableCell>
 
-                <TableCell>
-                    <Tooltip title={row.description} placement="top" arrow>
-                        <Typography
-                            sx={{
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                                color: isDescriptionExpanded ? 'primary.main' : 'text.secondary',
-                                display: 'inline-block',
-                                maxWidth: isDescriptionExpanded ? 'none' : 200,
-                                whiteSpace: isDescriptionExpanded ? 'normal' : 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                            onClick={toggleDescription}
-                        >
-                            {isDescriptionExpanded
-                                ? row.description
-                                : truncateText(row.description, 20)}
-                        </Typography>
-                    </Tooltip>
-                    {/* <Typography
-                        sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                        }}
-                        onClick={toggleDescription}
-                    >
-                        {isDescriptionExpanded ? row.description : truncateText(row.description, 20)}
-                    </Typography> */}
-                </TableCell>
+                <MovieDescriptionCell row={row} />
 
                 <TableCell>
                     <Chip
-                        label={row.film_type}
-                        // color={row.film_type === 'Feature' ? 'primary' : 'secondary'}
-                        // size="small"
+                        variant="body2"
+                        label={row.film_type === 1 ? 'Đang chiếu' : 'Sắp chiếu'}
+                        color={row.film_type === 1 ? 'primary' : 'secondary'}
+                        size="small"
                         sx={{ fontWeight: 'bold' }}
                     />
                 </TableCell>
@@ -137,13 +108,13 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
 
                 <TableCell>
                     <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                        {row.duration} phút
+                        {row.duration} (phút)
                     </Typography>
                 </TableCell>
 
                 <TableCell>
                     <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                        {new Date(row.release_date).toLocaleDateString()}
+                        {new Date(row.Release_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
 
@@ -192,7 +163,7 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 <DialogTitle>Xác nhận xóa</DialogTitle>
                 <DialogContent>
                     <Typography>
-                        Bạn có chắc chắn muốn xóa phim <strong>{row.name}</strong> không?
+                        Bạn có chắc chắn muốn xóa phim <strong>{row.film_name}</strong> không?
                     </Typography>
                 </DialogContent>
                 <DialogActions>
@@ -207,3 +178,45 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
         </>
     )
 }
+
+export function MovieDescriptionCell({ row }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const openDialog = () => setIsDialogOpen(true);
+    const closeDialog = () => setIsDialogOpen(false);
+
+    return (
+        <TableCell>
+            <Tooltip title={row.film_describe} placement="top" arrow>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        display: 'inline-block',
+                        maxWidth: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                    onClick={openDialog}
+                >
+                    {row.film_describe}
+                </Typography>
+            </Tooltip>
+
+            <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="sm" fullWidth>
+                <DialogTitle>Mô tả chi tiết</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">{row.film_describe}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog} color="primary">
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </TableCell>
+    );
+}
+

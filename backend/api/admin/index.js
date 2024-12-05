@@ -8,7 +8,7 @@ import userRoutes from "./user.js";
 import dashboardRoutes from "./dashboard.js";
 import newsRoutes from "./new.js";
 
-import { checkPermisson } from "../../middlewares/checkPermission.js";
+// import { checkPermisson } from "../../middlewares/checkPermission.js";
 
 export const adminApi = (app) => {
 

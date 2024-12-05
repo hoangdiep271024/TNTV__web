@@ -12,7 +12,6 @@ export default function DashboardPage() {
     });
 
     useEffect(() => {
-        // Make the API call when the component mounts
         const fetchDashboardData = async () => {
             try {
                 const myHeaders = new Headers();
