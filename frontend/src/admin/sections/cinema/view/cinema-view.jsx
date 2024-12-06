@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
 import { DashboardContent } from "../../../layouts/dashboard";
@@ -11,12 +11,22 @@ import { TableNoData } from "../../table-no-data";
 import { CinemaTableRow } from "../cinema-table-row";
 import { Link } from "react-router-dom";
 
-// chưa chỉnh search bar
 export function CinemaView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
     const [cinemas, setCinemas] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('cinema_name');
+    const [dataFiltered, setDataFiltered] = useState([]);
+
+    const handleFilterName = (event) => {
+        setFilterName(event.target.value);
+        table.onResetPage();
+    }
+
+    const handleFilterChange = (newFilter) => {
+        setSelectedFilter(newFilter);
+    };
 
     const handleDeleteSelected = async () => {
         if (table.selected.length === 0) return;
@@ -59,6 +69,7 @@ export function CinemaView() {
                 if (!response.ok) throw new Error("Failed to fetch cinemas");
 
                 const data = await response.json();
+                // console.log(data);
                 setCinemas(data);
             } catch (err) {
                 console.error(err);
@@ -70,11 +81,19 @@ export function CinemaView() {
         fetchCinemas();
     }, []);
 
-    const dataFiltered = applyFilter({
-        inputData: cinemas,
-        comparator: getComparator(table.order, table.orderBy),
-        filterName
-    });
+    const filteredData = useMemo(() => {
+        return applyFilter({
+            inputData: cinemas,
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+            attribute: selectedFilter
+        });
+    }, [cinemas, table.order, table.orderBy, filterName, selectedFilter])
+
+    useEffect(() => {
+        setDataFiltered(filteredData);
+    }, [filteredData]);
+
 
     const notFound = !dataFiltered.length && filterName;
 
@@ -100,10 +119,9 @@ export function CinemaView() {
                 <CinemaTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
-                    onFilterName={(event) => {
-                        setFilterName(event.target.value);
-                        table.onResetPage();
-                    }}
+                    selectedFilter={selectedFilter}
+                    onFilterName={handleFilterName}
+                    onFilterChange={handleFilterChange}
                     onDeleteSelected={handleDeleteSelected}
                 />
 
@@ -163,7 +181,7 @@ export function CinemaView() {
                     <TablePagination
                         component="div"
                         page={table.page}
-                        count={cinemas.length}
+                        count={dataFiltered.length}
                         rowsPerPage={table.rowsPerPage}
                         onPageChange={table.onChangePage}
                         rowsPerPageOptions={[5, 10, 25]}

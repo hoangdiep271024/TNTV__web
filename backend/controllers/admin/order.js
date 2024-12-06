@@ -9,13 +9,13 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
-    if(req.query.limitItems) {
+    let limitItems = 100;
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -29,7 +29,7 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const queryOrder = 
+    const queryOrder =
         `SELECT o.*, u.username, f.film_name, c.cinema_name, r.room_name, s.show_date
         FROM orders o
         JOIN showtimes s ON o.showtime_id = s.showtime_id
@@ -48,7 +48,7 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(orders);
 };
 
@@ -60,7 +60,7 @@ export const detail = async (req, res) => {
         const orderInfo = {};
 
         // Truy vấn Ticket, seats, rooms, cinemas
-        const queryTicket_Seat_Room = 
+        const queryTicket_Seat_Room =
             `SELECT c.cinema_name, r.room_name, s.seat_row, s.seat_number, t.ticket_price
             FROM tickets t
             JOIN seats s ON t.seat_id = s.seat_id
@@ -74,9 +74,9 @@ export const detail = async (req, res) => {
                 resolve(results);
             });
         });
-    
+
         // Truy vấn popcorn
-        const queryPopcorn = 
+        const queryPopcorn =
             `SELECT pc.combo_name, pc.combo_price, po.combo_quantity
             FROM popcorn_combos pc
             JOIN popcorn_orders po ON pc.combo_id = po.combo_id
@@ -89,7 +89,7 @@ export const detail = async (req, res) => {
         });
 
         // Truy vấn thông tin order: người đặt?, phim?, thời gian chiếu?
-        const queryOrder = 
+        const queryOrder =
             `SELECT o.*, u.username, f.film_name, s.show_date
             FROM orders o
             JOIN showtimes s ON o.showtime_id = s.showtime_id
@@ -102,7 +102,7 @@ export const detail = async (req, res) => {
                 resolve(results);
             });
         });
-        
+
         res.json(orderInfo);
     } catch (error) {
         console.log(error);
@@ -159,7 +159,7 @@ export const detail = async (req, res) => {
 // export const edit = async (req, res) => {
 //     try {
 //         const orderId = parseInt(req.params.orderId);
-  
+
 //         const { room_name, cinema_name } =  req.body;
 
 //         // Truy vấn cinema_id từ cinema_name

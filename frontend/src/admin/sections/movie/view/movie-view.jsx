@@ -107,9 +107,9 @@ export function MovieView() {
                                 rowCount={movies.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
-                                onSelectAllRows={(checked) =>
+                                onSelectAllRows={(checked) => {
                                     table.onSelectAllRows(checked, movies.map((movie) => movie.film_id))
-                                }
+                                }}
                                 headLabel={[
                                     { id: 'name', label: 'Tên phim' },
                                     { id: 'film_describe', label: 'Mô tả' },
@@ -158,7 +158,7 @@ export function MovieView() {
                     <TablePagination
                         component="div"
                         page={table.page}
-                        count={movies.length}
+                        count={dataFiltered.length}
                         rowsPerPage={table.rowsPerPage}
                         onPageChange={table.onChangePage}
                         rowsPerPageOptions={[5, 10, 25]}

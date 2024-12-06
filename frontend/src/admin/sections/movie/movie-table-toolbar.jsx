@@ -7,24 +7,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import { Iconify } from '../../components/iconify';
 import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-/**
- * MovieTableToolbar Component
- *
- * This component renders a toolbar for the movie table. It supports:
- * - Displaying the number of selected rows and providing an action (e.g., delete) for those rows.
- * - A search input field to filter the table rows by a name or keyword.
- * - A filter dropdown to select the property to search by (e.g., film name, director).
- *
- * @param {number} numSelected - The number of currently selected rows in the table.
- * @param {string} filterName - The current value of the search input field for filtering rows.
- * @param {string} selectedFilter - The selected filter property (e.g., 'film_name').
- * @param {Function} onFilterName - Callback function triggered when the search input value changes.
- *   It passes the updated filter string to the parent component.
- * @param {Function} onFilterChange - Callback function triggered when the filter property changes.
- *   It passes the updated filter property to the parent component.
- * @returns {JSX.Element} The rendered toolbar, displaying the selected row count or a search input field.
- */
-export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onFilterName, onFilterChange }) {
+export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onFilterName, onFilterChange, onDeleteSelected }) {
     const filterOptions = [
         { value: 'film_name', label: 'Tên phim' },
         { value: 'film_describe', label: 'Mô tả' },
@@ -48,7 +31,7 @@ export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onF
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <Box sx={{ display: 'flex', alignItems: 'cneter' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <FormControl sx={{ minWidth: 150, mr: 2 }}>
                         <InputLabel>Thuộc tính</InputLabel>
                         <Select
@@ -82,12 +65,11 @@ export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onF
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton>
+                    <IconButton onClick={onDeleteSelected}>
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>
             ) : null}
-            {/* delete all selected or filter list (optional) */}
         </Toolbar>
     );
 }
