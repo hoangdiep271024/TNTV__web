@@ -95,7 +95,7 @@ export function CreateCinemaView() {
 
                         <Box mt={3} display="flex" justifyContent="flex-end">
                             <Button type="submit" variant="contained" color="primary">
-                                Tạo rạp chiếu phim
+                                Tạo rạp chiếu
                             </Button>
                         </Box>
                     </form>

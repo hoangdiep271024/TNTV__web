@@ -3,9 +3,6 @@ import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
 import { Link, useNavigate } from "react-router-dom";
 
-// edit button handler
-// delete button handler
-// click name to open showtime details
 const deleteShowtime = async (id) => {
     try {
         const response = await fetch(`http://localhost:8888/api/admin/showtimes/delete/${id}`, {
@@ -42,7 +39,7 @@ export function ShowtimeTableRow({ row, selected, onSelectRow, onDelete }) {
 
     const navigate = useNavigate();
     const handleEditButton = () => {
-        navigate(`/admin/cinema/${row.cinema_id}`);
+        navigate(`/admin/showtime/${row.showtime_id}`);
     }
 
     const handleDeleteButton = () => {

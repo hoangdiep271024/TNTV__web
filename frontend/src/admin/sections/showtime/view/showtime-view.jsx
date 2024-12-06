@@ -11,6 +11,7 @@ import { Iconify } from "../../../components/iconify";
 import { TableNoData } from "../../table-no-data";
 import { Link } from "react-router-dom";
 
+// chưa chỉnh search bar
 export function ShowtimeView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
