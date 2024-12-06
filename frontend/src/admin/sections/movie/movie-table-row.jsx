@@ -25,7 +25,6 @@ const deleteMovie = async (id) => {
     }
 }
 
-// onDelete prop
 export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
@@ -116,7 +115,7 @@ export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
                 </TableCell>
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover} size="small">
+                    <IconButton onClick={handleOpenPopover}>
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>

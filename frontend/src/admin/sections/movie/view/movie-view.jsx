@@ -29,6 +29,32 @@ export function MovieView() {
         setSelectedFilter(newFilter);
     };
 
+    const handleDeleteSelected = async () => {
+        if (table.selected.length === 0) return;
+
+        try {
+            for (const movieId of table.selected) {
+                const response = await fetch(`http://localhost:8888/api/admin/movies/delete/${movieId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to delete movie with ID: ${movieId}`);
+                }
+            }
+
+            setMovies((prevMovies) => prevMovies.filter((movie) => !table.selected.includes(movie.movie_id)));
+            table.setSelected([]);
+            console.log('Selected movies deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting selected movies:', error);
+        }
+    };
+
     useEffect(() => {
         const fetchMovies = async () => {
             setLoading(true);
@@ -96,6 +122,7 @@ export function MovieView() {
                     selectedFilter={selectedFilter}
                     onFilterName={handleFilterName}
                     onFilterChange={handleFilterChange}
+                    onDeleteSelected={handleDeleteSelected}
                 />
 
                 <Scrollbar>
@@ -140,6 +167,10 @@ export function MovieView() {
                                             row={row}
                                             selected={table.selected.includes(row.film_id)}
                                             onSelectRow={() => table.onSelectRow(row.film_id)}
+                                            onDelete={(id) => {
+                                                setMovies((prevMovies) => prevMovies.filter((movie) => movie.movie_id !== id));
+                                                table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
+                                            }}
                                         />
                                     ))}
 

@@ -440,19 +440,26 @@ export const deleteItem = async (req, res) => {
     try {
         const showTimeId = req.params.showTimeId;
 
-        const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE showtime_id = ?`;
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteSeatStatus, [showTimeId], (err, results) => {
+            connection.beginTransaction((err) => {
                 if (err) return reject(err);
-                resolve(results);
-            });
-        });
 
-        const queryDeleteShowTime = `DELETE FROM showtimes WHERE showtime_id = ?`;
-        await new Promise((resolve, reject) => {
-            connection.query(queryDeleteShowTime, [showTimeId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+                const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE showtime_id = ?`;
+                connection.query(queryDeleteSeatStatus, [showTimeId], (err, results) => {
+                    if (err) return connection.rollback(() => reject(err));
+
+                    const queryDeleteShowTime = `DELETE FROM showtimes WHERE showtime_id = ?`;
+                    connection.query(queryDeleteShowTime, [showTimeId], (err, results) => {
+                        if (err) return connection.rollback(() => reject(err));
+
+                        // Step 3: Commit the transaction if both deletions are successful
+                        connection.commit((err) => {
+                            if (err) return connection.rollback(() => reject(err));
+
+                            resolve(results);
+                        });
+                    });
+                });
             });
         });
 
@@ -466,4 +473,4 @@ export const deleteItem = async (req, res) => {
             error: error.message,
         });
     }
-}
+};

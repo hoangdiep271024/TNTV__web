@@ -19,7 +19,7 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
+    let limitItems = 1700;
     if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
@@ -257,11 +257,32 @@ export const deleteItem = async (req, res) => {
     try {
         const roomId = req.params.roomId;
 
-        const queryDeleteRoom = `DELETE FROM rooms WHERE room_id = ?`;
+        // Start a transaction to ensure all deletions are handled together
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteRoom, [roomId], (err, results) => {
+            connection.beginTransaction((err) => {
                 if (err) return reject(err);
-                resolve(results);
+
+                const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE seat_id IN (SELECT seat_id FROM seats WHERE room_id = ?)`;
+                connection.query(queryDeleteSeatStatus, [roomId], (err, results) => {
+                    if (err) return connection.rollback(() => reject(err));
+
+                    const queryDeleteSeats = `DELETE FROM seats WHERE room_id = ?`;
+                    connection.query(queryDeleteSeats, [roomId], (err, results) => {
+                        if (err) return connection.rollback(() => reject(err));
+
+                        const queryDeleteRoom = `DELETE FROM rooms WHERE room_id = ?`;
+                        connection.query(queryDeleteRoom, [roomId], (err, results) => {
+                            if (err) return connection.rollback(() => reject(err));
+
+                            // Commit transaction if everything is successful
+                            connection.commit((err) => {
+                                if (err) return connection.rollback(() => reject(err));
+
+                                resolve(results);
+                            });
+                        });
+                    });
+                });
             });
         });
 
@@ -275,4 +296,4 @@ export const deleteItem = async (req, res) => {
             error: error.message,
         });
     }
-}
+};
