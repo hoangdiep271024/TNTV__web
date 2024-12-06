@@ -1,23 +1,39 @@
 import cors from "cors";
 
-// const whitelist = new Set(['http://example.com', 'https://example.org']);
-const whitelist = new Set(['*']);
-const corOptions = {
-    optionsSuccesStatus: 200,
-    origin: function(origin,callback) {
-        // if(whitelist.has(origin)) {
-        //     callback(null,true);
-        // } else {
-        //     callback(new Error("Not allowed by CORS"));
-        // }
-        callback(null,true)
+const corsOptions = {
+    origin: function (origin, callback) {
+        // Chỉ cho phép nguồn từ http://localhost:5173
+        if (origin === 'http://localhost:5173' || !origin) {
+            callback(null, true); // Cho phép nguồn hợp lệ
+        } else {
+            callback(new Error("Not allowed by CORS"));
+        }
     },
+    credentials: true, // Cho phép gửi cookie hoặc thông tin xác thực
+    optionsSuccessStatus: 200, // Đảm bảo các trình duyệt cũ không báo lỗi
+};
 
-    credentials: true
-}
+export default cors(corsOptions);
 
 
-export default cors(corOptions);
+// // const whitelist = new Set(['http://example.com', 'https://example.org']);
+// const whitelist = new Set(['*']);
+// const corOptions = {
+//     optionsSuccesStatus: 200,
+//     origin: function(origin,callback) {
+//         // if(whitelist.has(origin)) {
+//         //     callback(null,true);
+//         // } else {
+//         //     callback(new Error("Not allowed by CORS"));
+//         // }
+//         callback(null,true)
+//     },
+
+//     credentials: true
+// }
+
+
+// export default cors(corOptions);
 
 // export default function corMw(req, res, next) {
 //     res.header('Access-Control-Allow-Origin', '*'); // Cho phép tất cả các nguồn

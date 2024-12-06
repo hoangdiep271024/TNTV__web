@@ -11,6 +11,7 @@ import { TableNoData } from "../../table-no-data";
 import { CinemaTableRow } from "../cinema-table-row";
 import { Link } from "react-router-dom";
 
+// chưa chỉnh search bar
 export function CinemaView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
@@ -27,7 +28,7 @@ export function CinemaView() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: 'include',
+                    // credentials: 'include',
                 });
 
                 if (!response.ok) {
@@ -52,7 +53,7 @@ export function CinemaView() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: 'include',
+                    // credentials: 'include',
                 });
 
                 if (!response.ok) throw new Error("Failed to fetch cinemas");

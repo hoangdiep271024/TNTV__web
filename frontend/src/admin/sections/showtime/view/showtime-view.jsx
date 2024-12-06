@@ -27,7 +27,7 @@ export function ShowtimeView() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: 'include',
+                    // credentials: 'include',
                 });
 
                 if (!response.ok) {
@@ -52,7 +52,7 @@ export function ShowtimeView() {
                     headers: {
                         "Content-Type": "application/json",
                     },
-                    credentials: 'include',
+                    // credentials: 'include',
                 });
 
                 if (!response.ok) throw new Error("Failed to fetch showtimes");
