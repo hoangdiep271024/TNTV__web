@@ -33,11 +33,11 @@ export function RoomTableToolbar({ numSelected, filterName, selectedFilter, onFi
             ) : (
                 <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <FormControl sx={{ minWidth: 150, mr: 2 }}>
-                        <InputLabel>Thuộc tính</InputLabel>
+                        <InputLabel>Bộ lọc</InputLabel>
                         <Select
                             value={selectedFilter}
                             onChange={(e) => onFilterChange(e.target.value)}
-                            label="Thuộc tính"
+                            label="Bộ lọc"
                             fullWidth
                         >
                             {filterOptions.map((option) => (

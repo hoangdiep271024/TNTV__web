@@ -32,11 +32,11 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName, selec
             ) : (
                 <Box sx={{ display: 'flex', alignItems: 'cneter' }}>
                     <FormControl sx={{ minWidth: 150, mr: 2 }}>
-                        <InputLabel>Thuộc tính</InputLabel>
+                        <InputLabel>Bộ lọc</InputLabel>
                         <Select
                             value={selectedFilter}
                             onChange={(e) => onFilterChange(e.target.value)}
-                            label="Thuộc tính"
+                            label="Bộ lọc"
                             fullWidth
                         >
                             {filterOptions.map((option) => (
