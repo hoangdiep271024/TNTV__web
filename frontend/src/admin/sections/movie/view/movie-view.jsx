@@ -138,7 +138,7 @@ export function MovieView() {
                                     table.onSelectAllRows(checked, movies.map((movie) => movie.film_id))
                                 }}
                                 headLabel={[
-                                    { id: 'name', label: 'Tên phim' },
+                                    { id: 'film_name', label: 'Tên phim' },
                                     { id: 'film_describe', label: 'Mô tả' },
                                     { id: 'film_type', label: 'Trạng thái' },
                                     { id: 'age_limit', label: 'Giới hạn độ tuổi' },

@@ -127,7 +127,7 @@ export function EditCinemaView({ cinemaId }) {
 
                             <Box mt={3} display="flex" justifyContent="flex-end">
                                 <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                                    {loading ? "Đang cập nhật..." : "Cập nhật"}
+                                    Cập nhật
                                 </Button>
                             </Box>
                         </form>

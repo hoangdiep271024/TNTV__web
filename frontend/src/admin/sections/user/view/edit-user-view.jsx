@@ -1,17 +1,21 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box } from "@mui/material";
+import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box, Stack } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
+// thiếu một số trường full_name, sex, date_of_birth, date
+// thiếu tổng hợp order của khách hàng
 export function EditUserView({ userId }) {
     const [formData, setFormData] = useState({
         username: "",
-        user_img: "",
+        user_img: null,
         email: "",
         phone_number: "",
         role: 0,
         status: 0,
     });
+
+    const [currentImage, setCurrentImage] = useState("");
 
     const roleOptions = [
         { label: "Người dùng", value: 0 },
@@ -45,13 +49,14 @@ export function EditUserView({ userId }) {
 
                 setFormData({
                     username: user.username || "",
-                    user_img: user.user_img || "",
+                    user_img: null,
                     email: user.email || "",
                     phone_number: user.phone_number || "",
                     role: user.role || 0,
                     status: user.status || 0,
                 });
 
+                setCurrentImage(user.user_img || "");
                 setLoading(false);
             } catch (error) {
                 console.error(error);
@@ -68,15 +73,32 @@ export function EditUserView({ userId }) {
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFormData((prev) => ({ ...prev, user_img: file }));
+    };
+
     const handleSubmit = async (event) => {
         event.preventDefault();
+
+        const formDataToSend = new FormData();
+
+        // Append fields
+        formDataToSend.append("username", formData.username);
+        formDataToSend.append("email", formData.email);
+        formDataToSend.append("phone_number", formData.phone_number);
+        formDataToSend.append("role", formData.role);
+        formDataToSend.append("status", formData.status);
+
+        // Append the file if selected
+        if (formData.user_img) {
+            formDataToSend.append("user_img", formData.user_img);
+        }
+
         try {
             const response = await fetch(`http://localhost:8888/api/admin/users/edit/${userId}`, {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(formData),
+                body: formDataToSend,
             });
 
             if (!response.ok) {
@@ -97,96 +119,112 @@ export function EditUserView({ userId }) {
     return (
         <DashboardContent>
             <Card>
-                <CardHeader title="Chỉnh sửa thông tin người dùng" />
+                <CardHeader title={<Typography variant="h2">{'Chỉnh sửa thông tin người dùng'}</Typography>} />
                 <CardContent>
                     {loading ? (
                         <Typography variant="body1">Đang tải thông tin người dùng...</Typography>
                     ) : (
                         <form onSubmit={handleSubmit}>
-                            <Grid container spacing={2}>
+                            <Stack spacing={3} >
 
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Tên người dùng"
-                                        name="username"
-                                        value={formData.username}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Grid>
+                                <TextField
+                                    fullWidth
+                                    label="Tên người dùng"
+                                    name="username"
+                                    value={formData.username}
+                                    onChange={handleInputChange}
+                                    required
+                                />
 
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Email"
-                                        name="email"
-                                        type="email"
-                                        value={formData.email}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Grid>
+                                <TextField
+                                    fullWidth
+                                    label="Email"
+                                    name="email"
+                                    type="email"
+                                    value={formData.email}
+                                    onChange={handleInputChange}
+                                    required
+                                />
 
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Ảnh đại diện"
-                                        name="user_img"
-                                        value={formData.user_img}
-                                        onChange={handleInputChange}
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        label="Số điện thoại"
-                                        name="phone_number"
-                                        value={formData.phone_number}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
-                                </Grid>
-
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Vai trò"
-                                        name="role"
-                                        value={formData.role}
-                                        onChange={handleInputChange}
+                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+                                    {currentImage && (
+                                        <Box>
+                                            <img
+                                                src={currentImage}
+                                                alt="Current Profile"
+                                                style={{
+                                                    display: "block",
+                                                    width: "100%",
+                                                    maxWidth: "200px",
+                                                    borderRadius: "8px",
+                                                    margin: "0 auto",
+                                                }}
+                                            />
+                                        </Box>
+                                    )}
+                                    <Button
+                                        variant="outlined"
+                                        component="label"
+                                        size="small"
+                                        sx={{
+                                            color: "gray",
+                                            borderColor: "gray",
+                                            textTransform: "none",
+                                        }}
                                     >
-                                        {roleOptions.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
+                                        Tải ảnh đại diện
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </Button>
+                                </Box>
 
-                                <Grid item xs={12} sm={6}>
-                                    <TextField
-                                        fullWidth
-                                        select
-                                        label="Trạng thái"
-                                        name="status"
-                                        value={formData.status}
-                                        onChange={handleInputChange}
-                                    >
-                                        {statusOptions.map((option) => (
-                                            <MenuItem key={option.value} value={option.value}>
-                                                {option.label}
-                                            </MenuItem>
-                                        ))}
-                                    </TextField>
-                                </Grid>
-                            </Grid>
+                                <TextField
+                                    fullWidth
+                                    label="Số điện thoại"
+                                    name="phone_number"
+                                    value={formData.phone_number}
+                                    onChange={handleInputChange}
+                                    required
+                                />
+
+                                <TextField
+                                    fullWidth
+                                    select
+                                    label="Vai trò"
+                                    name="role"
+                                    value={formData.role}
+                                    onChange={handleInputChange}
+                                >
+                                    {roleOptions.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+
+                                <TextField
+                                    fullWidth
+                                    select
+                                    label="Trạng thái"
+                                    name="status"
+                                    value={formData.status}
+                                    onChange={handleInputChange}
+                                >
+                                    {statusOptions.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+                            </Stack>
 
                             <Box mt={3} display="flex" justifyContent="flex-end">
                                 <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                                    {loading ? "Đang cập nhật..." : "Cập nhật"}
+                                    Cập nhật
                                 </Button>
                             </Box>
 
