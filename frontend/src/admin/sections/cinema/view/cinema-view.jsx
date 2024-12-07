@@ -155,6 +155,7 @@ export function CinemaView() {
                                         </TableCell>
                                     </TableRow>
                                 )}
+
                                 {!loading && dataFiltered.slice(
                                     table.page * table.rowsPerPage,
                                     table.page * table.rowsPerPage + table.rowsPerPage

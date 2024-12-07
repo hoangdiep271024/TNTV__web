@@ -37,7 +37,6 @@ export function EditCinemaView({ cinemaId }) {
                     region_name: region.region_name || "",
                 });
 
-
                 setLoading(false);
             } catch (error) {
                 console.error(error);

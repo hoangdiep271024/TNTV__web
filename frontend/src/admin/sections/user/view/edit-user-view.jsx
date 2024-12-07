@@ -1,196 +1,207 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert } from "@mui/material";
+import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export function EditUserView({ userId }) {
-
     const [formData, setFormData] = useState({
         username: "",
-        avatar: "",
+        user_img: "",
         email: "",
-        phoneNumber: "",
-        role: "user",
-        status: "active"
+        phone_number: "",
+        role: 0,
+        status: 0,
     });
 
-    const roleOptions = ["user", "admin"];
-    const statusOptions = ["active", "inactive"];
+    const roleOptions = [
+        { label: "Người dùng", value: 0 },
+        { label: "Quản trị viên", value: 1 },
+    ];
+    const statusOptions = [
+        { label: "Đang hoạt động", value: 1 },
+        { label: "Không hoạt động", value: 0 },
+    ];
 
-    //     // Fetch user data based on userId
-    //     useEffect(() => {
-    //     if (userId) {
-    //         // Fetch user data using userId (e.g., from an API or database)
-    //         const fetchUserData = async () => {
-    //             try {
-    //                 const response = await fetch(`/api/users/${userId}`);
-    //                 const data = await response.json();
-    //                 setFormData({
-    //                     username: data.username,
-    //                     avatar: data.avatar,
-    //                     email: data.email, 
-    //                     phoneNumber: data.phoneNumber,
-    //                     role: data.role,
-    //                     status: data.status,
-    //                 });
-    //             } catch (error) {
-    //                 console.error("Error fetching user data:", error);
-    //             }
-    //         };
+    const [loading, setLoading] = useState(true);
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const navigate = useNavigate();
+    const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
-    //         fetchUserData();
-    //     }
-    // }, [userId]); // Re-fetch when userId changes
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(`http://localhost:8888/api/admin/users/detail/${userId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user details");
+                }
+                const data = await response.json();
+                // console.log(data);
+                // {"user":[{"user_id":2,"username":"nhdiep123","password":"$2a$11$2Mk7v/irDoraeg.tgA4z6O4iVU/rkTbZ1Z9WmXVD/TEw9Jxr.y6eu",
+                // "user_img":null,"email":"nguyenhoangdiep2710@gmail.com","phone_number":"0971234568","full_name":"Nguyen Hoang Diep","sex":1,
+                // "date_of_birth":"2004-10-26T17:00:00.000Z","role":0,"reset_token":null,"reset_token_expire":null,"date":null,"status":1}],
+                // "order":[]}
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    }
+                const user = data.user[0] || {};
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form data submitted:", formData);
-    }
+                setFormData({
+                    username: user.username || "",
+                    user_img: user.user_img || "",
+                    email: user.email || "",
+                    phone_number: user.phone_number || "",
+                    role: user.role || 0,
+                    status: user.status || 0,
+                });
 
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+                setSnackbar({ open: true, message: "Lỗi khi tải thông tin người dùng", severity: "error" });
+                setLoading(false);
+            }
+        };
 
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
+        fetchUserDetails();
+    }, [userId]);
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleCancel = () => {
-        setFormData({
-            username: "",
-            email: "",
-            avatar: "",
-            phoneNumber: "",
-            role: "user",
-            status: "active",
-        });
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:8888/api/admin/users/edit/${userId}`, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(formData),
+            });
 
-        setSnackbarOpen(true);
-        window.location.reload();
-    }
+            if (!response.ok) {
+                throw new Error("Failed to update user");
+            }
+
+            const result = await response.json();
+            // console.log(result);
+            setSnackbar({ open: true, message: "Thông tin người dùng đã được cập nhật thành công!", severity: "success" });
+
+            setTimeout(() => navigate(-1), 1000);
+        } catch (error) {
+            // console.error(error);
+            setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật thông tin người dùng!", severity: "error" });
+        }
+    };
 
     return (
         <DashboardContent>
             <Card>
                 <CardHeader title="Chỉnh sửa thông tin người dùng" />
                 <CardContent>
-                    <form onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
+                    {loading ? (
+                        <Typography variant="body1">Đang tải thông tin người dùng...</Typography>
+                    ) : (
+                        <form onSubmit={handleSubmit}>
+                            <Grid container spacing={2}>
 
-                            {/* Username */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Tên người dùng"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleChange}
-                                    required
-                                />
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Tên người dùng"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Email"
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Ảnh đại diện"
+                                        name="user_img"
+                                        value={formData.user_img}
+                                        onChange={handleInputChange}
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        label="Số điện thoại"
+                                        name="phone_number"
+                                        value={formData.phone_number}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        label="Vai trò"
+                                        name="role"
+                                        value={formData.role}
+                                        onChange={handleInputChange}
+                                    >
+                                        {roleOptions.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
+
+                                <Grid item xs={12} sm={6}>
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        label="Trạng thái"
+                                        name="status"
+                                        value={formData.status}
+                                        onChange={handleInputChange}
+                                    >
+                                        {statusOptions.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Grid>
                             </Grid>
 
-                            {/* Email */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Email"
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Grid>
-
-                            {/* Avatar */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Ảnh đại diện"
-                                    name="avatar"
-                                    value={formData.avatar}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Grid>
-
-                            {/* Phone Number */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Số điện thoại"
-                                    name="phoneNumber"
-                                    value={formData.phoneNumber}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Grid>
-
-                            {/* Role */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Vai trò"
-                                    name="role"
-                                    value={formData.role}
-                                    onChange={handleChange}
-                                >
-                                    {roleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Grid>
-
-                            {/* Status */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Trạng thái"
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleChange}
-                                >
-                                    {statusOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Grid>
-                        </Grid>
-
-                        <Grid container spacing={2} mt={2}>
-                            <Grid item>
-                                <Button type="submit" variant="contained" color="primary">
-                                    Lưu
+                            <Box mt={3} display="flex" justifyContent="flex-end">
+                                <Button type="submit" variant="contained" color="primary" disabled={loading}>
+                                    {loading ? "Đang cập nhật..." : "Cập nhật"}
                                 </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="outlined" color="error" onClick={handleCancel}>
-                                    Hủy bỏ
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                            </Box>
+
+                        </form>
+                    )}
                 </CardContent>
 
                 <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={3000}
+                    open={snackbar.open}
+                    autoHideDuration={6000}
                     onClose={handleSnackbarClose}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
-                    <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: "100%" }}>
-                        Các thay đổi chưa được lưu
+                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+                        {snackbar.message}
                     </Alert>
                 </Snackbar>
             </Card>

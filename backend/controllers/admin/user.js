@@ -94,8 +94,13 @@ export const detail = async (req, res) => {
                 });
             });
 
-            userInfo.order[0].combo_total_price = userInfo.order[0].combo_price * userInfo.order[0].combo_quantity;
-            delete userInfo.order[0].combo_price;
+            // Check if there are orders
+            if (userInfo.order.length > 0) {
+                userInfo.order.forEach(order => {
+                    order.combo_total_price = order.combo_price * order.combo_quantity;
+                    delete order.combo_price; // Remove combo_price after calculating total price
+                });
+            }
 
             res.json(userInfo);
         }

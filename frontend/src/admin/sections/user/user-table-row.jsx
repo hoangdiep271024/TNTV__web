@@ -1,13 +1,34 @@
-import { Avatar, Box, Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
+import { Avatar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
-
 import { Label } from '../../components/label';
-import { Iconify } from '../../components/iconify'
+import { Iconify } from '../../components/iconify';
 import { useNavigate } from "react-router-dom";
+
+const deleteUser = async (id) => {
+    try {
+        const response = await fetch(`http://localhost:8888/api/admin/users/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // credentials: 'include',
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete user');
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting user:", error);
+
+        return false;
+    }
+};
 
 export function UserTableRow({ row, selected, onSelectRow }) {
     const [openPopover, setOpenPopover] = useState(null);
-    const navigate = useNavigate();
+    const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -17,9 +38,25 @@ export function UserTableRow({ row, selected, onSelectRow }) {
         setOpenPopover(null);
     }, []);
 
-    const handleEdit = () => {
-        handleClosePopover();
-        navigate('/admin/user/${row.id}')
+    const navigate = useNavigate();
+    const handleEditButton = () => {
+        navigate(`/admin/user/${row.user_id}`);
+    }
+
+    const handleDeleteButton = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    }
+
+    const handleConfirmDelete = async () => {
+        const success = await deleteUser(row.user_id);
+        if (success) {
+            onDelete(row.user_id);
+        }
+        setOpenDialog(false);
     }
 
     return (
@@ -31,33 +68,34 @@ export function UserTableRow({ row, selected, onSelectRow }) {
 
                 <TableCell component="th" scope="row">
                     <Box gap={2} display="flex" alignItems="center">
-                        <Avatar alt={row.name} src={row.avatarUrl} />
-                        <Typography variant="subtitle1" fontWeight="bold">
-                            {row.name}
+                        <Avatar alt={row.username} src={row.user_img} />
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.username}
                         </Typography>
                     </Box>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                    <Typography variant="body2" noWrap>
                         {row.email}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                        {row.phonenumber}
+                    <Typography variant="body2" noWrap>
+                        {row.phone_number}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
                     <Typography variant="body2" sx={{ color: 'text.primary' }} noWrap>
-                        {row.role}
+                        {row.role === 0 ? 'Người dùng' : row.role === 1 ? 'Quản trị viên' : 'Không xác định'}
                     </Typography>
                 </TableCell>
 
+
                 <TableCell>
-                    <Label color={(row.status === "inactive" && 'error') || 'success'}>{row.status}</Label>
+                    <Label color={(row.status === 0 && 'error') || 'success'}>{row.status === 0 ? "Không hoạt động" : "Đang hoạt động"}</Label>
                 </TableCell>
 
                 <TableCell align="right">
@@ -89,17 +127,34 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleEdit}>
+                        <MenuItem onClick={handleEditButton}>
                             <Iconify icon="solar:pen-bold" />
                             Chỉnh sửa
                         </MenuItem>
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+                        <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>
                             <Iconify icon="solar:trash-bin-trash-bold" />
                             Xóa
                         </MenuItem>
                     </MenuList>
                 </Popover>
             </TableRow>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn có chắc chắn muốn xóa người dùng <strong>{row.username}</strong> không?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error">
+                        Xóa
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }
