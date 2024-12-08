@@ -33,7 +33,7 @@ export function ShowtimeView() {
 
         try {
             for (const showtimeId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/showtimes/delete/${showtimeId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${showtimeId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function ShowtimeView() {
         const fetchShowtimes = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/showtimes", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -110,6 +110,7 @@ export function ShowtimeView() {
                     component={Link}
                     to="/admin/showtime/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm suất chiếu
                 </Button>
@@ -131,11 +132,11 @@ export function ShowtimeView() {
                             <ShowtimeTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={showtimes.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, showtimes.map((showtime) => showtime.showtime_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((showtime) => showtime.showtime_id))
                                 }}
                                 headLabel={[
                                     { id: 'showtime_id', label: 'ID suất chiếu' },

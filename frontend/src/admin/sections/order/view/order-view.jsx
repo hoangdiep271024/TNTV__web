@@ -31,7 +31,7 @@ export function OrderView() {
 
         try {
             for (const orderId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/orders/delete/${orderId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/delete/${orderId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export function OrderView() {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/orders", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -118,11 +118,11 @@ export function OrderView() {
                             <OrderTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={orders.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, orders.map((order) => order.order_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((order) => order.order_id))
                                 }
                                 headLabel={[
                                     { id: 'order_id', label: 'Mã đơn hàng' },
@@ -170,7 +170,7 @@ export function OrderView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {orders.length > 0 &&
+                {dataFiltered.length > 0 &&
                     (<TablePagination
                         component="div"
                         page={table.page}

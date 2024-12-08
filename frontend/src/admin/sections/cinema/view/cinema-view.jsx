@@ -33,7 +33,7 @@ export function CinemaView() {
 
         try {
             for (const cinemaId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/cinemas/delete/${cinemaId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/delete/${cinemaId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function CinemaView() {
         const fetchCinemas = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/cinemas", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -110,6 +110,7 @@ export function CinemaView() {
                     component={Link}
                     to="/admin/cinema/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm rạp chiếu
                 </Button>
@@ -131,11 +132,11 @@ export function CinemaView() {
                             <CinemaTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={cinemas.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, cinemas.map((cinema) => cinema.cinema_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((cinema) => cinema.cinema_id))
                                 }}
                                 headLabel={[
                                     { id: 'cinema_name', label: 'Tên rạp chiếu' },
@@ -178,7 +179,7 @@ export function CinemaView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {cinemas.length > 0 && (
+                {dataFiltered.length > 0 && (
                     <TablePagination
                         component="div"
                         page={table.page}

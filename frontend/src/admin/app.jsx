@@ -79,7 +79,6 @@ function Layout() {
 //     },
 // ]);
 
-// ----------------------------------------------------------------------
 export default function App() {
     return (
         <CssVarsProvider theme={theme}>

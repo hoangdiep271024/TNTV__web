@@ -34,7 +34,7 @@ export function MovieView() {
 
         try {
             for (const movieId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/movies/delete/${movieId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/movies/delete/${movieId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export function MovieView() {
         const fetchMovies = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/films", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -110,6 +110,7 @@ export function MovieView() {
                     component={Link}
                     to="/admin/movie/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm phim
                 </Button>
@@ -131,11 +132,11 @@ export function MovieView() {
                             <MovieTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={movies.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, movies.map((movie) => movie.film_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((movie) => movie.film_id))
                                 }}
                                 headLabel={[
                                     { id: 'film_name', label: 'Tên phim' },
@@ -185,7 +186,7 @@ export function MovieView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {movies.length > 0 && (
+                {dataFiltered.length > 0 && (
                     <TablePagination
                         component="div"
                         page={table.page}

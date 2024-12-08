@@ -30,7 +30,7 @@ export function EditMovieView({ movieId }) {
     useEffect(() => {
         const fetchMovieDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8888/api/admin/films/detail/${movieId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/detail/${movieId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch movie details");
                 }
@@ -86,7 +86,7 @@ export function EditMovieView({ movieId }) {
         };
 
         try {
-            const response = await fetch(`http://localhost:8888/api/admin/films/edit/${movieId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/edit/${movieId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
