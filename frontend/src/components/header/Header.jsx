@@ -53,13 +53,14 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const theme = useTheme();
   const [login, setLogin] = useState('');
   const [userInfor, setUserInfor] = useState([]);
-  
+  const jwt = localStorage.getItem('jwt')
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({jwt : jwt})
     })
       .then(response => response.json())
       .then(responseData => {
@@ -75,36 +76,9 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
       })
       .catch(error => console.error('Error:', error));
   }, []);
-const logOutClick = async(e) => {
-  try {
-    const response = await fetch('/api/logOut', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-    });
-    
-    if (response.ok) {
-      // Xử lý thành công
-      const data = await response.json();
-
-      // Kiểm tra success
-      if (data.success) {
-        window.location.reload();
-      } else {
-        const error__alert =`Đăng ký thất bại:, ${data.message}`;
-        console.log(error__alert);
-        
-        // <Alert severity="error" style={{top:'0', left: '0', zIndex: '20', width:'25vh', height:'30px'}}>{error__alert}</Alert>
-      }
-    } else {
-      
-      console.error('Lỗi khi đăng ký:', response.statusText);
-    }
-  } catch (error) {
-    console.error(error)
-  }
+const logOutClick = () => {
+  localStorage.removeItem('jwt')
+  window.location.reload()
 };
     const black ='/black.gif'
     const white ='/white.gif'

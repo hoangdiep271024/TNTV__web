@@ -98,7 +98,10 @@ export default function ForgetPassword() {
            headers: {
              'Content-Type': 'application/json',
            },
-           body: JSON.stringify(formDataa)
+           body: JSON.stringify({
+            ...formData,   
+            ...formDataa   
+          })
          });
          
          if (response.ok) {
@@ -128,7 +131,10 @@ export default function ForgetPassword() {
          headers: {
            'Content-Type': 'application/json',
          },
-         body: JSON.stringify(formDataaa)
+         body: JSON.stringify({
+          ...formData, 
+          ...formDataaa 
+        })
        });
        
        if (response.ok) {

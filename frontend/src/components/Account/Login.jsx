@@ -55,9 +55,11 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
         const data = await response.json();
         if (data.success) {
           setOkMessage(`Đăng nhập thành công: ${data.message}`)
+          localStorage.setItem('jwt', data.jwt)
           setTimeout(() => {
             window.location.reload();
           }, 1500);
+          
           
         } else {
           const error__alert =`Đăng nhập thất bại: ${data.message}`;

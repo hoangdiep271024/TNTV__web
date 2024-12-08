@@ -24,7 +24,7 @@ const SubmitButton = styled.button`
 
 export default function Profile() {
 
-
+  const jwt = localStorage.getItem('jwt')
     const [login, setLogin] = useState('');
     const [userInfor, setUserInfor] = useState([]);
     const [changeClick, setChangeClick] = useState(false)
@@ -48,6 +48,7 @@ export default function Profile() {
       
       const formData = new FormData();
       formData.append('image', file);
+      formData.append('jwt', jwt);
       
       try {
         setUploadStatus('Đang tải lên...');
@@ -72,11 +73,12 @@ export default function Profile() {
     };
     
     useEffect(() => {
-      fetch('/api/userInfo', {
+      fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
+        body: JSON.stringify({jwt : jwt})
       })
         .then(response => response.json())
         .then(responseData => {
@@ -97,6 +99,7 @@ export default function Profile() {
         phone__number: '',
         gmail: '',
         sex:'',
+        jwt: jwt,
       });
     useEffect(() => {
         if (userInfor) {
@@ -104,7 +107,8 @@ export default function Profile() {
             name: userInfor.full_name || '',
             phone__number: userInfor.phone_number || '',
             gmail: userInfor.email || '',
-            sex:userInfor.sex || ''
+            sex:userInfor.sex || '',
+            jwt: jwt
           });
         }
       }, [userInfor]);

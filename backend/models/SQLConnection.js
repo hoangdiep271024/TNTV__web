@@ -1,14 +1,13 @@
-import mysql from 'mysql2/promise'; // Sử dụng 'promise' để hỗ trợ async/await
+import mysql from 'mysql2';
 
 // Tạo một kết nối đơn lẻ
 const connection = mysql.createConnection({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
     port: 3306,
     user: 'root', // Tên người dùng của cơ sở dữ liệu
-    password: 'Ducquangk6@', // Mật khẩu của cơ sở dữ liệu
-    database: 'web_phim' // Tên của cơ sở dữ liệu
+    password: 'Noname4ever@', // Mật khẩu của cơ sở dữ liệu
+    database: 'newschema' // Tên của cơ sở dữ liệu
 });
-
 // Kết nối đến cơ sở dữ liệu
 connection.connect((err) => {
     if (err) {
@@ -17,14 +16,6 @@ connection.connect((err) => {
     }
     console.log('Connected as id ' + connection.threadId);
 });
-
-// Kết nối đến cơ sở dữ liệu
-try {
-    await connection.connect();
-    console.log('Connected to the database');
-} catch (err) {
-    console.error('Error connecting to the database:', err.message);
-}
 
 export default connection;
 
@@ -49,4 +40,3 @@ export default connection;
 // }
 
 // export default connection;
-

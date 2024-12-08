@@ -49,11 +49,11 @@ const login = async (req, res) => {
         const token = createJWT(payload);
 
         // Bước 5: Đặt cookie JWT và phản hồi thành công
-        res.cookie("jwt", token, {
-            httpOnly: true,        // Cookie chỉ truy cập qua HTTP, không qua JavaScript
-            secure: true,          // Bật chế độ bảo mật (chỉ hoạt động với HTTPS)
-            sameSite: "none",      // Đảm bảo cookies được gửi qua domain khác nhau
-            maxAge: 1000 * 60 * 30 });
+        // res.cookie("jwt", token, {
+        //     httpOnly: true,        // Cookie chỉ truy cập qua HTTP, không qua JavaScript
+        //     secure: true,          // Bật chế độ bảo mật (chỉ hoạt động với HTTPS)
+        //     sameSite: "none",      // Đảm bảo cookies được gửi qua domain khác nhau
+        //     maxAge: 1000 * 60 * 30 });
         //.cookie("name", user.full_name, { maxAge: 1000 * 60 * 30 }).cookie("birthday", user.date_of_birth, { maxAge: 1000 * 60 * 30 }).cookie("phoneNumber", user.phone_number, { maxAge: 1000 * 60 * 30 }).cookie("address", user.address, { maxAge: 1000 * 60 * 30 });
 
         if (user.role === 0) {
