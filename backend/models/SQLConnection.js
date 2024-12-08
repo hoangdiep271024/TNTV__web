@@ -27,7 +27,7 @@ export default connection;
 //     port: 3306,                      // Cổng MySQL (thường là 3306)
 //     user: 'fall2024c8g13',           // Tên người dùng MySQL
 //     password: 'nhtt2024',            // Mật khẩu của người dùng
-//     database: 'fall2024c8g13_lab',   // Tên cơ sở dữ liệu
+//     database: 'fall2024c8g13_nhtt',   // Tên cơ sở dữ liệu
 //     connectTimeout: 10000 // Tăng thời gian timeout lên 10 giây
 // });
 

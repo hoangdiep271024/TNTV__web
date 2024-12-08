@@ -156,8 +156,6 @@ const MuiRadio = {
     }
 }
 
-// ----------------------------------------------------------------------
-
 export const components = {
     MuiCard,
     MuiLink,
