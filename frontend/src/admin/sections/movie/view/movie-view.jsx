@@ -110,6 +110,7 @@ export function MovieView() {
                     component={Link}
                     to="/admin/movie/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm phim
                 </Button>
@@ -131,11 +132,11 @@ export function MovieView() {
                             <MovieTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={movies.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, movies.map((movie) => movie.film_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((movie) => movie.film_id))
                                 }}
                                 headLabel={[
                                     { id: 'film_name', label: 'Tên phim' },
@@ -185,7 +186,7 @@ export function MovieView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {movies.length > 0 && (
+                {dataFiltered.length > 0 && (
                     <TablePagination
                         component="div"
                         page={table.page}

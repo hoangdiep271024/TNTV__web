@@ -77,32 +77,42 @@ export function ShowtimeTableRow({ row, selected, onSelectRow, onDelete }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium' }} noWrap>
-                        {row.film_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/movie/${row.film_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.film_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium' }} noWrap>
-                        {row.cinema_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/cinema/${row.cinema_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" ontWeight='medium' noWrap>
+                            {row.cinema_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium' }} noWrap>
+                    <Typography variant="body2" fontWeight='medium' noWrap>
                         {row.room_name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                    <Typography variant="body2" textAlign='center' fontWeight='medium' >
                         {new Date(row.show_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
-                        {row.show_time}
+                    <Typography variant="body2" textAlign='center' fontWeight='medium' >
+                        {row.show_time.split(':').slice(0, 2).join(':')}
                     </Typography>
                 </TableCell>
 

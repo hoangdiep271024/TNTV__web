@@ -118,11 +118,11 @@ export function RoomView() {
                             <RoomTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={rooms.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, rooms.map((room) => room.room_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((room) => room.room_id))
                                 }}
                                 headLabel={[
                                     { id: 'room_name', label: 'Tên phòng chiếu' },
@@ -151,6 +151,10 @@ export function RoomView() {
                                             row={row}
                                             selected={table.selected.includes(row.room_id)}
                                             onSelectRow={() => table.onSelectRow(row.room_id)}
+                                            onDelete={(id) => {
+                                                setRooms((prevRooms) => prevRooms.filter((room) => room.room_id !== id));
+                                                table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
+                                            }}
                                         />
                                     ))}
 

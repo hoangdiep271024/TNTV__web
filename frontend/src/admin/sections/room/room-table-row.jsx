@@ -1,10 +1,6 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
-import { useCallback, useState } from "react";
-import { Iconify } from '../../components/iconify'
-
-// edit button handler
-// delete button handler
-// click name to open edit room
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Link, IconButton, MenuItem, Popover, Table, TableCell, TableRow, Typography, TextField, MenuList, menuItemClasses, Snackbar } from "@mui/material";
+import { useCallback, useState, useEffect } from "react";
+import { Iconify } from '../../components/iconify';
 
 const deleteRoom = async (id) => {
     try {
@@ -14,7 +10,6 @@ const deleteRoom = async (id) => {
                 "Content-Type": "application/json",
             },
             // credentials: 'include',
-
         });
 
         if (!response.ok) {
@@ -28,9 +23,47 @@ const deleteRoom = async (id) => {
     }
 }
 
+const fetchRoomDetails = async (roomId) => {
+    try {
+        const response = await fetch(`http://localhost:8888/api/admin/rooms/detail/${roomId}`);
+        if (!response.ok) {
+            throw new Error('Failed to fetch room details');
+        }
+        const data = await response.json();
+        return data;
+    } catch (error) {
+        console.error("Error fetching room details:", error);
+        return null;
+    }
+}
+
+const editRoom = async (roomId, roomName, cinemaName) => {
+    try {
+        const response = await fetch(`http://localhost:8888/api/admin/rooms/edit/${roomId}`, {
+            method: 'PATCH',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ room_name: roomName, cinema_name: cinemaName }),
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to edit room');
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error editing room:", error);
+        return false;
+    }
+}
 export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
+    const [openEditDialog, setOpenEditDialog] = useState(false);
+    const [roomName, setRoomName] = useState('');
+    const [cinemaName, setCinemaName] = useState('');
+    const [loading, setLoading] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -48,6 +81,21 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
         setOpenDialog(false);
     }
 
+    const handleCloseEditDialog = () => {
+        setOpenEditDialog(false);
+    }
+
+    const handleEditClick = async () => {
+        setLoading(true);
+        const roomDetails = await fetchRoomDetails(row.room_id);
+        if (roomDetails) {
+            setRoomName(roomDetails.room[0].room_name);
+            setCinemaName(roomDetails.cinema[0].cinema_name);
+        }
+        setLoading(false);
+        setOpenEditDialog(true);
+    }
+
     const handleConfirmDelete = async () => {
         const success = await deleteRoom(row.room_id);
         if (success) {
@@ -55,6 +103,16 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
         }
         setOpenDialog(false);
     }
+
+    const handleSubmitEdit = async () => {
+        const success = await editRoom(row.room_id, roomName, cinemaName);
+        if (success) {
+
+        }
+        setOpenEditDialog(false);
+    }
+
+    // console.log(row);
 
     return (
         <>
@@ -65,7 +123,9 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
 
                 <TableCell>
                     <Typography variant="body2" fontWeight="bold" noWrap>
-                        {row.room_name}
+                        <Link onClick={handleEditClick} sx={{ cursor: 'pointer' }}>
+                            {row.room_name}
+                        </Link>
                     </Typography>
                 </TableCell>
 
@@ -117,6 +177,40 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
                 </Popover>
             </TableRow>
 
+            <Dialog open={openEditDialog} onClose={handleCloseEditDialog}>
+                <DialogTitle>{loading ? 'Đang tải dữ liệu...' : 'Chỉnh sửa phòng chiếu'}</DialogTitle>
+                <DialogContent>
+                    {loading ? (
+                        <Typography variant="body2">Đang tải dữ liệu...</Typography>
+                    ) : (
+                        <>
+                            <TextField
+                                label="Tên phòng"
+                                value={roomName}
+                                onChange={(e) => setRoomName(e.target.value)}
+                                fullWidth
+                                sx={{ mb: 2, mt: 2 }}
+                            />
+                            <TextField
+                                label="Tên rạp"
+                                value={cinemaName}
+                                onChange={(e) => setCinemaName(e.target.value)}
+                                fullWidth
+                            />
+                        </>
+                    )}
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseEditDialog} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleSubmitEdit} color="primary">
+                        Cập nhật
+                    </Button>
+                </DialogActions>
+            </Dialog>
+
+
             <Dialog open={openDialog} onClose={handleCloseDialog}>
                 <DialogTitle>Xác nhận xóa</DialogTitle>
                 <DialogContent>
@@ -133,6 +227,7 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
                     </Button>
                 </DialogActions>
             </Dialog>
+
         </>
     )
 }

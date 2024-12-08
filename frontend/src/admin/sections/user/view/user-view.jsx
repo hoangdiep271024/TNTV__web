@@ -121,11 +121,11 @@ export function UserView() {
                             <UserTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={users.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, users.map((user) => user.user_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((user) => user.user_id))
                                 }
                                 headLabel={[
                                     { id: 'username', label: 'Tên người dùng' },

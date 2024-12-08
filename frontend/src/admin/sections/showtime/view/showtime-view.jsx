@@ -110,6 +110,7 @@ export function ShowtimeView() {
                     component={Link}
                     to="/admin/showtime/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm suất chiếu
                 </Button>
@@ -131,11 +132,11 @@ export function ShowtimeView() {
                             <ShowtimeTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={showtimes.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, showtimes.map((showtime) => showtime.showtime_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((showtime) => showtime.showtime_id))
                                 }}
                                 headLabel={[
                                     { id: 'showtime_id', label: 'ID suất chiếu' },

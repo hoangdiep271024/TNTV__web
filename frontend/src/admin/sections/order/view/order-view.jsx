@@ -118,11 +118,11 @@ export function OrderView() {
                             <OrderTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={orders.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, orders.map((order) => order.order_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((order) => order.order_id))
                                 }
                                 headLabel={[
                                     { id: 'order_id', label: 'Mã đơn hàng' },
@@ -170,7 +170,7 @@ export function OrderView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {orders.length > 0 &&
+                {dataFiltered.length > 0 &&
                     (<TablePagination
                         component="div"
                         page={table.page}

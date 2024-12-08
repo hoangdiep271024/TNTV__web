@@ -110,6 +110,7 @@ export function CinemaView() {
                     component={Link}
                     to="/admin/cinema/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    size="small"
                 >
                     Thêm rạp chiếu
                 </Button>
@@ -131,11 +132,11 @@ export function CinemaView() {
                             <CinemaTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={cinemas.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, cinemas.map((cinema) => cinema.cinema_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((cinema) => cinema.cinema_id))
                                 }}
                                 headLabel={[
                                     { id: 'cinema_name', label: 'Tên rạp chiếu' },
@@ -178,7 +179,7 @@ export function CinemaView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {cinemas.length > 0 && (
+                {dataFiltered.length > 0 && (
                     <TablePagination
                         component="div"
                         page={table.page}
