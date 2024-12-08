@@ -4,8 +4,6 @@ import { varAlpha, createPaletteChannel } from '../styles';
 // Color Types
 export const colorTypes = ['primary', 'secondary', 'info', 'success', 'warning', 'error'];
 
-// ----------------------------------------------------------------------
-
 // Grey
 export const grey = createPaletteChannel(COLORS.grey);
 
@@ -37,14 +35,25 @@ export const text = {
         secondary: grey[600],
         disabled: grey[500],
     }),
+    dark: createPaletteChannel({
+        primary: grey[500],
+        secondary: grey[600],
+        disabled: grey[800],
+    }),
+
 };
 
 // Background
 export const background = {
     light: createPaletteChannel({
-        paper: '#FFFFFF',
+        paper: common["white"],
         default: grey[100],
         neutral: grey[200],
+    }),
+    dark: createPaletteChannel({
+        paper: grey[900],
+        default: grey[800],
+        neutral: grey[700],
     }),
 };
 
@@ -61,11 +70,10 @@ const baseAction = {
 
 export const action = {
     light: { ...baseAction, active: grey[600] },
+    dark: { ...baseAction, active: grey[300] },
 };
 
-/*
- * Base palette
- */
+// Base pallete
 const basePalette = {
     primary,
     secondary,
@@ -86,8 +94,15 @@ export const lightPalette = {
     action: action.light,
 };
 
-// ----------------------------------------------------------------------
+
+export const darkPallete = {
+    ...basePalette,
+    text: text.dark,
+    background: background.dark,
+    action: action.dark,
+}
 
 export const colorSchemes = {
     light: { palette: lightPalette },
+    dark: { palette: darkPallete },
 };

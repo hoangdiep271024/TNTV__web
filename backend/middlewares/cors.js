@@ -1,5 +1,6 @@
 import cors from "cors";
 
+// development
 const corsOptions = {
     origin: function (origin, callback) {
         // Chỉ cho phép nguồn từ http://localhost:5173
@@ -16,6 +17,7 @@ const corsOptions = {
 export default cors(corsOptions);
 
 
+// v2
 // // const whitelist = new Set(['http://example.com', 'https://example.org']);
 // const whitelist = new Set(['*']);
 // const corOptions = {
@@ -32,16 +34,16 @@ export default cors(corsOptions);
 //     credentials: true
 // }
 
-
 // export default cors(corOptions);
 
+// deployment
 // export default function corMw(req, res, next) {
 //     res.header('Access-Control-Allow-Origin', '*'); // Cho phép tất cả các nguồn
 //     res.header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
 //     res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
 //     res.header('Access-Control-Allow-Credentials', 'true'); // Cho phép gửi cookie
 //     if (req.method === 'OPTIONS') {
-//       return res.sendStatus(200); // Xử lý nhanh cho preflight request
+//         return res.sendStatus(200); // Xử lý nhanh cho preflight request
 //     }
 //     next();
-//   }
+// }

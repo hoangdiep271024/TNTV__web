@@ -1,8 +1,6 @@
 import { grey } from './palette';
 import { varAlpha } from '../styles';
 
-// ----------------------------------------------------------------------
-
 export function shadows() {
     const colorChannel = grey['500Channel'];
 
