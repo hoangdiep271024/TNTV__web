@@ -14,14 +14,10 @@ export default function DashboardPage() {
     useEffect(() => {
         const fetchDashboardData = async () => {
             try {
-                const myHeaders = new Headers();
-                myHeaders.append("Cookie", "connect.sid=s%3AAQRgftz8SKc9BZRR8ptWRb_kEAmCUpfV.3XBDxz2rML0agq2zBPleNwUY9FYrlcCB8k%2FdvCuHr7E");
-
                 const requestOptions = {
                     method: 'GET',
-                    headers: myHeaders,
                     redirect: 'follow',
-                    credential: "includes"
+                    // credentials: 'include'
                 };
 
                 const response = await fetch("http://localhost:8888/api/admin/dashboard", requestOptions);

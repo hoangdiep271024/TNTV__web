@@ -3,9 +3,6 @@ import Button from '@mui/material/Button';
 import Container from '@mui/material/Container';
 import Typography from '@mui/material/Typography';
 import { LinearProgress, linearProgressClasses } from '@mui/material';
-
-import { RouterLink } from '../../routes/components';
-
 import { SimpleLayout } from '../../layouts/simple';
 import { Suspense } from 'react';
 
@@ -46,7 +43,7 @@ export function NotFoundView() {
                         }}
                     />
 
-                    <Button component={RouterLink} href="/admin" size="large" variant="contained" color="inherit">
+                    <Button component={Link} to="/admin" size="large" variant="contained" color="inherit">
                         Go to home
                     </Button>
                 </Container>

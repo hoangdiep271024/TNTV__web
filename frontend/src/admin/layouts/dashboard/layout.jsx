@@ -1,12 +1,9 @@
 import { useState } from 'react';
-
 import Box from '@mui/material/Box';
 import Alert from '@mui/material/Alert';
 import Avatar from '@mui/material/Avatar';
 import { useTheme } from '@mui/material/styles';
-
 import { Iconify } from '../../components/iconify';
-
 import { Main } from './main';
 import { layoutClasses } from '../classes';
 import { NavMobile, NavDesktop } from './nav';
@@ -15,9 +12,8 @@ import { MenuButton } from '../components/menu-button';
 import { LayoutSection } from '../core/layout-section';
 import { HeaderSection } from '../core/header-section';
 import { ScrollToTop } from '../../components/ScrollToTop';
+// import { _myAccount } from '../../_mock'
 
-import { _myAccount } from '../../_mock'
-// ----------------------------------------------------------------------
 export function DashboardLayout({ sx, children, header }) {
     const theme = useTheme();
 
@@ -27,9 +23,7 @@ export function DashboardLayout({ sx, children, header }) {
 
     return (
         <LayoutSection
-            /** **************************************
-             * Header
-             *************************************** */
+            //Header
             headerSection={
                 <HeaderSection
                     layoutQuery={layoutQuery}
@@ -41,11 +35,12 @@ export function DashboardLayout({ sx, children, header }) {
                     }}
                     sx={header?.sx}
                     slots={{
-                        topArea: (
-                            <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
-                                This is an info Alert.
-                            </Alert>
-                        ),
+                        topArea: null,
+                        // (
+                        //     <Alert severity="info" sx={{ display: 'none', borderRadius: 0 }}>
+                        //         This is an info alert.
+                        //     </Alert>
+                        // ),
                         leftArea: (
                             <>
                                 <MenuButton
@@ -62,34 +57,28 @@ export function DashboardLayout({ sx, children, header }) {
                                 />
                             </>
                         ),
-                        rightArea: (
-                            // <Box gap={1} display="flex" alignItems="center">
-                            //     <Iconify
-                            //         icon="solar:user-circle-bold-duotone"
-                            //         width={22}
-                            //         sx={{ cursor: 'pointer' }}
-                            //         onClick={() => alert('Account icon clicked')} // Replace with desired action
-                            //     />
-                            // </Box>
-                            <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 40, height: 40 }}>
-                            </Avatar>
-                        ),
+                        rightArea: null,
+                        // (
+                        // <Box gap={1} display="flex" alignItems="center">
+                        //     <Iconify
+                        //         icon="solar:user-circle-bold-duotone"
+                        //         width={22}
+                        //         sx={{ cursor: 'pointer' }}
+                        //         onClick={() => alert('Account icon clicked')} // Replace with desired action
+                        //     />
+                        // </Box>
+                        // <Avatar src={_myAccount.photoURL} alt={_myAccount.displayName} sx={{ width: 40, height: 40 }} />
+                        // ),
                     }}
                 />
             }
-            /** **************************************
-             * Sidebar
-             *************************************** */
+            //Sidebar
             sidebarSection={
                 <NavDesktop data={navData} layoutQuery={layoutQuery} />
             }
-            /** **************************************
-             * Footer
-             *************************************** */
+            //Footer
             footerSection={null}
-            /** **************************************
-             * Style
-             *************************************** */
+            //Style
             cssVars={{
                 '--layout-nav-vertical-width': '300px',
                 '--layout-dashboard-content-pt': theme.spacing(1),

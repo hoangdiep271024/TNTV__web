@@ -14,13 +14,13 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
-    if(req.query.limitItems) {
+    let limitItems = 80;
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -34,7 +34,7 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const queryShowTime = 
+    const queryShowTime =
         `SELECT s.*, f.film_name, c.cinema_name, r.room_name 
         FROM showtimes s
         JOIN cinemas c ON s.cinema_id = c.cinema_id
@@ -47,12 +47,12 @@ export const index = async (req, res) => {
         LIMIT ?
         OFFSET ?`;
     const showtimes = await new Promise((resolve, reject) => {
-        connection.query(queryShowTime, [keywordCinema,  keywordRoom, keywordDate, limitItems, skip], (err, results) => {
+        connection.query(queryShowTime, [keywordCinema, keywordRoom, keywordDate, limitItems, skip], (err, results) => {
             if (err) return reject(err);
             resolve(results);
         });
     });
-  
+
     res.json(showtimes);
 };
 
@@ -62,7 +62,7 @@ export const detail = async (req, res) => {
         const showTimeId = req.params.showTimeId;
 
         const showTimeInfo = {};
-    
+
         const queryShowTime = `Select * from showtimes where showtime_id = ?`;
         const showTime = await new Promise((resolve, reject) => {
             connection.query(queryShowTime, [showTimeId], (err, results) => {
@@ -72,7 +72,7 @@ export const detail = async (req, res) => {
         });
         showTimeInfo.showTime = showTime;
 
-        if(showTime.length > 0) {
+        if (showTime.length > 0) {
             // Truy vấn film_name từ film_id trong bảng showtimes
             const queryFilm = `Select f.film_id, f.film_name
                             from films as f
@@ -149,13 +149,13 @@ export const create = async (req, res) => {
 
 // [POST] /admin/showtimes/create
 export const createPost = async (req, res) => {
-    const { film_name, room_name, cinema_name, show_date, show_time } =  req.body;
+    const { film_name, room_name, cinema_name, show_date, show_time } = req.body;
 
     const countResult = await connection.promise().query(
         `SELECT COUNT(*) as count FROM showtimes`,
     );
     const totalShowTimes = countResult[0][0].count;
-    const showTimeId =  totalShowTimes + 1;
+    const showTimeId = totalShowTimes + 1;
 
     // Truy vấn film_id từ film_name
     const queryFilm = `Select film_id, duration from films where film_name = ?`
@@ -214,8 +214,8 @@ export const createPost = async (req, res) => {
         connection.query(
             queryCheckOverlap,
             [
-                roomId, cinemaId, 
-                show_date, 
+                roomId, cinemaId,
+                show_date,
                 show_time, filmDuration, show_time,
                 show_time, show_time, filmDuration
             ],
@@ -259,7 +259,7 @@ export const edit = async (req, res) => {
         const showTimeId = req.params.showTimeId;
 
         const showTimeInfo = {};
-    
+
         const queryShowTime = `Select * from showtimes where showtime_id = ?`;
         const showTime = await new Promise((resolve, reject) => {
             connection.query(queryShowTime, [showTimeId], (err, results) => {
@@ -269,7 +269,7 @@ export const edit = async (req, res) => {
         });
         showTimeInfo.showTime = showTime;
 
-        if(showTime.length > 0) {
+        if (showTime.length > 0) {
             // Truy vấn film_name từ film_id trong bảng showtimes
             const queryFilm = `Select f.film_id, f.film_name
                             from films as f
@@ -338,8 +338,8 @@ export const edit = async (req, res) => {
 export const editPatch = async (req, res) => {
     try {
         const showTimeId = parseInt(req.params.showTimeId);
-  
-        const { film_name, room_name, cinema_name, show_date, show_time } =  req.body;
+
+        const { film_name, room_name, cinema_name, show_date, show_time } = req.body;
 
         // Truy vấn film_id từ film_name
         const queryFilm = `Select film_id, duration from films where film_name = ?`
@@ -398,8 +398,8 @@ export const editPatch = async (req, res) => {
             connection.query(
                 queryCheckOverlap,
                 [
-                    roomId, cinemaId, 
-                    show_date, 
+                    roomId, cinemaId,
+                    show_date,
                     show_time, filmDuration, show_time,
                     show_time, show_time, filmDuration
                 ],
@@ -435,24 +435,31 @@ export const editPatch = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/showtimes/delete/:showTimeId
+// [DELETE] /admin/showtimes/delete/:showTimeId
 export const deleteItem = async (req, res) => {
     try {
         const showTimeId = req.params.showTimeId;
 
-        const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE showtime_id = ?`;
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteSeatStatus, [showTimeId], (err, results) => {
+            connection.beginTransaction((err) => {
                 if (err) return reject(err);
-                resolve(results);
-            });
-        });
 
-        const queryDeleteShowTime = `DELETE FROM showtimes WHERE showtime_id = ?`;
-        await new Promise((resolve, reject) => {
-            connection.query(queryDeleteShowTime, [showTimeId], (err, results) => {
-                if (err) return reject(err);
-                resolve(results);
+                const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE showtime_id = ?`;
+                connection.query(queryDeleteSeatStatus, [showTimeId], (err, results) => {
+                    if (err) return connection.rollback(() => reject(err));
+
+                    const queryDeleteShowTime = `DELETE FROM showtimes WHERE showtime_id = ?`;
+                    connection.query(queryDeleteShowTime, [showTimeId], (err, results) => {
+                        if (err) return connection.rollback(() => reject(err));
+
+                        // Step 3: Commit the transaction if both deletions are successful
+                        connection.commit((err) => {
+                            if (err) return connection.rollback(() => reject(err));
+
+                            resolve(results);
+                        });
+                    });
+                });
             });
         });
 
@@ -466,4 +473,4 @@ export const deleteItem = async (req, res) => {
             error: error.message,
         });
     }
-}
+};

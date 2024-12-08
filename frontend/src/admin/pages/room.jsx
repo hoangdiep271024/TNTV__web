@@ -1,8 +1,6 @@
 import { Helmet } from 'react-helmet-async';
 import { RoomView } from '../sections/room/view/room-view';
 
-// ----------------------------------------------------------------------
-
 export default function RoomPage() {
     return (
         <>

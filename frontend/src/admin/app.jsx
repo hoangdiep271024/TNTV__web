@@ -106,6 +106,7 @@ export default function App() {
                         <Route path="news" element={<NewsPage />} />
                         <Route path="dashboard" element={<DashboardPage />} />
                     </Route>
+                    <Route path='*' element={<Page404 />} />
                 </Routes>
             </BrowserRouter>
         </CssVarsProvider>

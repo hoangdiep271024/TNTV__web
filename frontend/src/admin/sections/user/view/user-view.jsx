@@ -1,10 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
-import { _users } from '../../../_mock/_data'
 import { DashboardContent } from '../../../layouts/dashboard'
-import { Box, Card, Table, TableBody, TableContainer, TablePagination, Typography } from "@mui/material";
-import { Iconify } from "../../../components/iconify";
-
+import { Box, Card, CircularProgress, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from "@mui/material";
 import { UserTableHead } from "../user-table-head";
 import { UserTableToolbar } from "../user-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
@@ -15,20 +12,89 @@ import { useTable } from "../use-table";
 
 
 export function UserView() {
-    // Custom hook to handle table state and functions (pagination, selection, sorting)
     const table = useTable();
-
-    // State variable to manage the filter criteria for filtering users by their name
     const [filterName, setFilterName] = useState('');
+    const [users, setUsers] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('username');
+    const [dataFiltered, setDataFiltered] = useState([]);
 
-    // Filter and sort the list of users based on the current filter and sort settings
-    const dataFiltered = applyFilter({
-        inputData: _users,
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-    });
 
-    // Determine if there are no users that match the filter
+    const handleFilterName = (event) => {
+        setFilterName(event.target.value);
+        table.onResetPage();
+    }
+
+    const handleFilterChange = (newFilter) => {
+        setSelectedFilter(newFilter);
+    };
+
+    const handleDeleteSelected = async () => {
+        if (table.selected.length === 0) return;
+
+        try {
+            for (const userId of table.selected) {
+                const response = await fetch(`http://localhost:8888/api/admin/users/delete/${userId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to delete user with ID: ${userId}`);
+                }
+            }
+
+            setUsers((prevUsers) => prevUsers.filter((user) => !table.selected.includes(user.user_id)));
+            table.setSelected([]);
+            console.log('Selected users deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting selected users:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchUsers = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch("http://localhost:8888/api/admin/users", {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch users");
+
+                const data = await response.json();
+                // console.log(data);
+                setUsers(data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchUsers();
+    }, []);
+
+    const filteredData = useMemo(() => {
+        return applyFilter({
+            inputData: users,
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+            attribute: selectedFilter
+        });
+    }, [users, table.order, table.orderBy, filterName, selectedFilter])
+
+    useEffect(() => {
+        setDataFiltered(filteredData);
+    }, [filteredData]);
+
     const notFound = !dataFiltered.length && filterName;
 
     return (
@@ -43,10 +109,10 @@ export function UserView() {
                 <UserTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
-                    onFilterName={(event) => {
-                        setFilterName(event.target.value);
-                        table.onResetPage(); // Reset table page when filter changes
-                    }}
+                    selectedFilter={selectedFilter}
+                    onFilterName={handleFilterName}
+                    onFilterChange={handleFilterChange}
+                    onDeleteSelected={handleDeleteSelected}
                 />
 
                 <Scrollbar>
@@ -55,52 +121,63 @@ export function UserView() {
                             <UserTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={_users.length}
+                                rowCount={users.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, _users.map((user) => user.id))
+                                    table.onSelectAllRows(checked, users.map((user) => user.user_id))
                                 }
                                 headLabel={[
-                                    { id: 'name', label: 'Tên người dùng' },
+                                    { id: 'username', label: 'Tên người dùng' },
                                     { id: 'email', label: 'Email' },
-                                    { id: 'phonenumber', label: 'Số điện thoại' },
+                                    { id: 'phone_number', label: 'Số điện thoại' },
                                     { id: 'role', label: 'Vai trò' },
                                     { id: 'status', label: 'Trạng thái' },
                                     { id: '' },
                                 ]}
                             />
                             <TableBody>
-                                {/* Display rows based on pagination */}
-                                {dataFiltered.slice(
+                                {loading && (
+                                    <TableRow>
+                                        <TableCell colSpan={7}>
+                                            <Box display="flex" justifyContent="center" alignItems="center" height="150px">
+                                                <CircularProgress />
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+
+                                {!loading && dataFiltered.slice(
                                     table.page * table.rowsPerPage,
                                     table.page * table.rowsPerPage + table.rowsPerPage
                                 ).map((row) => (
                                     <UserTableRow
-                                        key={row.id}
+                                        key={row.user_id}
                                         row={row}
-                                        selected={table.selected.includes(row.id)}
-                                        onSelectRow={() => table.onSelectRow(row.id)}
+                                        selected={table.selected.includes(row.user_id)}
+                                        onSelectRow={() => table.onSelectRow(row.user_id)}
+                                        onDelete={(id) => {
+                                            setUsers((prevUsers) => prevUsers.filter((user) => user.user_id !== id));
+                                            table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
+                                        }}
                                     />
                                 ))}
 
                                 {/* <TableEmptyRows
                                     height={68}
-                                    emptyRows={emptyRows(table.page, table.rowsPerPage, _users.length)}
+                                    emptyRows={emptyRows(table.page, table.rowsPerPage, users.length)}
                                 /> */}
 
-                                {/* Message for no matching data based on filter */}
                                 {notFound && <TableNoData searchQuery={filterName} />}
                             </TableBody>
                         </Table>
                     </TableContainer>
                 </Scrollbar>
 
-                {/* Pagination controls */}
                 <TablePagination
                     component="div"
                     page={table.page}
-                    count={_users.length}
+                    count={dataFiltered.length}
                     rowsPerPage={table.rowsPerPage}
                     onPageChange={table.onChangePage}
                     rowsPerPageOptions={[5, 10, 25]}

@@ -8,9 +8,9 @@ export const index = async (req, res) => {
     const status = req.query.status;
     let userStatus = '(status = 1 OR status = 0)';
 
-    if(status) {
-        if(status == "Hoạt động") userStatus = 'status = 1';
-        else if(status == "Không hoạt động") userStatus = 'status = 0';
+    if (status) {
+        if (status == "Hoạt động") userStatus = 'status = 1';
+        else if (status == "Không hoạt động") userStatus = 'status = 0';
     }
     // Hết lọc theo trạng thái
 
@@ -20,12 +20,12 @@ export const index = async (req, res) => {
 
     // Phân trang
     let limitItems = 5;
-    if(req.query.limitItems) {
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -39,7 +39,7 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const queryUser = 
+    const queryUser =
         `SELECT *
         FROM users
         WHERE username LIKE ?
@@ -54,7 +54,7 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(users);
 };
 
@@ -75,8 +75,8 @@ export const detail = async (req, res) => {
         });
         userInfo.user = user;
 
-        if(user.length > 0) {
-            const queryOrder = 
+        if (user.length > 0) {
+            const queryOrder =
                 `SELECT o.*, f.film_name, c.cinema_name, r.room_name, s.show_date, pc.combo_name, po.combo_quantity, pc.combo_price
                 FROM users u
                 JOIN orders o ON u.user_id = o.user_id
@@ -94,9 +94,14 @@ export const detail = async (req, res) => {
                 });
             });
 
-            userInfo.order[0].combo_total_price = userInfo.order[0].combo_price * userInfo.order[0].combo_quantity;
-            delete userInfo.order[0].combo_price;
-            
+            // Check if there are orders
+            if (userInfo.order.length > 0) {
+                userInfo.order.forEach(order => {
+                    order.combo_total_price = order.combo_price * order.combo_quantity;
+                    delete order.combo_price; // Remove combo_price after calculating total price
+                });
+            }
+
             res.json(userInfo);
         }
         else {
@@ -131,7 +136,7 @@ export const edit = async (req, res) => {
         });
         userInfo.user = user;
 
-        if(user.length > 0) {            
+        if (user.length > 0) {
             res.json(userInfo);
         }
         else {
@@ -155,11 +160,11 @@ export const editPatch = async (req, res) => {
         const userId = parseInt(req.params.userId);
 
         // Không gửi ảnh khác lên
-        if(res.locals.url == "") {
-            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
-            if(sex == "male") sex = 1;
+        if (res.locals.url == "") {
+            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } = req.body;
+            if (sex == "male") sex = 1;
             else sex = 2;
-            if(role == "user") role = 0;
+            if (role == "user") role = 0;
             else role = 1;
 
             // Update bảng User
@@ -175,10 +180,10 @@ export const editPatch = async (req, res) => {
             });
 
         } else { // Có gửi ảnh khác lên
-            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } =  req.body;
-            if(sex == "male") sex = 1;
+            let { username, email, phone_number, full_name, sex, date_of_birth, role, status } = req.body;
+            if (sex == "male") sex = 1;
             else sex = 2;
-            if(role == "user") role = 0;
+            if (role == "user") role = 0;
             else role = 1;
 
             // Update bảng User
@@ -216,7 +221,7 @@ export const deleteItem = async (req, res) => {
         const queryDeleteUser = `DELETE FROM users WHERE user_id = ?`
 
         // Nếu user này đã từng order thì mới xóa
-        if(orderId.length > 0) {
+        if (orderId.length > 0) {
             // Xóa ở tickets
             const queryDeleteTicket = `DELETE FROM tickets WHERE order_id = ?`
             // Xóa ở popcorn_order
@@ -249,7 +254,7 @@ export const deleteItem = async (req, res) => {
 // [PATCH] /admin/users/change-role/:userId
 export const changeRole = async (req, res) => {
     try {
-        const userId  = req.params.userId;
+        const userId = req.params.userId;
 
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
@@ -268,37 +273,37 @@ export const changeRole = async (req, res) => {
         const newRole = currentRole == 0 ? 1 : 0;
 
         const [updateResult] = await connection.promise().query(
-            'UPDATE users SET role = ? WHERE user_id = ?', 
+            'UPDATE users SET role = ? WHERE user_id = ?',
             [newRole, userId]
         );
 
         if (updateResult.affectedRows > 0) {
-            res.status(200).json({ 
+            res.status(200).json({
                 code: 200,
-                message: "User role changed successfully", 
-                newRole: newRole 
+                message: "User role changed successfully",
+                newRole: newRole
             });
         } else {
             res.status(500).json({
                 code: 500,
-                message: "Failed to update user role" 
+                message: "Failed to update user role"
             });
         }
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({ 
+        res.status(500).json({
             code: 500,
-            message: "Error changing user role", 
+            message: "Error changing user role",
             error: error.message
         });
     }
 };
 
-// [PATCH] /admin/users/change-role/:userId
+// [PATCH] /admin/users/change-status/:userId
 export const changeStatus = async (req, res) => {
     try {
-        const userId  = req.params.userId;
+        const userId = req.params.userId;
 
         if (!userId) {
             return res.status(400).json({ message: "User ID is required" });
@@ -317,28 +322,28 @@ export const changeStatus = async (req, res) => {
         const newStatus = currentStatus == 0 ? 1 : 0;
 
         const [updateResult] = await connection.promise().query(
-            'UPDATE users SET status = ? WHERE user_id = ?', 
+            'UPDATE users SET status = ? WHERE user_id = ?',
             [newStatus, userId]
         );
 
         if (updateResult.affectedRows > 0) {
-            res.status(200).json({ 
+            res.status(200).json({
                 code: 200,
-                message: "User Status changed successfully", 
-                newStatus: newStatus 
+                message: "User Status changed successfully",
+                newStatus: newStatus
             });
         } else {
             res.status(500).json({
                 code: 500,
-                message: "Failed to update user status" 
+                message: "Failed to update user status"
             });
         }
 
-    } catch(error) {
+    } catch (error) {
         console.error(error);
-        res.status(500).json({ 
+        res.status(500).json({
             code: 500,
-            message: "Error changing user status", 
+            message: "Error changing user status",
             error: error.message
         });
     }

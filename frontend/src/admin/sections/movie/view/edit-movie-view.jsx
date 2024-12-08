@@ -99,10 +99,10 @@ export function EditMovieView({ movieId }) {
             }
 
             const result = await response.json();
-            console.log(result);
+            // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được cập nhật thành công!", severity: "success" });
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật phim!", severity: "error" });
         }
     };
