@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import { useBooking } from './BookingContext';
 import "./Thanh_toan.css";
 
 const Thanh_toan = ({ nextStep }) => {
+    const jwt = localStorage.getItem('jwt')
     const { showtime_id, seatTotalAmount, popcornTotalAmount, selectedSeats, selectedCombos } = useBooking();
     const [loading, setLoading] = useState(false); // Thêm trạng thái loading
     const [timeLeft, setTimeLeft] = useState(300); // 5 phút = 300 giây
@@ -29,10 +29,16 @@ const Thanh_toan = ({ nextStep }) => {
     // Xử lý khi hết giờ
     const handleTimeOut = async () => {
         alert('Đã hết giờ giữ ghế! Bạn sẽ được chuyển về trang chủ.');
-        await axios.post(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
-            showtime_id: showtime_id,
-            bookedSeat: selectedSeats,
-        });
+        await fetch(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                showtime_id: showtime_id,
+                bookedSeat: selectedSeats,
+            })
+        }).catch(error => console.error('Lỗi khi hủy giữ ghế:', error));
         window.location.href = `/auth`; // Chuyển về trang chủ
     };
 
@@ -41,11 +47,16 @@ const Thanh_toan = ({ nextStep }) => {
             event.preventDefault();
 
             // Gửi yêu cầu hủy giữ ghế
-            axios.post(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
-                showtime_id: showtime_id,
-                bookedSeat: selectedSeats,
-            })
-                .catch(error => console.error('Lỗi khi hủy giữ ghế:', error));
+            fetch(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    showtime_id: showtime_id,
+                    bookedSeat: selectedSeats,
+                })
+            }).catch(error => console.error('Lỗi khi hủy giữ ghế:', error));
 
             event.returnValue = ''; // Hiện cảnh báo khi người dùng thoát
         };
@@ -62,13 +73,30 @@ const Thanh_toan = ({ nextStep }) => {
         setLoading(true); // Bắt đầu loading khi nhấn nút Thanh Toán
 
         try {
-            const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/payment`, { showtime_id: showtime_id, amount: totalAmount, selectedSeats: selectedSeats, selectedCombos: selectedCombos });
-            if (response.data && response.data.paymentUrl) {
-                // Mở trang mới và chuyển hướng tới URL thanh toán
-                window.location.href = response.data.paymentUrl;
-            } else {
-                alert('Không lấy được URL thanh toán. Vui lòng thử lại.');
-            }
+            
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payment`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    jwt : jwt,
+                    showtime_id: showtime_id,
+                    amount: totalAmount,
+                    selectedSeats: selectedSeats, 
+                    selectedCombos: selectedCombos
+                })
+            }).then(response => response.json())
+            .then(responseData => {
+                if (responseData && responseData.paymentUrl) {
+                    window.location.href = responseData.paymentUrl;
+                }
+                else {
+                    alert('Bạn chưa đăng nhập hoặc đã hết phiên đăng nhập. Vui lòng thử lại.');
+                }
+
+            })
+            .catch(error => console.error('Error:', error));
         } catch (error) {
             console.error('Payment error:', error);
             alert('Đã có lỗi xảy ra khi xử lý thanh toán. Vui lòng thử lại.');

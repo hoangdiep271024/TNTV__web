@@ -1,9 +1,9 @@
-import axios from 'axios';
 import React, { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
 import Shared from "../Shared";
 import "./Thong_tin_ve.css";
 function Thong_tin_ve() {
+    const jwt = localStorage.getItem('jwt')
     const [orderInfo, setOrderInfo] = useState(null);
     const [error, setError] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -17,11 +17,27 @@ function Thong_tin_ve() {
 
     useEffect(() => {
         // Fetch seat data
-        const fetchOrderInfo = async () => {
+        const fetchOrderInfo = () => {
             try {
-                const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`);
-                setOrderInfo(response.data.order); // Lưu thông tin đơn hàng vào state
-                setLoading(false); // Đánh dấu việc load dữ liệu xong
+                const response = fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({jwt : jwt})
+                }).then(response => response.json())
+                .then(responseData => {
+                    if (responseData.success) {
+                        setOrderInfo(responseData.order); // Lưu thông tin đơn hàng vào state
+                        setLoading(false); // Đánh dấu việc load dữ liệu xong
+                    }
+                    else {
+                        alert('Bạn chưa đăng nhập hoặc đã hết phiên đăng nhập. Vui lòng thử lại.');
+                        window.location.href = `/auth`; // Chuyển về trang chủ
+                    }
+    
+                })
+                .catch(error => console.error('Error:', error));
             } catch (error) {
                 setError("Đã xảy ra lỗi khi tải thông tin.");
                 setLoading(false); // Đánh dấu việc load dữ liệu xong
@@ -29,7 +45,7 @@ function Thong_tin_ve() {
         };
 
         fetchOrderInfo();
-    }, []);
+    }, [jwt]);
 
     if (loading) {
         return (

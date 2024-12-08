@@ -7,7 +7,7 @@ import { default as React } from 'react';
 
 const Mua_ve = ({ nextStep }) => {
 
-
+    const jwt = localStorage.getItem('jwt')
     const { seatTotalAmount, setSeatTotalAmount, popcornTotalAmount, selectedSeats, setSelectedSeats, seatData } = useBooking();
     const handleSeatClick = (seat) => {
         if (seat.seat_status === 1 || (seat.reserved_until && new Date(seat.reserved_until) > new Date())) return;
@@ -75,23 +75,23 @@ const Mua_ve = ({ nextStep }) => {
                     if (selectedSeats.length > 0) {
                         try {
                             // Gửi request POST đến endpoint "/api/userInfo"
-                            const response = await fetch('/api/userInfo', {
+                            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
                                 },
-                                credentials: 'include', // Đảm bảo cookie được gửi cùng request
-                            });
+                                body: JSON.stringify({ jwt: jwt })
+                            }).then(response => response.json())
+                                .then(responseData => {
+                                    if (responseData.success) {
+                                        nextStep();
+                                    }
+                                    else {
+                                        alert('Hãy đăng nhập để thực hiện thao tác này');
+                                    }
 
-                            const data = await response.json();
-
-                            if (data.success === false) {
-                                // Hiển thị alert nếu success là false
-                                alert('Hãy đăng nhập để thực hiện thao tác này');
-                            } else {
-                                // Tiếp tục bước tiếp theo nếu user đã đăng nhập
-                                nextStep();
-                            }
+                                })
+                                .catch(error => console.error('Error:', error));
                         } catch (error) {
                             console.error('Lỗi khi gửi request:', error);
                             alert('Đã xảy ra lỗi, vui lòng thử lại sau!');

@@ -132,23 +132,6 @@ export const getLastestOrder = async (req, res) => {
         const decoded = verifyToken(token);
         const user_id = decoded.id;
         // Truy vấn thông tin đơn hàng mới nhất trong vòng 1 ngày trước hôm nay
-        // const query1 = `
-        //     SELECT 
-        //         order_id, order_date, total_price, 
-        //         show_date, show_time, 
-        //         film_name, film_img, 
-        //         room_name, cinema_name, address 
-        //     FROM orders
-        //     INNER JOIN showtimes ON orders.showtime_id = showtimes.showtime_id
-        //     INNER JOIN films ON showtimes.film_id = films.film_id
-        //     INNER JOIN rooms ON showtimes.room_id = rooms.room_id
-        //     INNER JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id
-        //     WHERE user_id = ? 
-        //        AND order_date >= CURDATE() - INTERVAL 1 DAY
-        //        AND order_date < CURDATE()
-        //     ORDER BY order_id DESC
-        //     LIMIT 1;
-        // `;
         const query1 = `
             SELECT 
                 order_id, order_date, total_price, 
@@ -160,10 +143,27 @@ export const getLastestOrder = async (req, res) => {
             INNER JOIN films ON showtimes.film_id = films.film_id
             INNER JOIN rooms ON showtimes.room_id = rooms.room_id
             INNER JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id
-            WHERE user_id = ?
+            WHERE user_id = ? 
+               AND order_date >= CURDATE() - INTERVAL 1 DAY
+               AND order_date < CURDATE()
             ORDER BY order_id DESC
             LIMIT 1;
         `;
+        // const query1 = `
+        //     SELECT 
+        //         order_id, order_date, total_price, 
+        //         show_date, show_time, 
+        //         film_name, film_img, 
+        //         room_name, cinema_name, address 
+        //     FROM orders
+        //     INNER JOIN showtimes ON orders.showtime_id = showtimes.showtime_id
+        //     INNER JOIN films ON showtimes.film_id = films.film_id
+        //     INNER JOIN rooms ON showtimes.room_id = rooms.room_id
+        //     INNER JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id
+        //     WHERE user_id = ?
+        //     ORDER BY order_id DESC
+        //     LIMIT 1;
+        // `;
         const [orderResult] = await connection.promise().query(query1, [user_id]);
 
         if (orderResult.length === 0) {
