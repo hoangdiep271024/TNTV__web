@@ -34,8 +34,9 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
     setSearchQuery(e.target.value); 
   };
   const handleSubmit = (e) => {
-    navigate(`/tim_kiem/${encodeURIComponent(createSlug(searchQuery))}`)
     localStorage.setItem('searchQuery', searchQuery);
+    navigate(`/tim_kiem/${encodeURIComponent(createSlug(searchQuery))}`)
+    window.location.reload()
   };
   
   const handleClose = () => {

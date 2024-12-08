@@ -7,7 +7,8 @@ const Evaluate = (props) => {
     const [dataRate, setDataRate] = useState({
         film_id: localStorage.getItem('film_id'),
         comments: '',
-        star: ''
+        star: '',
+        jwt: localStorage.getItem('jwt')
     });
     const [message, setMessage] = useState(null);
     const [ErorrMessage, setErorrMessage] = useState(null);

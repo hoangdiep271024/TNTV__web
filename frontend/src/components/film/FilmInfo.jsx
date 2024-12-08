@@ -41,7 +41,8 @@ export default function FilmInfo(props) {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
        
       });
   
@@ -66,7 +67,8 @@ export default function FilmInfo(props) {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
       });
   
       if (!response.ok) {
@@ -87,7 +89,8 @@ export default function FilmInfo(props) {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
       });
   
       if (!response.ok) {
