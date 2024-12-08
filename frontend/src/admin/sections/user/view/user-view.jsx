@@ -34,7 +34,7 @@ export function UserView() {
 
         try {
             for (const userId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/users/delete/${userId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/delete/${userId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export function UserView() {
         const fetchUsers = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/users", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
@@ -121,11 +121,11 @@ export function UserView() {
                             <UserTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={users.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, users.map((user) => user.user_id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((user) => user.user_id))
                                 }
                                 headLabel={[
                                     { id: 'username', label: 'Tên người dùng' },

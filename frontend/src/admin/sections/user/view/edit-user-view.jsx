@@ -34,7 +34,7 @@ export function EditUserView({ userId }) {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8888/api/admin/users/detail/${userId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/detail/${userId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch user details");
                 }
@@ -96,7 +96,7 @@ export function EditUserView({ userId }) {
         }
 
         try {
-            const response = await fetch(`http://localhost:8888/api/admin/users/edit/${userId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/edit/${userId}`, {
                 method: "PATCH",
                 body: formDataToSend,
             });
