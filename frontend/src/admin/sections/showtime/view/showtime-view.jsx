@@ -33,7 +33,7 @@ export function ShowtimeView() {
 
         try {
             for (const showtimeId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/showtimes/delete/${showtimeId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${showtimeId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function ShowtimeView() {
         const fetchShowtimes = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/showtimes", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

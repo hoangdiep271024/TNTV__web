@@ -30,7 +30,7 @@ export function CreateShowtimeView() {
         };
 
         try {
-            const response = await fetch("http://localhost:8888/api/admin/showtimes/create", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

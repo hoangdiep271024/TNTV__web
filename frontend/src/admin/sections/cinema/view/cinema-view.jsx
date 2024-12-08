@@ -33,7 +33,7 @@ export function CinemaView() {
 
         try {
             for (const cinemaId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/cinemas/delete/${cinemaId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/delete/${cinemaId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -58,7 +58,7 @@ export function CinemaView() {
         const fetchCinemas = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/cinemas", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

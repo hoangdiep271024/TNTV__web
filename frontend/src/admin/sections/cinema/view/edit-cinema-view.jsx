@@ -19,7 +19,7 @@ export function EditCinemaView({ cinemaId }) {
     useEffect(() => {
         const fetchCinemaDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8888/api/admin/cinemas/detail/${cinemaId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/detail/${cinemaId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch cinema details");
                 }
@@ -56,7 +56,7 @@ export function EditCinemaView({ cinemaId }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8888/api/admin/cinemas/edit/${cinemaId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/edit/${cinemaId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 
 const deleteShowtime = async (id) => {
     try {
-        const response = await fetch(`http://localhost:8888/api/admin/showtimes/delete/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${id}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",

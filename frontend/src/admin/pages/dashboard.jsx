@@ -20,7 +20,7 @@ export default function DashboardPage() {
                     // credentials: 'include'
                 };
 
-                const response = await fetch("http://localhost:8888/api/admin/dashboard", requestOptions);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard`, requestOptions);
                 const result = await response.json();
 
                 // Update state with the fetched data

@@ -4,7 +4,7 @@ import { Iconify } from '../../components/iconify';
 
 const deleteRoom = async (id) => {
     try {
-        const response = await fetch(`http://localhost:8888/api/admin/rooms/delete/${id}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/delete/${id}`, {
             method: 'DELETE',
             headers: {
                 "Content-Type": "application/json",
@@ -25,7 +25,7 @@ const deleteRoom = async (id) => {
 
 const fetchRoomDetails = async (roomId) => {
     try {
-        const response = await fetch(`http://localhost:8888/api/admin/rooms/detail/${roomId}`);
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/detail/${roomId}`);
         if (!response.ok) {
             throw new Error('Failed to fetch room details');
         }
@@ -39,7 +39,7 @@ const fetchRoomDetails = async (roomId) => {
 
 const editRoom = async (roomId, roomName, cinemaName) => {
     try {
-        const response = await fetch(`http://localhost:8888/api/admin/rooms/edit/${roomId}`, {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/edit/${roomId}`, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",

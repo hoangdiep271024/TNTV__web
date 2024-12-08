@@ -19,7 +19,7 @@ export function OrderDetailsView({ orderId }) {
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
-                const response = await fetch(`http://localhost:8888/api/admin/orders/detail/${orderId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/detail/${orderId}`);
                 if (!response.ok) {
                     throw new Error('Failed to fetch order details');
                 }

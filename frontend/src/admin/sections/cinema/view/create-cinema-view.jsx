@@ -21,7 +21,7 @@ export function CreateCinemaView() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch("http://localhost:8888/api/admin/cinemas/create", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

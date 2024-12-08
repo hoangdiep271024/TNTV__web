@@ -40,7 +40,7 @@ export function CreateMovieView() {
         }
 
         try {
-            const response = await fetch("http://localhost:8888/api/admin/films/create", {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",

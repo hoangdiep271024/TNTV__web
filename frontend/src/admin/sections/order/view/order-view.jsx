@@ -31,7 +31,7 @@ export function OrderView() {
 
         try {
             for (const orderId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/orders/delete/${orderId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/delete/${orderId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export function OrderView() {
         const fetchOrders = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/orders", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

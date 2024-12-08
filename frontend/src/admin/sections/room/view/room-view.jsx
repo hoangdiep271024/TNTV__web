@@ -31,7 +31,7 @@ export function RoomView() {
 
         try {
             for (const roomId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/rooms/delete/${roomId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/delete/${roomId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -56,7 +56,7 @@ export function RoomView() {
         const fetchRooms = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/rooms", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",

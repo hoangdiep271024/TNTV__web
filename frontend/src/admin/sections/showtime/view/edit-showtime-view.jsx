@@ -20,7 +20,7 @@ export function EditShowtimeView({ showtimeId }) {
     useEffect(() => {
         const fetchShowtimeDetails = async () => {
             try {
-                const response = await fetch(`http://localhost:8888/api/admin/showtimes/detail/${showtimeId}`);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/detail/${showtimeId}`);
                 if (!response.ok) {
                     throw new Error("Failed to fetch showtime details");
                 }
@@ -57,7 +57,7 @@ export function EditShowtimeView({ showtimeId }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8888/api/admin/showtimes/edit/${showtimeId}`, {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/edit/${showtimeId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",

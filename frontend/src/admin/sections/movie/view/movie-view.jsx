@@ -34,7 +34,7 @@ export function MovieView() {
 
         try {
             for (const movieId of table.selected) {
-                const response = await fetch(`http://localhost:8888/api/admin/movies/delete/${movieId}`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/movies/delete/${movieId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export function MovieView() {
         const fetchMovies = async () => {
             setLoading(true);
             try {
-                const response = await fetch("http://localhost:8888/api/admin/films", {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
