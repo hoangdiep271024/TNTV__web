@@ -11,6 +11,7 @@ export function ShowtimeTableToolbar({ numSelected, filterName, selectedFilter, 
     const filterOptions = [
         { value: 'film_name', label: 'Tên phim' },
         { value: 'cinema_name', label: 'Tên rạp chiếu' },
+        { value: 'room_name', label: 'Tên phòng chiếu' },
     ]
 
     return (
@@ -55,7 +56,7 @@ export function ShowtimeTableToolbar({ numSelected, filterName, selectedFilter, 
                         placeholder="Tìm kiếm..."
                         startAdornment={
                             <InputAdornment position="start">
-                                <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                                <Iconify width={20} icon="eva:search-fill" />
                             </InputAdornment>
                         }
                         sx={{ maxWidth: 320 }}

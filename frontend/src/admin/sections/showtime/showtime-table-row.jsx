@@ -92,7 +92,7 @@ export function ShowtimeTableRow({ row, selected, onSelectRow, onDelete }) {
                         to={`/admin/cinema/${row.cinema_id}`}
                         style={{ textDecoration: "none", color: "inherit" }}
                     >
-                        <Typography variant="body2" ontWeight='medium' noWrap>
+                        <Typography variant="body2" fontWeight='medium' noWrap>
                             {row.cinema_name}
                         </Typography>
                     </Link>

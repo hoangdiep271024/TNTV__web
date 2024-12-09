@@ -234,7 +234,7 @@ export function EditUserView({ userId }) {
 
                 <Snackbar
                     open={snackbar.open}
-                    autoHideDuration={6000}
+                    autoHideDuration={4000}
                     onClose={handleSnackbarClose}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >

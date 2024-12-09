@@ -94,6 +94,14 @@ export function RoomView() {
 
     const notFound = !dataFiltered.length && filterName;
 
+    const handleEditSuccess = (roomId, updatedData) => {
+        setRooms((prevRooms) =>
+            prevRooms.map((room) =>
+                room.room_id === roomId ? { ...room, ...updatedData } : room
+            )
+        );
+    };
+
     return (
         <DashboardContent>
             <Box display='flex' alignItems="center" mb={5}>
@@ -155,6 +163,7 @@ export function RoomView() {
                                                 setRooms((prevRooms) => prevRooms.filter((room) => room.room_id !== id));
                                                 table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
                                             }}
+                                            onEditSuccess={handleEditSuccess}
                                         />
                                     ))}
 

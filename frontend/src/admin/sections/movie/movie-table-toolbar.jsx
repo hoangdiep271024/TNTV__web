@@ -54,7 +54,7 @@ export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onF
                         placeholder="Tìm kiếm..."
                         startAdornment={
                             <InputAdornment position="start">
-                                <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                                <Iconify width={20} icon="eva:search-fill" />
                             </InputAdornment>
                         }
                         sx={{ maxWidth: 320 }}
