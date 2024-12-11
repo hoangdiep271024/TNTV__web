@@ -19,24 +19,24 @@ export default function ChangeMode() {
         value={mode}
         label="Mode"
         onChange={handleChange}
-        style={{ display: "flex", gap: 1, alignItems: "center" }}
+        style={{ display: "flex", gap: 1, alignItems: "center" , height: '40px'}}
       >
         <MenuItem value="light">
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
             <WbSunnyIcon />
             Light
           </div>
         </MenuItem>
         <MenuItem value="dark">
           {" "}
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
             <DarkModeIcon />
             Dark
           </div>
         </MenuItem>
         <MenuItem value="system">
           {" "}
-          <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+          <div style={{ display: "flex", gap: "5px", alignItems: "center" }}>
             <SettingsSystemDaydreamIcon />
             System
           </div>{" "}
