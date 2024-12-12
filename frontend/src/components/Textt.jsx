@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-export default function Text({ fullText}) {
+export default function Textt({ fullText}) {
   const [text, setText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0); // Initialize to 0
 
@@ -21,9 +21,9 @@ export default function Text({ fullText}) {
         textAlign: 'center',
         fontFamily: 'Sriracha',
         fontWeight: '800',
-        fontSize: '32px',
+        fontSize: '20px',
         color: '#fafafa',
-        marginTop: '28vh',
+        marginTop: '30px',
       }}
     >
       {text}
