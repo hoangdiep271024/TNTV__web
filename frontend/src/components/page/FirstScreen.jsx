@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box } from '@mui/material';
-import Text from '../\bText';
+import Text from '../Text';
 import Textt from '../Textt';
 import '../welcome.css';
 import { useNavigate } from 'react-router-dom';
