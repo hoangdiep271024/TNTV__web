@@ -12,7 +12,7 @@ export const getOrders = async (req, res) => {
         }
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -103,7 +103,7 @@ export const getOrders = async (req, res) => {
             })
         );
 
-        res.json(ordersInfo);
+        return res.json(ordersInfo);
     } catch (error) {
         console.error('Error fetching order data:', error);
         res.status(500).json({ message: 'Internal Server Error' });

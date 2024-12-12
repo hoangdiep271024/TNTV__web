@@ -1,7 +1,8 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Link, IconButton, MenuItem, Popover, Table, TableCell, TableRow, Typography, TextField, MenuList, menuItemClasses, Snackbar } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Link, IconButton, MenuItem, Popover, Table, TableCell, TableRow, Typography, TextField, MenuList, menuItemClasses, Snackbar, Alert } from "@mui/material";
 import { useCallback, useState, useEffect } from "react";
 import { Iconify } from '../../components/iconify';
 
+// delete room api
 const deleteRoom = async (id) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/delete/${id}`, {
@@ -23,6 +24,7 @@ const deleteRoom = async (id) => {
     }
 }
 
+// room details api
 const fetchRoomDetails = async (roomId) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/detail/${roomId}`);
@@ -37,6 +39,7 @@ const fetchRoomDetails = async (roomId) => {
     }
 }
 
+// edit room api
 const editRoom = async (roomId, roomName, cinemaName) => {
     try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/edit/${roomId}`, {
@@ -57,13 +60,18 @@ const editRoom = async (roomId, roomName, cinemaName) => {
         return false;
     }
 }
-export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
+export function RoomTableRow({ row, selected, onSelectRow, onDelete, onEditSuccess }) {
     const [openPopover, setOpenPopover] = useState(null);
     const [openDialog, setOpenDialog] = useState(false);
     const [openEditDialog, setOpenEditDialog] = useState(false);
     const [roomName, setRoomName] = useState('');
     const [cinemaName, setCinemaName] = useState('');
     const [loading, setLoading] = useState(false);
+    const [snackbarOpen, setSnackbarOpen] = useState(false);
+
+    const handleCloseSnackbar = () => {
+        setSnackbarOpen(false);
+    }
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -106,13 +114,16 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
 
     const handleSubmitEdit = async () => {
         const success = await editRoom(row.room_id, roomName, cinemaName);
-        if (success) {
 
+        if (success && onEditSuccess) {
+            onEditSuccess(row.room_id, { room_name: roomName, cinema_name: cinemaName });
+        } else {
+            setSnackbarOpen(true);
         }
-        setOpenEditDialog(false);
-    }
 
-    // console.log(row);
+        setOpenEditDialog(false);
+        setOpenPopover(false);
+    }
 
     return (
         <>
@@ -165,7 +176,7 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'primary.main' }}>
+                        <MenuItem onClick={handleEditClick} sx={{ color: 'primary.main' }}>
                             <Iconify icon="solar:pen-bold" />
                             Chỉnh sửa
                         </MenuItem>
@@ -227,6 +238,17 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete }) {
                     </Button>
                 </DialogActions>
             </Dialog>
+
+            <Snackbar
+                open={snackbarOpen}
+                autoHideDuration={4000}
+                onClose={handleCloseSnackbar}
+                anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+            >
+                <Alert onClose={handleCloseSnackbar} severity="error" sx={{ width: '100%' }}>
+                    Cập nhật thất bại! Vui lòng thử lại.
+                </Alert>
+            </Snackbar>
 
         </>
     )

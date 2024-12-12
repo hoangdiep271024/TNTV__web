@@ -121,7 +121,7 @@ const [okMessage, setOkMessage]= useState('')
         backgroundColor: "#fff",
         transition: 'linear',
         paddingLeft:'25px',
-         paddingTop:'30px'
+         paddingTop:'10px'
       }}
       autoComplete="off"
     >
@@ -139,25 +139,24 @@ const [okMessage, setOkMessage]= useState('')
         )}
       <form onSubmit={handleSubmit}>
         <label className="name__label" style={{color:'#000'}}>Họ và tên</label>
-        <br/>
-        <input className="name"  name="name" type="text" onChange={handleChange} required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
-         <br/>
+        <input className="name"  name="name" type="text" onChange={handleChange} required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px', marginBottom: '10px'}}></input>
+         {/* <br/> */}
          <label className="user__name" name="user__name" onChange={handleChange} style={{color:'#000'}}>Tên đăng nhập</label>
         <br/>
-        <input className="user__name"  name="user__name" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="user__name"  name="user__name" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px', marginBottom: '10px'}}></input>
          <br/>
          <label className="gmail__label" style={{color:'#000'}}>E-mail</label>
         <br/>
-        <input className="gmail"  name="gmail" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="gmail"  name="gmail" onChange={handleChange} type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'00px', marginBottom: '10px'}}></input>
          <br/>
          <label className="phone__label" style={{color:'#000'}}>Số điện thoại</label>
         <br/>
         
-        <input className="phone__number" onChange={handleChange}  name="phone__number" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="phone__number" onChange={handleChange}  name="phone__number" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px', marginBottom: '10px'}}></input>
          <br/>
          <label className="birthday__label" style={{color:'#000'}}>Ngày sinh</label>
         <br/>
-        <input className="birthday" onChange={handleChange}  name="birthday" type="date" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+        <input className="birthday" onChange={handleChange}  name="birthday" type="date" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px', marginBottom: '10px'}}></input>
          <br/>
          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginTop: '10px' }}>
   <label style={{ color: 'black', margin: 0 }}>Giới tính:</label>
@@ -175,11 +174,11 @@ const [okMessage, setOkMessage]= useState('')
 <br></br>
          <label className="password__label" style={{color:'#000'}}>Mật khẩu</label>
          <br/>
-         <input className="Password" onChange={handleChange}  name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
+         <input className="Password" onChange={handleChange}  name="password" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px', marginBottom: '10px'}}></input>
          <br/>
          <label className="password__label" style={{color:'#000'}}>Xác nhận mật khẩu</label>
          <br/>
-         <input className="rePassword" onChange={handleChange} name="rePassword" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px'}}></input>
+         <input className="rePassword" onChange={handleChange} name="rePassword" type="password" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'85%', fontSize:'17px', paddingLeft:'5px', marginTop:'0px'}}></input>
          <SubmitButton type="submit" value="Đăng ký" />
       </form>
       

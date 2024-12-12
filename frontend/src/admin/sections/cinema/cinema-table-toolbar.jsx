@@ -10,6 +10,7 @@ import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 export function CinemaTableToolbar({ numSelected, filterName, selectedFilter, onFilterName, onFilterChange, onDeleteSelected }) {
     const filterOptions = [
         { value: 'cinema_name', label: 'Tên rạp chiếu' },
+        { value: 'address', label: 'Địa chỉ' },
         { value: 'cluster_name', label: 'Tên cụm rạp' },
     ]
 
@@ -55,7 +56,7 @@ export function CinemaTableToolbar({ numSelected, filterName, selectedFilter, on
                         placeholder="Tìm kiếm..."
                         startAdornment={
                             <InputAdornment position="start">
-                                <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
+                                <Iconify width={20} icon="eva:search-fill" />
                             </InputAdornment>
                         }
                         sx={{ maxWidth: 320 }}

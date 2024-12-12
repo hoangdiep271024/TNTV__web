@@ -45,17 +45,22 @@ app.use('/api', api);
 
 adminApi(app);
 
-// Route for the main app
-app.get('/', (req, res) => {
-  res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Serve main index.html
-});
-
-// Route for the admin app
+// Route for the admin app (important: this needs to come before the wildcard route)
 app.get('/admin', (req, res) => {
   res.sendFile(path.resolve(distPath, 'dist', 'admin.html')); // Serve admin admin.html
 });
 
-// Các route khác sẽ trả về index.html (SPA)
+// Route for the admin app (SPA fallback for admin routes)
+app.get('/admin/*', (req, res) => {
+  res.sendFile(path.resolve(distPath, 'dist', 'admin.html')); // Serve admin admin.html
+});
+
+// Route for the main app (SPA fallback)
+app.get('/', (req, res) => {
+  res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Serve main index.html
+});
+
+// Các route khác sẽ trả về index.html (SPA fallback for non-admin routes)
 app.get('*', (req, res) => {
   res.sendFile(path.resolve(distPath, 'dist', 'index.html')); // Chuyển đổi thành đường dẫn tuyệt đối
 });

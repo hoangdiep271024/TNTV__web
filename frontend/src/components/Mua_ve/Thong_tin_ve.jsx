@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
 import Shared from "../Shared";
 import "./Thong_tin_ve.css";
-
 function Thong_tin_ve() {
     const jwt = localStorage.getItem('jwt');
     const [orderInfo, setOrderInfo] = useState(null);
@@ -16,32 +15,36 @@ function Thong_tin_ve() {
     };
 
     useEffect(() => {
-        const fetchOrderInfo = async () => {
+        // Fetch seat data
+        const fetchOrderInfo = () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`, {
+                const response = fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
                     },
-                    body: JSON.stringify({ jwt }),
-                });
-                const responseData = await response.json();
-                if (responseData.success) {
-                    setOrderInfo(responseData.order);
-                } else {
-                    setOrderInfo(null);
-                }
+                    body: JSON.stringify({jwt : jwt})
+                }).then(response => response.json())
+                .then(responseData => {
+                    if (responseData.success) {
+                        setOrderInfo(responseData.order); // Lưu thông tin đơn hàng vào state
+                        setLoading(false); // Đánh dấu việc load dữ liệu xong
+                    }
+                    else {
+                        alert('Bạn chưa đăng nhập hoặc đã hết phiên đăng nhập. Vui lòng thử lại.');
+                        window.location.href = `/auth`; // Chuyển về trang chủ
+                    }
+    
+                })
+                .catch(error => console.error('Error:', error));
             } catch (error) {
                 setError("Đã xảy ra lỗi khi tải thông tin.");
-            } finally {
-                setLoading(false);
+                setLoading(false); // Đánh dấu việc load dữ liệu xong
             }
         };
 
         fetchOrderInfo();
     }, [jwt]);
-
-    let content;
 
     if (loading) {
         content = <div className="ticket-booking">Đang tải thông tin...</div>;

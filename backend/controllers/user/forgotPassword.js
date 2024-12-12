@@ -66,7 +66,7 @@ export const forgotPassword = async (req, res) => {
             });
         });
     } catch (error) {
-        res.json({ message: error.message, success: false });
+        return res.json({ message: error.message, success: false });
     }
 
 }
@@ -124,7 +124,7 @@ export const forgotPasswordChangePassword = async (req, res) => {
         const newPassword = req.body.password;
         const reNewPassword = req.body.rePassword;
         if(newPassword != reNewPassword){
-            res.json({
+            return res.json({
                 message: "nhập lại mật khẩu sai",
                 success: false
             })
@@ -137,13 +137,13 @@ export const forgotPasswordChangePassword = async (req, res) => {
                 message: err.message,
                 success: false
             });
-            res.json({
+            return res.json({
                 message: "Đổi mật khẩu thành công",
                 success: true
             })
         })
     } catch (error) {
-        res.json({ message: error.message, success: false });
+        return res.json({ message: error.message, success: false });
     }
 
 }

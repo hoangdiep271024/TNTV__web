@@ -170,7 +170,7 @@ export const filmShowTimeInfo = async (req, res) => {
             });
         });
 
-        res.json(postOut);
+        return res.json(postOut);
     });
 }
 
@@ -187,7 +187,7 @@ export const getComment = async (req, res) => {
             return res.status(500).json({ error: 'Database query failed' });
         }
 
-        res.json({
+        return res.json({
             numberOfComment: results.length,
             comment: results
         });
@@ -206,7 +206,7 @@ export const postComment = async (req, res) => {
     }
 
     if (isTokenExpired(token)) {
-        res.json({
+        return res.json({
             message: "Người dùng hết phiên đăng nhập",
             success: false
         })
@@ -241,7 +241,7 @@ export const postComment = async (req, res) => {
                 return res.status(500).json({ error: 'Database query failed' });
             }
 
-            res.json({
+            return res.json({
                 success: true,
                 message: "Đánh giá thành công"
             });
@@ -278,7 +278,7 @@ export const phim = async (req, res) => {
         if (error) {
             return res.status(500).json({ message: 'Database error', error });
         }
-        res.json(results);
+        return res.json(results);
     });
 }
 
@@ -313,7 +313,7 @@ export const filmSearchByName = async (req, res) => {
         }, {});
 
         // Trả về kết quả
-        res.json(filmsByType);
+        return res.json(filmsByType);
     });
 }
 
@@ -348,7 +348,7 @@ export const filmType = async (req, res) => {
         if (results.length === 0) {
             return res.status(404).json({ message: 'No films found for this category' });
         }
-        res.json(results);
+        return res.json(results);
     });
 };
 

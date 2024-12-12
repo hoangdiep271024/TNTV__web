@@ -13,7 +13,7 @@ export const likeCheck = async (req, res) => {
 }
 
 if (isTokenExpired(token)) {
-    res.json({
+    return res.json({
         message: "Người dùng hết phiên đăng nhập",
         liked: false
     })
@@ -28,9 +28,9 @@ if (isTokenExpired(token)) {
           return res.status(500).json({ error: 'Internal server error' });
         }
         if (results.length > 0) {
-          res.json({ liked: true });
+          return res.json({ liked: true });
         } else {
-          res.json({ liked: false });
+          return res.json({ liked: false });
         }
       });
 
@@ -47,7 +47,7 @@ export const unLike = async (req, res) => {
 }
 
 if (isTokenExpired(token)) {
-    res.json({
+    return res.json({
         message: "Người dùng hết phiên đăng nhập",
         liked: false
     })
@@ -64,12 +64,12 @@ if (isTokenExpired(token)) {
       }
     
       if (results.affectedRows > 0) {
-        res.json({
+        return res.json({
           message: "Bỏ like thành công",
           liked: false,
         });
       } else {
-        res.json({
+        return res.json({
           message: "Không tìm thấy bản ghi để xoá",
           liked: true, 
         });
@@ -89,7 +89,7 @@ export const Like = async (req, res) => {
 }
 
 if (isTokenExpired(token)) {
-    res.json({
+    return res.json({
         message: "Người dùng hết phiên đăng nhập",
         liked: false
     })
@@ -105,7 +105,7 @@ if (isTokenExpired(token)) {
       return res.status(500).json({ error: 'Internal server error' });
     }
 
-    res.json({ 
+    return res.json({ 
       message: "Liked successfully", 
       liked: true 
     });})

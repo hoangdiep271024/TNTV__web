@@ -151,7 +151,7 @@ export function EditShowtimeView({ showtimeId }) {
                 </CardContent>
             </Card>
 
-            <Snackbar open={snackbar.open} autoHideDuration={6000} onClose={handleSnackbarClose}>
+            <Snackbar open={snackbar.open} autoHideDuration={4000} onClose={handleSnackbarClose}>
                 <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>
                     {snackbar.message}
                 </Alert>

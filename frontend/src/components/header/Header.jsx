@@ -13,6 +13,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
+import AccountHeader from "../Account/AccountHeader";
 function createSlug(name) {
   
   return name
@@ -125,32 +126,38 @@ const logOutClick = () => {
       fontFamily: "Arial",
       fontSize: "14px",
       textAlign: "center",
-      top: "-6.5px",
     },
   }}
   InputProps={{
     endAdornment: (
       <InputAdornment position="end">
-        <SearchIcon sx={{ cursor: "pointer" }} onClick = {handleSubmit}/>
+        <SearchIcon sx={{ cursor: "pointer" }} onClick={handleSubmit} />
       </InputAdornment>
     ),
     sx: {
-      height: '40px', 
+      height: "35px",
     },
   }}
   sx={{
-    width: '230px',
-    '& .MuiOutlinedInput-root': {
-      height: '40px', 
+    width: "230px",
+    "& .MuiOutlinedInput-root": {
+      height: "35px",
     },
-    '& .MuiInputBase-input': {
-      padding: '10px', 
+    "& .MuiInputBase-input": {
+      padding: "0 10px", // Điều chỉnh padding cho cân đối
+    },
+    "& .MuiInputLabel-root": {
+      top: "-8px", // Căn chỉnh nhãn về vị trí mong muốn
+    },
+    "& .MuiInputLabel-shrink": {
+      transform: "translate(13px, -4px) scale(0.75)", 
     },
   }}
 />
+
 </form>
 
-{!login && (<Button
+{/* {!login && (<Button
             sx={{
               textTransform: "none",
               color: theme.palette.mode === "light" ? "black" : "white",
@@ -180,7 +187,9 @@ const logOutClick = () => {
             onClick={onLoginClick}
           >
             Đăng nhập
-          </Button>)}
+          </Button>)} */}
+{!login && <AccountHeader signup={onSignupClick} login={onLoginClick}/>}
+
           {login && (
             <div>
             <Button

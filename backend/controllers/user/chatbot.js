@@ -5,7 +5,7 @@ import {
 import dotenv from "dotenv";
 // import filmInfoForAI from "../../middlewares/user/filmInfoForAI.js";
 dotenv.config();
-const apiKey = process.env.GeminiApiKey;
+const apiKey = ""
 const genAI = new GoogleGenerativeAI(apiKey);
 // const filmInfo = filmInfoForAI()
 
@@ -59,7 +59,7 @@ const chatBot = async (req, res) => {
         const result = await chatSession.sendMessage(prompt);
         return res.json(result.response.text())
     } catch (error) {
-        res.json("Xin lỗi hệ thống có chút vấn đề mong bạn thông cảm")
+        return res.json("Xin lỗi hệ thống có chút vấn đề mong bạn thông cảm")
     }
 
 }

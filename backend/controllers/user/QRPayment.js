@@ -22,10 +22,10 @@ export const giuGhe = async (req, res) => {
     try {
         // Cập nhật trạng thái ghế thành 1 (đã đặt)
         await updateSeatStatus(showtime_id, bookedSeat, reserved_until);
-        res.json({ success: true });
+        return res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Error reserving seats' });
+        return res.status(500).json({ success: false, message: 'Error reserving seats' });
     }
 }
 
@@ -34,10 +34,10 @@ export const huyGiuGhe = async (req, res) => {
     try {
         // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
         await updateSeatStatus(showtime_id, bookedSeat, null);
-        res.json({ success: true });
+        return res.json({ success: true });
     } catch (error) {
         console.error(error);
-        res.status(500).json({ success: false, message: 'Error canceling reservation' });
+        return res.status(500).json({ success: false, message: 'Error canceling reservation' });
     }
 }
 
@@ -68,8 +68,8 @@ export const QRPayment = async (req, res) => {
         const accessKey = 'F8BBA842ECF85';
         const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
         const partnerCode = 'MOMO';
-        const redirectUrl = `https://fall2024c8g13.int3306.freeddns.org/thong_tin_ve`;
-        const ipnUrl = 'https://fall2024c8g13.int3306.freeddns.org/api/payment/callback';
+        const redirectUrl = `http://fall2024c8g13.int3306.freeddns.org/thong_tin_ve`;
+        const ipnUrl = 'http://fall2024c8g13.int3306.freeddns.org/api/payment/callback';
         const requestType = "payWithMethod";
         const amount = total_amount;
         const orderId = partnerCode + new Date().getTime();
@@ -117,9 +117,9 @@ export const QRPayment = async (req, res) => {
             paymentRes.on('end', () => {
                 const response = JSON.parse(data);
                 if (response.resultCode === 0) {
-                    res.json({ paymentUrl: response.payUrl, orderId: response.orderId });
+                    return res.json({ paymentUrl: response.payUrl, orderId: response.orderId });
                 } else {
-                    res.status(500).json({ error: 'Payment initiation failed' });
+                    return res.status(500).json({ error: 'Payment initiation failed' });
                 }
             });
         });
@@ -144,7 +144,6 @@ export const callback = async (req, res) => {
     try {
         if (resultCode === 0) { // Thanh toán thành công
             const { user_id, showtime_id, selectedSeats, selectedCombos } = JSON.parse(extraData);
-
             // Thêm vào bảng orders
             const [orderResult] = await connection.promise().query(
                 'INSERT INTO orders (user_id, showtime_id, order_date, total_price) VALUES (?, ?, NOW(), ?)',
@@ -152,7 +151,6 @@ export const callback = async (req, res) => {
             );
 
             const order_id = orderResult.insertId;
-
             // Thêm vào bảng tickets
             for (const seat of selectedSeats) {
                 await connection.promise().query(
@@ -162,11 +160,12 @@ export const callback = async (req, res) => {
             }
 
             // Cập nhật bảng seat_status
-            const seatIds = selectedSeats.map(seat => seat.seat_id); // Lấy danh sách seat_id
-            await connection.promise().query(
-                'UPDATE seats SET seat_status = 1 WHERE seat_id IN (?)',
-                [seatIds]
-            );
+            for (const seat of selectedSeats) {
+                await connection.promise().query(
+                    'UPDATE seat_status SET seat_status = 1 WHERE seat_id = ? AND showtime_id = ?',
+                    [seat.seat_id, showtime_id]
+                );
+            }
 
             // Thêm vào bảng popcorn_orders
             for (const [comboId, combo] of Object.entries(selectedCombos)) {
@@ -183,6 +182,6 @@ export const callback = async (req, res) => {
         }
     } catch (error) {
         console.error('Error in callback:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        return res.status(500).json({ error: 'Internal Server Error' });
     }
 };

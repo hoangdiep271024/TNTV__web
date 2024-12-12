@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, MenuItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
 export function EditMovieView({ movieId }) {
     const [formData, setFormData] = useState({
@@ -16,6 +17,8 @@ export function EditMovieView({ movieId }) {
         directors: "",
         actors: "",
     });
+
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
@@ -101,6 +104,8 @@ export function EditMovieView({ movieId }) {
             const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được cập nhật thành công!", severity: "success" });
+
+            setTimeout(() => navigate(-1), 1000);
         } catch (error) {
             // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật phim!", severity: "error" });
@@ -132,7 +137,6 @@ export function EditMovieView({ movieId }) {
                                     label="URL hình ảnh (cách nhau bởi dấu phẩy)"
                                     value={formData.film_img}
                                     onChange={handleInputChange}
-                                    required
                                     fullWidth
                                 />
                                 <TextField
@@ -140,7 +144,6 @@ export function EditMovieView({ movieId }) {
                                     label="URL trailer"
                                     value={formData.film_trailer}
                                     onChange={handleInputChange}
-                                    required
                                     fullWidth
                                 />
                                 <TextField
@@ -231,7 +234,7 @@ export function EditMovieView({ movieId }) {
 
             <Snackbar
                 open={snackbar.open}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
                 onClose={handleSnackbarClose}
             >
                 <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>

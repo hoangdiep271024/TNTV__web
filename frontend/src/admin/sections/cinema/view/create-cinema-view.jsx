@@ -104,7 +104,7 @@ export function CreateCinemaView() {
 
             <Snackbar
                 open={snackbar.open}
-                autoHideDuration={6000}
+                autoHideDuration={4000}
                 onClose={handleSnackbarClose}
             >
                 <Alert onClose={handleSnackbarClose} severity={snackbar.severity}>

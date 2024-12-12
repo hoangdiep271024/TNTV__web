@@ -14,7 +14,7 @@ export const userInfo = async (req, res) => {
         }
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -33,7 +33,7 @@ export const userInfo = async (req, res) => {
             });
         }
 
-        res.json({
+        return res.json({
             userInfo: userInfo,
             success: true
         })
@@ -56,7 +56,7 @@ export const userInfoUpdate = async (req, res) => {
         const decoded = verifyToken(token);
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -91,7 +91,7 @@ export const userFilmLiked = async (req, res) => {
         const decoded = verifyToken(token);
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -118,7 +118,7 @@ export const userFilmLiked = async (req, res) => {
                 return res.status(500).json({ error: 'Database query failed' });
             }
     
-            res.json(results);
+            return res.json(results);
         });
 
     } catch (error) {
