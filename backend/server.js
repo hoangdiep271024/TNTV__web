@@ -1,4 +1,5 @@
 import cookieParser from "cookie-parser";
+import cors from "cors";
 import { config } from "dotenv";
 import express, { json } from "express";
 import session from 'express-session';
@@ -6,7 +7,6 @@ import path from "path";
 import { fileURLToPath } from 'url';
 import api from "./api/user/index.js";
 import corMw from "./middlewares/cors.js";
-import cors from "cors";
 const app = express();
 app.use(corMw);
 
@@ -26,7 +26,7 @@ const PORT = process.env.PORT;
 // Tạo __dirname và __filename trong môi trường ES module
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const distPath = path.join(__dirname, '../frontend');
+const distPath = path.join(__dirname, '../backend');
 
 
 //set up

@@ -1,14 +1,7 @@
 import cors from "cors";
 
 const corsOptions = {
-    origin: function (origin, callback) {
-        // Chỉ cho phép nguồn từ http://localhost:5173
-        if (origin === 'http://localhost:5173' || !origin) {
-            callback(null, true); // Cho phép nguồn hợp lệ
-        } else {
-            callback(new Error("Not allowed by CORS"));
-        }
-    },
+    origin: '*', // Cho phép tất cả các nguồn,
     credentials: true, // Cho phép gửi cookie hoặc thông tin xác thực
     optionsSuccessStatus: 200, // Đảm bảo các trình duyệt cũ không báo lỗi
 };

@@ -68,8 +68,8 @@ export const QRPayment = async (req, res) => {
         const accessKey = 'F8BBA842ECF85';
         const secretKey = 'K951B6PE1waDMi640xX08PD3vg6EkVlz';
         const partnerCode = 'MOMO';
-        const redirectUrl = `http://localhost:8888/thong_tin_ve`;
-        const ipnUrl = 'http://localhost:8888/api/payment/callback';
+        const redirectUrl = `https://fall2024c8g13.int3306.freeddns.org/thong_tin_ve`;
+        const ipnUrl = 'https://fall2024c8g13.int3306.freeddns.org/api/payment/callback';
         const requestType = "payWithMethod";
         const amount = total_amount;
         const orderId = partnerCode + new Date().getTime();
