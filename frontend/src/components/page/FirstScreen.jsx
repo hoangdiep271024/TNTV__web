@@ -26,13 +26,11 @@ export default function FirstScreen() {
         playsInline
         style={{
           position: 'absolute',
-          top: '0vh',
+          top: '-18vh',
           left: '0',
           width: '100vw',
-          height: '100vh',
+          height: '136vh',
           objectFit: 'cover',
-
-        
           zIndex: -2, 
         }}
       >
