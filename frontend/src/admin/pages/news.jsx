@@ -1,8 +1,8 @@
 import { Helmet } from 'react-helmet-async';
-import { NewsView } from '../sections/news/view/news-view';
-
+import { NewsView } from '../sections/news/view';
 
 export default function NewsPage() {
+
     return (
         <>
             <Helmet>

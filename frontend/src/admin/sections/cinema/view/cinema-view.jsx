@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Box, Button, Table, TableBody, TableContainer, TablePagination, Typography, TableRow, TableCell, CircularProgress } from "@mui/material";
+import { Card, Box, Button, Table, TableBody, TableContainer, TablePagination, Typography, TableRow, TableCell, CircularProgress, Alert } from "@mui/material";
 import { Iconify } from "../../../components/iconify";
 import { CinemaTableToolbar } from "../cinema-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
@@ -16,6 +16,7 @@ export function CinemaView() {
     const [filterName, setFilterName] = useState('');
     const [cinemas, setCinemas] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [error, setError] = useState(null);
     const [selectedFilter, setSelectedFilter] = useState('cinema_name');
     const [dataFiltered, setDataFiltered] = useState([]);
 
@@ -57,6 +58,7 @@ export function CinemaView() {
     useEffect(() => {
         const fetchCinemas = async () => {
             setLoading(true);
+            setError(null);
             try {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas`, {
                     method: 'GET',
@@ -72,7 +74,8 @@ export function CinemaView() {
                 // console.log(data);
                 setCinemas(data);
             } catch (err) {
-                console.error(err);
+                setError(err.message);
+                // console.error(err);
             } finally {
                 setLoading(false);
             }
@@ -99,19 +102,30 @@ export function CinemaView() {
 
     return (
         <DashboardContent>
-            <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display='flex'
+                mb={5}
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý rạp chiếu phim
                 </Typography>
-                <Box flexGrow={1} />
                 <Button
                     variant="contained"
                     color="success"
-                    component={Link}
-                    to="/admin/cinema/create"
                     startIcon={<Iconify icon="mingcute:add-line" />}
-                    size="small"
-                >
+                    component={Link}
+                    to="/admin/cinema/create"                >
                     Thêm rạp chiếu
                 </Button>
             </Box>
@@ -157,7 +171,17 @@ export function CinemaView() {
                                     </TableRow>
                                 )}
 
-                                {!loading && dataFiltered.slice(
+                                {error && (
+                                    <TableRow>
+                                        <TableCell colSpan={7}>
+                                            <Box display="flex" justifyContent="center" alignItems="center" height="150px">
+                                                <Alert severity="error">{error}</Alert>
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+
+                                {!loading && !error && dataFiltered.slice(
                                     table.page * table.rowsPerPage,
                                     table.page * table.rowsPerPage + table.rowsPerPage
                                 ).map((row) => (

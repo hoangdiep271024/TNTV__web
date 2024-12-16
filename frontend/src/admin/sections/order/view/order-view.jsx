@@ -170,8 +170,8 @@ export function OrderView() {
                     </TableContainer>
                 </Scrollbar>
 
-                {dataFiltered.length > 0 &&
-                    (<TablePagination
+                {dataFiltered.length > 0 && (
+                    <TablePagination
                         component="div"
                         page={table.page}
                         count={dataFiltered.length}
@@ -181,7 +181,7 @@ export function OrderView() {
                         onRowsPerPageChange={table.onChangeRowsPerPage}
                         labelRowsPerPage="Số dòng mỗi trang:"
                     />
-                    )}
+                )}
             </Card>
         </DashboardContent>
     )

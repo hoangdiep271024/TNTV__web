@@ -5,13 +5,65 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Iconify } from '../../components/iconify';
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, Menu, MenuItem } from '@mui/material';
+import { useState } from 'react';
+
+function FilterIconMenu({ selectedFilter, onFilterChange, filterOptions }) {
+    const [anchorEl, setAnchorEl] = useState(null);
+
+    const handleOpen = (event) => {
+        setAnchorEl(event.currentTarget);
+    }
+
+    const handleClose = () => {
+        setAnchorEl(null);
+    }
+
+    const handleSelect = (value) => {
+        onFilterChange(value);
+        handleClose();
+    }
+
+    return (
+        <>
+            <Tooltip title="Bộ lọc">
+                <IconButton onClick={handleOpen}>
+                    <Iconify icon="solar:filter-bold" />
+                </IconButton>
+            </Tooltip>
+            <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleClose}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'left',
+                }}
+            >
+                {filterOptions.map((option) => (
+                    <MenuItem
+                        key={option.value}
+                        selected={selectedFilter === option.value}
+                        onClick={() => handleSelect(option.value)}
+                    >
+                        {option.label}
+                    </MenuItem>
+                ))}
+            </Menu>
+        </>
+    );
+}
 
 export function OrderTableToolbar({ numSelected, filterName, onFilterName, selectedFilter, onFilterChange, onDeleteSelected }) {
     const filterOptions = [
         { value: 'username', label: 'Tên người dùng' },
         { value: 'film_name', label: 'Tên phim' },
     ]
+
     return (
         <Toolbar
             sx={{
@@ -30,22 +82,7 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName, selec
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <Box sx={{ display: 'flex', alignItems: 'cneter' }}>
-                    <FormControl sx={{ minWidth: 150, mr: 2 }}>
-                        <InputLabel>Bộ lọc</InputLabel>
-                        <Select
-                            value={selectedFilter}
-                            onChange={(e) => onFilterChange(e.target.value)}
-                            label="Bộ lọc"
-                            fullWidth
-                        >
-                            {filterOptions.map((option) => (
-                                <MenuItem key={option.value} value={option.value}>
-                                    {option.label}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
 
                     <OutlinedInput
                         fullWidth
@@ -54,17 +91,28 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName, selec
                         placeholder="Tìm kiếm..."
                         startAdornment={
                             <InputAdornment position="start">
-                                <Iconify width={20} icon="eva:search-fill" />
+                                <Iconify icon="solar:card-search-bold" />
                             </InputAdornment>
                         }
-                        sx={{ maxWidth: 320 }}
+                    />
+
+                    <FilterIconMenu
+                        selectedFilter={selectedFilter}
+                        onFilterChange={onFilterChange}
+                        filterOptions={filterOptions}
                     />
                 </Box>
             )}
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton onClick={onDeleteSelected}>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

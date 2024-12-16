@@ -8,6 +8,7 @@ import { Scrollbar } from "../../../components/scrollbar";
 import { RoomTableHead } from "../room-table-head";
 import { RoomTableRow } from "../room-table-row";
 import { TableNoData } from "../../table-no-data";
+import { Iconify } from "../../../components/iconify";
 
 export function RoomView() {
     const table = hook();
@@ -104,10 +105,31 @@ export function RoomView() {
 
     return (
         <DashboardContent>
-            <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display='flex'
+                mb={5}
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý phòng chiếu phim
                 </Typography>
+                <Button
+                    variant="contained"
+                    color="success"
+                    startIcon={<Iconify icon="mingcute:add-line" />}
+                >
+                    Thêm phòng chiếu
+                </Button>
             </Box>
 
             <Card>
@@ -173,16 +195,18 @@ export function RoomView() {
                     </TableContainer>
                 </Scrollbar>
 
-                <TablePagination
-                    component="div"
-                    page={table.page}
-                    count={dataFiltered.length}
-                    rowsPerPage={table.rowsPerPage}
-                    onPageChange={table.onChangePage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    onRowsPerPageChange={table.onChangeRowsPerPage}
-                    labelRowsPerPage="Số dòng mỗi trang:"
-                />
+                {dataFiltered.length > 0 && (
+                    <TablePagination
+                        component="div"
+                        page={table.page}
+                        count={dataFiltered.length}
+                        rowsPerPage={table.rowsPerPage}
+                        onPageChange={table.onChangePage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        onRowsPerPageChange={table.onChangeRowsPerPage}
+                        labelRowsPerPage="Số dòng mỗi trang:"
+                    />
+                )}
             </Card>
         </DashboardContent>
     )

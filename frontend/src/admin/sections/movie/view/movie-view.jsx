@@ -99,18 +99,30 @@ export function MovieView() {
 
     return (
         <DashboardContent>
-            <Box display="flex" alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display="flex"
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+                mb={5}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý phim
                 </Typography>
-                <Box flexGrow={1} />
                 <Button
                     variant="contained"
                     color="success"
+                    startIcon={<Iconify icon="mingcute:add-line" />}
                     component={Link}
                     to="/admin/movie/create"
-                    startIcon={<Iconify icon="mingcute:add-line" />}
-                    size="small"
                 >
                     Thêm phim
                 </Button>

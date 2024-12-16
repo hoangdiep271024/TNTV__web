@@ -2,7 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Box, Button, Card, Table, TableRow, TableCell, CircularProgress, TableContainer, TablePagination, Typography, TableBody } from "@mui/material";
+import { Box, Button, Card, Table, TableRow, TableCell, CircularProgress, TableContainer, TablePagination, Typography, TableBody, Icon } from "@mui/material";
 import { ShowtimeTableToolbar } from "../showtime-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { ShowtimeTableHead } from "../showtime-table-head";
@@ -99,18 +99,30 @@ export function ShowtimeView() {
 
     return (
         <DashboardContent>
-            <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display='flex'
+                mb={5}
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý suất chiếu phim
                 </Typography>
-                <Box flexGrow={1} />
                 <Button
                     variant="contained"
                     color="success"
+                    startIcon={<Iconify icon="mingcute:add-line" />}
                     component={Link}
                     to="/admin/showtime/create"
-                    startIcon={<Iconify icon="mingcute:add-line" />}
-                    size="small"
                 >
                     Thêm suất chiếu
                 </Button>
@@ -181,16 +193,18 @@ export function ShowtimeView() {
                     </TableContainer>
                 </Scrollbar>
 
-                <TablePagination
-                    component="div"
-                    page={table.page}
-                    count={dataFiltered.length}
-                    rowsPerPage={table.rowsPerPage}
-                    onPageChange={table.onChangePage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    onRowsPerPageChange={table.onChangeRowsPerPage}
-                    labelRowsPerPage="Số dòng mỗi trang:"
-                />
+                {dataFiltered.length > 0 && (
+                    <TablePagination
+                        component="div"
+                        page={table.page}
+                        count={dataFiltered.length}
+                        rowsPerPage={table.rowsPerPage}
+                        onPageChange={table.onChangePage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        onRowsPerPageChange={table.onChangeRowsPerPage}
+                        labelRowsPerPage="Số dòng mỗi trang:"
+                    />
+                )}
             </Card>
 
         </DashboardContent>
