@@ -20,7 +20,7 @@ export default function DashboardPage() {
                     // credentials: 'include'
                 };
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard`, requestOptions);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=12`, requestOptions);
                 const result = await response.json();
 
                 setDashboardData(result);
@@ -41,7 +41,7 @@ export default function DashboardPage() {
             <DashboardContent>
                 <Box>
                     <Typography variant="h2" gutterBottom>
-                        Tổng quan quản trị
+                        Tổng quan thống kê tháng này
                     </Typography>
 
                     {/* Phần thẻ thống kê */}
@@ -53,10 +53,10 @@ export default function DashboardPage() {
                                 <CardHeader title="Tổng Đơn Hàng" />
                                 <CardContent>
                                     <Typography variant="h3">
-                                        {dashboardData.order ? dashboardData.order : null}
+                                        {dashboardData.order ? dashboardData.order : '0'}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Tổng số đơn hàng trong tháng này.
+                                        đơn hàng trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -68,10 +68,10 @@ export default function DashboardPage() {
                                 <CardHeader title="Doanh Thu" />
                                 <CardContent>
                                     <Typography variant="h3">
-                                        {dashboardData.revenue ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dashboardData.revenue) : null}
+                                        {dashboardData.revenue ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dashboardData.revenue) : 0}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Tổng doanh thu trong tháng này.
+                                        doanh thu trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -83,10 +83,10 @@ export default function DashboardPage() {
                                 <CardHeader title="Người Dùng Mới" />
                                 <CardContent>
                                     <Typography variant="h3">
-                                        {dashboardData.newUser ? dashboardData.user : null}
+                                        {dashboardData.newUser ? dashboardData.user : '0'}
                                     </Typography>
                                     <Typography variant="body2" color="text.secondary">
-                                        Tổng số người dùng mới trong tháng này.
+                                        người dùng mới trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
@@ -97,7 +97,7 @@ export default function DashboardPage() {
                     <Box sx={{ mt: 10 }}>
 
                         <Typography variant="h2" gutterBottom>
-                            Doanh thu phim theo tháng
+                            Tổng vé và doanh thu theo phim
                         </Typography>
 
                         <Grid container spacing={3}>
@@ -115,7 +115,14 @@ export default function DashboardPage() {
                                             {dashboardData.filmResult.map((film) => (
                                                 <TableRow key={film.film_id}>
 
-                                                    <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
+                                                    <TableCell
+                                                        component="th"
+                                                        scope="row"
+                                                        sx={{
+                                                            fontWeight: "bold",
+                                                            color: film.total_tickets_sold ? 'inherit' : 'red'
+                                                        }}
+                                                    >
                                                         {film.film_name}
                                                     </TableCell>
 

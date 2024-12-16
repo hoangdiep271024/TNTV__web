@@ -1,6 +1,7 @@
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, Link, IconButton, MenuItem, Popover, Table, TableCell, TableRow, Typography, TextField, MenuList, menuItemClasses, Snackbar, Alert } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, Popover, Table, TableCell, TableRow, Typography, TextField, MenuList, menuItemClasses, Snackbar, Alert } from "@mui/material";
 import { useCallback, useState, useEffect } from "react";
 import { Iconify } from '../../components/iconify';
+import { Link } from "react-router-dom";
 
 // delete room api
 const deleteRoom = async (id) => {
@@ -141,9 +142,14 @@ export function RoomTableRow({ row, selected, onSelectRow, onDelete, onEditSucce
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
-                        {row.cinema_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/cinema/${row.cinema_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="medium" noWrap>
+                            {row.cinema_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
 

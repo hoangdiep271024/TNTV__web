@@ -64,44 +64,49 @@ export function OrderTableRow({ row, selected, onSelectRow, onDelete }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
-                        {row.username}
-                    </Typography>
+                    <Link
+                        to={`/admin/user/${row.user_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.username}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="bold" noWrap>
                         {row.film_name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="medium" noWrap>
                         {row.cinema_name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="medium" oWrap>
                         {row.room_name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
                         {new Date(row.show_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="medium" noWrap>
                         {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(row.total_price)}
                     </Typography>
                 </TableCell>
 
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                    <Typography variant="body2" sx={{ fontWeight: 'medium' }}>
                         {new Date(row.order_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>

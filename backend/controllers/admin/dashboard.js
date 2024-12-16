@@ -25,7 +25,7 @@ export const index = async (req, res) => {
         // Tổng vé và doanh thu theo film
 
         // Phân trang
-        let limitItems = 8;
+        let limitItems = 10;
         if (req.query.limitItems) {
             limitItems = parseInt(`${req.query.limitItems}`);
         }

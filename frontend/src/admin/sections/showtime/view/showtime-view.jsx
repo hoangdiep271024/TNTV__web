@@ -155,8 +155,8 @@ export function ShowtimeView() {
                                     { id: 'film_name', label: 'Tên phim' },
                                     { id: 'cinema_name', label: 'Tên rạp chiếu' },
                                     { id: 'room_name', label: 'Tên phòng chiếu' },
-                                    { id: 'show_date', label: 'Ngày chiếu' },
                                     { id: 'show_time', label: 'Giờ chiếu' },
+                                    { id: 'show_date', label: 'Ngày chiếu' },
                                     { id: '' }
                                 ]}
                             />
