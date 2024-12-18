@@ -103,13 +103,12 @@ export const create = async (req, res) => {
 export const createPost = async (req, res) => {
     try {
         const currentDate = new Date();
-        const optionsDate = { year: 'numeric', month: 'numeric', day: 'numeric' };
-        const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const day = String(currentDate.getDate()).padStart(2, '0');
 
-        const formattedDate = currentDate.toLocaleDateString('vi-VN', optionsDate);
-        const formattedTime = currentDate.toLocaleTimeString('vi-VN', optionsTime);
+        const formattedDate = `${year}-${month}-${day}`;
 
-        const fullFormattedDateTime = `${formattedDate} ${formattedTime}`;
         let { film_name, new_content, new_header, new_footer } = req.body;
 
         const countResult = await connection.promise().query(
@@ -131,7 +130,7 @@ export const createPost = async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const New = await new Promise((resolve, reject) => {
-            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id], (err, results) => {
+            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, formattedDate, new_header, new_footer, res.locals.user[0].user_id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -211,13 +210,12 @@ export const editPatch = async (req, res) => {
         const newId = parseInt(req.params.newId);
 
         const currentDate = new Date();
-        const optionsDate = { year: 'numeric', month: 'numeric', day: 'numeric' };
-        const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+        const year = currentDate.getFullYear();
+        const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Tháng bắt đầu từ 0
+        const day = String(currentDate.getDate()).padStart(2, '0');
 
-        const formattedDate = currentDate.toLocaleDateString('vi-VN', optionsDate);
-        const formattedTime = currentDate.toLocaleTimeString('vi-VN', optionsTime);
+        const formattedDate = `${year}-${month}-${day}`;
 
-        const fullFormattedDateTime = `${formattedDate} ${formattedTime}`;
 
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
         if (res.locals.url == "") {
@@ -237,7 +235,7 @@ export const editPatch = async (req, res) => {
                 SET film_id = ?, new_content = ?, new_time = ?, new_header = ?, new_footer = ?, user_id = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, formattedDate, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
@@ -260,7 +258,7 @@ export const editPatch = async (req, res) => {
                 SET film_id = ?, new_content = ?, new_img = ?, new_time = ?, new_header = ?, new_footer = ?, user_id = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, formattedDate, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
