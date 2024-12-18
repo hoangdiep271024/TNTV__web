@@ -1,13 +1,11 @@
-import { Box } from '@mui/material';
-import React, { useState, useEffect } from 'react'
-import DOMPurify from "dompurify";
-import Shared from '../Shared';
-import Footer from '../Footer/Footer';
-import {useTheme} from '@mui/material';
+import { Box, useTheme } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import NewNew from '../new/NewNew';
-import NewCard from '../new/NewCard';
 import BasicPagination from '../film/BasicPagination';
+import Footer from '../Footer/Footer';
+import NewCard from '../new/NewCard';
+import NewNew from '../new/NewNew';
+import Shared from '../Shared';
 function createSlug(name) {
   return name
     .trim() 
@@ -23,7 +21,7 @@ export default function New() {
   const fetchNewVietnam = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/vietnam`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -46,7 +44,7 @@ export default function New() {
   const fetchNewAboard = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/aboard`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },

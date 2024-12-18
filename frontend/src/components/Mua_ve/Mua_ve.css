@@ -167,3 +167,13 @@ color: red;
 .occupied {
     background-color: #ffcdd2;
 }
+
+.loai-ghe {
+    position:relative;
+    top: 410px;
+    display: inline-flex;
+    justify-content: center;
+    width: 100%;
+    height: 45px;
+    padding-right: 280px;
+}

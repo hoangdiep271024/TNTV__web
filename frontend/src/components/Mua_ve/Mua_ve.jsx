@@ -183,6 +183,15 @@ const Mua_ve = ({ nextStep }) => {
                     );
                 }) : <p>Loading seats...</p>}
             </div>
+            <div className='loai-ghe'>
+                <div></div>
+                <div style={{backgroundColor: '#dfdfdf', width: '25px', height: '25px', margin: '10px'}}></div>
+                <div style={{display: 'flex',justifyContent: 'center',flexDirection : 'column',marginRight: '20px'}}>Ghế thường</div>
+                <div style={{backgroundColor: '#d4b15f', width: '25px', height: '25px', margin: '10px'}}></div>
+                <div style={{display: 'flex',justifyContent: 'center',flexDirection : 'column', marginRight: '20px'}}>Ghế VIP</div>
+                <div style = {{backgroundColor: '#3b5998', width: '25px', height: '25px', margin: '10px'}}></div>
+                <div style={{display: 'flex',justifyContent: 'center',flexDirection : 'column'}}>Ghế đôi</div>
+            </div>
         </div >
     );
 };

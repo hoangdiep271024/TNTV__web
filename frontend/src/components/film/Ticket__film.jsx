@@ -1,11 +1,9 @@
-import React from 'react';
-import CssBaseline from "@mui/material/CssBaseline";
-import Box from "@mui/material/Box";
-import FilmList from './FilmList';
-import { useState, useEffect } from 'react';
-import Film_card from './Film_card';
 import { useTheme } from "@emotion/react";
+import Box from "@mui/material/Box";
+import React, { useEffect, useState } from 'react';
 import BasicPagination from './BasicPagination';
+import Film_card from './Film_card';
+import FilmList from './FilmList';
 
 export default function Ticket__film({ onLoadComplete }) {
 
@@ -17,7 +15,7 @@ export default function Ticket__film({ onLoadComplete }) {
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/film/filmShowing`, {
-      method: 'POST',
+      method: 'GET',
       headers: {
         'Content-Type': 'application/json',
       },

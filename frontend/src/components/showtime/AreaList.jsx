@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
-import CssBaseline from "@mui/material/CssBaseline";
 import Box from "@mui/material/Box";
-import { useTheme } from "@mui/material/styles";
 import Button from "@mui/material/Button";
-import { useNavigate } from 'react-router-dom'
+import { useTheme } from "@mui/material/styles";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 
 export default function AreaList() {
   const navigate = useNavigate()
@@ -29,7 +27,7 @@ export default function AreaList() {
   const fetchData = async () => { 
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc`, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
@@ -54,7 +52,7 @@ export default function AreaList() {
       const response = await fetch(
         `${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc/khuVuc_id=${areaClick}`,
         {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -93,7 +91,7 @@ export default function AreaList() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/cinema_id=${cinemaID}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

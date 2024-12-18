@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import Shared from '../Shared'
-import Footer from '../Footer/Footer'
-import Box from '@mui/material/Box'
-import DOMPurify from "dompurify";
 import { useTheme } from '@emotion/react';
+import Box from '@mui/material/Box';
+import DOMPurify from "dompurify";
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Footer from '../Footer/Footer';
+import Shared from '../Shared';
 function createSlug(name) {
   return name
     .trim() 
@@ -19,7 +19,7 @@ export default function NewDetail() {
   const fetchNewDetail = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/new_id=${new_id}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },
@@ -42,7 +42,7 @@ export default function NewDetail() {
   const fetchNewRelate = async (film_id) => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/film_id=${film_id}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },

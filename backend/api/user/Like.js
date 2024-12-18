@@ -1,5 +1,5 @@
 import express from "express";
-import { likeCheck, unLike, Like } from "../../controllers/user/like.js";
+import { Like, likeCheck, unLike } from "../../controllers/user/like.js";
 
 const routerLike = express.Router()
 routerLike.post("/likeCheck/film_id=:film_id", likeCheck)

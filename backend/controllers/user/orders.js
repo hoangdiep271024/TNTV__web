@@ -144,8 +144,6 @@ export const getLastestOrder = async (req, res) => {
             INNER JOIN rooms ON showtimes.room_id = rooms.room_id
             INNER JOIN cinemas ON showtimes.cinema_id = cinemas.cinema_id
             WHERE user_id = ? 
-               AND order_date >= CURDATE() - INTERVAL 1 DAY
-               AND order_date < CURDATE()
             ORDER BY order_id DESC
             LIMIT 1;
         `;

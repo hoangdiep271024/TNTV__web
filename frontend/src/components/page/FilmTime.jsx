@@ -39,7 +39,7 @@ export default function FilmDetail() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
@@ -70,7 +70,7 @@ export default function FilmDetail() {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },

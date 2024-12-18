@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
+import React, { useEffect, useState } from 'react';
 
 export default function FilmDetailTime({ onAreaChange }) { 
   const [areas, setAreas] = useState(null);
@@ -11,7 +11,7 @@ export default function FilmDetailTime({ onAreaChange }) {
   const fetchData = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/lichChieu/khuVuc`, {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },

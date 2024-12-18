@@ -1,12 +1,11 @@
-import React from 'react'
-import Shared from '../Shared'
-import Footer from '../Footer/Footer'
-import { useEffect, useState } from 'react';
-import FilmDetailTime from '../film/FilmDetailTime';
-import Box from '@mui/material/Box';
-import { Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
+import { Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import FilmDetailTime from '../film/FilmDetailTime';
+import Footer from '../Footer/Footer';
+import Shared from '../Shared';
 function createSlug(name) {
   return name
     .trim() // Xóa khoảng trắng ở đầu và cuối
@@ -33,7 +32,7 @@ export default function Cinema() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/region_id=${selectedArea?.region_id}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

@@ -285,7 +285,7 @@ export const phim = async (req, res) => {
 
 export const filmSearchByName = async (req, res) => {
     // Lấy từ khóa tìm kiếm từ query string
-    const searchQuery = req.body.q;
+    const searchQuery = req.params.q;
 
     if (!searchQuery) {
         return res.status(400).json({ error: 'Vui lòng nhập từ khóa tìm kiếm.' });
@@ -294,7 +294,7 @@ export const filmSearchByName = async (req, res) => {
     SELECT f.film_id , f.film_name , f.film_img , f.film_trailer , f.Release_date , f.film_describe,f.age_limit,f.duration,f.film_type,f.country,fe.film_rate 
     FROM films f 
     inner join film_evaluate fe on  fe .film_id = f.film_id 
-    WHERE film.film_name like ?
+    WHERE f.film_name like ?
   `;
 
     // Thực hiện truy vấn

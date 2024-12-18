@@ -1,15 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import Box from '@mui/material/Box';
-import FilmInfo from '../film/FilmInfo';
-import { Link } from 'react-router-dom';
 import { useTheme } from "@emotion/react";
+import { Typography } from '@mui/material';
+import Box from '@mui/material/Box';
+import Button from "@mui/material/Button";
+import React, { useEffect, useState } from 'react';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import FilmDetailTime from "../film/FilmDetailTime";
+import FilmInfo from '../film/FilmInfo';
 import Footer from '../Footer/Footer';
 import Shared from '../Shared';
-import { Typography } from '@mui/material';
-import FilmDetailTime from "../film/FilmDetailTime";
-import Button from "@mui/material/Button";
-import { useNavigate } from 'react-router-dom';
 
 function createSlug(name) {
   return name
@@ -41,7 +39,7 @@ export default function FilmDetail() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}`, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -70,7 +68,7 @@ export default function FilmDetail() {
     const fetchCinemas = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`, {
-          method: 'POST',
+          method: 'GET',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -96,7 +94,7 @@ export default function FilmDetail() {
         const response = await fetch(
           `${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}/lichChieu/khuVuc_id=${selectedArea?.region_id}`,
           {
-            method: "POST",
+            method: "GET",
             headers: {
               "Content-Type": "application/json",
             },

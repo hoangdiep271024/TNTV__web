@@ -1,11 +1,11 @@
-import React, { useEffect, useState } from 'react'
-import Box  from '@mui/material/Box'
-import Shared from '../Shared';
+import { useTheme } from '@emotion/react';
+import Box from '@mui/material/Box';
+import React, { useEffect, useState } from 'react';
 import Footer from '../Footer/Footer';
+import Shared from '../Shared';
+import BasicPagination from '../film/BasicPagination';
 import FilmList from '../film/FilmList';
 import Film_card from '../film/Film_card';
-import { useTheme } from '@emotion/react';
-import BasicPagination from '../film/BasicPagination';
 export default function Category() {
   const theme = useTheme()
   const category_id =localStorage.getItem('category_id')
@@ -13,7 +13,7 @@ export default function Category() {
   const fetchCategoryData = async () => {
     try {
       const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/category_id=${category_id}`, {
-        method: 'POST',
+        method: 'GET',
         headers: {
           'Content-Type': 'application/json',
         },

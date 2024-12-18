@@ -1,7 +1,6 @@
 
-import React, { useState, useEffect } from 'react'
-import CssBaseline from "@mui/material/CssBaseline";
 import { Box, keyframes } from "@mui/material";
+import React, { useEffect, useState } from 'react';
 
 export default function Trailer() {
     const flyDown = keyframes`
@@ -20,7 +19,7 @@ export default function Trailer() {
       const fetchData = async () => {
         try {
           const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },

@@ -18,7 +18,7 @@ function Thong_tin_ve() {
         // Fetch seat data
         const fetchOrderInfo = () => {
             try {
-                const response = fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
+                const response = fetch(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -45,6 +45,8 @@ function Thong_tin_ve() {
 
         fetchOrderInfo();
     }, [jwt]);
+
+    let content;
 
     if (loading) {
         content = <div className="ticket-booking">Đang tải thông tin...</div>;

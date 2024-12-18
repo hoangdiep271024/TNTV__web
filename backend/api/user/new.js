@@ -1,9 +1,9 @@
 import express from "express";
-import { filmNew, newVietnam, newAboard, NewDetail, NewRelate } from "../../controllers/user/new.js";
+import { filmNew, newAboard, NewDetail, NewRelate, newVietnam } from "../../controllers/user/new.js";
 const routerNew = express.Router()
-routerNew.post('/', filmNew) 
-routerNew.post('/vietnam',newVietnam) 
-routerNew.post('/aboard', newAboard) 
-routerNew.post('/new_id=:new_id', NewDetail)
-routerNew.post('/film_id=:film_id', NewRelate)
+routerNew.get('/', filmNew) 
+routerNew.get('/vietnam',newVietnam) 
+routerNew.get('/aboard', newAboard) 
+routerNew.get('/new_id=:new_id', NewDetail)
+routerNew.get('/film_id=:film_id', NewRelate)
 export default routerNew

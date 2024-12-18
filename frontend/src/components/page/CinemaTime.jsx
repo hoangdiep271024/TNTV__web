@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import Footer from '../Footer/Footer'
-import Shared from '../Shared'
-import Box from '@mui/material/Box'
 import { useTheme } from '@emotion/react'
 import { Button } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { useLocation } from 'react-router-dom';
+import Box from '@mui/material/Box'
+import React, { useEffect, useState } from 'react'
+import { useLocation, useNavigate } from 'react-router-dom'
+import Footer from '../Footer/Footer'
+import Shared from '../Shared'
 
 export default function CinemaTime() {
   const location = useLocation();
@@ -33,7 +32,7 @@ export default function CinemaTime() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/rap/cinema_id=${cinema_id}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

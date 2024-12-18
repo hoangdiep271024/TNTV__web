@@ -1,14 +1,10 @@
-import React, { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import CssBaseline from "@mui/material/CssBaseline";
+import { useTheme } from "@emotion/react";
 import Box from "@mui/material/Box";
+import React, { useEffect, useState } from "react";
+import { Link, useLocation, useParams } from "react-router-dom";
+import Footer from "../Footer/Footer";
 import Shared from "../Shared";
 import FilmInfo from "../film/FilmInfo";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useTheme } from "@emotion/react";
-import Footer from "../Footer/Footer";
-import { useLocation } from 'react-router-dom';
 
 function createSlug(name) {
   return name
@@ -30,7 +26,7 @@ export default function FilmDetail() {
     const fetchData = async () => {
       try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/id=${film_id}`, {
-          method: "POST",
+          method: "GET",
           headers: {
             "Content-Type": "application/json",
           },

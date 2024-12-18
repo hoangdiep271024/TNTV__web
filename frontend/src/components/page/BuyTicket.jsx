@@ -1,12 +1,12 @@
+import { useTheme } from '@emotion/react'
 import Box from '@mui/material/Box'
 import React, { useEffect, useState } from 'react'
 import Footer from '../Footer/Footer'
 import Shared from '../Shared'
-import { useTheme } from '@emotion/react'
-import AreaList from '../showtime/AreaList'
+import BasicPagination from '../film/BasicPagination'
 import FilmList from '../film/FilmList'
 import Film_card from '../film/Film_card'
-import BasicPagination from '../film/BasicPagination'
+import AreaList from '../showtime/AreaList'
 
 export default function BuyTicket() {
     const [data, setData] = useState(null)
@@ -14,7 +14,7 @@ export default function BuyTicket() {
     const fetchData = async () => {
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmShowing`, {
-                method: 'POST',
+                method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                 },
