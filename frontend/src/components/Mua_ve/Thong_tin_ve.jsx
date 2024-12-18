@@ -18,7 +18,7 @@ function Thong_tin_ve() {
         // Fetch seat data
         const fetchOrderInfo = () => {
             try {
-                const response = fetch(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`, {
+                fetch(`${import.meta.env.VITE_API_URL}/api/orders/getLastestOrder`, {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
@@ -68,8 +68,8 @@ function Thong_tin_ve() {
                                 <p>{orderInfo.cinema_name}</p>
                                 <p>Suất chiếu : {orderInfo.show_date.split("T")[0]} , {orderInfo.show_time}</p>
                                 <p style={{ display: 'flex' }}>Ghế: {orderInfo.seats.map((seat) => (
-                                    <span style={{ marginLeft: '3px' }} key={seat.seat_name}>{seat.seat_name}</span>
-                                ))} , {orderInfo.room_name}</p>
+                                    <span style={{ marginLeft: '3px' }} key={seat.seat_name}>{seat.seat_name},</span>
+                                ))}&nbsp;{orderInfo.room_name}</p>
                                 {orderInfo.popcorns.length > 0 ? (
                                     orderInfo.popcorns.map((pop) => (
                                         <p key={pop.combo_name}>
