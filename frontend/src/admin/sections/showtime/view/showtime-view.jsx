@@ -32,11 +32,18 @@ export function ShowtimeView() {
         if (table.selected.length === 0) return;
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             for (const showtimeId of table.selected) {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${showtimeId}`, {
                     method: 'DELETE',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });
@@ -58,10 +65,17 @@ export function ShowtimeView() {
         const fetchShowtimes = async () => {
             setLoading(true);
             try {
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });

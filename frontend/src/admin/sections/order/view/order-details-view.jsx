@@ -19,7 +19,20 @@ export function OrderDetailsView({ orderId }) {
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/detail/${orderId}`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/detail/${orderId}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    }
+                });
+
                 if (!response.ok) {
                     throw new Error('Failed to fetch order details');
                 }

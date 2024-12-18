@@ -63,8 +63,18 @@ export function CreateMovieView() {
         }
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/create`, {
                 method: "POST",
+                headers: {
+                    'Authorization': 'Bearer ' + jwt,
+                },
                 body: JSON.stringify(payload),
             });
 
@@ -75,7 +85,7 @@ export function CreateMovieView() {
             // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được tạo thành công!", severity: "success" });
-            setTimeout(() => navigate("admin/movie"), 1000);
+            setTimeout(() => navigate("/admin/movie"), 1000);
         } catch (error) {
             // console.error(error);
             setFormData({

@@ -30,11 +30,19 @@ export function OrderView() {
         if (table.selected.length === 0) return;
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             for (const orderId of table.selected) {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders/delete/${orderId}`, {
                     method: 'DELETE',
                     headers: {
                         "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });
@@ -56,10 +64,18 @@ export function OrderView() {
         const fetchOrders = async () => {
             setLoading(true);
             try {
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/orders`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });

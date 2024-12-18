@@ -32,10 +32,18 @@ export function CreateShowtimeView() {
         };
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + jwt,
                 },
                 body: JSON.stringify(payload),
             });

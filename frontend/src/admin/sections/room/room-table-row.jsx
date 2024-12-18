@@ -6,10 +6,17 @@ import { Link } from "react-router-dom";
 // delete room api
 const deleteRoom = async (id) => {
     try {
+        const jwt = localStorage.getItem('jwt');
+
+        if (!jwt) {
+            console.error('JWT token is missing');
+            return;
+        }
+
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/delete/${id}`, {
             method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
+                'Authorization': 'Bearer ' + jwt,
             },
             // credentials: 'include',
         });
@@ -28,7 +35,19 @@ const deleteRoom = async (id) => {
 // room details api
 const fetchRoomDetails = async (roomId) => {
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/detail/${roomId}`);
+        const jwt = localStorage.getItem('jwt');
+
+        if (!jwt) {
+            console.error('JWT token is missing');
+            return;
+        }
+
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/detail/${roomId}`, {
+            method: "GET",
+            headers: {
+                'Authorization': 'Bearer ' + jwt,
+            }
+        });
         if (!response.ok) {
             throw new Error('Failed to fetch room details');
         }
@@ -43,10 +62,18 @@ const fetchRoomDetails = async (roomId) => {
 // edit room api
 const editRoom = async (roomId, roomName, cinemaName) => {
     try {
+        const jwt = localStorage.getItem('jwt');
+
+        if (!jwt) {
+            console.error('JWT token is missing');
+            return;
+        }
+
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/rooms/edit/${roomId}`, {
             method: 'PATCH',
             headers: {
                 "Content-Type": "application/json",
+                'Authorization': 'Bearer ' + jwt,
             },
             body: JSON.stringify({ room_name: roomName, cinema_name: cinemaName }),
         });

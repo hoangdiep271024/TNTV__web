@@ -12,11 +12,25 @@ export function NewsView() {
     useEffect(() => {
         async function fetchAdminNews() {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/news`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/news`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    }
+                });
+
                 if (!response.ok) {
                     throw new Error(`Error; ${response.statusText}`);
                 }
-                const data = await response.json();
+
+                // const data = await response.json();
                 setNews(data);
             } catch (err) {
                 setError(err.message);
@@ -25,7 +39,6 @@ export function NewsView() {
                 setLoading(false);
             }
         }
-
         fetchAdminNews();
     }, []);
 
