@@ -254,13 +254,13 @@ export const editPatch = async (req, res) => {
             }
             const filmId = film[0].film_id;
 
-            // Update bảng film
+            // Update bảng news
             const queryUpdateNew = `
                 UPDATE news
-                SET film_id = ?, new_content = ?, new_img = ?, new_time = ?, new_header = ?, new_footer = ?
+                SET film_id = ?, new_content = ?, new_img = ?, new_time = ?, new_header = ?, new_footer = ?, user_id = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
