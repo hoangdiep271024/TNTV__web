@@ -63,6 +63,7 @@ export default function NewNew() {
           gap: '2%',
           cursor: 'pointer',
           paddingY: '12px',
+          position: 'relative',
           '&:hover': {
             backgroundColor: theme.palette.mode === 'dark' ? '#505251' : '#cdd1cf',
           },
@@ -74,7 +75,7 @@ export default function NewNew() {
             <img src ={item.new_img} style={{width: '30%', height: '90%', objectFit: 'cover'}}></img>
             <div style={{height: '90%', width: '65%'}}>
               <div style ={{ overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal',}}>{item.new_header}</div>
-              <div style={{textAlign: 'end'}}>{exactlyDate}</div>
+              <div style={{textAlign: 'end', position: 'absolute', bottom: '10px', right: '20px'}}>{exactlyDate}</div>
             </div>
         </Box>)
     })}
