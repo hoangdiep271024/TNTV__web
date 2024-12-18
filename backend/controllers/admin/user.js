@@ -168,9 +168,11 @@ export const editPatch = async (req, res) => {
             const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
 
             if(checkUserEmail.length > 0) {
-                return res.status(500).json({
-                    message: `Email ${email} already existed.\nPlease choose another email.`
-                })
+                if(checkUserEmail[0].email != email) {
+                    return res.status(500).json({
+                        message: `Email ${email} already existed.\nPlease choose another email.`
+                    })
+                }
             }
 
             // Update bảng User
@@ -196,9 +198,11 @@ export const editPatch = async (req, res) => {
             const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
 
             if(checkUserEmail.length > 0) {
-                return res.status(500).json({
-                    message: `Email ${email} already existed.\nPlease choose another email.`
-                })
+                if(checkUserEmail[0].email != email) {
+                    return res.status(500).json({
+                        message: `Email ${email} already existed.\nPlease choose another email.`
+                    })
+                }
             }
 
             // Update bảng User
