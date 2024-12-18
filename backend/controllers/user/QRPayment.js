@@ -29,7 +29,6 @@ export const giuGhe = async (req, res) => {
     }
 }
 
-
 export const QRPayment = async (req, res) => {
     const { showtime_id, amount: total_amount, selectedSeats, selectedCombos } = req.body;
 
@@ -166,8 +165,16 @@ export const callback = async (req, res) => {
 
             return res.status(200).json({ message: 'Payment successful and order created.' });
         } else {
-            console.log('Payment failed or canceled:', req.body);
-            return res.status(400).json({ message: 'Payment failed or canceled.' });
+            const { showtime_id, selectedSeats} = JSON.parse(extraData);
+            try {
+                // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
+                await updateSeatStatus(showtime_id, selectedSeats, null);
+                console.log('Payment failed or canceled:', req.body);
+                return res.status(400).json({ message: 'Payment failed or canceled.' });
+            } catch (error) {
+                console.error(error);
+                return res.status(500).json({ success: false, message: 'Error canceling reservation' });
+            }
         }
     } catch (error) {
         console.error('Error in callback:', error);
