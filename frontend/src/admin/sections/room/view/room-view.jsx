@@ -123,13 +123,13 @@ export function RoomView() {
                 >
                     Quản lý phòng chiếu phim
                 </Typography>
-                <Button
+                {/* <Button
                     variant="contained"
                     color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
                 >
                     Thêm phòng chiếu
-                </Button>
+                </Button> */}
             </Box>
 
             <Card>

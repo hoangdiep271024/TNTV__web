@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function CreateShowtimeView() {
     const [formData, setFormData] = useState({
@@ -12,6 +13,7 @@ export function CreateShowtimeView() {
     });
 
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const navigate = useNavigate();
 
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
@@ -42,12 +44,20 @@ export function CreateShowtimeView() {
                 throw new Error("Failed to create showtime");
             }
 
-            const result = await response.json();
-            console.log(result);
+            // const result = await response.json();
+            // console.log(result);
             setSnackbar({ open: true, message: "Suất chiếu phim đã được tạo thành công!", severity: "success" });
+            setTimeout(() => navigate("/admin/showtime"), 1000);
         } catch (error) {
-            console.error(error);
+            // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi tạo suất chiếu!", severity: "error" });
+            setFormData({
+                film_name: "",
+                room_name: "",
+                cinema_name: "",
+                show_date: "",
+                show_time: "",
+            });
         }
     };
 

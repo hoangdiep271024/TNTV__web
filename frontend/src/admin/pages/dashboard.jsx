@@ -20,7 +20,7 @@ export default function DashboardPage() {
                     // credentials: 'include'
                 };
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=12`, requestOptions);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=11`, requestOptions);
                 const result = await response.json();
 
                 setDashboardData(result);

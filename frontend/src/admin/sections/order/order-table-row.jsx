@@ -87,7 +87,7 @@ export function OrderTableRow({ row, selected, onSelectRow, onDelete }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" fontWeight="medium" oWrap>
+                    <Typography variant="body2" fontWeight="medium" noWrap>
                         {row.room_name}
                     </Typography>
                 </TableCell>

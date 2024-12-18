@@ -1,31 +1,32 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, MenuItem } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, MenuItem, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export function EditMovieView({ movieId }) {
     const [formData, setFormData] = useState({
         film_name: "",
-        film_img: "",
+        film_img: null,
         film_trailer: "",
         Release_date: "",
         film_describe: "",
         age_limit: "",
         duration: "",
-        film_type: "1",
+        film_type: 1,
         categories: "",
         directors: "",
         actors: "",
     });
 
+    const [initialFormData, setInitialFormData] = useState(formData);
     const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
 
     const filmTypeOptions = [
-        { value: "1", label: "Đang chiếu" },
-        { value: "0", label: "Sắp chiếu" },
+        { value: 1, label: "Đang chiếu" },
+        { value: 0, label: "Sắp chiếu" },
     ];
 
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
@@ -39,27 +40,22 @@ export function EditMovieView({ movieId }) {
                 }
                 const data = await response.json();
 
-                const filmImages = Array.isArray(data.film[0]?.film_img)
-                    ? data.film[0].film_img
-                    : [data.film[0]?.film_img || ""];
-
-                const formattedDate = data.film[0]?.Release_date
-                    ? new Date(data.film[0].Release_date).toISOString().split("T")[0]
-                    : "";
-
-                setFormData({
-                    film_name: data.film[0]?.film_name || "",
-                    film_img: filmImages.join(", "), // Convert array to comma-separated string
-                    film_trailer: data.film[0]?.film_trailer || "",
-                    Release_date: formattedDate,
-                    film_describe: data.film[0]?.film_describe || "",
-                    age_limit: data.film[0]?.age_limit || "",
-                    duration: data.film[0]?.duration || "",
-                    film_type: data.film[0]?.film_type.toString() || "1",
+                const fetchedData = {
+                    film_name: data.film[0]?.film_name,
+                    film_img: data.film[0].film_img,
+                    film_trailer: data.film[0]?.film_trailer,
+                    Release_date: new Date(data.film[0]?.Release_date).toLocaleDateString("en-CA"),
+                    film_describe: data.film[0]?.film_describe,
+                    age_limit: data.film[0]?.age_limit,
+                    duration: data.film[0]?.duration,
+                    film_type: data.film[0]?.film_type,
                     categories: data.categories?.map((cat) => cat.category_name).join(", ") || "",
                     directors: data.directors?.map((dir) => dir.director_name).join(", ") || "",
                     actors: data.actors?.map((actor) => actor.actor_name).join(", ") || "",
-                });
+                };
+
+                setFormData(fetchedData);
+                setInitialFormData(fetchedData);
 
                 setLoading(false);
             } catch (error) {
@@ -75,40 +71,91 @@ export function EditMovieView({ movieId }) {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
+        console.log(`${name}: ${value}`); // Debugging log
         setFormData((prev) => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageReset = () => {
+        setFormData((prev) => ({ ...prev, film_img: null }));
+    };
+
+    const handleAddPoster = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setFormData((prev) => ({ ...prev, film_img: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const payload = {
-            ...formData,
-            film_img: formData.film_img.split(",").map((url) => url.trim()),
-            categories: formData.categories.split(",").map((category) => category.trim()),
-            directors: formData.directors.split(",").map((director) => director.trim()),
-            actors: formData.actors.split(",").map((actor) => actor.trim()),
-        };
+
+        // console.log("Submitting form:", formData);
+
+        const formDataObj = new FormData();
+
+        formDataObj.append("film_name", formData.film_name);
+        formDataObj.append("film_trailer", formData.film_trailer);
+        formDataObj.append("Release_date", formData.Release_date);
+        formDataObj.append("film_describe", formData.film_describe);
+        formDataObj.append("age_limit", formData.age_limit);
+        formDataObj.append("duration", formData.duration);
+        formDataObj.append("film_type", formData.film_type);
+
+        if (formData.film_img) {
+            formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
+        }
+
+        // formDataObj.append("categories", formData.categories.split(",").map(category => category.trim()).join(","));
+        // formDataObj.append("directors", formData.directors.split(",").map(director => director.trim()).join(","));
+        // formDataObj.append("actors", formData.actors.split(",").map(actor => actor.trim()).join(","));
+
+        // for (let pair of formDataObj.entries()) {
+        //     console.log(pair[0] + ": " + pair[1]);
+        // }
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/edit/${movieId}`, {
                 method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify(payload),
+                body: formDataObj,
             });
 
             if (!response.ok) {
                 throw new Error("Failed to update movie");
             }
 
-            const result = await response.json();
+            // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được cập nhật thành công!", severity: "success" });
-
-            setTimeout(() => navigate(-1), 1000);
+            setTimeout(() => navigate("admin/movie"), 1000);
         } catch (error) {
-            // console.error(error);
+            //console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật phim!", severity: "error" });
+            setFormData(initialFormData);
+        }
+    };
+
+    const getYouTubeEmbedUrl = (url) => {
+        try {
+            const regexShort = /(?:https?:\/\/)?youtu\.be\/([^&\s]+)/;
+            const matchShort = url.match(regexShort);
+            if (matchShort) {
+                return `https://www.youtube.com/embed/${matchShort[1]}`;
+            }
+
+            const regexWatch = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&\s]+)/;
+            const matchWatch = url.match(regexWatch);
+            if (matchWatch) {
+                return `https://www.youtube.com/embed/${matchWatch[1]}`;
+            }
+
+            return url;
+        } catch (error) {
+            console.error("Error transforming YouTube URL:", error);
+            return url;
         }
     };
 
@@ -120,10 +167,18 @@ export function EditMovieView({ movieId }) {
                 />
                 <CardContent>
                     {loading ? (
-                        <Typography variant="body1">Đang tải thông tin phim...</Typography>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="300px"
+                        >
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3}>
+                                {/* film name input */}
                                 <TextField
                                     name="film_name"
                                     label="Tên phim"
@@ -132,20 +187,108 @@ export function EditMovieView({ movieId }) {
                                     required
                                     fullWidth
                                 />
-                                <TextField
-                                    name="film_img"
-                                    label="URL hình ảnh (cách nhau bởi dấu phẩy)"
-                                    value={formData.film_img}
-                                    onChange={handleInputChange}
-                                    fullWidth
-                                />
+
+                                {/* display image and image input */}
+                                <Box
+                                    display="flex"
+                                    flexDirection="column"
+                                    alignItems="center"
+                                    sx={{
+                                        width: "300px",
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            width: "300px",
+                                            height: "450px",
+                                            backgroundColor: "#e0e0e0",
+                                            border: "1px solid #ccc",
+                                            borderRadius: "4px",
+                                            display: "flex",
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            position: "relative",
+                                            overflow: "hidden",
+                                        }}
+                                    >
+                                        {formData.film_img ? (
+                                            <img
+                                                src={formData.film_img}
+                                                alt="Movie Poster"
+                                                style={{
+                                                    width: "100%",
+                                                    height: "100%",
+                                                    objectFit: "contain",
+                                                    objectPosition: "center",
+                                                }}
+                                            />
+                                        ) : (
+                                            <Typography
+                                                variant="caption"
+                                                color="textSecondary"
+                                                sx={{ textAlign: "center" }}
+                                            >
+                                                Chưa có poster phim
+                                            </Typography>
+                                        )}
+                                    </Box>
+
+                                    <Box sx={{ marginTop: "10px" }}>
+                                        {formData.film_img ? (
+                                            <Button
+                                                onClick={handleImageReset}
+                                                variant="outlined"
+                                                color="error"
+                                                size="small"
+                                            >
+                                                Xóa poster phim
+                                            </Button>
+                                        ) : (
+                                            <>
+                                                <input
+                                                    accept="image/*"
+                                                    id="upload-poster"
+                                                    type="file"
+                                                    style={{ display: "none" }}
+                                                    onChange={handleAddPoster}
+                                                />
+                                                <label htmlFor="upload-poster">
+                                                    <Button
+                                                        variant="outlined"
+                                                        color="info"
+                                                        size="small"
+                                                        component="span"
+                                                    >
+                                                        Thêm poster phim
+                                                    </Button>
+                                                </label>
+                                            </>
+                                        )}
+                                    </Box>
+                                </Box>
+
+                                {/* display trailer and trailer input */}
+                                {formData.film_trailer && (
+                                    <Box>
+                                        <iframe
+                                            width="50%"
+                                            height="315"
+                                            src={getYouTubeEmbedUrl(formData.film_trailer)}
+                                            title="Movie Trailer"
+                                            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                            allowFullScreen
+                                        />
+                                    </Box>
+                                )}
                                 <TextField
                                     name="film_trailer"
-                                    label="URL trailer"
+                                    label="Trailer URL (Shortened URL or Standard URL)"
                                     value={formData.film_trailer}
                                     onChange={handleInputChange}
                                     fullWidth
                                 />
+
+                                {/* release date input */}
                                 <TextField
                                     name="Release_date"
                                     label="Ngày phát hành"
@@ -156,13 +299,14 @@ export function EditMovieView({ movieId }) {
                                     required
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="film_describe"
                                     label="Mô tả"
                                     value={formData.film_describe}
                                     onChange={handleInputChange}
                                     multiline
-                                    rows={4}
+                                    rows={15}
                                     required
                                     fullWidth
                                 />

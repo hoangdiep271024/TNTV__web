@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export function EditCinemaView({ cinemaId }) {
@@ -10,6 +10,8 @@ export function EditCinemaView({ cinemaId }) {
         cluster_name: "",
         region_name: "",
     });
+
+    const [originalData, setOriginalData] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
@@ -30,16 +32,18 @@ export function EditCinemaView({ cinemaId }) {
                 const cluster = data.clusters[0] || {};
                 const region = data.regions[0] || {};
 
-                setFormData({
+                const initialData = {
                     cinema_name: cinema.cinema_name || "",
                     address: cinema.address || "",
                     cluster_name: cluster.cluster_name || "",
                     region_name: region.region_name || "",
-                });
+                };
 
+                setFormData(initialData);
+                setOriginalData(initialData);
                 setLoading(false);
             } catch (error) {
-                console.error(error);
+                // console.error(error);
                 setSnackbar({ open: true, message: "Lỗi khi tải thông tin rạp", severity: "error" });
                 setLoading(false);
             }
@@ -68,14 +72,14 @@ export function EditCinemaView({ cinemaId }) {
                 throw new Error("Failed to update cinema");
             }
 
-            const result = await response.json();
+            // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Rạp chiếu phim đã được cập nhật thành công!", severity: "success" });
-
-            setTimeout(() => navigate(-1), 1000);
+            setTimeout(() => navigate("/admin/cinema"), 1000);
         } catch (error) {
             // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật rạp!", severity: "error" });
+            setFormData(originalData);
         }
     };
 
@@ -87,7 +91,14 @@ export function EditCinemaView({ cinemaId }) {
                 />
                 <CardContent>
                     {loading ? (
-                        <Typography variant="body1">Đang tải thông tin rạp...</Typography>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="300px"
+                        >
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3}>

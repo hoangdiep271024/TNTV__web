@@ -148,7 +148,7 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                         }}
                     >
                         <MenuItem onClick={handleEditButton}>
-                            <Iconify icon="solar:pen-bold" />
+                            <Iconify icon="solar:pen-bold" sx={{ color: 'primary.main' }} />
                             Chỉnh sửa
                         </MenuItem>
                         <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>
