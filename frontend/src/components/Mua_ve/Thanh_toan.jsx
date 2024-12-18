@@ -29,44 +29,8 @@ const Thanh_toan = ({ nextStep }) => {
     // Xử lý khi hết giờ
     const handleTimeOut = async () => {
         alert('Đã hết giờ giữ ghế! Bạn sẽ được chuyển về trang chủ.');
-        await fetch(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                showtime_id: showtime_id,
-                bookedSeat: selectedSeats,
-            })
-        }).catch(error => console.error('Lỗi khi hủy giữ ghế:', error));
         window.location.href = `/auth`; // Chuyển về trang chủ
     };
-
-    useEffect(() => {
-        const handleBeforeUnload = (event) => {
-            event.preventDefault();
-
-            // Gửi yêu cầu hủy giữ ghế
-            fetch(`${import.meta.env.VITE_API_URL}/api/payment/huy_giu_ghe`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({
-                    showtime_id: showtime_id,
-                    bookedSeat: selectedSeats,
-                })
-            }).catch(error => console.error('Lỗi khi hủy giữ ghế:', error));
-
-            event.returnValue = ''; // Hiện cảnh báo khi người dùng thoát
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => {
-            window.removeEventListener('beforeunload', handleBeforeUnload);
-        };
-    }, [showtime_id, selectedSeats]);
 
 
     const handlePayment = async () => {

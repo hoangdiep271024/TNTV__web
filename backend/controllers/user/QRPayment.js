@@ -29,17 +29,6 @@ export const giuGhe = async (req, res) => {
     }
 }
 
-export const huyGiuGhe = async (req, res) => {
-    const { showtime_id, bookedSeat } = req.body;
-    try {
-        // Cập nhật trạng thái ghế lại thành 0 (chưa đặt)
-        await updateSeatStatus(showtime_id, bookedSeat, null);
-        return res.json({ success: true });
-    } catch (error) {
-        console.error(error);
-        return res.status(500).json({ success: false, message: 'Error canceling reservation' });
-    }
-}
 
 export const QRPayment = async (req, res) => {
     const { showtime_id, amount: total_amount, selectedSeats, selectedCombos } = req.body;

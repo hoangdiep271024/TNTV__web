@@ -1,7 +1,5 @@
-import { Box } from '@mui/material';
-import React, { useState, useEffect } from 'react'
-import DOMPurify from "dompurify";
-import {useTheme} from '@mui/material';
+import { Box, useTheme } from '@mui/material';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 function createSlug(name) {
     return name
@@ -16,7 +14,7 @@ export default function NewNew() {
     const fetchNewData = async () => {
         try {
           const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new`, {
-            method: 'POST',
+            method: 'GET',
             headers: {
               'Content-Type': 'application/json',
             },
