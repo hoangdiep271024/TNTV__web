@@ -22,7 +22,20 @@ export function EditShowtimeView({ showtimeId }) {
     useEffect(() => {
         const fetchShowtimeDetails = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/detail/${showtimeId}`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/detail/${showtimeId}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    }
+                });
+
                 if (!response.ok) {
                     throw new Error("Failed to fetch showtime details");
                 }
@@ -60,10 +73,18 @@ export function EditShowtimeView({ showtimeId }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/edit/${showtimeId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + jwt,
                 },
                 body: JSON.stringify(formData),
             });

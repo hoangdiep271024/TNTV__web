@@ -5,11 +5,18 @@ import { Link, useNavigate } from "react-router-dom";
 
 const deleteCinema = async (id) => {
     try {
+        const jwt = localStorage.getItem('jwt');
+
+        if (!jwt) {
+            console.error('JWT token is missing');
+            return;
+        }
+
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/delete/${id}`, {
             method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-            },
+                'Authorization': 'Bearer ' + jwt,
+            }
             // credentials: 'include',
         });
 

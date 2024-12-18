@@ -33,12 +33,19 @@ export function CinemaView() {
         if (table.selected.length === 0) return;
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             for (const cinemaId of table.selected) {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/delete/${cinemaId}`, {
                     method: 'DELETE',
                     headers: {
-                        "Content-Type": "application/json",
-                    },
+                        'Authorization': 'Bearer ' + jwt,
+                    }
                     // credentials: 'include',
                 });
 
@@ -60,11 +67,18 @@ export function CinemaView() {
             setLoading(true);
             setError(null);
             try {
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas`, {
                     method: 'GET',
                     headers: {
-                        "Content-Type": "application/json",
-                    },
+                        'Authorization': 'Bearer ' + jwt,
+                    }
                     // credentials: 'include',
                 });
 

@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, MenuItem, CircularProgress } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, MenuItem, CircularProgress, Autocomplete, Chip } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export function EditMovieView({ movieId }) {
@@ -13,9 +13,9 @@ export function EditMovieView({ movieId }) {
         age_limit: "",
         duration: "",
         film_type: 1,
-        categories: "",
-        directors: "",
-        actors: "",
+        categories: [],
+        directors: [],
+        actors: [],
     });
 
     const [initialFormData, setInitialFormData] = useState(formData);
@@ -33,8 +33,22 @@ export function EditMovieView({ movieId }) {
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
+
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/detail/${movieId}`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/detail/${movieId}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    },
+                });
+
                 if (!response.ok) {
                     throw new Error("Failed to fetch movie details");
                 }
@@ -49,10 +63,12 @@ export function EditMovieView({ movieId }) {
                     age_limit: data.film[0]?.age_limit,
                     duration: data.film[0]?.duration,
                     film_type: data.film[0]?.film_type,
-                    categories: data.categories?.map((cat) => cat.category_name).join(", ") || "",
-                    directors: data.directors?.map((dir) => dir.director_name).join(", ") || "",
-                    actors: data.actors?.map((actor) => actor.actor_name).join(", ") || "",
+                    categories: [...new Set(data.categories?.map((cat) => cat.category_name))] || [],
+                    directors: [...new Set(data.directors?.map((dir) => dir.director_name))] || [],
+                    actors: [...new Set(data.actors?.map((actor) => actor.actor_name))] || [],
                 };
+
+                // console.log([...new Set(data.categories?.map((cat) => cat.category_name))]);
 
                 setFormData(fetchedData);
                 setInitialFormData(fetchedData);
@@ -71,7 +87,7 @@ export function EditMovieView({ movieId }) {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        console.log(`${name}: ${value}`); // Debugging log
+        //console.log(`${name}: ${value}`); // Debugging log
         setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
@@ -109,17 +125,31 @@ export function EditMovieView({ movieId }) {
             formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
         }
 
-        // formDataObj.append("categories", formData.categories.split(",").map(category => category.trim()).join(","));
-        // formDataObj.append("directors", formData.directors.split(",").map(director => director.trim()).join(","));
-        // formDataObj.append("actors", formData.actors.split(",").map(actor => actor.trim()).join(","));
+        // const categoriesArray = formData.categories.split(",").map(item => item.trim());
+        // const actorsArray = formData.actors.split(",").map(item => item.trim());
+        // const directorsArray = formData.directors.split(",").map(item => item.trim());
+
+        formDataObj.append("categories", JSON.stringify(formData.categories));
+        formDataObj.append("directors", JSON.stringify(formData.directors));
+        formDataObj.append("actors", JSON.stringify(formData.actors));
 
         // for (let pair of formDataObj.entries()) {
         //     console.log(pair[0] + ": " + pair[1]);
         // }
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/edit/${movieId}`, {
                 method: "PATCH",
+                headers: {
+                    'Authorization': 'Bearer ' + jwt,
+                },
                 body: formDataObj,
             });
 
@@ -130,7 +160,7 @@ export function EditMovieView({ movieId }) {
             // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được cập nhật thành công!", severity: "success" });
-            setTimeout(() => navigate("admin/movie"), 1000);
+            setTimeout(() => navigate("/admin/movie"), 1000);
         } catch (error) {
             //console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật phim!", severity: "error" });
@@ -310,6 +340,7 @@ export function EditMovieView({ movieId }) {
                                     required
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="age_limit"
                                     label="Giới hạn độ tuổi"
@@ -319,6 +350,7 @@ export function EditMovieView({ movieId }) {
                                     required
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="duration"
                                     label="Thời lượng (phút)"
@@ -328,6 +360,7 @@ export function EditMovieView({ movieId }) {
                                     required
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="film_type"
                                     label="Trạng thái phim"
@@ -343,23 +376,54 @@ export function EditMovieView({ movieId }) {
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                                <TextField
-                                    name="categories"
-                                    label="Thể loại (cách nhau bởi dấu phẩy)"
+
+                                <Autocomplete
+                                    multiple
+                                    freeSolo
+                                    options={[
+                                        "Kinh Dị", "Hài Kịch", "Hành Động", "Tội Phạm",
+                                        "Phiêu Lưu", "Hoạt Hình", "Gia Đình",
+                                        "Khoa Học Viễn Tưởng", "Bí Ẩn", "Giả Tưởng",
+                                        "Lãng Mạng", "Drama", "Giật Gân", "Âm Nhạc",
+                                        "Tiểu Sử", "Lịch Sử", "Chiến Tranh"
+                                    ]}
                                     value={formData.categories}
-                                    onChange={handleInputChange}
-                                    fullWidth
+                                    onChange={(event, value) => {
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            categories: value
+                                        }));
+                                    }}
+                                    renderTags={(value, getTagProps) =>
+                                        value.map((option, index) => (
+                                            <Chip
+                                                variant="outlined"
+                                                label={option}
+                                                {...getTagProps({ index })}
+                                            />
+                                        ))
+                                    }
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Thể loại"
+                                            placeholder="Thêm thể loại (cách nhau bởi dấu phẩy)"
+                                        />
+                                    )}
                                 />
+
                                 <TextField
                                     name="directors"
-                                    label="Đạo diễn (cách nhau bởi dấu phẩy)"
+                                    label="Đạo diễn"
+                                    placeholder="Thêm đạo diễn (cách nhau bởi dấu phẩy)"
                                     value={formData.directors}
                                     onChange={handleInputChange}
                                     fullWidth
                                 />
                                 <TextField
                                     name="actors"
-                                    label="Diễn viên (cách nhau bởi dấu phẩy)"
+                                    label="Diễn viên"
+                                    placeholder="Thêm diễn viên (cách nhau bởi dấu phẩy)"
                                     value={formData.actors}
                                     onChange={handleInputChange}
                                     fullWidth

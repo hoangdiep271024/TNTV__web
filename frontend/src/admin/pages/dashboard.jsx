@@ -13,10 +13,20 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchDashboardData = async () => {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             try {
                 const requestOptions = {
                     method: 'GET',
                     redirect: 'follow',
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    },
                     // credentials: 'include'
                 };
 

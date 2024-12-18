@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, CircularProgress } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Box, Button, Stack, TextField, Snackbar, Alert, CircularProgress, Autocomplete } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 export function EditCinemaView({ cinemaId }) {
@@ -21,7 +21,22 @@ export function EditCinemaView({ cinemaId }) {
     useEffect(() => {
         const fetchCinemaDetails = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/detail/${cinemaId}`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/detail/${cinemaId}`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
+                    }
+                }
+
+                );
                 if (!response.ok) {
                     throw new Error("Failed to fetch cinema details");
                 }
@@ -60,10 +75,18 @@ export function EditCinemaView({ cinemaId }) {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/edit/${cinemaId}`, {
                 method: "PATCH",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + jwt,
                 },
                 body: JSON.stringify(formData),
             });
@@ -110,6 +133,7 @@ export function EditCinemaView({ cinemaId }) {
                                     required
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="address"
                                     label="Địa chỉ"
@@ -118,21 +142,57 @@ export function EditCinemaView({ cinemaId }) {
                                     required
                                     fullWidth
                                 />
-                                <TextField
+
+                                <Autocomplete
                                     name="cluster_name"
-                                    label="Tên cụm"
                                     value={formData.cluster_name}
-                                    onChange={handleInputChange}
-                                    required
-                                    fullWidth
+                                    onChange={(event, newValue) => handleInputChange({ target: { name: 'cluster_name', value: newValue } })}
+                                    options={[
+                                        'Beta Cinemas',
+                                        'CGV Cinemas',
+                                        'Lotte Cinemas',
+                                        'Cinestar',
+                                        'Mega GS Cinemas',
+                                        'Dcine',
+                                        'Đống Đa Cinema',
+                                        'Starlight',
+                                        'Rio Cinemas',
+                                        'Touch Cinema',
+                                        'Cinemax',
+                                        'Love'
+                                    ]}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Tên cụm rạp"
+                                            required
+                                            fullWidth
+                                        />
+                                    )}
                                 />
-                                <TextField
+
+                                <Autocomplete
                                     name="region_name"
-                                    label="Tên khu vực"
                                     value={formData.region_name}
-                                    onChange={handleInputChange}
-                                    required
-                                    fullWidth
+                                    onChange={(event, newValue) => handleInputChange({ target: { name: 'region_name', value: newValue } })}
+                                    options={[
+                                        "Hà Nội", "Tp.Hồ Chí Minh", "Bình Dương", "Đồng Nai", "Cần Thơ", "Đà Nẵng",
+                                        "Khánh Hòa", "Lâm Đồng", "Quảng Ninh", "Bình Định", "Bà Rịa-Vũng Tàu", "Bắc Giang",
+                                        "Đắk Lắk", "Gia Lai", "Hải Phòng", "Thừa-Thiên Huế", "Kiên Giang",
+                                        "Kon Tum", "Nghệ An", "Quảng Bình", "Quảng Nam", "Sóc Trăng", "Tây Ninh", "Thái Nguyên",
+                                        "Thanh Hóa", "Tiên Giang", "An Giang", "Bắc Ninh", "Bình Thuận", "Cà Mau", "Đồng Tháp",
+                                        "Hà Nam", "Hà Tĩnh", "Hải Dương", "Hậu Giang", "Hưng Yên", "Lạng Sơn", "Lào Cai",
+                                        "Long An", "Nam Định", "Ninh BÌnh", "Ninh Thuận", "Phú Thọ", "Quảng Ngãi", "Quảng Trị",
+                                        "Sơn La", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Yên Bái"
+                                    ]}
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            label="Khu vực"
+                                            required
+                                            fullWidth
+                                        />
+                                    )}
                                 />
                             </Stack>
 

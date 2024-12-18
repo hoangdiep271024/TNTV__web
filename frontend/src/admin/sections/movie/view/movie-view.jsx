@@ -33,11 +33,18 @@ export function MovieView() {
         if (table.selected.length === 0) return;
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             for (const movieId of table.selected) {
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/movies/delete/${movieId}`, {
                     method: 'DELETE',
                     headers: {
-                        "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });
@@ -59,10 +66,18 @@ export function MovieView() {
         const fetchMovies = async () => {
             setLoading(true);
             try {
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
                 const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });

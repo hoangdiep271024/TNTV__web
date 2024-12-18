@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, Box, Button } from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, Box, Button, Autocomplete } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -23,10 +23,18 @@ export function CreateCinemaView() {
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/cinemas/create`, {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
+                    'Authorization': 'Bearer ' + jwt,
                 },
                 body: JSON.stringify(formData),
             });
@@ -38,9 +46,7 @@ export function CreateCinemaView() {
             // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Rạp chiếu phim đã được tạo thành công!", severity: "success" });
-            setTimeout(() => {
-                navigate("/admin/cinema");
-            }, 1000);
+            setTimeout(() => navigate("/admin/cinema"), 1000);
         } catch (error) {
             // console.error(error);
             setFormData({
@@ -70,6 +76,7 @@ export function CreateCinemaView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="address"
                                 label="Địa chỉ"
@@ -78,22 +85,61 @@ export function CreateCinemaView() {
                                 required
                                 fullWidth
                             />
-                            <TextField
+
+                            <Autocomplete
                                 name="cluster_name"
-                                label="Tên cụm rạp"
                                 value={formData.cluster_name}
-                                onChange={handleInputChange}
-                                required
-                                fullWidth
+                                onChange={(event, newValue) => handleInputChange({ target: { name: 'cluster_name', value: newValue } })}
+                                options={[
+                                    'Beta Cinemas',
+                                    'CGV Cinemas',
+                                    'Lotte Cinemas',
+                                    'Cinestar',
+                                    'Mega GS Cinemas',
+                                    'Dcine',
+                                    'Đống Đa Cinema',
+                                    'Starlight',
+                                    'Rio Cinemas',
+                                    'Touch Cinema',
+                                    'Cinemax',
+                                    'Love'
+                                ]}
+                                isOptionEqualToValue={(option, value) => option === value}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Tên cụm rạp"
+                                        required
+                                        fullWidth
+                                    />
+                                )}
                             />
-                            <TextField
+
+                            <Autocomplete
                                 name="region_name"
-                                label="Khu vực"
                                 value={formData.region_name}
-                                onChange={handleInputChange}
-                                required
-                                fullWidth
+                                onChange={(event, newValue) => handleInputChange({ target: { name: 'region_name', value: newValue } })}
+                                options={[
+                                    "Hà Nội", "Tp.Hồ Chí Minh", "Bình Dương", "Đồng Nai", "Cần Thơ", "Đà Nẵng",
+                                    "Khánh Hòa", "Lâm Đồng", "Quảng Ninh", "Bình Định", "Bà Rịa-Vũng Tàu", "Bắc Giang",
+                                    "Đắk Lắk", "Gia Lai", "Hải Phòng", "Thừa-Thiên Huế", "Kiên Giang",
+                                    "Kon Tum", "Nghệ An", "Quảng Bình", "Quảng Nam", "Sóc Trăng", "Tây Ninh", "Thái Nguyên",
+                                    "Thanh Hóa", "Tiên Giang", "An Giang", "Bắc Ninh", "Bình Thuận", "Cà Mau", "Đồng Tháp",
+                                    "Hà Nam", "Hà Tĩnh", "Hải Dương", "Hậu Giang", "Hưng Yên", "Lạng Sơn", "Lào Cai",
+                                    "Long An", "Nam Định", "Ninh BÌnh", "Ninh Thuận", "Phú Thọ", "Quảng Ngãi", "Quảng Trị",
+                                    "Sơn La", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Yên Bái"
+                                ]}
+                                isOptionEqualToValue={(option, value) => option === value}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Khu vực"
+                                        required
+                                        fullWidth
+                                    />
+                                )}
                             />
+
                         </Stack>
 
                         <Box mt={3} display="flex" justifyContent="flex-end">

@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 // thiếu một số trường full_name, sex, date_of_birth, date
-// thiếu tổng hợp order của khách hàng
 export function EditUserView({ userId }) {
     const [formData, setFormData] = useState({
         username: "",
@@ -36,10 +35,24 @@ export function EditUserView({ userId }) {
     useEffect(() => {
         const fetchUserDetails = async () => {
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/detail/${userId}`);
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/detail/${userId}`, {
+                    method: "GET",
+                    headers: {
+                        'Authorization': 'Bearer ' + jwt,
+                    }
+                });
+
                 if (!response.ok) {
                     throw new Error("Failed to fetch user details");
                 }
+
                 const data = await response.json();
                 // console.log(data);
                 // {"user":[{"user_id":2,"username":"nhdiep123","password":"$2a$11$2Mk7v/irDoraeg.tgA4z6O4iVU/rkTbZ1Z9WmXVD/TEw9Jxr.y6eu",
@@ -104,8 +117,18 @@ export function EditUserView({ userId }) {
         }
 
         try {
+            const jwt = localStorage.getItem('jwt');
+
+            if (!jwt) {
+                console.error('JWT token is missing');
+                return;
+            }
+
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/edit/${userId}`, {
                 method: "PATCH",
+                headers: {
+                    'Authorization': 'Bearer ' + jwt,
+                },
                 body: formDataToSend,
             });
 
@@ -113,7 +136,7 @@ export function EditUserView({ userId }) {
                 throw new Error("Failed to update user");
             }
 
-            const result = await response.json();
+            // const result = await response.json();
             // console.log(result);
             setSnackbar({ open: true, message: "Thông tin người dùng đã được cập nhật thành công!", severity: "success" });
 
@@ -265,54 +288,55 @@ export function EditUserView({ userId }) {
                             </form>
 
                             {/* Order Data Table */}
-                            <Box mt={5}>
-                                <Typography variant="h2" gutterBottom>
-                                    Lịch sử đặt vé
-                                </Typography>
-
-                                {orderData.length > 0 ? (
-                                    <TableContainer component={Paper}>
-                                        <Table>
-                                            <TableHead>
-                                                <TableRow>
-                                                    <TableCell>Mã Đơn Hàng</TableCell>
-                                                    <TableCell>Ngày Đặt Vé</TableCell>
-                                                    <TableCell>Tên Phim</TableCell>
-                                                    <TableCell>Tên Rạp</TableCell>
-                                                    <TableCell>Tên Phòng</TableCell>
-                                                    <TableCell>Ngày Chiếu</TableCell>
-                                                    <TableCell>Tổng Tiền</TableCell>
-                                                </TableRow>
-                                            </TableHead>
-                                            <TableBody>
-                                                {orderData.map((order) => (
-                                                    <TableRow key={order.order_id}>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.order_id}</TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>
-                                                            {new Date(order.order_date).toLocaleDateString()}
-                                                        </TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.film_name}</TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.cinema_name}</TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.room_name}</TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>
-                                                            {new Date(order.show_date).toLocaleDateString()}
-                                                        </TableCell>
-                                                        <TableCell sx={{ fontWeight: 'medium' }}>
-                                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total_price)}
-                                                        </TableCell>
-                                                    </TableRow>
-
-                                                ))}
-                                            </TableBody>
-                                        </Table>
-                                    </TableContainer>
-                                ) : (
-                                    <Typography variant="body1" color="text.secondary" mt={2}>
-                                        Không có đơn hàng nào đã được đặt.
+                            {formData.role == 0 ?
+                                (<Box mt={5}>
+                                    <Typography variant="h2" gutterBottom>
+                                        Lịch sử đặt vé
                                     </Typography>
-                                )}
-                            </Box>
 
+                                    {orderData.length > 0 ? (
+                                        <TableContainer component={Paper}>
+                                            <Table>
+                                                <TableHead>
+                                                    <TableRow>
+                                                        <TableCell>Mã Đơn Hàng</TableCell>
+                                                        <TableCell>Ngày Đặt Vé</TableCell>
+                                                        <TableCell>Tên Phim</TableCell>
+                                                        <TableCell>Tên Rạp</TableCell>
+                                                        <TableCell>Tên Phòng</TableCell>
+                                                        <TableCell>Ngày Chiếu</TableCell>
+                                                        <TableCell>Tổng Tiền</TableCell>
+                                                    </TableRow>
+                                                </TableHead>
+                                                <TableBody>
+                                                    {orderData.map((order) => (
+                                                        <TableRow key={order.order_id}>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>{order.order_id}</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>
+                                                                {new Date(order.order_date).toLocaleDateString()}
+                                                            </TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>{order.film_name}</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>{order.cinema_name}</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>{order.room_name}</TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>
+                                                                {new Date(order.show_date).toLocaleDateString()}
+                                                            </TableCell>
+                                                            <TableCell sx={{ fontWeight: 'medium' }}>
+                                                                {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total_price)}
+                                                            </TableCell>
+                                                        </TableRow>
+
+                                                    ))}
+                                                </TableBody>
+                                            </Table>
+                                        </TableContainer>
+                                    ) : (
+                                        <Typography variant="body1" color="text.secondary" mt={2}>
+                                            Không có đơn hàng nào đã được đặt.
+                                        </Typography>
+                                    )}
+                                </Box>
+                                ) : null}
                         </>
                     )}
                 </CardContent>
