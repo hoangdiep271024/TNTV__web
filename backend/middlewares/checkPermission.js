@@ -51,7 +51,7 @@ export const checkPermisson = async (req, res, next) => {
 //         // }
 
         // Lấy token từ header Authorization
-        const authHeader = req.headers['authorization'];
+        const authHeader = req.headers['Authorization'];
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({
                 messages: "Unauthorized\nPlease login first!"

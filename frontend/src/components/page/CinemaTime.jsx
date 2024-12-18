@@ -57,7 +57,7 @@ export default function CinemaTime() {
   return (
     <>
     <Shared/>
-    <Box sx={{ marginLeft: '10vw', width : '80vw', height: 'auto', minHeight: '20vh', backgroundColor: 'none', marginTop: '17vh', display: 'flex', justifyContent: 'center', gap :2, border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, borderRadius: '5px', padding: '15px'}}>
+    <Box sx={{ marginLeft: '10vw', width : '80vw', height: 'auto', minHeight: '20vh', backgroundColor: 'none', marginTop: '19vh', display: 'flex', justifyContent: 'center', gap :2, border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, borderRadius: '5px', padding: '15px'}}>
           {cluster_name === 'Beta Cinemas' && (
             <img src="/beta.jpg" style={{width: '60px', height: '60px', borderRadius: '100%', objectFit: 'cover',border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`}}></img>
           )}
