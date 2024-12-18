@@ -63,12 +63,12 @@ export function EditUserView({ userId }) {
                 const user = data.user[0] || {};
 
                 setFormData({
-                    username: user.username || "",
-                    user_img: user.user_img || "",
-                    email: user.email || "",
-                    phone_number: user.phone_number || "",
-                    role: user.role || 0,
-                    status: user.status || 0,
+                    username: user.username,
+                    user_img: user.user_img,
+                    email: user.email,
+                    phone_number: user.phone_number,
+                    role: user.role,
+                    status: user.status,
                 });
 
                 setOrderData(data.order || []);
