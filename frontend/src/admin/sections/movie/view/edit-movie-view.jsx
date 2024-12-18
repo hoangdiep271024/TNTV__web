@@ -398,6 +398,7 @@ export function EditMovieView({ movieId }) {
                                         value.map((option, index) => (
                                             <Chip
                                                 variant="outlined"
+                                                key={option}
                                                 label={option}
                                                 {...getTagProps({ index })}
                                             />
