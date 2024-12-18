@@ -128,10 +128,10 @@ export const createPost = async (req, res) => {
 
         // Lưu data vào bảng news
         const queryNews = `INSERT INTO news 
-            VALUES (?, ?, ?, ?, ?, ?, ?)`;
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)`;
 
         const New = await new Promise((resolve, reject) => {
-            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer], (err, results) => {
+            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -234,10 +234,10 @@ export const editPatch = async (req, res) => {
             // Update bảng news
             const queryUpdateNew = `
                 UPDATE news
-                SET film_id = ?, new_content = ?, new_time = ?, new_header = ?, new_footer = ?
+                SET film_id = ?, new_content = ?, new_time = ?, new_header = ?, new_footer = ?, user_id = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, fullFormattedDateTime, new_header, new_footer, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, fullFormattedDateTime, new_header, new_footer, res.locals.user[0].user_id, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });

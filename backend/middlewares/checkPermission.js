@@ -1,13 +1,13 @@
-// import { verifyToken, isTokenExpired } from "./JWT";
-// import systemConfig from "../config/systemConfig";
-// import dotenv from "dotenv";
-// import connection from "../models/SQLConnection";
-// dotenv.config();
+import { verifyToken, isTokenExpired } from "./JWT";
+import systemConfig from "../config/systemConfig";
+import dotenv from "dotenv";
+import connection from "../models/SQLConnection";
+dotenv.config();
 
-// const SECRET_CODE = process.env.SECRET_CODE
+const SECRET_CODE = process.env.SECRET_CODE
 
-// export const checkPermisson = async (req, res, next) => {
-//     try {
+export const checkPermisson = async (req, res, next) => {
+    try {
 //         // // buoc 1: nguoi dung dang nhap hay chua
 //         // // let token = null;
 //         // // if(req.session.user){
@@ -50,33 +50,39 @@
 //         //     res.render("index.html")
 //         // }
 
-//         if (!req.cookies.jwt) {
-//             return res.status(401).json({
-//                 messages: "Unauthorized\nPlease login first!"
-//             });
-//         }
+        // Lấy token từ header Authorization
+        const authHeader = req.headers['authorization'];
+        if (!authHeader || !authHeader.startsWith('Bearer ')) {
+            return res.status(401).json({
+                messages: "Unauthorized\nPlease login first!"
+            });
+        }
 
-//         const userId = verifyToken(req.cookies.jwt);
+        const token = authHeader.split(' ')[1]; // Tách 'Bearer' khỏi token
+        const userId = verifyToken(token).id;
 
-//         // Nếu token expired hoặc không hợp lệ thì userId sẽ null
-//         if (!userId || isTokenExpired(req.cookies.jwt)) {
-//             return res.status(401).json({
-//                 messages: "Token is expired or invalid\nPlease login first!"
-//             });
-//         }
+        // Nếu token expired hoặc không hợp lệ thì userId sẽ null
+        if (!userId || isTokenExpired(token)) {
+            return res.status(401).json({
+                messages: "Token is expired or invalid\nPlease login first!"
+            });
+        }
 
-//         const [user] = await connection.promise().query(`SELECT * FROM users WHERE user_id = ?`, [userId.id])
+        const [user] = await connection.promise().query(`SELECT * FROM users WHERE user_id = ?`, [userId.id])
 
-//         if (user.length == 0) {
-//             return res.status(401).json({
-//                 messages: "Token is expired or invalid\nPlease login first!"
-//             });
-//         }
+        if (user.length == 0) {
+            return res.status(401).json({
+                messages: "Token is expired or invalid\nPlease login first!"
+            });
+        }
 
-//         res.locals.user = user;
+        res.locals.user = user;
 
-//         next();
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+        next();
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            messages: "Internal Server Error"
+        });
+    }
+}
