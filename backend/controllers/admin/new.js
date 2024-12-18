@@ -113,8 +113,7 @@ export const createPost = async (req, res) => {
         const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
         if (film.length === 0) {
             return res.status(500).json({
-                message: "Film doesn't exist.\nPlease choose film again!",
-                error: error
+                message: "Film doesn't exist.\nPlease choose film again!"
             });
         }
         const filmId = film[0].film_id;
@@ -233,8 +232,7 @@ export const editPatch = async (req, res) => {
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
             if (film.length == 0) {
                 return res.status(500).json({
-                    message: "Film doesn't exist\nPlease choose film again",
-                    error: error
+                    message: "Film doesn't exist\nPlease choose film again"
                 });
             }
             const filmId = film[0].film_id;
