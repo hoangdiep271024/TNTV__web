@@ -102,7 +102,15 @@ export const create = async (req, res) => {
 // [POST] /admin/news/create
 export const createPost = async (req, res) => {
     try {
-        let { film_name, new_content, new_time, new_header, new_footer } = req.body;
+        const currentDate = new Date();
+        const optionsDate = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+        const formattedDate = currentDate.toLocaleDateString('vi-VN', optionsDate);
+        const formattedTime = currentDate.toLocaleTimeString('vi-VN', optionsTime);
+
+        const fullFormattedDateTime = `${formattedDate} ${formattedTime}`;
+        let { film_name, new_content, new_header, new_footer } = req.body;
 
         const countResult = await connection.promise().query(
             `SELECT COUNT(*) as count FROM news`,
@@ -123,7 +131,7 @@ export const createPost = async (req, res) => {
             VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
         const New = await new Promise((resolve, reject) => {
-            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, new_time, new_header, new_footer], (err, results) => {
+            connection.query(queryNews, [newId, filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer], (err, results) => {
                 if (err) return reject(err);
                 resolve(results);
             });
@@ -202,9 +210,18 @@ export const editPatch = async (req, res) => {
     try {
         const newId = parseInt(req.params.newId);
 
+        const currentDate = new Date();
+        const optionsDate = { year: 'numeric', month: 'numeric', day: 'numeric' };
+        const optionsTime = { hour: '2-digit', minute: '2-digit', second: '2-digit' };
+
+        const formattedDate = currentDate.toLocaleDateString('vi-VN', optionsDate);
+        const formattedTime = currentDate.toLocaleTimeString('vi-VN', optionsTime);
+
+        const fullFormattedDateTime = `${formattedDate} ${formattedTime}`;
+
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
         if (res.locals.url == "") {
-            let { film_name, new_content, new_time, new_header, new_footer } = req.body;
+            let { film_name, new_content, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
             if (film.length == 0) {
@@ -220,14 +237,14 @@ export const editPatch = async (req, res) => {
                 SET film_id = ?, new_content = ?, new_time = ?, new_header = ?, new_footer = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, new_time, new_header, new_footer, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, fullFormattedDateTime, new_header, new_footer, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
             });
 
         } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
-            let { film_name, new_content, new_time, new_header, new_footer } = req.body;
+            let { film_name, new_content, new_header, new_footer } = req.body;
 
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
             if (film.length == 0) {
@@ -243,7 +260,7 @@ export const editPatch = async (req, res) => {
                 SET film_id = ?, new_content = ?, new_img = ?, new_time = ?, new_header = ?, new_footer = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
-                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, new_time, new_header, new_footer, newId], (err, results) => {
+                connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, fullFormattedDateTime, new_header, new_footer, newId], (err, results) => {
                     if (err) return reject(err);
                     resolve(results);
                 });
