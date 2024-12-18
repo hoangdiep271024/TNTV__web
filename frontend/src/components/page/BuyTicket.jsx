@@ -38,7 +38,7 @@ export default function BuyTicket() {
   return (
     <Box>
    <Shared></Shared>
-  <div style={{ marginTop: '17vh', fontSize: '25px', textAlign: 'center', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444', marginBottom: '15px'}}>{`MUA VÉ THEO PHIM`}</div>
+  <div style={{ marginTop: '19vh', fontSize: '25px', textAlign: 'center', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444', marginBottom: '15px'}}>{`MUA VÉ THEO PHIM`}</div>
   {data && <Ticket__film data = {data}></Ticket__film>}
   <div style={{ marginTop: '5vh', fontSize: '25px', textAlign: 'center', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444', marginBottom: '15px'}}>{`MUA VÉ THEO RẠP`}</div>
   <AreaList></AreaList>

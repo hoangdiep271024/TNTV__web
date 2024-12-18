@@ -144,7 +144,7 @@ const logOutClick = () => {
       height: "35px",
     },
     "& .MuiInputBase-input": {
-      padding: "0 10px", // Điều chỉnh padding cho cân đối
+      padding: "0 10px", 
     },
     "& .MuiInputLabel-root": {
       top: "-8px", // Căn chỉnh nhãn về vị trí mong muốn
