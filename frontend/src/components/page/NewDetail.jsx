@@ -89,11 +89,11 @@ export default function NewDetail() {
        const exactlyDate = `${day}/${month}`;
       return (
         item.new_id !== dataDetail[0].new_id && (
-          <Box key={index} sx={{ display: 'flex', padding: '10px 5px', gap: '7px', alignItems: 'center', borderLeft: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderRight: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, cursor: 'pointer'}} onClick = {() => ClickNew(item.new_id, item.new_header)}>
+          <Box key={index} sx={{ display: 'flex', padding: '10px 5px', gap: '7px', alignItems: 'center', borderLeft: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderRight: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderBottom: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, cursor: 'pointer', position: 'relative'}} onClick = {() => ClickNew(item.new_id, item.new_header)}>
             <img src={item.new_img} alt="related item" style={{width: '60%', height:'auto', maxHeight: '105px', maxWidth: '200px', objectFit: 'cover'}} />
             <div style={{height: '105px'}}>
               <div>{item.new_header}</div>
-              <div style={{textAlign: 'end', fontSize: '15px'}}>{exactlyDate}</div>
+              <div style={{textAlign: 'end', fontSize: '15px', position: 'absolute', right: '15px'}}>{exactlyDate}</div>
             </div>
           </Box>
         )

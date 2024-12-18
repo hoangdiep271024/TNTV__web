@@ -1,8 +1,13 @@
+import { Box, TextField } from "@mui/material";
 import React, { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
+import Footer from "../Footer/Footer";
+import Shared from "../Shared";
+import { useTheme } from "@emotion/react";
 
 const NewCreate = () => {
+    const theme =useTheme()
   const [formData, setFormData] = useState({
     film_name: "",
     new_header: "",
@@ -34,22 +39,24 @@ const NewCreate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const data = new FormData(); // Sử dụng FormData để gửi cả text và file
+    const data = new FormData(); 
     data.append("film_name", formData.film_name);
     data.append("new_header", formData.new_header);
     data.append("new_footer", formData.new_footer);
     data.append("new_content", formData.new_content);
 
     if (newImg) {
-      data.append("new_img", newImg); // Thêm ảnh vào FormData
+      data.append("new_img", newImg); 
     }
 
     try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/news/create`, {
-        method: "POST",
-        body: data, 
-      });
-
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/news/create`, {
+          method: "POST",
+          headers: {
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+          },
+          body: data, 
+        });
       const result = await response.json();
       console.log("Response:", result);
     } catch (error) {
@@ -79,42 +86,113 @@ const NewCreate = () => {
   ];
 
   return (
-    <form onSubmit={handleSubmit}>
-      <div>
+    <Box>
+    <Shared></Shared>
+    <Box sx={{marginTop: '19vh'}}>
+    <div style={{
+          marginTop: '20px', fontSize: '30px', textAlign: 'center',
+          fontFamily: 'Montserrat', fontWeight: '600',
+          color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444',
+          marginBottom: '15px'
+        }}>
+          {`TẠO BÀI VIẾT`}
+        </div> 
+    <form onSubmit={handleSubmit} style={{width: '60%', marginLeft: '20%', position: 'relative'}}>
+     <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
+      <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
         <label>Tên phim:</label>
-        <input
+        <TextField
           type="text"
           name="film_name"
           value={formData.film_name}
           onChange={handleInputChange}
-          placeholder="Nhập tên phim"
+          label="Tên phim"
           required
+          sx={{
+            "& .MuiInputLabel-shrink": {
+              transform: "translate(12px, -7px) scale(0.85)", // Chỉnh vị trí và kích thước
+            
+            },
+          }}
+          InputProps={{
+            style: {
+              height: "40px", 
+            },
+          }}
+          InputLabelProps={{
+            style: {
+              top: '-8px', 
+            },
+          }}
+         
         />
       </div>
 
-      <div>
-        <label>Header:</label>
-        <input
+      <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
+        <label>Tiêu đề</label>
+        <TextField
+
           type="text"
           name="new_header"
           value={formData.new_header}
           onChange={handleInputChange}
-          placeholder="Nhập header"
+           label="Film Name"
+           required
+           sx={{
+            "& .MuiInputLabel-shrink": {
+              transform: "translate(12px, -7px) scale(0.85)", // Chỉnh vị trí và kích thước
+            
+            },
+          }}
+          InputProps={{
+            style: {
+              height: "40px", 
+            },
+          }}
+          InputLabelProps={{
+            style: {
+              top: '-8px', 
+            },
+          }}
         />
       </div>
+      </div>
+      <div style={{display: 'flex', justifyContent: 'space-between', marginTop: '20px'}}>
+      <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
+        <label>Ảnh (New_Image):</label>
+        <input type="file" accept="image/*" onChange={handleImageChange} />
+      </div>
 
-      <div>
-        <label>Footer:</label>
-        <input
+      <div style={{display: 'flex', alignItems: 'center', gap: '20px'}}>
+        <label>Footer</label>
+        <TextField
           type="text"
           name="new_footer"
           value={formData.new_footer}
           onChange={handleInputChange}
-          placeholder="Nhập footer"
+          label="Nhập footer"
+          required
+          sx={{
+            "& .MuiInputLabel-shrink": {
+              transform: "translate(12px, -7px) scale(0.85)", // Chỉnh vị trí và kích thước
+            
+            },
+          }}
+          InputProps={{
+            style: {
+              height: "40px", 
+            },
+          }}
+          InputLabelProps={{
+            style: {
+              top: '-8px', 
+            },
+          }}
         />
       </div>
+      </div>
 
-      <div>
+      <div style={{marginTop: '20px'}}>
         <label>Nội dung chính:</label>
         <ReactQuill
           theme="snow"
@@ -123,18 +201,27 @@ const NewCreate = () => {
           modules={modules}
           formats={formats}
           placeholder="Nhập nội dung chính... (bao gồm cả ảnh và text)"
+          style={{width: '100%', overflow: 'auto', overflowY: 'scroll', height: '500px'}}
         />
+        <style>
+  {`
+    .ql-editor img {
+      width: 700px !important;
+      height: auto;
+    }
+  `}
+</style>
       </div>
 
-      <div style={{ marginTop: "20px" }}>
-        <label>Ảnh:</label>
-        <input type="file" accept="image/*" onChange={handleImageChange} />
-      </div>
+      
 
-      <button type="submit" style={{ marginTop: "20px" }}>
+      <button type="submit" style={{ marginTop: "20px", position: 'absolute', right: '0px' }}>
         Tạo bài viết
       </button>
     </form>
+    </Box>
+    <Footer></Footer>
+    </Box>
   );
 };
 
