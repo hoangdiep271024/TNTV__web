@@ -5,9 +5,15 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Iconify } from '../../components/iconify';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
-// delete all selected button handler <=> onDeleteSelected
-export function ShowtimeTableToolbar({ numSelected, filterName, onFilterName }) {
+export function ShowtimeTableToolbar({ numSelected, filterName, selectedFilter, onFilterName, onFilterChange, onDeleteSelected }) {
+    const filterOptions = [
+        { value: 'film_name', label: 'Tên phim' },
+        { value: 'cinema_name', label: 'Tên rạp chiếu' },
+        { value: 'room_name', label: 'Tên phòng chiếu' },
+    ]
+
     return (
         <Toolbar
             sx={{
@@ -26,23 +32,47 @@ export function ShowtimeTableToolbar({ numSelected, filterName, onFilterName }) 
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <OutlinedInput
-                    fullWidth
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="Tìm kiếm suất chiếu..."
-                    startAdornment={
-                        <InputAdornment position="start">
-                            <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                    }
-                    sx={{ maxWidth: 320 }}
-                />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FormControl sx={{ minWidth: 150, mr: 2 }}>
+                        <InputLabel>Bộ lọc</InputLabel>
+                        <Select
+                            value={selectedFilter}
+                            onChange={(e) => onFilterChange(e.target.value)}
+                            label="Bộ lọc"
+                            fullWidth
+                        >
+                            {filterOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+
+                    <OutlinedInput
+                        fullWidth
+                        value={filterName}
+                        onChange={onFilterName}
+                        placeholder="Tìm kiếm..."
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <Iconify width={20} icon="eva:search-fill" />
+                            </InputAdornment>
+                        }
+                        sx={{ maxWidth: 320 }}
+                    />
+                </Box>
             )}
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

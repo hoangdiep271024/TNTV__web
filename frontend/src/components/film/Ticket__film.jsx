@@ -13,10 +13,10 @@ export default function Ticket__film({ onLoadComplete }) {
   const [data, setData] = useState([[]]);
   const [showing, setShowing] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
-  const filmsPerPage = 16;
+  const filmsPerPage = 14;
 
   useEffect(() => {
-    fetch('/api/film/filmShowing', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/film/filmShowing`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

@@ -4,24 +4,15 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
-
 import { Iconify } from '../../components/iconify';
+import { Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material';
 
-/**
- * MovieTableToolbar Component
- *
- * This component renders a toolbar for the movie table. It supports:
- * - Displaying the number of selected rows and providing an action (e.g., delete) for those rows.
- * - A search input field to filter the table rows by a name or keyword.
- *
- * @param {number} numSelected - The number of currently selected rows in the table.
- * @param {string} filterName - The current value of the search input field for filtering rows.
- * @param {Function} onFilterName - Callback function triggered when the search input value changes.
- *   It passes the updated filter string to the parent component.
- *
- * @returns {JSX.Element} The rendered toolbar, displaying the selected row count or a search input field.
- */
-export function MovieTableToolbar({ numSelected, filterName, onFilterName }) {
+export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onFilterName, onFilterChange, onDeleteSelected }) {
+    const filterOptions = [
+        { value: 'film_name', label: 'Tên phim' },
+        { value: 'film_describe', label: 'Mô tả' },
+    ]
+
     return (
         <Toolbar
             sx={{
@@ -40,28 +31,51 @@ export function MovieTableToolbar({ numSelected, filterName, onFilterName }) {
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <OutlinedInput
-                    fullWidth
-                    value={filterName}
-                    onChange={onFilterName}
-                    placeholder="Tìm kiếm phim..."
-                    startAdornment={
-                        <InputAdornment position="start">
-                            <Iconify width={20} icon="eva:search-fill" sx={{ color: 'text.disabled' }} />
-                        </InputAdornment>
-                    }
-                    sx={{ maxWidth: 320 }}
-                />
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                    <FormControl sx={{ minWidth: 150, mr: 2 }}>
+                        <InputLabel>Bộ lọc</InputLabel>
+                        <Select
+                            value={selectedFilter}
+                            onChange={(e) => onFilterChange(e.target.value)}
+                            label="Bộ lọc"
+                            fullWidth
+                        >
+                            {filterOptions.map((option) => (
+                                <MenuItem key={option.value} value={option.value}>
+                                    {option.label}
+                                </MenuItem>
+                            ))}
+                        </Select>
+                    </FormControl>
+                    <OutlinedInput
+                        fullWidth
+                        value={filterName}
+                        onChange={onFilterName}
+                        placeholder="Tìm kiếm..."
+                        startAdornment={
+                            <InputAdornment position="start">
+                                <Iconify width={20} icon="eva:search-fill" />
+                            </InputAdornment>
+                        }
+                        sx={{ maxWidth: 320 }}
+                    />
+                </Box>
+
             )}
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>
             ) : null}
-            {/* delete all selected or filter list (optional) */}
         </Toolbar>
     );
 }

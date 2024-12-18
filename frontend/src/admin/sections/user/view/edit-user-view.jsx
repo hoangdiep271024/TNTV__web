@@ -1,196 +1,245 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert } from "@mui/material";
+import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box, Stack } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 
+// thiếu một số trường full_name, sex, date_of_birth, date
+// thiếu tổng hợp order của khách hàng
 export function EditUserView({ userId }) {
-
     const [formData, setFormData] = useState({
         username: "",
-        avatar: "",
+        user_img: null,
         email: "",
-        phoneNumber: "",
-        role: "user",
-        status: "active"
+        phone_number: "",
+        role: 0,
+        status: 0,
     });
 
-    const roleOptions = ["user", "admin"];
-    const statusOptions = ["active", "inactive"];
+    const [currentImage, setCurrentImage] = useState("");
 
-    //     // Fetch user data based on userId
-    //     useEffect(() => {
-    //     if (userId) {
-    //         // Fetch user data using userId (e.g., from an API or database)
-    //         const fetchUserData = async () => {
-    //             try {
-    //                 const response = await fetch(`/api/users/${userId}`);
-    //                 const data = await response.json();
-    //                 setFormData({
-    //                     username: data.username,
-    //                     avatar: data.avatar,
-    //                     email: data.email, 
-    //                     phoneNumber: data.phoneNumber,
-    //                     role: data.role,
-    //                     status: data.status,
-    //                 });
-    //             } catch (error) {
-    //                 console.error("Error fetching user data:", error);
-    //             }
-    //         };
+    const roleOptions = [
+        { label: "Người dùng", value: 0 },
+        { label: "Quản trị viên", value: 1 },
+    ];
+    const statusOptions = [
+        { label: "Đang hoạt động", value: 1 },
+        { label: "Không hoạt động", value: 0 },
+    ];
 
-    //         fetchUserData();
-    //     }
-    // }, [userId]); // Re-fetch when userId changes
+    const [loading, setLoading] = useState(true);
+    const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const navigate = useNavigate();
+    const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }));
-    }
+    useEffect(() => {
+        const fetchUserDetails = async () => {
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/detail/${userId}`);
+                if (!response.ok) {
+                    throw new Error("Failed to fetch user details");
+                }
+                const data = await response.json();
+                // console.log(data);
+                // {"user":[{"user_id":2,"username":"nhdiep123","password":"$2a$11$2Mk7v/irDoraeg.tgA4z6O4iVU/rkTbZ1Z9WmXVD/TEw9Jxr.y6eu",
+                // "user_img":null,"email":"nguyenhoangdiep2710@gmail.com","phone_number":"0971234568","full_name":"Nguyen Hoang Diep","sex":1,
+                // "date_of_birth":"2004-10-26T17:00:00.000Z","role":0,"reset_token":null,"reset_token_expire":null,"date":null,"status":1}],
+                // "order":[]}
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("Form data submitted:", formData);
-    }
+                const user = data.user[0] || {};
 
-    const [snackbarOpen, setSnackbarOpen] = useState(false);
+                setFormData({
+                    username: user.username || "",
+                    user_img: null,
+                    email: user.email || "",
+                    phone_number: user.phone_number || "",
+                    role: user.role || 0,
+                    status: user.status || 0,
+                });
 
-    const handleSnackbarClose = () => {
-        setSnackbarOpen(false);
+                setCurrentImage(user.user_img || "");
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+                setSnackbar({ open: true, message: "Lỗi khi tải thông tin người dùng", severity: "error" });
+                setLoading(false);
+            }
+        };
+
+        fetchUserDetails();
+    }, [userId]);
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleCancel = () => {
-        setFormData({
-            username: "",
-            email: "",
-            avatar: "",
-            phoneNumber: "",
-            role: "user",
-            status: "active",
-        });
+    const handleFileChange = (event) => {
+        const file = event.target.files[0];
+        setFormData((prev) => ({ ...prev, user_img: file }));
+    };
 
-        setSnackbarOpen(true);
-        window.location.reload();
-    }
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+
+        const formDataToSend = new FormData();
+
+        // Append fields
+        formDataToSend.append("username", formData.username);
+        formDataToSend.append("email", formData.email);
+        formDataToSend.append("phone_number", formData.phone_number);
+        formDataToSend.append("role", formData.role);
+        formDataToSend.append("status", formData.status);
+
+        // Append the file if selected
+        if (formData.user_img) {
+            formDataToSend.append("user_img", formData.user_img);
+        }
+
+        try {
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/users/edit/${userId}`, {
+                method: "PATCH",
+                body: formDataToSend,
+            });
+
+            if (!response.ok) {
+                throw new Error("Failed to update user");
+            }
+
+            const result = await response.json();
+            // console.log(result);
+            setSnackbar({ open: true, message: "Thông tin người dùng đã được cập nhật thành công!", severity: "success" });
+
+            setTimeout(() => navigate(-1), 1000);
+        } catch (error) {
+            // console.error(error);
+            setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật thông tin người dùng!", severity: "error" });
+        }
+    };
 
     return (
         <DashboardContent>
             <Card>
-                <CardHeader title="Chỉnh sửa thông tin người dùng" />
+                <CardHeader title={<Typography variant="h2">{'Chỉnh sửa thông tin người dùng'}</Typography>} />
                 <CardContent>
-                    <form onSubmit={handleSubmit}>
-                        <Grid container spacing={2}>
+                    {loading ? (
+                        <Typography variant="body1">Đang tải thông tin người dùng...</Typography>
+                    ) : (
+                        <form onSubmit={handleSubmit}>
+                            <Stack spacing={3} >
 
-                            {/* Username */}
-                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Tên người dùng"
                                     name="username"
                                     value={formData.username}
-                                    onChange={handleChange}
+                                    onChange={handleInputChange}
                                     required
                                 />
-                            </Grid>
 
-                            {/* Email */}
-                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Email"
                                     name="email"
                                     type="email"
                                     value={formData.email}
-                                    onChange={handleChange}
+                                    onChange={handleInputChange}
                                     required
                                 />
-                            </Grid>
 
-                            {/* Avatar */}
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    fullWidth
-                                    label="Ảnh đại diện"
-                                    name="avatar"
-                                    value={formData.avatar}
-                                    onChange={handleChange}
-                                    required
-                                />
-                            </Grid>
+                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+                                    {currentImage && (
+                                        <Box>
+                                            <img
+                                                src={currentImage}
+                                                alt="Current Profile"
+                                                style={{
+                                                    display: "block",
+                                                    width: "100%",
+                                                    maxWidth: "200px",
+                                                    borderRadius: "8px",
+                                                    margin: "0 auto",
+                                                }}
+                                            />
+                                        </Box>
+                                    )}
+                                    <Button
+                                        variant="outlined"
+                                        component="label"
+                                        size="small"
+                                        sx={{
+                                            color: "gray",
+                                            borderColor: "gray",
+                                            textTransform: "none",
+                                        }}
+                                    >
+                                        Tải ảnh đại diện
+                                        <input
+                                            type="file"
+                                            hidden
+                                            accept="image/*"
+                                            onChange={handleFileChange}
+                                        />
+                                    </Button>
+                                </Box>
 
-                            {/* Phone Number */}
-                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     label="Số điện thoại"
-                                    name="phoneNumber"
-                                    value={formData.phoneNumber}
-                                    onChange={handleChange}
+                                    name="phone_number"
+                                    value={formData.phone_number}
+                                    onChange={handleInputChange}
                                     required
                                 />
-                            </Grid>
 
-                            {/* Role */}
-                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     select
                                     label="Vai trò"
                                     name="role"
                                     value={formData.role}
-                                    onChange={handleChange}
+                                    onChange={handleInputChange}
                                 >
                                     {roleOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                            </Grid>
 
-                            {/* Status */}
-                            <Grid item xs={12} sm={6}>
                                 <TextField
                                     fullWidth
                                     select
                                     label="Trạng thái"
                                     name="status"
                                     value={formData.status}
-                                    onChange={handleChange}
+                                    onChange={handleInputChange}
                                 >
                                     {statusOptions.map((option) => (
-                                        <MenuItem key={option} value={option}>
-                                            {option}
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
                                         </MenuItem>
                                     ))}
                                 </TextField>
-                            </Grid>
-                        </Grid>
+                            </Stack>
 
-                        <Grid container spacing={2} mt={2}>
-                            <Grid item>
-                                <Button type="submit" variant="contained" color="primary">
-                                    Lưu
+                            <Box mt={3} display="flex" justifyContent="flex-end">
+                                <Button type="submit" variant="contained" color="primary" disabled={loading}>
+                                    Cập nhật
                                 </Button>
-                            </Grid>
-                            <Grid item>
-                                <Button variant="outlined" color="error" onClick={handleCancel}>
-                                    Hủy bỏ
-                                </Button>
-                            </Grid>
-                        </Grid>
-                    </form>
+                            </Box>
+
+                        </form>
+                    )}
                 </CardContent>
 
                 <Snackbar
-                    open={snackbarOpen}
-                    autoHideDuration={3000}
+                    open={snackbar.open}
+                    autoHideDuration={4000}
                     onClose={handleSnackbarClose}
                     anchorOrigin={{ vertical: "bottom", horizontal: "center" }}
                 >
-                    <Alert onClose={handleSnackbarClose} severity="warning" sx={{ width: "100%" }}>
-                        Các thay đổi chưa được lưu
+                    <Alert onClose={handleSnackbarClose} severity={snackbar.severity} sx={{ width: "100%" }}>
+                        {snackbar.message}
                     </Alert>
                 </Snackbar>
             </Card>

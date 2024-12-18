@@ -21,7 +21,7 @@ export default function ChatBot({closeClick}) {
         var postMessage = input
         setInput(''); // Xóa nội dung input sau khi gửi
         try {
-          const response = await axios.post('/api/chatBot', { message: postMessage });
+          const response = await axios.post(`${import.meta.env.VITE_API_URL}/api/chatBot`, { message: postMessage });
           console.log(response)
           const botMessage = { role: 'model', parts: [{ text: response.data }] };
           setMessages((prevMessages) => [...prevMessages, botMessage]);

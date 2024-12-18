@@ -2,7 +2,7 @@ import { useCallback, useState } from "react";
 
 export function useTable() {
     const [page, setPage] = useState(0);
-    const [orderBy, setOrderBy] = useState('name');
+    const [orderBy, setOrderBy] = useState('username');
     const [rowsPerPage, setRowsPerPage] = useState(5);
     const [selected, setSelected] = useState([]);
     const [order, setOrder] = useState('asc');
@@ -50,6 +50,7 @@ export function useTable() {
         orderBy,
         rowsPerPage,
         selected,
+        setSelected,
         order,
         onSort,
         onSelectAllRows,

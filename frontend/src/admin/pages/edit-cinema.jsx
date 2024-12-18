@@ -2,7 +2,6 @@ import { Helmet } from 'react-helmet-async';
 import { EditCinemaView } from '../sections/cinema/view';
 import { useParams } from 'react-router-dom';
 
-// ----------------------------------------------------------------------
 export default function EditCinemaPage() {
     const { id } = useParams();
     return (
@@ -11,7 +10,7 @@ export default function EditCinemaPage() {
                 <title> {`Chỉnh sửa thông tin rạp chiếu phim | NHTT Admin Panel`}</title>
             </Helmet>
 
-            <EditCinemaPage cinemaId={id} />
+            <EditCinemaView cinemaId={id} />
         </>
     );
 }

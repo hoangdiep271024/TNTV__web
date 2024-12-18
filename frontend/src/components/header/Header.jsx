@@ -13,6 +13,7 @@ import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
+import AccountHeader from "../Account/AccountHeader";
 function createSlug(name) {
   
   return name
@@ -29,6 +30,16 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
+  const [searchQuery, setSearchQuery] = useState('');
+  const handleChange = (e) => {
+    setSearchQuery(e.target.value); 
+  };
+  const handleSubmit = (e) => {
+    localStorage.setItem('searchQuery', searchQuery);
+    navigate(`/tim_kiem/${encodeURIComponent(createSlug(searchQuery))}`)
+    window.location.reload()
+  };
+  
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -44,13 +55,14 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const theme = useTheme();
   const [login, setLogin] = useState('');
   const [userInfor, setUserInfor] = useState([]);
-  
+  const jwt = localStorage.getItem('jwt')
   useEffect(() => {
-    fetch('/api/userInfo', {
+    fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify({jwt : jwt})
     })
       .then(response => response.json())
       .then(responseData => {
@@ -61,40 +73,14 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
         else{
           setLogin(false)
         }
+        console.log(responseData)
         
       })
       .catch(error => console.error('Error:', error));
   }, []);
-const logOutClick = async(e) => {
-  try {
-    const response = await fetch('/api/logOut', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-
-    });
-    
-    if (response.ok) {
-      // Xử lý thành công
-      const data = await response.json();
-
-      // Kiểm tra success
-      if (data.success) {
-        window.location.reload();
-      } else {
-        const error__alert =`Đăng ký thất bại:, ${data.message}`;
-        console.log(error__alert);
-        
-        // <Alert severity="error" style={{top:'0', left: '0', zIndex: '20', width:'25vh', height:'30px'}}>{error__alert}</Alert>
-      }
-    } else {
-      
-      console.error('Lỗi khi đăng ký:', response.statusText);
-    }
-  } catch (error) {
-    console.error(error)
-  }
+const logOutClick = () => {
+  localStorage.removeItem('jwt')
+  window.location.reload()
 };
     const black ='/black.gif'
     const white ='/white.gif'
@@ -106,12 +92,13 @@ const logOutClick = async(e) => {
         width: "100vw",
         display: "flex",
         alignItems: "center",
+        justifyContent: 'space-around'
       }}
     >
       <Box
         sx={{
           marginLeft: "5px",
-          width: "100%",
+          width: "60%",
           display: "flex",
           alignItems: "center",
           gap: 0.6,
@@ -126,42 +113,51 @@ const logOutClick = async(e) => {
           NHTT Movie Tickets
         </Typography>
       </Box>
-      <Box sx={{ alignItems: "center" }}>
+      <Box sx={{ alignItems: "center" , marginLeft: '-5%'}}>
         <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+        <form onSubmit={handleSubmit}>
         <TextField
   id="outlined-search"
   label="Search..."
   type="search"
+  onChange={handleChange}
   InputLabelProps={{
     style: {
       fontFamily: "Arial",
       fontSize: "14px",
       textAlign: "center",
-      top: "-6.5px",
     },
   }}
   InputProps={{
     endAdornment: (
       <InputAdornment position="end">
-        <SearchIcon sx={{ cursor: "pointer" }} />
+        <SearchIcon sx={{ cursor: "pointer" }} onClick={handleSubmit} />
       </InputAdornment>
     ),
     sx: {
-      height: '40px', 
+      height: "35px",
     },
   }}
   sx={{
-    width: '230px',
-    '& .MuiOutlinedInput-root': {
-      height: '40px', 
+    width: "230px",
+    "& .MuiOutlinedInput-root": {
+      height: "35px",
     },
-    '& .MuiInputBase-input': {
-      padding: '10px', 
+    "& .MuiInputBase-input": {
+      padding: "0 10px", // Điều chỉnh padding cho cân đối
+    },
+    "& .MuiInputLabel-root": {
+      top: "-8px", // Căn chỉnh nhãn về vị trí mong muốn
+    },
+    "& .MuiInputLabel-shrink": {
+      transform: "translate(13px, -4px) scale(0.75)", 
     },
   }}
 />
 
-{!login && (<Button
+</form>
+
+{/* {!login && (<Button
             sx={{
               textTransform: "none",
               color: theme.palette.mode === "light" ? "black" : "white",
@@ -191,7 +187,9 @@ const logOutClick = async(e) => {
             onClick={onLoginClick}
           >
             Đăng nhập
-          </Button>)}
+          </Button>)} */}
+{!login && <AccountHeader signup={onSignupClick} login={onLoginClick}/>}
+
           {login && (
             <div>
             <Button

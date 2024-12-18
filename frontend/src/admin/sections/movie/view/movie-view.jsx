@@ -1,9 +1,8 @@
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Box, Button, Card, Table, TableBody, TableContainer, TablePagination, Typography } from '@mui/material';
+import { Box, Button, Card, CircularProgress, Table, TableBody, TableCell, TableContainer, TablePagination, TableRow, Typography } from '@mui/material';
 import { Iconify } from "../../../components/iconify";
 import { MovieTableToolbar } from "../movie-table-toolbar";
-import { useState } from "react";
-import { _movies } from "../../../_mock";
+import { useEffect, useMemo, useState } from "react";
 import { hook } from "../hook";
 import { applyFilter, emptyRows, getComparator } from "../../utils";
 import { MovieTableHead } from "../movie-table-head";
@@ -11,33 +10,119 @@ import { MovieTableRow } from "../movie-table-row";
 import { TableEmptyRows } from "../../table-empty-rows";
 import { TableNoData } from "../../table-no-data";
 import { Scrollbar } from "../../../components/scrollbar";
+import { Link } from "react-router-dom";
 
-// add-movie button to move to create-movie page
 export function MovieView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
+    const [movies, setMovies] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('film_name');
+    const [dataFiltered, setDataFiltered] = useState([]);
 
-    // Filter and sort the list of users based on the current filter and sort settings
-    const dataFiltered = applyFilter({
-        inputData: _movies,
-        comparator: getComparator(table.order, table.orderBy),
-        filterName,
-    });
+    const handleFilterName = (event) => {
+        setFilterName(event.target.value);
+        table.onResetPage();
+    }
 
-    // Determine if there are no users that match the filter
+    const handleFilterChange = (newFilter) => {
+        setSelectedFilter(newFilter);
+    };
+
+    const handleDeleteSelected = async () => {
+        if (table.selected.length === 0) return;
+
+        try {
+            for (const movieId of table.selected) {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/movies/delete/${movieId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to delete movie with ID: ${movieId}`);
+                }
+            }
+
+            setMovies((prevMovies) => prevMovies.filter((movie) => !table.selected.includes(movie.movie_id)));
+            table.setSelected([]);
+            console.log('Selected movies deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting selected movies:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchMovies = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch movies");
+
+                const data = await response.json();
+                // console.log(data);
+                setMovies(data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchMovies();
+    }, []);
+
+    const filteredData = useMemo(() => {
+        return applyFilter({
+            inputData: movies,
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+            attribute: selectedFilter
+        });
+    }, [movies, table.order, table.orderBy, filterName, selectedFilter])
+
+    useEffect(() => {
+        setDataFiltered(filteredData);
+    }, [filteredData]);
+
     const notFound = !dataFiltered.length && filterName;
 
     return (
         <DashboardContent>
-            <Box display="flex" alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display="flex"
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+                mb={5}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý phim
                 </Typography>
-                <Box flexGrow={1} />
                 <Button
                     variant="contained"
                     color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    component={Link}
+                    to="/admin/movie/create"
                 >
                     Thêm phim
                 </Button>
@@ -47,10 +132,10 @@ export function MovieView() {
                 <MovieTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
-                    onFilterName={(event) => {
-                        setFilterName(event.target.value);
-                        table.onResetPage();
-                    }}
+                    selectedFilter={selectedFilter}
+                    onFilterName={handleFilterName}
+                    onFilterChange={handleFilterChange}
+                    onDeleteSelected={handleDeleteSelected}
                 />
 
                 <Scrollbar>
@@ -59,38 +144,52 @@ export function MovieView() {
                             <MovieTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={_movies.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
-                                onSelectAllRows={(checked) =>
-                                    table.onSelectAllRows(checked, _movies.map((movie) => movie.id))
-                                }
+                                onSelectAllRows={(checked) => {
+                                    table.onSelectAllRows(checked, dataFiltered.map((movie) => movie.film_id))
+                                }}
                                 headLabel={[
-                                    { id: 'name', label: 'Tên phim' },
-                                    { id: 'description', label: 'Mô tả' },
-                                    { id: 'film_type', label: 'Thể loại chính' },
+                                    { id: 'film_name', label: 'Tên phim' },
+                                    { id: 'film_describe', label: 'Mô tả' },
+                                    { id: 'film_type', label: 'Trạng thái' },
                                     { id: 'age_limit', label: 'Giới hạn độ tuổi' },
-                                    { id: 'duration', label: 'Thời lượng (phút)' },
-                                    { id: 'release_date', label: 'Ngày phát hành' },
+                                    { id: 'duration', label: 'Thời lượng' },
+                                    { id: 'Release_date', label: 'Ngày phát hành' },
                                     { id: '' }
                                 ]}
                             />
                             <TableBody>
-                                {dataFiltered.slice(
-                                    table.page * table.rowsPerPage,
-                                    table.page * table.rowsPerPage + table.rowsPerPage
-                                ).map((row) => (
-                                    <MovieTableRow
-                                        key={row.id}
-                                        row={row}
-                                        selected={table.selected.includes(row.id)}
-                                        onSelectRow={() => table.onSelectRow(row.id)}
-                                    />
-                                ))}
+                                {loading && (
+                                    <TableRow>
+                                        <TableCell colSpan={7}>
+                                            <Box display="flex" justifyContent="center" alignItems="center" height="150px">
+                                                <CircularProgress />
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
+                                {!loading &&
+                                    dataFiltered.slice(
+                                        table.page * table.rowsPerPage,
+                                        table.page * table.rowsPerPage + table.rowsPerPage
+                                    ).map((row) => (
+                                        <MovieTableRow
+                                            key={row.film_id}
+                                            row={row}
+                                            selected={table.selected.includes(row.film_id)}
+                                            onSelectRow={() => table.onSelectRow(row.film_id)}
+                                            onDelete={(id) => {
+                                                setMovies((prevMovies) => prevMovies.filter((movie) => movie.movie_id !== id));
+                                                table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
+                                            }}
+                                        />
+                                    ))}
 
                                 {/* <TableEmptyRows
                                     height={68}
-                                    emptyRows={emptyRows(table.page, table.rowsPerPage, _movies.length)}
+                                    emptyRows={emptyRows(table.page, table.rowsPerPage, movies.length)}
                                 /> */}
 
                                 {notFound && <TableNoData searchQuery={filterName} />}
@@ -99,16 +198,18 @@ export function MovieView() {
                     </TableContainer>
                 </Scrollbar>
 
-                <TablePagination
-                    component="div"
-                    page={table.page}
-                    count={_movies.length}
-                    rowsPerPage={table.rowsPerPage}
-                    onPageChange={table.onChangePage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    onRowsPerPageChange={table.onChangeRowsPerPage}
-                    labelRowsPerPage="Số dòng mỗi trang:"
-                />
+                {dataFiltered.length > 0 && (
+                    <TablePagination
+                        component="div"
+                        page={table.page}
+                        count={dataFiltered.length}
+                        rowsPerPage={table.rowsPerPage}
+                        onPageChange={table.onChangePage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        onRowsPerPageChange={table.onChangeRowsPerPage}
+                        labelRowsPerPage="Số dòng mỗi trang:"
+                    />
+                )}
             </Card>
         </DashboardContent>
     );

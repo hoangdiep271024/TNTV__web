@@ -10,7 +10,7 @@ group by region_name, regions.region_id`;
                 resolve(results);
             });
         });
-        res.json(results)
+        return res.json(results)
 }
 
 export const rap = async(req,res)=>{
@@ -39,7 +39,7 @@ export const rap = async(req,res)=>{
             clusters[cluster_name].push({cinema_name,cinema_id});
         });
 
-        res.json(clusters);
+        return res.json(clusters);
     });
 }
 

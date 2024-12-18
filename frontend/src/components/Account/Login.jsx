@@ -43,8 +43,8 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
  
 
     try {
-      const response = await fetch('/api/login', {
-        method: 'POST',
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/login`, {
+        method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
         },
@@ -55,9 +55,11 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
         const data = await response.json();
         if (data.success) {
           setOkMessage(`Đăng nhập thành công: ${data.message}`)
+          localStorage.setItem('jwt', data.jwt)
           setTimeout(() => {
             window.location.reload();
           }, 1500);
+          
           
         } else {
           const error__alert =`Đăng nhập thất bại: ${data.message}`;

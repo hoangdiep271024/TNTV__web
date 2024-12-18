@@ -7,7 +7,8 @@ const Evaluate = (props) => {
     const [dataRate, setDataRate] = useState({
         film_id: localStorage.getItem('film_id'),
         comments: '',
-        star: ''
+        star: '',
+        jwt: localStorage.getItem('jwt')
     });
     const [message, setMessage] = useState(null);
     const [ErorrMessage, setErorrMessage] = useState(null);
@@ -46,7 +47,7 @@ const Evaluate = (props) => {
         } else if((dataRate.star && !dataRate.comments.trim()) || (dataRate.star && dataRate.comments.trim())) {
             e.preventDefault();
             try {
-                const response = await fetch('/api/film/filmInfo/postComment', {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/film/filmInfo/postComment`, {
                   method: 'POST',
                   headers: {
                     'Content-Type': 'application/json',

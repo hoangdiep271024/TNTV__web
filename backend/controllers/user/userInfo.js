@@ -4,7 +4,7 @@ import connection from '../../models/SQLConnection.js';
 dotenv.config();
 export const userInfo = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
 
         if (!token) {
             return res.json({
@@ -14,7 +14,7 @@ export const userInfo = async (req, res) => {
         }
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -33,7 +33,7 @@ export const userInfo = async (req, res) => {
             });
         }
 
-        res.json({
+        return res.json({
             userInfo: userInfo,
             success: true
         })
@@ -45,7 +45,7 @@ export const userInfo = async (req, res) => {
 
 export const userInfoUpdate = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
         if (!token) {
             return res.json({
                 message: "Người dùng chưa đăng nhập",
@@ -56,7 +56,7 @@ export const userInfoUpdate = async (req, res) => {
         const decoded = verifyToken(token);
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -80,7 +80,7 @@ export const userInfoUpdate = async (req, res) => {
 
 export const userFilmLiked = async (req, res) => {
     try {
-        const token = req.cookies.jwt;
+        const token = req.body.jwt;
         if (!token) {
             return res.json({
                 message: "Người dùng chưa đăng nhập",
@@ -91,7 +91,7 @@ export const userFilmLiked = async (req, res) => {
         const decoded = verifyToken(token);
 
         if (isTokenExpired(token)) {
-            res.json({
+            return res.json({
                 message: "Người dùng hết phiên đăng nhập",
                 success: false
             })
@@ -118,7 +118,7 @@ export const userFilmLiked = async (req, res) => {
                 return res.status(500).json({ error: 'Database query failed' });
             }
     
-            res.json(results);
+            return res.json(results);
         });
 
     } catch (error) {

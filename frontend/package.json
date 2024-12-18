@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build --mode development",
     "lint": "eslint .",
     "preview": "vite preview",
     "test": "vitest"
@@ -17,11 +17,12 @@
     "@fontsource-variable/dm-sans": "^5.1.0",
     "@fontsource-variable/open-sans": "^5.1.0",
     "@fontsource/barlow": "^5.1.0",
+    "@fontsource/roboto": "^5.1.0",
     "@iconify/react": "^5.0.2",
     "@mui/icons-material": "5.13.7",
     "@mui/material": "5.15.14",
     "axios": "^1.7.7",
-    "dompurify": "^3.2.1",
+    "dompurify": "^3.2.2",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-helmet-async": "^2.0.5",
@@ -46,5 +47,5 @@
     "vite": "^5.4.8",
     "vitest": "^2.1.5"
   },
-  "packageManager": "yarn@4.5.1"
+  "packageManager": "yarn@4.5.3"
 }

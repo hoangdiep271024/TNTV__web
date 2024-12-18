@@ -11,6 +11,7 @@ import { Link } from 'react-router-dom';
 import Trailer from './Trailer';
 import Evaluate from './Evaluate';
 import Alert from '@mui/material/Alert';
+import { useNavigate } from 'react-router-dom';
 function createSlug(name) {
   
   return name
@@ -21,6 +22,7 @@ function createSlug(name) {
 }
 
 export default function FilmInfo(props) {
+  const navigate = useNavigate()
   const [isClickTrailer, setIsClickTrailer] = useState(false)
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
@@ -35,13 +37,18 @@ export default function FilmInfo(props) {
   else {document.body.style.overflow = 'auto'}
    
   const [liked, setLiked] = useState(null)
+  const filmBuy = (film_name) =>{
+    navigate(`/mua_ve/${film_name}`)
+    window.location.reload()
+  }
   const likeCheckFetch = async () => {
     try {
-      const response = await fetch(`/api/like/likeCheck/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/likeCheck/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
        
       });
   
@@ -62,11 +69,12 @@ export default function FilmInfo(props) {
 
   const unLike = async () => {
     try {
-      const response = await fetch(`/api/like/unlike/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/unlike/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
       });
   
       if (!response.ok) {
@@ -83,11 +91,12 @@ export default function FilmInfo(props) {
 
   const Like = async () => {
     try {
-      const response = await fetch(`/api/like/film_id=${props.film_id}`, {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/like/film_id=${props.film_id}`, {
         method: 'POST', 
         headers: {
           'Content-Type': 'application/json',
-        }
+        },
+        body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
       });
   
       if (!response.ok) {
@@ -166,7 +175,7 @@ const ClickType =(category_id) => {
         </button>}
       <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={EvaluateClick}>Đánh giá</button>
       <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={trailerClick}>Trailer</button>
-      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}}>Mua vé</button>
+      <button style={{width:'120px', height:'30px', backgroundColor: 'white', color: 'black', cursor: 'pointer', display: 'flex', justifyContent: 'center', alignItems:'center', gap: 1.4, fontSize: '14px'}} onClick={() => filmBuy(props.name)}>Mua vé</button>
      </div>
      <Typography style={{ marginTop: '7px', fontSize: '14px'}} >{props.descript}</Typography>
      <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '7px'}}>

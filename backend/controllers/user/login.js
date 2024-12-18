@@ -2,7 +2,7 @@ import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import { createJWT } from "../../middlewares/JWT.js";
 import connection from "../../models/SQLConnection.js";
-import { signInValidator } from "../../validation/user.js";
+import signInValidator from "../../validation/signIn.js";
 
 dotenv.config();
 const SECRET_CODE = process.env.SECRET_CODE;
@@ -49,18 +49,24 @@ const login = async (req, res) => {
         const token = createJWT(payload);
 
         // Bước 5: Đặt cookie JWT và phản hồi thành công
-        res.cookie("jwt", token, { maxAge: 1000 * 60 * 30 });
+        // res.cookie("jwt", token, {
+        //     httpOnly: true,        // Cookie chỉ truy cập qua HTTP, không qua JavaScript
+        //     secure: true,          // Bật chế độ bảo mật (chỉ hoạt động với HTTPS)
+        //     sameSite: "none",      // Đảm bảo cookies được gửi qua domain khác nhau
+        //     maxAge: 1000 * 60 * 30 });
         //.cookie("name", user.full_name, { maxAge: 1000 * 60 * 30 }).cookie("birthday", user.date_of_birth, { maxAge: 1000 * 60 * 30 }).cookie("phoneNumber", user.phone_number, { maxAge: 1000 * 60 * 30 }).cookie("address", user.address, { maxAge: 1000 * 60 * 30 });
 
         if (user.role === 0) {
             return res.json({
                 message: "user",
-                success: true
+                success: true,
+                jwt: token
             });
         } else {
             return res.json({
                 message: "admin",
-                success: true
+                success: true,
+                jwt: token
             });
         }
         

@@ -1,15 +1,33 @@
-import { Checkbox, Chip, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
+import { Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Tooltip, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
-
 import { Iconify } from '../../components/iconify'
+import { Link, useNavigate } from "react-router-dom";
 
-// edit button handle
-// delete button handle
-// click name to open movie details
+const deleteMovie = async (id) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // credentials: 'include',
 
-export function MovieTableRow({ row, selected, onSelectRow }) {
+        });
+
+        if (!response.ok) {
+            throw new Error('Failed to delete movie');
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting movie:", error);
+        return false;
+    }
+}
+
+export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
-    const [isDescriptionExpanded, setDescriptionExpanded] = useState(false);
+    const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -19,16 +37,26 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
         setOpenPopover(null);
     }, []);
 
-    const toggleDescription = () => {
-        setDescriptionExpanded((prev) => !prev);
-    };
+    const navigate = useNavigate();
+    const handleEditButton = () => {
+        navigate(`/admin/movie/${row.film_id}`);
+    }
 
-    const truncateText = (text, length) => {
-        if (text.length > length) {
-            return `${text.substring(0, length)}...`;
+    const handleDeleteButton = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    }
+
+    const handleConfirmDelete = async () => {
+        const success = await deleteMovie(row.film_id);
+        if (success) {
+            onDelete(row.film_id);
         }
-        return text;
-    };
+        setOpenDialog(false);
+    }
 
     return (
         <>
@@ -38,46 +66,24 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                        {row.name}
-                    </Typography>
+                    <Link
+                        to={`/admin/movie/${row.film_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.film_name}
+                        </Typography>
+                    </Link>
+
                 </TableCell>
 
-                <TableCell>
-                    <Tooltip title={row.description} placement="top" arrow>
-                        <Typography
-                            sx={{
-                                cursor: 'pointer',
-                                textDecoration: 'underline',
-                                color: isDescriptionExpanded ? 'primary.main' : 'text.secondary',
-                                display: 'inline-block',
-                                maxWidth: isDescriptionExpanded ? 'none' : 200,
-                                whiteSpace: isDescriptionExpanded ? 'normal' : 'nowrap',
-                                overflow: 'hidden',
-                                textOverflow: 'ellipsis',
-                            }}
-                            onClick={toggleDescription}
-                        >
-                            {isDescriptionExpanded
-                                ? row.description
-                                : truncateText(row.description, 20)}
-                        </Typography>
-                    </Tooltip>
-                    {/* <Typography
-                        sx={{
-                            cursor: 'pointer',
-                            textDecoration: 'underline',
-                        }}
-                        onClick={toggleDescription}
-                    >
-                        {isDescriptionExpanded ? row.description : truncateText(row.description, 20)}
-                    </Typography> */}
-                </TableCell>
+                <MovieDescriptionCell row={row} />
 
                 <TableCell>
                     <Chip
-                        label={row.film_type}
-                        color={row.film_type === 'Feature' ? 'primary' : 'secondary'}
+                        variant="body2"
+                        label={row.film_type === 1 ? 'Đang chiếu' : 'Sắp chiếu'}
+                        color={row.film_type === 1 ? 'primary' : 'secondary'}
                         size="small"
                         sx={{ fontWeight: 'bold' }}
                     />
@@ -97,19 +103,19 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                        {row.duration} phút
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                        {row.duration} (phút)
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
-                        {new Date(row.release_date).toLocaleDateString()}
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
+                        {new Date(row.Release_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
 
                 <TableCell align="right">
-                    <IconButton onClick={handleOpenPopover} size="small">
+                    <IconButton onClick={handleOpenPopover}>
                         <Iconify icon="eva:more-vertical-fill" />
                     </IconButton>
                 </TableCell>
@@ -137,17 +143,76 @@ export function MovieTableRow({ row, selected, onSelectRow }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'primary.main' }}>
+                        <MenuItem onClick={handleEditButton} sx={{ color: 'primary.main' }}>
                             <Iconify icon="solar:pen-bold" />
                             Chỉnh sửa
                         </MenuItem>
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+                        <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>
                             <Iconify icon="solar:trash-bin-trash-bold" />
                             Xóa
                         </MenuItem>
                     </MenuList>
                 </Popover>
             </TableRow>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn có chắc chắn muốn xóa phim <strong>{row.film_name}</strong> không?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error">
+                        Xóa
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }
+
+export function MovieDescriptionCell({ row }) {
+    const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+    const openDialog = () => setIsDialogOpen(true);
+    const closeDialog = () => setIsDialogOpen(false);
+
+    return (
+        <TableCell>
+            <Tooltip title={row.film_describe} placement="top" arrow>
+                <Typography
+                    variant="body2"
+                    sx={{
+                        cursor: 'pointer',
+                        color: 'primary.main',
+                        display: 'inline-block',
+                        maxWidth: 200,
+                        whiteSpace: 'nowrap',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                    }}
+                    onClick={openDialog}
+                >
+                    {row.film_describe}
+                </Typography>
+            </Tooltip>
+
+            <Dialog open={isDialogOpen} onClose={closeDialog} maxWidth="sm" fullWidth>
+                <DialogTitle>Mô tả chi tiết</DialogTitle>
+                <DialogContent>
+                    <Typography variant="body1">{row.film_describe}</Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={closeDialog} color="primary">
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
+        </TableCell>
+    );
+}
+

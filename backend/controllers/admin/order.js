@@ -9,13 +9,13 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
-    if(req.query.limitItems) {
+    let limitItems = 100;
+    if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
 
     let page = 1;
-    if(req.query.page) {
+    if (req.query.page) {
         page = parseInt(`${req.query.page}`);
     }
 
@@ -29,7 +29,7 @@ export const index = async (req, res) => {
 
     // Hết Sắp xếp theo tiêu chí
 
-    const queryOrder = 
+    const queryOrder =
         `SELECT o.*, u.username, f.film_name, c.cinema_name, r.room_name, s.show_date
         FROM orders o
         JOIN showtimes s ON o.showtime_id = s.showtime_id
@@ -48,7 +48,7 @@ export const index = async (req, res) => {
             resolve(results);
         });
     });
-  
+
     res.json(orders);
 };
 
@@ -60,7 +60,7 @@ export const detail = async (req, res) => {
         const orderInfo = {};
 
         // Truy vấn Ticket, seats, rooms, cinemas
-        const queryTicket_Seat_Room = 
+        const queryTicket_Seat_Room =
             `SELECT c.cinema_name, r.room_name, s.seat_row, s.seat_number, t.ticket_price
             FROM tickets t
             JOIN seats s ON t.seat_id = s.seat_id
@@ -74,9 +74,9 @@ export const detail = async (req, res) => {
                 resolve(results);
             });
         });
-    
+
         // Truy vấn popcorn
-        const queryPopcorn = 
+        const queryPopcorn =
             `SELECT pc.combo_name, pc.combo_price, po.combo_quantity
             FROM popcorn_combos pc
             JOIN popcorn_orders po ON pc.combo_id = po.combo_id
@@ -89,7 +89,7 @@ export const detail = async (req, res) => {
         });
 
         // Truy vấn thông tin order: người đặt?, phim?, thời gian chiếu?
-        const queryOrder = 
+        const queryOrder =
             `SELECT o.*, u.username, f.film_name, s.show_date
             FROM orders o
             JOIN showtimes s ON o.showtime_id = s.showtime_id
@@ -102,7 +102,7 @@ export const detail = async (req, res) => {
                 resolve(results);
             });
         });
-        
+
         res.json(orderInfo);
     } catch (error) {
         console.log(error);
@@ -111,87 +111,6 @@ export const detail = async (req, res) => {
         });
     }
 }
-
-// [POST] /admin/orders/create
-// export const create = async (req, res) => {
-//     const { room_name, cinema_name } =  req.body;
-
-//     const countResult = await connection.promise().query(
-//         `SELECT COUNT(*) as count FROM rooms`,
-//     );
-//     const totalRooms = countResult[0][0].count;
-//     const roomId =  totalRooms + 1;
-
-//     // Truy vấn cinema_id từ cinema_name
-//     const  queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
-//     const cinemaInfo = await new Promise((resolve, reject) => {
-//         connection.query(queryCinema, [cinema_name], (err, results) => {
-//             if (err) return reject(err);
-//             resolve(results);
-//         });
-//     });
-//     const cinemaId = cinemaInfo[0].cinema_id;
-
-//     // Lưu data vào bảng rooms
-//     const queryInsertRoom = `INSERT INTO rooms 
-//                             VALUES (?, ?, ?)`;
-//     const room = await new Promise((resolve, reject) => {
-//         connection.query(queryInsertRoom, [roomId, room_name, cinemaId], (err, results) => {
-//             if (err) return reject(err);
-//             resolve(results);
-//         });
-//     });
-
-//     // Kiểm tra xem bản ghi có được tạo thành công không
-//     if (room) {
-//         res.status(201).json({
-//             message: "Room created successfully",
-//             roomId: room[0], // ID của bản ghi mới được tạo
-//         });
-//     } else {
-//         res.status(500).json({
-//             message: "Error creating room",
-//         });
-//     }
-// }
-
-// [PATCH] /admin/orders/edit/:orderId
-// export const edit = async (req, res) => {
-//     try {
-//         const orderId = parseInt(req.params.orderId);
-  
-//         const { room_name, cinema_name } =  req.body;
-
-//         // Truy vấn cinema_id từ cinema_name
-//         const  queryCinema = `Select cinema_id from cinemas where cinema_name = ?`
-//         const cinemaInfo = await new Promise((resolve, reject) => {
-//             connection.query(queryCinema, [cinema_name], (err, results) => {
-//                 if (err) return reject(err);
-//                 resolve(results);
-//             });
-//         });
-//         const cinemaId = cinemaInfo[0].cinema_id;
-
-//         const queryUpdateRoom = `UPDATE rooms
-//                                 SET room_name = ?, cinema_id = ?
-//                                 WHERE room_id = ?`;
-//         await new Promise((resolve, reject) => {
-//             connection.query(queryUpdateRoom, [room_name, cinemaId, roomId], (err, results) => {
-//                 if (err) return reject(err);
-//                 resolve(results);
-//             });
-//         });
-//         res.status(200).json({
-//             message: "Room updated successfully",
-//         });
-//     } catch (error) {
-//         console.log(error);
-//         res.status(500).json({
-//             message: "Not Found",
-//             error: error.message
-//         });
-//     }
-// }
 
 // [DELETE] /admin/orders/delete/:orderId
 export const deleteItem = async (req, res) => {

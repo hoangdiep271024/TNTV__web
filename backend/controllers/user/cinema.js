@@ -1,7 +1,7 @@
-import dotenv from "dotenv";
-import connection from "../../models/SQLConnection.js";
 import { format } from 'date-fns';
 import { vi } from 'date-fns/locale';
+import dotenv from "dotenv";
+import connection from "../../models/SQLConnection.js";
 
 dotenv.config();
 export const cinema = async(req,res)=>{
@@ -19,7 +19,7 @@ export const cinema = async(req,res)=>{
             res.status(500).json({ error: 'Lỗi server' });
             return;
         }
-        res.json(results); // Trả về kết quả dưới dạng JSON
+        return res.json(results); // Trả về kết quả dưới dạng JSON
     });
 }
 
@@ -112,7 +112,7 @@ export const cinemaID = async (req, res) => {
             });
         });
 
-        res.json(time);
+        return res.json(time);
     });
 };
 

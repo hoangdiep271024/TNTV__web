@@ -1,40 +1,128 @@
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { hook } from "../hook";
 import { applyFilter, getComparator } from "../../utils";
-import { _showtimes } from "../../../_mock";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Box, Button, Card, Table, TableContainer, TablePagination, Typography, TableBody } from "@mui/material";
+import { Box, Button, Card, Table, TableRow, TableCell, CircularProgress, TableContainer, TablePagination, Typography, TableBody, Icon } from "@mui/material";
 import { ShowtimeTableToolbar } from "../showtime-table-toolbar";
 import { Scrollbar } from "../../../components/scrollbar";
 import { ShowtimeTableHead } from "../showtime-table-head";
 import { ShowtimeTableRow } from "../showtime-table-row";
 import { Iconify } from "../../../components/iconify";
+import { TableNoData } from "../../table-no-data";
+import { Link } from "react-router-dom";
 
-// add-showtime button to move to create-showtime page
-// click showtime-id to open edit-showtime page
 export function ShowtimeView() {
     const table = hook();
     const [filterName, setFilterName] = useState('');
+    const [showtimes, setShowtimes] = useState([]);
+    const [loading, setLoading] = useState(false);
+    const [selectedFilter, setSelectedFilter] = useState('film_name');
+    const [dataFiltered, setDataFiltered] = useState([]);
 
-    const dataFiltered = applyFilter({
-        inputData: _showtimes,
-        comparator: getComparator(table.order, table.orderBy),
-        filterName
-    })
+    const handleFilterName = (event) => {
+        setFilterName(event.target.value);
+        table.onResetPage();
+    }
+
+    const handleFilterChange = (newFilter) => {
+        setSelectedFilter(newFilter);
+    };
+
+    const handleDeleteSelected = async () => {
+        if (table.selected.length === 0) return;
+
+        try {
+            for (const showtimeId of table.selected) {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${showtimeId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Failed to delete showtime with ID: ${showtimeId}`);
+                }
+            }
+
+            setShowtimes((prevShowtimes) => prevShowtimes.filter((showtime) => !table.selected.includes(showtime.showtime_id)));
+            table.setSelected([]);
+            console.log('Selected showtimes deleted successfully.');
+        } catch (error) {
+            console.error('Error deleting selected showtimes:', error);
+        }
+    };
+
+    useEffect(() => {
+        const fetchShowtimes = async () => {
+            setLoading(true);
+            try {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    // credentials: 'include',
+                });
+
+                if (!response.ok) throw new Error("Failed to fetch showtimes");
+
+                const data = await response.json();
+                // console.log(data);
+                setShowtimes(data);
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        }
+
+        fetchShowtimes();
+    }, []);
+
+
+    const filteredData = useMemo(() => {
+        return applyFilter({
+            inputData: showtimes,
+            comparator: getComparator(table.order, table.orderBy),
+            filterName,
+            attribute: selectedFilter
+        });
+    }, [showtimes, table.order, table.orderBy, filterName, selectedFilter])
+
+    useEffect(() => {
+        setDataFiltered(filteredData);
+    }, [filteredData]);
 
     const notFound = !dataFiltered.length && filterName;
 
     return (
         <DashboardContent>
-            <Box display='flex' alignItems="center" mb={5}>
-                <Typography variant="h2">
+            <Box
+                display='flex'
+                mb={5}
+                sx={{
+                    width: "100%",
+                    flexDirection: { xs: 'column', sm: 'row' },
+                    alignItems: { xs: 'flex-start', sm: 'center' },
+                }}
+            >
+                <Typography
+                    variant="h2"
+                    sx={{
+                        flexGrow: 1,
+                        marginBottom: { xs: 1 },
+                    }}
+                >
                     Quản lý suất chiếu phim
                 </Typography>
-                <Box flexGrow={1} />
                 <Button
                     variant="contained"
                     color="success"
                     startIcon={<Iconify icon="mingcute:add-line" />}
+                    component={Link}
+                    to="/admin/showtime/create"
                 >
                     Thêm suất chiếu
                 </Button>
@@ -44,10 +132,10 @@ export function ShowtimeView() {
                 <ShowtimeTableToolbar
                     numSelected={table.selected.length}
                     filterName={filterName}
-                    onFilterName={(event) => {
-                        setFilterName(event.target.value);
-                        table.onResetPage();
-                    }}
+                    selectedFilter={selectedFilter}
+                    onFilterName={handleFilterName}
+                    onFilterChange={handleFilterChange}
+                    onDeleteSelected={handleDeleteSelected}
                 />
 
                 <Scrollbar>
@@ -56,33 +144,46 @@ export function ShowtimeView() {
                             <ShowtimeTableHead
                                 order={table.order}
                                 orderBy={table.orderBy}
-                                rowCount={_showtimes.length}
+                                rowCount={dataFiltered.length}
                                 numSelected={table.selected.length}
                                 onSort={table.onSort}
                                 onSelectAllRows={(checked) => {
-                                    table.onSelectAllRows(checked, _showtimes.map((showtime) => showtime.id))
+                                    table.onSelectAllRows(checked, dataFiltered.map((showtime) => showtime.showtime_id))
                                 }}
                                 headLabel={[
-                                    { id: 'id', label: 'ID suất chiếu' },
-                                    { id: 'movie_name', label: 'Tên phim' },
+                                    { id: 'showtime_id', label: 'ID suất chiếu' },
+                                    { id: 'film_name', label: 'Tên phim' },
                                     { id: 'cinema_name', label: 'Tên rạp chiếu' },
                                     { id: 'room_name', label: 'Tên phòng chiếu' },
-                                    { id: 'date', label: 'Ngày chiếu' },
-                                    { id: 'showtime', label: 'Giờ chiếu' },
+                                    { id: 'show_time', label: 'Giờ chiếu' },
+                                    { id: 'show_date', label: 'Ngày chiếu' },
                                     { id: '' }
                                 ]}
                             />
 
                             <TableBody>
+                                {loading && (
+                                    <TableRow>
+                                        <TableCell colSpan={7}>
+                                            <Box display="flex" justifyContent="center" alignItems="center" height="150px">
+                                                <CircularProgress />
+                                            </Box>
+                                        </TableCell>
+                                    </TableRow>
+                                )}
                                 {dataFiltered.slice(
                                     table.page * table.rowsPerPage,
                                     table.page * table.rowsPerPage + table.rowsPerPage
                                 ).map((row) => (
                                     <ShowtimeTableRow
-                                        key={row.id}
+                                        key={row.showtime_id}
                                         row={row}
-                                        selected={table.selected.includes(row.id)}
-                                        onSelectRow={() => table.onSelectRow(row.id)}
+                                        selected={table.selected.includes(row.showtime_id)}
+                                        onSelectRow={() => table.onSelectRow(row.showtime_id)}
+                                        onDelete={(id) => {
+                                            setShowtimes((prevShowtimes) => prevShowtimes.filter((showtime) => showtime.showtime_id !== id));
+                                            table.setSelected((prevSelected) => prevSelected.filter((selectedId) => selectedId !== id));
+                                        }}
                                     />
                                 ))}
 
@@ -92,17 +193,20 @@ export function ShowtimeView() {
                     </TableContainer>
                 </Scrollbar>
 
-                <TablePagination
-                    component="div"
-                    page={table.page}
-                    count={_showtimes.length}
-                    rowsPerPage={table.rowsPerPage}
-                    onPageChange={table.onChangePage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    onRowsPerPageChange={table.onChangeRowsPerPage}
-                    labelRowsPerPage="Số dòng mỗi trang:"
-                />
+                {dataFiltered.length > 0 && (
+                    <TablePagination
+                        component="div"
+                        page={table.page}
+                        count={dataFiltered.length}
+                        rowsPerPage={table.rowsPerPage}
+                        onPageChange={table.onChangePage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        onRowsPerPageChange={table.onChangeRowsPerPage}
+                        labelRowsPerPage="Số dòng mỗi trang:"
+                    />
+                )}
             </Card>
+
         </DashboardContent>
     )
 }

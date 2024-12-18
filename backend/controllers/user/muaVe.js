@@ -52,7 +52,7 @@ export const showSeat = async (req, res) => {
             }))
         };
 
-        res.json(postOut);
+        return res.json(postOut);
     } catch (error) {
         console.error("Error fetching seat data:", error);
         res.status(500).json({ error: "Failed to retrieve seat information" });
@@ -63,5 +63,5 @@ export const popcornInfo = async (req, res) => {
     const result = await connection.promise().query(`
         SELECT * from popcorn_combos
     `,);
-    res.json(result[0]);
+    return res.json(result[0]);
 }

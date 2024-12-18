@@ -58,7 +58,6 @@ export const forgotPassword = async (req, res) => {
                         message: error.message,
                         success: false
                     });
-                    req.session.userEmail = userEmail;
                     return res.json({
                         message: 'Mã xác thực đã được gửi đến email của bạn!',
                         success: true
@@ -67,14 +66,14 @@ export const forgotPassword = async (req, res) => {
             });
         });
     } catch (error) {
-        res.json({ message: error.message, success: false });
+        return res.json({ message: error.message, success: false });
     }
 
 }
 
 export const forgotPasswordCheck = async (req, res) => {
     try {
-        const userEmail = req.session.userEmail;  // Lấy email từ session
+        const userEmail = req.body.gmail;  // Lấy email từ session
         const query = `SELECT reset_token, reset_token_expire FROM users WHERE email = ?`;
         connection.query(query, [userEmail], async (err, results) => {
             if (err) {
@@ -125,12 +124,12 @@ export const forgotPasswordChangePassword = async (req, res) => {
         const newPassword = req.body.password;
         const reNewPassword = req.body.rePassword;
         if(newPassword != reNewPassword){
-            res.json({
+            return res.json({
                 message: "nhập lại mật khẩu sai",
                 success: false
             })
         }
-        const userEmail = req.session.userEmail;  // Lấy email từ session
+        const userEmail = req.body.gmail;  // Lấy email từ session
         const hashedPassword = await bcryptjs.hash(newPassword, 11);
         const query = "UPDATE users SET password = ? where email = ?";
         connection.query(query, [hashedPassword, userEmail],(err, results) => {
@@ -138,13 +137,13 @@ export const forgotPasswordChangePassword = async (req, res) => {
                 message: err.message,
                 success: false
             });
-            res.json({
+            return res.json({
                 message: "Đổi mật khẩu thành công",
                 success: true
             })
         })
     } catch (error) {
-        res.json({ message: error.message, success: false });
+        return res.json({ message: error.message, success: false });
     }
 
 }

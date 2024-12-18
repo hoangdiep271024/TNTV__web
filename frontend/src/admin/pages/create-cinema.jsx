@@ -9,7 +9,7 @@ export default function CreateCinemaPage() {
                 <title> {`Tạo rạp chiếu phim | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
 
-            <CreateCinemaPage />
+            <CreateCinemaView />
         </>
     );
 }

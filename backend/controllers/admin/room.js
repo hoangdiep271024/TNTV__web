@@ -19,7 +19,7 @@ export const index = async (req, res) => {
     // Hết Tìm kiếm
 
     // Phân trang
-    let limitItems = 5;
+    let limitItems = 1700;
     if (req.query.limitItems) {
         limitItems = parseInt(`${req.query.limitItems}`);
     }
@@ -86,6 +86,18 @@ export const detail = async (req, res) => {
                 });
             });
 
+            const querySeat = `Select s.seat_id, s.seat_row, s.seat_number, s.seat_type, ss.seat_status
+                            from seats as s
+                            inner join seat_status as ss on s.seat_id = ss.seat_id
+                            inner join rooms as r on s.room_id = r.room_id
+                            where r.room_id = ?`;
+            roomInfo.seat = await new Promise((resolve, reject) => {
+                connection.query(querySeat, [roomId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
             res.json(roomInfo);
         }
         else {
@@ -103,8 +115,25 @@ export const detail = async (req, res) => {
     }
 }
 
-// [POST] /admin/rooms/create
+// [GET] /admin/rooms/create
 export const create = async (req, res) => {
+    try {
+        const [cinemas] = await connection.promise().query(`SELECT cinema_id, cinema_name FROM cinemas`);
+
+        res.json({
+            cinemasToChoose: cinemas
+        })
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({
+            message: "Error creating room",
+            error: error
+        });
+    }
+}
+
+// [POST] /admin/rooms/create
+export const createPost = async (req, res) => {
     const { room_name, cinema_name } = req.body;
 
     const countResult = await connection.promise().query(
@@ -235,16 +264,37 @@ export const editPatch = async (req, res) => {
     }
 }
 
-// [PATCH] /admin/rooms/delete/:roomId
+// [DELETE] /admin/rooms/delete/:roomId
 export const deleteItem = async (req, res) => {
     try {
         const roomId = req.params.roomId;
 
-        const queryDeleteRoom = `DELETE FROM rooms WHERE room_id = ?`;
+        // Start a transaction to ensure all deletions are handled together
         await new Promise((resolve, reject) => {
-            connection.query(queryDeleteRoom, [roomId], (err, results) => {
+            connection.beginTransaction((err) => {
                 if (err) return reject(err);
-                resolve(results);
+
+                const queryDeleteSeatStatus = `DELETE FROM seat_status WHERE seat_id IN (SELECT seat_id FROM seats WHERE room_id = ?)`;
+                connection.query(queryDeleteSeatStatus, [roomId], (err, results) => {
+                    if (err) return connection.rollback(() => reject(err));
+
+                    const queryDeleteSeats = `DELETE FROM seats WHERE room_id = ?`;
+                    connection.query(queryDeleteSeats, [roomId], (err, results) => {
+                        if (err) return connection.rollback(() => reject(err));
+
+                        const queryDeleteRoom = `DELETE FROM rooms WHERE room_id = ?`;
+                        connection.query(queryDeleteRoom, [roomId], (err, results) => {
+                            if (err) return connection.rollback(() => reject(err));
+
+                            // Commit transaction if everything is successful
+                            connection.commit((err) => {
+                                if (err) return connection.rollback(() => reject(err));
+
+                                resolve(results);
+                            });
+                        });
+                    });
+                });
             });
         });
 
@@ -258,4 +308,4 @@ export const deleteItem = async (req, res) => {
             error: error.message,
         });
     }
-}
+};

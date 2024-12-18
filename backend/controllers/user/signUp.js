@@ -1,7 +1,7 @@
 import bcryptjs from "bcryptjs";
 import dotenv from "dotenv";
 import connection from "../../models/SQLConnection.js";
-import { singUpValidator } from "../../validation/user.js";
+import singUpValidator from "../../validation/signUp.js";
 
 dotenv.config();
 const SECRET_CODE = process.env.SECRET_CODE;
@@ -58,7 +58,7 @@ const signUp = async (req, res) => {
         // Bước 5: thông báo đăng kí thành công
         // Xóa mật khẩu trước khi gửi phản hồi
         req.body.password = undefined;
-        res.json({
+        return res.json({
             message: "đăng kí thành công",
             success: true
         });

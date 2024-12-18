@@ -1,13 +1,33 @@
-import { Checkbox, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, Table, TableCell, TableRow, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Iconify } from '../../components/iconify'
+import { Link, useNavigate } from "react-router-dom";
 
-// edit button handler
-// delete button handler
-// click name to open showtime details
+const deleteShowtime = async (id) => {
+    try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/showtimes/delete/${id}`, {
+            method: 'DELETE',
+            headers: {
+                "Content-Type": "application/json",
+            },
+            // credentials: 'include',
+        });
 
-export function ShowtimeTableRow({ row, selected, onSelectRow }) {
+        if (!response.ok) {
+            throw new Error('Failed to delete showtime');
+        }
+
+        return true;
+    } catch (error) {
+        console.error("Error deleting showtime:", error);
+
+        return false;
+    }
+};
+
+export function ShowtimeTableRow({ row, selected, onSelectRow, onDelete }) {
     const [openPopover, setOpenPopover] = useState(null);
+    const [openDialog, setOpenDialog] = useState(false);
 
     const handleOpenPopover = useCallback((event) => {
         setOpenPopover(event.currentTarget);
@@ -17,6 +37,27 @@ export function ShowtimeTableRow({ row, selected, onSelectRow }) {
         setOpenPopover(null);
     }, []);
 
+    const navigate = useNavigate();
+    const handleEditButton = () => {
+        navigate(`/admin/showtime/${row.showtime_id}`);
+    }
+
+    const handleDeleteButton = () => {
+        setOpenDialog(true);
+    }
+
+    const handleCloseDialog = () => {
+        setOpenDialog(false);
+    }
+
+    const handleConfirmDelete = async () => {
+        const success = await deleteShowtime(row.showtime_id);
+        if (success) {
+            onDelete(row.showtime_id);
+        }
+        setOpenDialog(false);
+    }
+
     return (
         <>
             <TableRow hover tabIndex={-1} role="checkbox" selected={selected}>
@@ -25,40 +66,56 @@ export function ShowtimeTableRow({ row, selected, onSelectRow }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="subtitle1" fontWeight="bold" noWrap>
-                        {row.id}
-                    </Typography>
+                    <Link
+                        to={`/admin/showtime/${row.showtime_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.showtime_id}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.primary' }} noWrap>
-                        {row.movie_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/movie/${row.film_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight="bold" noWrap>
+                            {row.film_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.secondary' }} noWrap>
-                        {row.cinema_name}
-                    </Typography>
+                    <Link
+                        to={`/admin/cinema/${row.cinema_id}`}
+                        style={{ textDecoration: "none", color: "inherit" }}
+                    >
+                        <Typography variant="body2" fontWeight='medium' noWrap>
+                            {row.cinema_name}
+                        </Typography>
+                    </Link>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ fontWeight: 'medium', color: 'text.secondary' }} noWrap>
+                    <Typography variant="body2" fontWeight='medium' noWrap>
                         {row.room_name}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
-                        {new Date(row.date).toLocaleDateString()}
+                    <Typography variant="body2" textAlign='center' fontWeight='medium' >
+                        {row.show_time.split(':').slice(0, 2).join(':')}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
-                        {row.showtime}
+                    <Typography variant="body2" textAlign='center' fontWeight='medium' >
+                        {new Date(row.show_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
+
 
                 <TableCell align="right">
                     <IconButton onClick={handleOpenPopover} size="small">
@@ -89,17 +146,34 @@ export function ShowtimeTableRow({ row, selected, onSelectRow }) {
                             },
                         }}
                     >
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'primary.main' }}>
+                        <MenuItem onClick={handleEditButton} sx={{ color: 'primary.main' }}>
                             <Iconify icon="solar:pen-bold" />
                             Chỉnh sửa
                         </MenuItem>
-                        <MenuItem onClick={handleClosePopover} sx={{ color: 'error.main' }}>
+                        <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>
                             <Iconify icon="solar:trash-bin-trash-bold" />
                             Xóa
                         </MenuItem>
                     </MenuList>
                 </Popover>
             </TableRow>
+
+            <Dialog open={openDialog} onClose={handleCloseDialog}>
+                <DialogTitle>Xác nhận xóa</DialogTitle>
+                <DialogContent>
+                    <Typography>
+                        Bạn có chắc chắn muốn xóa suất chiếu <strong>{row.showtime_id}</strong> không?
+                    </Typography>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={handleCloseDialog} color="primary">
+                        Hủy
+                    </Button>
+                    <Button onClick={handleConfirmDelete} color="error">
+                        Xóa
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </>
     )
 }
