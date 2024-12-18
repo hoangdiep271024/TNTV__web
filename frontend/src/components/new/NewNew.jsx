@@ -75,7 +75,7 @@ export default function NewNew() {
       >
             <img src ={item.new_img} style={{width: '30%', height: '90%', objectFit: 'cover'}}></img>
             <div style={{height: '90%', width: '65%'}}>
-              <div>{item.new_header}</div>
+              <div style ={{ overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal',}}>{item.new_header}</div>
               <div style={{textAlign: 'end'}}>{exactlyDate}</div>
             </div>
         </Box>)
