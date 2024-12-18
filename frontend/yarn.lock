@@ -574,6 +574,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@fontsource/roboto@npm:^5.1.0":
+  version: 5.1.0
+  resolution: "@fontsource/roboto@npm:5.1.0"
+  checksum: 10c0/e424fec92e5cb89a466f271d4a1cd335b4fd8406411a7eaad5b79e9eb4cc61f6258000b1d24444cadbf1f8a06e9ddcdd30a2990b61874978e34fc357d003cba5
+  languageName: node
+  linkType: hard
+
 "@humanwhocodes/module-importer@npm:^1.0.1":
   version: 1.0.1
   resolution: "@humanwhocodes/module-importer@npm:1.0.1"
@@ -5438,6 +5445,7 @@ __metadata:
     "@fontsource-variable/dm-sans": "npm:^5.1.0"
     "@fontsource-variable/open-sans": "npm:^5.1.0"
     "@fontsource/barlow": "npm:^5.1.0"
+    "@fontsource/roboto": "npm:^5.1.0"
     "@iconify/react": "npm:^5.0.2"
     "@mui/icons-material": "npm:5.13.7"
     "@mui/material": "npm:5.15.14"

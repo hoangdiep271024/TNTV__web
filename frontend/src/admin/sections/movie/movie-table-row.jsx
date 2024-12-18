@@ -103,13 +103,13 @@ export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
                         {row.duration} (phút)
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ textAlign: 'center' }}>
+                    <Typography variant="body2" sx={{ textAlign: 'center', fontWeight: 'medium' }}>
                         {new Date(row.Release_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>

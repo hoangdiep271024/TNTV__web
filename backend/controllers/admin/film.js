@@ -158,6 +158,15 @@ export const createPost = async (req, res) => {
     try {
         let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } = req.body;
 
+        // Kiểm tra trùng lặp tên phim
+        const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
+
+        if(checkFilmName.length > 0) {
+            return res.status(500).json({
+                message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+            })
+        }
+
         const countResult = await connection.promise().query(
             `SELECT COUNT(*) as count FROM films`,
         );
@@ -344,6 +353,15 @@ export const editPatch = async (req, res) => {
         if (res.locals.url == "") {
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
 
+            // Kiểm tra trùng lặp tên phim
+            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
+
+            if(checkFilmName.length > 0) {
+                return res.status(500).json({
+                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                })
+            }
+
             // Update bảng film
             const queryUpdateFilm = `
                 UPDATE films
@@ -358,6 +376,15 @@ export const editPatch = async (req, res) => {
 
         } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
+
+            // Kiểm tra trùng lặp tên phim
+            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
+
+            if(checkFilmName.length > 0) {
+                return res.status(500).json({
+                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                })
+            }
 
             // Update bảng film
             const queryUpdateFilm = `

@@ -65,7 +65,13 @@ export function MovieTableToolbar({ numSelected, filterName, selectedFilter, onF
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton onClick={onDeleteSelected}>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

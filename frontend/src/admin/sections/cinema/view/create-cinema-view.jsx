@@ -1,6 +1,7 @@
 import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, Box, Button } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 export function CreateCinemaView() {
     const [formData, setFormData] = useState({
@@ -10,6 +11,7 @@ export function CreateCinemaView() {
         address: "",
     });
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+    const navigate = useNavigate();
 
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
@@ -33,19 +35,20 @@ export function CreateCinemaView() {
                 throw new Error("Failed to create cinema");
             }
 
-            const result = await response.json();
+            // const result = await response.json();
             // console.log(result);
-
+            setSnackbar({ open: true, message: "Rạp chiếu phim đã được tạo thành công!", severity: "success" });
+            setTimeout(() => {
+                navigate("/admin/cinema");
+            }, 1000);
+        } catch (error) {
+            // console.error(error);
             setFormData({
                 cinema_name: "",
                 address: "",
                 cluster_name: "",
                 region_name: "",
             });
-
-            setSnackbar({ open: true, message: "Rạp chiếu phim đã được tạo thành công!", severity: "success" });
-        } catch (error) {
-            // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi tạo rạp chiếu phim!", severity: "error" });
         }
     };

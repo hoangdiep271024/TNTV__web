@@ -44,6 +44,7 @@ const MyAccount = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
         })
             .then(response => response.json())
             .then(responseData => {
@@ -65,6 +66,7 @@ const MyAccount = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
         })
             .then(response => response.json())
             .then(responseData => {
@@ -86,6 +88,7 @@ const MyAccount = () => {
             headers: {
                 'Content-Type': 'application/json',
             },
+            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
         })
             .then(response => response.json())
             .then(responseData => {

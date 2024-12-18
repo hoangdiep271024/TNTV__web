@@ -12,6 +12,8 @@ userRoutes.get("/detail/:userId", controller.detail);
 
 // userRoutes.post("/create", controller.create);
 
+userRoutes.get("/edit/:userId", controller.edit);
+
 userRoutes.patch(
     "/edit/:userId",  upload.single("user_img"), async (req, res, next) =>{
         res.locals.url = "";

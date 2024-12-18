@@ -5,13 +5,14 @@ import IconButton from '@mui/material/IconButton';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputAdornment from '@mui/material/InputAdornment';
 import { Iconify } from '../../components/iconify';
-import { Box, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
+import { Box, Button, FormControl, InputLabel, MenuItem, Select } from '@mui/material';
 
 export function OrderTableToolbar({ numSelected, filterName, onFilterName, selectedFilter, onFilterChange, onDeleteSelected }) {
     const filterOptions = [
         { value: 'username', label: 'Tên người dùng' },
         { value: 'film_name', label: 'Tên phim' },
     ]
+
     return (
         <Toolbar
             sx={{
@@ -30,7 +31,8 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName, selec
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <Box sx={{ display: 'flex', alignItems: 'cneter' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+
                     <FormControl sx={{ minWidth: 150, mr: 2 }}>
                         <InputLabel>Bộ lọc</InputLabel>
                         <Select
@@ -54,17 +56,22 @@ export function OrderTableToolbar({ numSelected, filterName, onFilterName, selec
                         placeholder="Tìm kiếm..."
                         startAdornment={
                             <InputAdornment position="start">
-                                <Iconify width={20} icon="eva:search-fill" />
+                                <Iconify icon="eva:search-fill" />
                             </InputAdornment>
                         }
-                        sx={{ maxWidth: 320 }}
                     />
                 </Box>
             )}
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton onClick={onDeleteSelected}>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

@@ -174,16 +174,18 @@ export function UserView() {
                     </TableContainer>
                 </Scrollbar>
 
-                <TablePagination
-                    component="div"
-                    page={table.page}
-                    count={dataFiltered.length}
-                    rowsPerPage={table.rowsPerPage}
-                    onPageChange={table.onChangePage}
-                    rowsPerPageOptions={[5, 10, 25]}
-                    onRowsPerPageChange={table.onChangeRowsPerPage}
-                    labelRowsPerPage="Số dòng mỗi trang:"
-                />
+                {dataFiltered.length > 0 && (
+                    <TablePagination
+                        component="div"
+                        page={table.page}
+                        count={dataFiltered.length}
+                        rowsPerPage={table.rowsPerPage}
+                        onPageChange={table.onChangePage}
+                        rowsPerPageOptions={[5, 10, 25]}
+                        onRowsPerPageChange={table.onChangeRowsPerPage}
+                        labelRowsPerPage="Số dòng mỗi trang:"
+                    />
+                )}
             </Card>
         </DashboardContent>
     )

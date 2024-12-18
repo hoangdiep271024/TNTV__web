@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box, Stack } from "@mui/material";
+import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box, Stack, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 
 // thiếu một số trường full_name, sex, date_of_birth, date
@@ -8,7 +8,7 @@ import { useNavigate } from "react-router-dom";
 export function EditUserView({ userId }) {
     const [formData, setFormData] = useState({
         username: "",
-        user_img: null,
+        user_img: "",
         email: "",
         phone_number: "",
         role: 0,
@@ -49,7 +49,7 @@ export function EditUserView({ userId }) {
 
                 setFormData({
                     username: user.username || "",
-                    user_img: null,
+                    user_img: user.user_img || "",
                     email: user.email || "",
                     phone_number: user.phone_number || "",
                     role: user.role || 0,
@@ -76,6 +76,11 @@ export function EditUserView({ userId }) {
     const handleFileChange = (event) => {
         const file = event.target.files[0];
         setFormData((prev) => ({ ...prev, user_img: file }));
+
+        if (file) {
+            const imageUrl = URL.createObjectURL(file);
+            setCurrentImage(imageUrl);
+        }
     };
 
     const handleSubmit = async (event) => {
@@ -122,7 +127,14 @@ export function EditUserView({ userId }) {
                 <CardHeader title={<Typography variant="h2">{'Chỉnh sửa thông tin người dùng'}</Typography>} />
                 <CardContent>
                     {loading ? (
-                        <Typography variant="body1">Đang tải thông tin người dùng...</Typography>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="300px"
+                        >
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3} >
@@ -147,7 +159,7 @@ export function EditUserView({ userId }) {
                                 />
 
                                 <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
-                                    {currentImage && (
+                                    {currentImage ? (
                                         <Box>
                                             <img
                                                 src={currentImage}
@@ -161,7 +173,26 @@ export function EditUserView({ userId }) {
                                                 }}
                                             />
                                         </Box>
+                                    ) : (
+                                        <Box
+                                            sx={{
+                                                width: "100%",
+                                                maxWidth: "200px",
+                                                height: "200px",
+                                                display: "flex",
+                                                justifyContent: "center",
+                                                alignItems: "center",
+                                                border: "1px dashed gray",
+                                                borderRadius: "8px",
+                                                backgroundColor: "#f4f6f8",
+                                            }}
+                                        >
+                                            <Typography variant="body2" color="text.secondary">
+                                                Chưa có ảnh đại diện
+                                            </Typography>
+                                        </Box>
                                     )}
+
                                     <Button
                                         variant="outlined"
                                         component="label"

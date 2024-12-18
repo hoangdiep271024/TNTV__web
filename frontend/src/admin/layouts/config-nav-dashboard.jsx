@@ -61,14 +61,14 @@ export const navData = [
         path: '/admin/user',
         icon: <UserIcon />,
     },
-    {
-        title: 'Quản lý bài viết',
-        path: '/admin/news',
-        icon: <ArticleIcon />,
-    },
+    // {
+    //     title: 'Quản lý bài viết',
+    //     path: '/admin/news',
+    //     icon: <ArticleIcon />,
+    // },
     {
         title: 'Đăng xuất',
-        path: '/auth',
+        path: '/admin/auth',
         icon: <ExitIcon />,
     }
 ];

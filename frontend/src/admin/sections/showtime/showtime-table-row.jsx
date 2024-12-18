@@ -106,15 +106,16 @@ export function ShowtimeTableRow({ row, selected, onSelectRow, onDelete }) {
 
                 <TableCell>
                     <Typography variant="body2" textAlign='center' fontWeight='medium' >
-                        {new Date(row.show_date).toLocaleDateString()}
+                        {row.show_time.split(':').slice(0, 2).join(':')}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
                     <Typography variant="body2" textAlign='center' fontWeight='medium' >
-                        {row.show_time.split(':').slice(0, 2).join(':')}
+                        {new Date(row.show_date).toLocaleDateString()}
                     </Typography>
                 </TableCell>
+
 
                 <TableCell align="right">
                     <IconButton onClick={handleOpenPopover} size="small">

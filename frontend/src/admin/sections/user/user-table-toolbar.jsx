@@ -31,7 +31,7 @@ export function UserTableToolbar({ numSelected, filterName, selectedFilter, onFi
                     {numSelected} đã chọn
                 </Typography>
             ) : (
-                <Box sx={{ display: 'flex', alignItems: 'cneter' }}>
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
                     <FormControl sx={{ minWidth: 150, mr: 2 }}>
                         <InputLabel>Bộ lọc</InputLabel>
                         <Select
@@ -65,7 +65,13 @@ export function UserTableToolbar({ numSelected, filterName, selectedFilter, onFi
 
             {numSelected > 0 ? (
                 <Tooltip title="Xóa">
-                    <IconButton onClick={onDeleteSelected}>
+                    <IconButton
+                        onClick={onDeleteSelected}
+                        sx={{
+                            color: 'error.main',
+                            '&:hover': { backgroundColor: 'action.hover' },
+                        }}
+                    >
                         <Iconify icon="solar:trash-bin-trash-bold" />
                     </IconButton>
                 </Tooltip>

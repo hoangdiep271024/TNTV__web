@@ -1,8 +1,8 @@
-import { Avatar, Box, Button, Checkbox, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
+import { Avatar, Box, Button, Checkbox, Chip, Dialog, DialogActions, DialogContent, DialogTitle, IconButton, MenuItem, menuItemClasses, MenuList, Popover, TableCell, TableRow, Typography } from "@mui/material";
 import { useCallback, useState } from "react";
 import { Label } from '../../components/label';
 import { Iconify } from '../../components/iconify';
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 const deleteUser = async (id) => {
     try {
@@ -69,30 +69,50 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                 <TableCell component="th" scope="row">
                     <Box gap={2} display="flex" alignItems="center">
                         <Avatar alt={row.username} src={row.user_img} />
-                        <Typography variant="body2" fontWeight="bold" noWrap>
-                            {row.username}
-                        </Typography>
+                        <Link
+                            to={`/admin/user/${row.user_id}`}
+                            style={{ textDecoration: "none", color: "inherit" }}
+                        >
+                            <Typography variant="body2" fontWeight="bold" noWrap>
+                                {row.username}
+                            </Typography>
+                        </Link>
+
                     </Box>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="medium" noWrap>
                         {row.email}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" noWrap>
+                    <Typography variant="body2" fontWeight="medium" noWrap>
                         {row.phone_number}
                     </Typography>
                 </TableCell>
 
                 <TableCell>
-                    <Typography variant="body2" sx={{ color: 'text.primary' }} noWrap>
-                        {row.role === 0 ? 'Người dùng' : row.role === 1 ? 'Quản trị viên' : 'Không xác định'}
-                    </Typography>
+                    <Box display="flex" alignItems="center" gap={1}>
+                        <Iconify
+                            icon={row.role === 1 ? "mdi:shield-account" : "mdi:account"}
+                            color={row.role === 1 ? "primary.main" : "success.main"}
+                            width={20}
+                            height={20}
+                        />
+                        <Chip
+                            label={row.role === 0 ? 'Người dùng' : row.role === 1 ? 'Quản trị viên' : 'Không xác định'}
+                            size="small"
+                            sx={{
+                                color: row.role === 1 ? "primary.contrastText" : "success.contrastText",
+                                backgroundColor: row.role === 1 ? "primary.main" : "success.main",
+                                fontWeight: "bold",
+                                textTransform: "uppercase",
+                            }}
+                        />
+                    </Box>
                 </TableCell>
-
 
                 <TableCell>
                     <Label color={(row.status === 0 && 'error') || 'success'}>{row.status === 0 ? "Không hoạt động" : "Đang hoạt động"}</Label>
@@ -128,7 +148,7 @@ export function UserTableRow({ row, selected, onSelectRow }) {
                         }}
                     >
                         <MenuItem onClick={handleEditButton}>
-                            <Iconify icon="solar:pen-bold" />
+                            <Iconify icon="solar:pen-bold" sx={{ color: 'primary.main' }} />
                             Chỉnh sửa
                         </MenuItem>
                         <MenuItem onClick={handleDeleteButton} sx={{ color: 'error.main' }}>

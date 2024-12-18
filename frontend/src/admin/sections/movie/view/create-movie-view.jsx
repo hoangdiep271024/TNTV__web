@@ -5,7 +5,7 @@ import { useState } from "react";
 export function CreateMovieView() {
     const [formData, setFormData] = useState({
         film_name: "",
-        film_img: "",
+        film_img: null,
         film_trailer: "",
         Release_date: "",
         film_describe: "",
@@ -29,22 +29,42 @@ export function CreateMovieView() {
         setFormData((prev) => ({ ...prev, [name]: value }));
     }
 
+    const handleImageReset = () => {
+        setFormData((prev) => ({ ...prev, film_img: null }));
+    };
+
+    const handleAddPoster = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => {
+                setFormData((prev) => ({ ...prev, film_img: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
+    };
+
+
     const handleSubmit = async (event) => {
         event.preventDefault();
-        const payload = {
-            ...formData,
-            film_img: formData.film_img.split(",").map((url) => url.trim()), // Convert comma-separated string to array
-            categories: formData.categories.split(",").map((category) => category.trim()),
-            directors: formData.directors.split(",").map((director) => director.trim()),
-            actors: formData.actors.split(",").map((actor) => actor.trim()),
+
+        const formDataObj = new FormData();
+
+        formDataObj.append("film_name", formData.film_name);
+        formDataObj.append("film_trailer", formData.film_trailer);
+        formDataObj.append("Release_date", formData.Release_date);
+        formDataObj.append("film_describe", formData.film_describe);
+        formDataObj.append("age_limit", formData.age_limit);
+        formDataObj.append("duration", formData.duration);
+        formDataObj.append("film_type", formData.film_type);
+
+        if (formData.film_img) {
+            formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
         }
 
         try {
             const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films/create`, {
                 method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
                 body: JSON.stringify(payload),
             });
 
@@ -52,11 +72,25 @@ export function CreateMovieView() {
                 throw new Error("Failed to create movie");
             }
 
-            const result = await response.json();
-            console.log(result);
+            // const result = await response.json();
+            // console.log(result);
             setSnackbar({ open: true, message: "Phim đã được tạo thành công!", severity: "success" });
+            setTimeout(() => navigate("admin/movie"), 1000);
         } catch (error) {
-            console.error(error);
+            // console.error(error);
+            setFormData({
+                film_name: "",
+                film_img: null,
+                film_trailer: "",
+                Release_date: "",
+                film_describe: "",
+                age_limit: "",
+                duration: "",
+                film_type: 1,
+                categories: "",
+                directors: "",
+                actors: "",
+            });
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi tạo phim!", severity: "error" });
         }
     };
@@ -78,22 +112,93 @@ export function CreateMovieView() {
                                 required
                                 fullWidth
                             />
-                            <TextField
-                                name="film_img"
-                                label="URL hình ảnh (cách nhau bởi dấu phẩy)"
-                                value={formData.film_img}
-                                onChange={handleInputChange}
-                                required
-                                fullWidth
-                            />
+
+                            <Box
+                                display="flex"
+                                flexDirection="column"
+                                alignItems="center"
+                                sx={{
+                                    width: "300px",
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: "300px",
+                                        height: "450px",
+                                        backgroundColor: "#e0e0e0",
+                                        border: "1px solid #ccc",
+                                        borderRadius: "4px",
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        position: "relative",
+                                        overflow: "hidden",
+                                    }}
+                                >
+                                    {formData.film_img ? (
+                                        <img
+                                            src={formData.film_img}
+                                            alt="Movie Poster"
+                                            style={{
+                                                width: "100%",
+                                                height: "100%",
+                                                objectFit: "contain",
+                                                objectPosition: "center",
+                                            }}
+                                        />
+                                    ) : (
+                                        <Typography
+                                            variant="caption"
+                                            color="textSecondary"
+                                            sx={{ textAlign: "center" }}
+                                        >
+                                            Chưa có poster phim
+                                        </Typography>
+                                    )}
+                                </Box>
+
+                                <Box sx={{ marginTop: "10px" }}>
+                                    {formData.film_img ? (
+                                        <Button
+                                            onClick={handleImageReset}
+                                            variant="outlined"
+                                            color="error"
+                                            size="small"
+                                        >
+                                            Xóa poster phim
+                                        </Button>
+                                    ) : (
+                                        <>
+                                            <input
+                                                accept="image/*"
+                                                id="upload-poster"
+                                                type="file"
+                                                style={{ display: "none" }}
+                                                onChange={handleAddPoster}
+                                            />
+                                            <label htmlFor="upload-poster">
+                                                <Button
+                                                    variant="outlined"
+                                                    color="info"
+                                                    size="small"
+                                                    component="span"
+                                                >
+                                                    Thêm poster phim
+                                                </Button>
+                                            </label>
+                                        </>
+                                    )}
+                                </Box>
+                            </Box>
+
                             <TextField
                                 name="film_trailer"
                                 label="URL trailer"
                                 value={formData.film_trailer}
                                 onChange={handleInputChange}
-                                required
                                 fullWidth
                             />
+
                             <TextField
                                 name="Release_date"
                                 label="Ngày phát hành"

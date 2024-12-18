@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { Card, CardContent, CardHeader, Typography, Stack, TextField, Box, Button, Snackbar, Alert } from "@mui/material";
+import { Card, CardContent, CardHeader, Typography, Stack, TextField, Box, Button, Snackbar, Alert, CircularProgress } from "@mui/material";
 
 export function EditShowtimeView({ showtimeId }) {
     const [formData, setFormData] = useState({
@@ -11,6 +11,8 @@ export function EditShowtimeView({ showtimeId }) {
         show_date: "",
         show_time: "",
     });
+
+    const [originalData, setOriginalData] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
@@ -28,21 +30,22 @@ export function EditShowtimeView({ showtimeId }) {
                 console.log(data);
 
                 const showDate = data.showTime[0]?.show_date || "";
-                const formattedShowDate = showDate ? new Date(showDate).toISOString().split("T")[0] : "";
+                const formattedShowDate = showDate ? new Date(showDate).toLocaleDateString("en-CA") : "";
 
-                setFormData({
+                const initialData = {
                     film_name: data.film[0]?.film_name || "",
                     room_name: data.room[0]?.room_name || "",
                     cinema_name: data.cinema[0]?.cinema_name || "",
                     show_date: formattedShowDate,
                     show_time: data.showTime[0]?.show_time || "",
-                });
+                };
 
+                setFormData(initialData);
+                setOriginalData(initialData);
                 setLoading(false);
             } catch (error) {
                 console.error(error);
                 setSnackbar({ open: true, message: "Lỗi khi tải thông tin suất chiếu", severity: "error" });
-                setLoading(false);
             }
         };
 
@@ -73,11 +76,12 @@ export function EditShowtimeView({ showtimeId }) {
             console.log(result);
 
             setSnackbar({ open: true, message: "Suất chiếu phim đã được cập nhật thành công!", severity: "success" });
-
-            setTimeout(() => navigate(-1), 1000);
+            setTimeout(() => navigate("/admin/showtime"), 1000);;
         } catch (error) {
             console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật suất chiếu!", severity: "error" });
+
+            setFormData(originalData);
         }
     };
 
@@ -87,7 +91,14 @@ export function EditShowtimeView({ showtimeId }) {
                 <CardHeader title={<Typography variant="h2">{'Chỉnh sửa thông tin suất chiếu phim'}</Typography>} />
                 <CardContent>
                     {loading ? (
-                        <Typography variant="body1">Đang tải thông tin suất chiếu...</Typography>
+                        <Box
+                            display="flex"
+                            justifyContent="center"
+                            alignItems="center"
+                            height="300px"
+                        >
+                            <CircularProgress />
+                        </Box>
                     ) : (
                         <form onSubmit={handleSubmit}>
                             <Stack spacing={3}>

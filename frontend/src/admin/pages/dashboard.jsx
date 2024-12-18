@@ -20,10 +20,9 @@ export default function DashboardPage() {
                     // credentials: 'include'
                 };
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard`, requestOptions);
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=11`, requestOptions);
                 const result = await response.json();
 
-                // Update state with the fetched data
                 setDashboardData(result);
             } catch (error) {
                 console.error('Error fetching dashboard data:', error);
@@ -31,7 +30,7 @@ export default function DashboardPage() {
         };
 
         fetchDashboardData();
-    }, []); // Empty dependency array to run the effect only once when the component mounts
+    }, []);
 
     return (
         <>
@@ -40,60 +39,61 @@ export default function DashboardPage() {
             </Helmet>
 
             <DashboardContent>
-                <Box sx={{ p: 3 }}>
+                <Box>
                     <Typography variant="h2" gutterBottom>
-                        Tổng quan quản trị
+                        Tổng quan thống kê tháng này
                     </Typography>
 
-                    {/* Dashboard Cards Section */}
+                    {/* Phần thẻ thống kê */}
                     <Grid container spacing={3}>
-                        {/* Total Orders Card */}
+
+                        {/* Tổng đơn hàng */}
                         <Grid item xs={12} sm={4}>
                             <Card>
                                 <CardHeader title="Tổng Đơn Hàng" />
                                 <CardContent>
-                                    <Typography variant="h3" component="div">
-                                        {dashboardData.order}
+                                    <Typography variant="h3">
+                                        {dashboardData.order ? dashboardData.order : '0'}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Tổng số đơn hàng trong tháng này.
+                                        đơn hàng trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
 
-                        {/* Total Revenue Card */}
+                        {/* Tổng doanh thu */}
                         <Grid item xs={12} sm={4}>
                             <Card>
                                 <CardHeader title="Doanh Thu" />
                                 <CardContent>
-                                    <Typography variant="h3" component="div">
-                                        {dashboardData.revenue} VND
+                                    <Typography variant="h3">
+                                        {dashboardData.revenue ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(dashboardData.revenue) : 0}
                                     </Typography>
                                     <Typography variant="body2" color="textSecondary">
-                                        Tổng doanh thu trong tháng này.
+                                        doanh thu trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
 
-                        {/* New Users Card */}
+                        {/* Số lượng người dùng mới */}
                         <Grid item xs={12} sm={4}>
                             <Card>
                                 <CardHeader title="Người Dùng Mới" />
                                 <CardContent>
-                                    <Typography variant="h3" component="div">
-                                        {dashboardData.newUser}
+                                    <Typography variant="h3">
+                                        {dashboardData.newUser ? dashboardData.user : '0'}
                                     </Typography>
-                                    <Typography variant="body2" color="textSecondary">
-                                        Tổng số người dùng mới trong tháng này.
+                                    <Typography variant="body2" color="text.secondary">
+                                        người dùng mới trong tháng này
                                     </Typography>
                                 </CardContent>
                             </Card>
                         </Grid>
                     </Grid>
 
-                    {/* Film Ticket Revenue Results */}
+                    {/* Doanh thu theo phim */}
                     <Box sx={{ mt: 10 }}>
 
                         <Typography variant="h2" gutterBottom>
@@ -114,14 +114,34 @@ export default function DashboardPage() {
                                         <TableBody>
                                             {dashboardData.filmResult.map((film) => (
                                                 <TableRow key={film.film_id}>
-                                                    <TableCell component="th" scope="row" sx={{ fontWeight: "bold" }}>
+
+                                                    <TableCell
+                                                        component="th"
+                                                        scope="row"
+                                                        sx={{
+                                                            fontWeight: "bold",
+                                                            color: film.total_tickets_sold ? 'inherit' : 'red'
+                                                        }}
+                                                    >
                                                         {film.film_name}
                                                     </TableCell>
-                                                    <TableCell align="center">{film.total_tickets_sold}</TableCell>
-                                                    <TableCell align="center">
+
+                                                    <TableCell
+                                                        align="center"
+                                                        sx={{ color: film.total_tickets_sold ? 'inherit' : 'red' }}
+                                                    >
+                                                        {film.total_tickets_sold}
+                                                    </TableCell>
+
+                                                    <TableCell
+                                                        align="center"
+                                                        sx={{ color: film.total_revenue ? 'inherit' : 'red' }}
+                                                    >
                                                         {film.total_revenue
                                                             ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(film.total_revenue)
-                                                            : 'Chưa có doanh thu'}                                                    </TableCell>
+                                                            : 'Chưa có doanh thu'}
+                                                    </TableCell>
+
                                                 </TableRow>
                                             ))}
                                         </TableBody>
