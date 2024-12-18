@@ -68,7 +68,7 @@ export const checkPermisson = async (req, res, next) => {
             });
         }
 
-        const [user] = await connection.promise().query(`SELECT * FROM users WHERE user_id = ?`, [userId.id])
+        const [user] = await connection.promise().query(`SELECT * FROM users WHERE user_id = ?`, [userId])
 
         if (user.length == 0) {
             return res.status(401).json({
