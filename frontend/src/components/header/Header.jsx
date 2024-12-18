@@ -14,6 +14,11 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { useNavigate } from "react-router-dom";
 import AccountHeader from "../Account/AccountHeader";
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
 function createSlug(name) {
   
   return name
@@ -47,7 +52,6 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
   const handleClickMyAccount = () => {
     navigate(`/account/${encodeURIComponent(createSlug(userInfor.full_name))}`)
   };
-
   const handleCloseProfile = () => {
     setAnchorEl(null);
     onProfileClick();
@@ -78,10 +82,6 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
       })
       .catch(error => console.error('Error:', error));
   }, []);
-const logOutClick = () => {
-  localStorage.removeItem('jwt')
-  window.location.reload()
-};
     const black ='/black.gif'
     const white ='/white.gif'
 
@@ -92,7 +92,8 @@ const logOutClick = () => {
         width: "100vw",
         display: "flex",
         alignItems: "center",
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        paddingRight: '20px'
       }}
     >
       <Box
@@ -147,7 +148,7 @@ const logOutClick = () => {
       padding: "0 10px", 
     },
     "& .MuiInputLabel-root": {
-      top: "-8px", // Căn chỉnh nhãn về vị trí mong muốn
+      top: "-8px",
     },
     "& .MuiInputLabel-shrink": {
       transform: "translate(13px, -4px) scale(0.75)", 
@@ -157,37 +158,6 @@ const logOutClick = () => {
 
 </form>
 
-{/* {!login && (<Button
-            sx={{
-              textTransform: "none",
-              color: theme.palette.mode === "light" ? "black" : "white",
-              border: `1px solid ${
-                theme.palette.mode === "light" ? "black" : "white"
-              }`,
-              width:'100px',
-              height:'37px'
-            }}
-            onClick={onSignupClick}
-          >
-            Đăng ký
-          </Button>)}
-
-          {!login && (<Button
-            sx={{
-              textTransform: "none",
-              color: theme.palette.mode === "light" ? "black" : "white",
-              backgroundColor:
-                theme.palette.mode === "light" ? "#a0ba50" : "#0184FA",
-              "&:hover": {
-                backgroundColor:
-                  theme.palette.mode === "light" ? "grey" : "#005bb5", // Màu nền khi hover
-              },
-              width: '100px'
-            }}
-            onClick={onLoginClick}
-          >
-            Đăng nhập
-          </Button>)} */}
 {!login && <AccountHeader signup={onSignupClick} login={onLoginClick}/>}
 
           {login && (
@@ -200,9 +170,8 @@ const logOutClick = () => {
               onClick={handleClick}
               style={{textTransform: 'none', height: '41px',display:'flex', alignItems: 'center', justifyContent:'center', gap :'5px', width:'auto',color: theme.palette.mode === "light" ? "black" : "white", fontSize: '20px', whiteSpace: 'nowrap',overflow: 'hidden', textOverflow: 'ellipsis'}}
             >
-              {/* <AccountCircleIcon style={{width: '40px', height: '40px'}}/> */}
               <img style={{width: '40px', height: '40px', borderRadius:'100%', border: '1px solid #9ea4ad'}} src= {userInfor.user_img || 'data:image/jpeg;base64,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'}></img>
-              {userInfor.full_name}
+              <div style={{width: 'auto', maxWidth: '150px',whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{userInfor.full_name}</div>
             </Button>
             <Menu
               id="basic-menu"
@@ -213,34 +182,13 @@ const logOutClick = () => {
                 'aria-labelledby': 'basic-button',
               }}
             >
-              <MenuItem onClick={handleCloseProfile}>Profile</MenuItem>
-              <MenuItem onClick={handleClickMyAccount}>My account</MenuItem>
+              <MenuItem onClick={handleCloseProfile}>Hồ sơ</MenuItem>
+              <MenuItem onClick={handleClickMyAccount}>Tài khoản</MenuItem>
+              <MenuItem><AlertDialog></AlertDialog></MenuItem>
             </Menu>
           </div>
-            // <div style={{cursor: 'pointer',marginLeft: '15px',display:'flex', alignItems: 'center', justifyContent:'center', gap :'5px', width:'auto', whiteSpace: 'nowrap', fontSize: '17px'}}>
-            // <AccountCircleIcon style={{width: '40px', height: '40px'}}/>
-            // <div>{userInfor.full_name}</div>
-            // </div>
           )}
 <ChangeMode />
-          {login && (
-            <Button
-            sx={{
-              marginRight: '15px',
-              textTransform: "none",
-              color: theme.palette.mode === "light" ? "black" : "white",
-              border: `1px solid ${
-                theme.palette.mode === "light" ? "black" : "white"
-              }`,
-              width:'100px',
-              height:'37px'
-            }}
-          
-            onClick={logOutClick}
-          >
-            Đăng xuất
-          </Button>
-          )}
         </Box>
       </Box>
     </div>
@@ -248,3 +196,49 @@ const logOutClick = () => {
 };
 
 export default Header;
+
+function AlertDialog({click}) {
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClosee = () => {
+    setOpen(false);
+    click();
+  };
+  const handleLogout = () => {
+    localStorage.removeItem('jwt');
+    window.location.reload()
+  }
+
+  return (
+    <React.Fragment>
+      <Box variant="outlined" onClick={handleClickOpen}>
+        Đăng xuất
+      </Box>
+      <Dialog
+        open={open}
+        onClose={handleClosee}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Bạn có chắc chắn muốn đăng xuất !"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+          Hãy xác nhận
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleLogout}>CÓ</Button>
+          <Button onClick={handleClosee} autoFocus>
+            KHÔNG
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}
