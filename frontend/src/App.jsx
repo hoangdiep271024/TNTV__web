@@ -20,6 +20,7 @@ import New from "./components/page/New";
 import NewDetail from "./components/page/NewDetail";
 import Search from "./components/page/Search";
 import FirstScreen from "./components/page/FirstScreen";
+import NewCreate from "./components/page/NewCreate";
 function App() {
   return (
     <Router>
@@ -45,6 +46,8 @@ function App() {
         <Route path="/tin_tuc" element={<New/>}/>
         <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
         <Route path="/tim_kiem/:searchQuery" element={<Search/>}/>
+        <Route path="/new/create" element={<NewCreate/>}/>
+
       </Routes>
     </Router>);
 
