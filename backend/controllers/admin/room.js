@@ -86,6 +86,18 @@ export const detail = async (req, res) => {
                 });
             });
 
+            const querySeat = `Select s.seat_id, s.seat_row, s.seat_number, s.seat_type, ss.seat_status
+                            from seats as s
+                            inner join seat_status as ss on s.seat_id = ss.seat_id
+                            inner join rooms as r on s.room_id = r.room_id
+                            where r.room_id = ?`;
+            roomInfo.seat = await new Promise((resolve, reject) => {
+                connection.query(querySeat, [roomId], (err, results) => {
+                    if (err) return reject(err);
+                    resolve(results);
+                });
+            });
+
             res.json(roomInfo);
         }
         else {

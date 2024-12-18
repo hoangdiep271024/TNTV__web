@@ -124,8 +124,6 @@ export const edit = async (req, res) => {
     try {
         const userId = parseInt(req.params.userId);
 
-        const userInfo = {};
-
         // Truy vấn user
         const queryUser = `SELECT * FROM users WHERE user_id = ?`;
         const user = await new Promise((resolve, reject) => {
@@ -134,10 +132,9 @@ export const edit = async (req, res) => {
                 resolve(results);
             });
         });
-        userInfo.user = user;
 
         if (user.length > 0) {
-            res.json(userInfo);
+            res.json(user);
         }
         else {
             res.json({
@@ -167,6 +164,15 @@ export const editPatch = async (req, res) => {
             if (role == "user") role = 0;
             else role = 1;
 
+            // Kiểm tra trùng lặp email
+            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
+
+            if(checkUserEmail.length > 0) {
+                return res.status(500).json({
+                    message: `Email ${email} already existed.\nPlease choose another email.`
+                })
+            }
+
             // Update bảng User
             const queryUpdateUser = `
                 UPDATE users
@@ -185,6 +191,15 @@ export const editPatch = async (req, res) => {
             else sex = 2;
             if (role == "user") role = 0;
             else role = 1;
+
+            // Kiểm tra trùng lặp email
+            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
+
+            if(checkUserEmail.length > 0) {
+                return res.status(500).json({
+                    message: `Email ${email} already existed.\nPlease choose another email.`
+                })
+            }
 
             // Update bảng User
             const queryUpdateUser = `
