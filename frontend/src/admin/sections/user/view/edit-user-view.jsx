@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { Card, Typography, Grid, Button, CardHeader, CardContent, TextField, MenuItem, Snackbar, Alert, Box, Stack, CircularProgress } from "@mui/material";
 import { useNavigate } from "react-router-dom";
+import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
 
 // thiếu một số trường full_name, sex, date_of_birth, date
 // thiếu tổng hợp order của khách hàng
@@ -14,6 +15,7 @@ export function EditUserView({ userId }) {
         role: 0,
         status: 0,
     });
+    const [orderData, setOrderData] = useState([]);
 
     const [currentImage, setCurrentImage] = useState("");
 
@@ -56,6 +58,7 @@ export function EditUserView({ userId }) {
                     status: user.status || 0,
                 });
 
+                setOrderData(data.order || []);
                 setCurrentImage(user.user_img || "");
                 setLoading(false);
             } catch (error) {
@@ -136,130 +139,181 @@ export function EditUserView({ userId }) {
                             <CircularProgress />
                         </Box>
                     ) : (
-                        <form onSubmit={handleSubmit}>
-                            <Stack spacing={3} >
+                        <>
+                            <form onSubmit={handleSubmit}>
+                                <Stack spacing={3} >
 
-                                <TextField
-                                    fullWidth
-                                    label="Tên người dùng"
-                                    name="username"
-                                    value={formData.username}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                    <TextField
+                                        fullWidth
+                                        label="Tên người dùng"
+                                        name="username"
+                                        value={formData.username}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
 
-                                <TextField
-                                    fullWidth
-                                    label="Email"
-                                    name="email"
-                                    type="email"
-                                    value={formData.email}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                                    <TextField
+                                        fullWidth
+                                        label="Email"
+                                        name="email"
+                                        type="email"
+                                        value={formData.email}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
 
-                                <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
-                                    {currentImage ? (
-                                        <Box>
-                                            <img
-                                                src={currentImage}
-                                                alt="Current Profile"
-                                                style={{
-                                                    display: "block",
+                                    <Box sx={{ display: "flex", flexDirection: "column", alignItems: "flex-start", gap: 2 }}>
+                                        {currentImage ? (
+                                            <Box>
+                                                <img
+                                                    src={currentImage}
+                                                    alt="Current Profile"
+                                                    style={{
+                                                        display: "block",
+                                                        width: "100%",
+                                                        maxWidth: "200px",
+                                                        borderRadius: "8px",
+                                                        margin: "0 auto",
+                                                    }}
+                                                />
+                                            </Box>
+                                        ) : (
+                                            <Box
+                                                sx={{
                                                     width: "100%",
                                                     maxWidth: "200px",
+                                                    height: "200px",
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    alignItems: "center",
+                                                    border: "1px dashed gray",
                                                     borderRadius: "8px",
-                                                    margin: "0 auto",
+                                                    backgroundColor: "#f4f6f8",
                                                 }}
-                                            />
-                                        </Box>
-                                    ) : (
-                                        <Box
+                                            >
+                                                <Typography variant="body2" color="text.secondary">
+                                                    Chưa có ảnh đại diện
+                                                </Typography>
+                                            </Box>
+                                        )}
+
+                                        <Button
+                                            variant="outlined"
+                                            component="label"
+                                            size="small"
                                             sx={{
-                                                width: "100%",
-                                                maxWidth: "200px",
-                                                height: "200px",
-                                                display: "flex",
-                                                justifyContent: "center",
-                                                alignItems: "center",
-                                                border: "1px dashed gray",
-                                                borderRadius: "8px",
-                                                backgroundColor: "#f4f6f8",
+                                                color: "gray",
+                                                borderColor: "gray",
+                                                textTransform: "none",
                                             }}
                                         >
-                                            <Typography variant="body2" color="text.secondary">
-                                                Chưa có ảnh đại diện
-                                            </Typography>
-                                        </Box>
-                                    )}
+                                            Tải ảnh đại diện
+                                            <input
+                                                type="file"
+                                                hidden
+                                                accept="image/*"
+                                                onChange={handleFileChange}
+                                            />
+                                        </Button>
+                                    </Box>
 
-                                    <Button
-                                        variant="outlined"
-                                        component="label"
-                                        size="small"
-                                        sx={{
-                                            color: "gray",
-                                            borderColor: "gray",
-                                            textTransform: "none",
-                                        }}
+                                    <TextField
+                                        fullWidth
+                                        label="Số điện thoại"
+                                        name="phone_number"
+                                        value={formData.phone_number}
+                                        onChange={handleInputChange}
+                                        required
+                                    />
+
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        label="Vai trò"
+                                        name="role"
+                                        value={formData.role}
+                                        onChange={handleInputChange}
                                     >
-                                        Tải ảnh đại diện
-                                        <input
-                                            type="file"
-                                            hidden
-                                            accept="image/*"
-                                            onChange={handleFileChange}
-                                        />
+                                        {roleOptions.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+
+                                    <TextField
+                                        fullWidth
+                                        select
+                                        label="Trạng thái"
+                                        name="status"
+                                        value={formData.status}
+                                        onChange={handleInputChange}
+                                    >
+                                        {statusOptions.map((option) => (
+                                            <MenuItem key={option.value} value={option.value}>
+                                                {option.label}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
+                                </Stack>
+
+                                <Box mt={3} display="flex" justifyContent="flex-end">
+                                    <Button type="submit" variant="contained" color="primary" disabled={loading}>
+                                        Cập nhật
                                     </Button>
                                 </Box>
+                            </form>
 
-                                <TextField
-                                    fullWidth
-                                    label="Số điện thoại"
-                                    name="phone_number"
-                                    value={formData.phone_number}
-                                    onChange={handleInputChange}
-                                    required
-                                />
+                            {/* Order Data Table */}
+                            <Box mt={5}>
+                                <Typography variant="h2" gutterBottom>
+                                    Lịch sử đặt vé
+                                </Typography>
 
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Vai trò"
-                                    name="role"
-                                    value={formData.role}
-                                    onChange={handleInputChange}
-                                >
-                                    {roleOptions.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
+                                {orderData.length > 0 ? (
+                                    <TableContainer component={Paper}>
+                                        <Table>
+                                            <TableHead>
+                                                <TableRow>
+                                                    <TableCell>Mã Đơn Hàng</TableCell>
+                                                    <TableCell>Ngày Đặt Vé</TableCell>
+                                                    <TableCell>Tên Phim</TableCell>
+                                                    <TableCell>Tên Rạp</TableCell>
+                                                    <TableCell>Tên Phòng</TableCell>
+                                                    <TableCell>Ngày Chiếu</TableCell>
+                                                    <TableCell>Tổng Tiền</TableCell>
+                                                </TableRow>
+                                            </TableHead>
+                                            <TableBody>
+                                                {orderData.map((order) => (
+                                                    <TableRow key={order.order_id}>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.order_id}</TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>
+                                                            {new Date(order.order_date).toLocaleDateString()}
+                                                        </TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.film_name}</TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.cinema_name}</TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>{order.room_name}</TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>
+                                                            {new Date(order.show_date).toLocaleDateString()}
+                                                        </TableCell>
+                                                        <TableCell sx={{ fontWeight: 'medium' }}>
+                                                            {new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(order.total_price)}
+                                                        </TableCell>
+                                                    </TableRow>
 
-                                <TextField
-                                    fullWidth
-                                    select
-                                    label="Trạng thái"
-                                    name="status"
-                                    value={formData.status}
-                                    onChange={handleInputChange}
-                                >
-                                    {statusOptions.map((option) => (
-                                        <MenuItem key={option.value} value={option.value}>
-                                            {option.label}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </Stack>
-
-                            <Box mt={3} display="flex" justifyContent="flex-end">
-                                <Button type="submit" variant="contained" color="primary" disabled={loading}>
-                                    Cập nhật
-                                </Button>
+                                                ))}
+                                            </TableBody>
+                                        </Table>
+                                    </TableContainer>
+                                ) : (
+                                    <Typography variant="body1" color="text.secondary" mt={2}>
+                                        Không có đơn hàng nào đã được đặt.
+                                    </Typography>
+                                )}
                             </Box>
 
-                        </form>
+                        </>
                     )}
                 </CardContent>
 
