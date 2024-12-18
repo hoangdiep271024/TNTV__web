@@ -57,7 +57,7 @@ export default function Cinema() {
   return (
     <>
     <Shared></Shared>
-    <Box sx={{marginTop: '17vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2}}>
+    <Box sx={{marginTop: '19vh', display: 'flex', justifyContent: 'center', alignItems: 'center', gap: 2}}>
     <Typography>Chọn tỉnh thành</Typography>
     <FilmDetailTime onAreaChange={handleAreaChange}></FilmDetailTime>
     </Box>

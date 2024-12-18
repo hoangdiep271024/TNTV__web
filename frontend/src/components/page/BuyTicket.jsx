@@ -48,7 +48,7 @@ export default function BuyTicket() {
 }
 function Ticket__film({data}) {
     const [currentPage, setCurrentPage] = useState(1);
-    const filmsPerPage = 16;
+    const filmsPerPage = 14;
     const handlePageChange = (event, value) => {
       setCurrentPage(value);
     };
