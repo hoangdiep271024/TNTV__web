@@ -76,6 +76,7 @@ export default function NewNew() {
             <div style={{height: '90%', width: '65%'}}>
               <div style ={{ overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal',}}>{item.new_header}</div>
               <div style={{textAlign: 'end', position: 'absolute', bottom: '10px', right: '20px'}}>{exactlyDate}</div>
+              <div style={{position: 'absolute', bottom: '10px', fontSize: '15px', color: '#ef4444'}}>{item.username}</div>
             </div>
         </Box>)
     })}

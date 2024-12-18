@@ -3,7 +3,9 @@ import connection from "../../models/SQLConnection.js";
 dotenv.config();
 export const filmNew = async (req, res) => {  
     let query = `
-    SELECT * from news
+    select news.new_time, news.new_id, news.new_content, news.new_img, news.new_time, news.new_header, news.new_footer, users.username
+from news
+left join users on news.user_id = users.user_id
     `;
     
     connection.query(query, (error, results) => {
@@ -23,9 +25,10 @@ export const filmNew = async (req, res) => {
 
 export const newVietnam = async (req, res) => {  
     let query = `
-    select news.new_id, news.new_header,news.new_img, news.new_time, news.new_footer , films.country, films.film_id
+    select news.new_id, news.new_header,news.new_img, news.new_time, news.new_footer , films.country, films.film_id, users.username
     from news
     left join films on films.film_id = news.film_id
+    left join users on news.user_id = users.user_id
     where films.country =1
     `;
     
@@ -45,9 +48,10 @@ export const newVietnam = async (req, res) => {
 
 export const newAboard = async (req, res) => {  
     let query = `
-    select news.new_id, news.new_header,news.new_img, news.new_time, news.new_footer , films.country, films.film_id
+    select news.new_id, news.new_header,news.new_img, news.new_time, news.new_footer , films.country, films.film_id, users.username
     from news
     left join films on films.film_id = news.film_id
+    left join users on news.user_id = users.user_id
     where films.country =0
     `;
     

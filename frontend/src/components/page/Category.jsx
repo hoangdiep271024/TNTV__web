@@ -88,7 +88,7 @@ export default function Category() {
   return (
    <Box>
     <Shared/>
-    {data && <div style={{ marginTop: '17vh', fontSize: '30px', marginLeft: '10%', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444', marginBottom: '15px'}}>{`DANH SÁCH PHIM: ${type.toUpperCase()} >>`}</div>}
+    {data && <div style={{ marginTop: '19vh', fontSize: '30px', marginLeft: '10%', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444', marginBottom: '15px'}}>{`DANH SÁCH PHIM: ${type.toUpperCase()} >>`}</div>}
      {data && <Ticket__film data={data}></Ticket__film>}
    {data && <Footer/>}
    </Box>

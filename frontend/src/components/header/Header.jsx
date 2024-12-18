@@ -56,6 +56,10 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
     setAnchorEl(null);
     onProfileClick();
   };
+  const ClickNew = () => {
+    window.location.reload()
+    navigate('/tin_tuc/viet_bai')
+  }
   const theme = useTheme();
   const [login, setLogin] = useState('');
   const [userInfor, setUserInfor] = useState([]);
@@ -184,7 +188,9 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
             >
               <MenuItem onClick={handleCloseProfile}>Hồ sơ</MenuItem>
               <MenuItem onClick={handleClickMyAccount}>Tài khoản</MenuItem>
+              <MenuItem onClick={ClickNew}>Tạo bài viết</MenuItem>
               <MenuItem><AlertDialog></AlertDialog></MenuItem>
+              
             </Menu>
           </div>
           )}
@@ -210,9 +216,8 @@ function AlertDialog({click}) {
   };
   const handleLogout = () => {
     localStorage.removeItem('jwt');
-    window.location.reload()
+    navigate('/welcome')
   }
-
   return (
     <React.Fragment>
       <Box variant="outlined" onClick={handleClickOpen}>

@@ -37,7 +37,7 @@ export default function Director() {
   return (
     <Box>
       <Shared/>
-      {data &&  <Box sx= {{width: '100vw', height: 'auto', minHeight: '35vh', display: 'flex', marginTop: '17vh', backgroundColor: 'black', alignItems: 'center', paddingLeft: '15vw', gap: 4, color: 'white'}}>
+      {data &&  <Box sx= {{width: '100vw', height: 'auto', minHeight: '35vh', display: 'flex', marginTop: '19vh', backgroundColor: 'black', alignItems: 'center', paddingLeft: '15vw', gap: 4, color: 'white'}}>
      
       <img src = {data.director_img} style={{ width: '150px',
       height: 'auto'}}></img>

@@ -46,7 +46,7 @@ function App() {
         <Route path="/tin_tuc" element={<New/>}/>
         <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
         <Route path="/tim_kiem/:searchQuery" element={<Search/>}/>
-        <Route path="/new/create" element={<NewCreate/>}/>
+        <Route path="/tin_tuc/viet_bai" element={<NewCreate/>}/>
 
       </Routes>
     </Router>);

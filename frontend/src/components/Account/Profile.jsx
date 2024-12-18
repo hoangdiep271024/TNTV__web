@@ -201,13 +201,13 @@ export default function Profile() {
         <br/>
         <input className="phone__number" disabled={!changeClick}  value={formData.phone__number} onChange={handleChange}  name="phone__number" type="text" required style={{outline:'none', borderRadius: '5px', border:'1px solid #b8b2b2', height:'35px', width:'100%', fontSize:'17px', paddingLeft:'5px', marginTop:'10px', marginBottom: '10px'}}></input>
          <br/>
-         <div style={{display: 'flex', alignItems:'center',gap:'8px'}}>
-          <p style={{color:'black'}}>Giới tính:</p>
-         <label style={{color: 'black'}}>
+         <div style={{display: 'flex', alignItems:'center',gap:'8px', padding: '0'}}>
+          <p style={{ color: 'black', margin: 0 }}>Giới tính:</p>
+         <label style={{ color: 'black', display: 'flex', alignItems: 'center', gap: '4px' , margin: '0'}}>
     <input style ={{padding: '0'}} className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="1" checked={formData.sex == '1'}/>
     Nam
   </label>
-  <label style={{color: 'black'}}>
+  <label style={{ color: 'black', display: 'flex', alignItems: 'center', gap: '4px' , margin: '0'}}>
     <input style ={{padding: '0'}} className='sex' onChange={handleChange} disabled={!changeClick} type="radio" name="sex" value="2" checked={formData.sex == '2'}/>
     Nữ
   </label>

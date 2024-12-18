@@ -124,7 +124,7 @@ function Neww({data}) {
           return (
             <Box sx={{ width: '23%' , height:'auto'}}>
             <NewCard
-            img={item.new_img} header= {item.new_header} footer = {item.new_footer} date = {exactlyDate} new_id = {item.new_id}
+            img={item.new_img} header= {item.new_header} footer = {item.new_footer} date = {exactlyDate} new_id = {item.new_id} username ={item.username}
             />
             </Box>
           );

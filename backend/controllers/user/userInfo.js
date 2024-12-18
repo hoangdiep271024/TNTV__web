@@ -125,3 +125,39 @@ export const userFilmLiked = async (req, res) => {
         return res.status(401).json({ message: "Invalid token", error: error.message });
     }
 }
+
+export const userNew = async (req, res) => {
+    try {
+        const token = req.body.jwt;
+        if (!token) {
+            return res.json({
+                message: "Người dùng chưa đăng nhập",
+                success: false
+            })
+        }
+
+        const decoded = verifyToken(token);
+
+        if (isTokenExpired(token)) {
+            return res.json({
+                message: "Người dùng hết phiên đăng nhập",
+                success: false
+            })
+        }
+        const user_id = decoded.id
+        const query =
+            `select * from news
+            where user_ID =  ?`
+
+        connection.query(query, [user_id], (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Database query failed' });
+            }
+    
+            return res.json(results);
+        });
+
+    } catch (error) {
+        return res.status(401).json({ message: "Invalid token", error: error.message });
+    }
+}

@@ -6,7 +6,7 @@
 
 .acc_container{
     display: block;
-    padding: 0 22%;
+    padding: 0 0;
 }
 
 .acc_content {
@@ -18,8 +18,8 @@
 }
 
 .acc_content img {
-    width: 13%;
-    height: 13%;
+    width: 100px;
+    height: 100px;
     object-fit: cover;
     border-radius: 100%;
     border: 5px solid white;
