@@ -211,7 +211,6 @@ export const editPatch = async (req, res) => {
             if (film.length == 0) {
                 return res.status(500).json({
                     message: "Film doesn't exist\nPlease choose film again",
-                    error: error
                 });
             }
             const filmId = film[0].film_id;
@@ -243,7 +242,7 @@ export const editPatch = async (req, res) => {
             // Update bảng film
             const queryUpdateNew = `
                 UPDATE news
-                SET film_id = ?, new_content = ?, new_image = ?, new_time = ?, new_header = ?, new_footer = ?
+                SET film_id = ?, new_content = ?, new_img = ?, new_time = ?, new_header = ?, new_footer = ?
                 WHERE new_id = ?`;
             await new Promise((resolve, reject) => {
                 connection.query(queryUpdateNew, [filmId, new_content, res.locals.url, new_time, new_header, new_footer, newId], (err, results) => {

@@ -357,9 +357,11 @@ export const editPatch = async (req, res) => {
             const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
 
             if(checkFilmName.length > 0) {
-                return res.status(500).json({
-                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
-                })
+                if(checkFilmName[0].film_id != filmId) {
+                    return res.status(500).json({
+                        message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                    })
+                }
             }
 
             // Update bảng film
@@ -381,9 +383,11 @@ export const editPatch = async (req, res) => {
             const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
 
             if(checkFilmName.length > 0) {
-                return res.status(500).json({
-                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
-                })
+                if(checkFilmName[0].film_id != filmId) {
+                    return res.status(500).json({
+                        message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                    })
+                }
             }
 
             // Update bảng film
