@@ -1,5 +1,5 @@
-
-// // development
+// import cors from 'cors';
+// // // development
 // const corsOptions = {
 //     origin: function (origin, callback) {
 //         // Chỉ cho phép nguồn từ http://localhost:5173
