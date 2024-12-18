@@ -102,7 +102,7 @@ function Bap_nuoc({ nextStep, prevStep }) {
             </div>
 
             <div className="sum-price" style={{ marginBottom: '15px' }}>
-                <p style={{ fontSize: '15px', fontWeight: '800' }}>TỔNG ĐƠN HÀNG:</p>
+                <p style={{ fontSize: '15px', fontWeight: '800',fontFamily: 'Montserrat' }}>TỔNG ĐƠN HÀNG:</p>
                 <p style={{ fontSize: '15px' }}>{(seatTotalAmount + popcornTotalAmount).toLocaleString()}đ</p>
             </div>
             <button id="tiep-tuc" onClick={async () => {
