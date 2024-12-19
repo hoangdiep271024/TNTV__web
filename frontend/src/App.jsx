@@ -23,7 +23,7 @@ import FirstScreen from "./components/page/FirstScreen";
 import NewCreate from "./components/page/NewCreate";
 function App() {
   return (
-    <Router>
+<Router>
       <Routes>
         <Route path="/" element={<Navigate to="/welcome" />} />
         <Route path="/welcome" element={<FirstScreen />} />
@@ -47,9 +47,9 @@ function App() {
         <Route path="/tin_tuc/:new_header" element={<NewDetail/>}/>
         <Route path="/tim_kiem/:searchQuery" element={<Search/>}/>
         <Route path="/tin_tuc/viet_bai" element={<NewCreate/>}/>
-
+        
       </Routes>
-    </Router>);
+   </Router>);
 
 }
 
