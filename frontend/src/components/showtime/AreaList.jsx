@@ -494,10 +494,11 @@ export default function AreaList() {
                                       <div>{`Thời lượng: ${film.duration} phút`}</div>
                                       <div>{`T${film.age_limit}`}</div>
                                     </div>
-                                    <Box sx={{display: 'flex' ,flexWrap: 'wrap' , gap: '15px'}}></Box>
+                                    <Box sx={{display: 'flex' ,flexWrap: 'wrap' , gap: '15px', width: '100%'}}>
                                     {Array.isArray(film.showtimes) && film.showtimes.map((showTime, key) => (
                                        <Button style={{border: '1px solid #009688', borderRadius: '3px'}} onClick={() => clickShowtime(film.film_name, showTime.showtime_id)} key={key}>{showTime.show_time.substring(0,5)}</Button>
         ))}
+        </Box>
                                     </Box>
                                 </Box>
                             ))}
