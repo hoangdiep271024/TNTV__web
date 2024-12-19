@@ -9,6 +9,7 @@ import BasicPagination from '../film/BasicPagination';
 import { Box, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import NewCard from '../new/NewCard';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 
 const MyAccount = () => {
     const theme = useTheme()
@@ -16,6 +17,8 @@ const MyAccount = () => {
     const [isFilmLike, setIsFilmLike] = useState(false);
     const [userInfor, setUserInfor] = useState([]);
     const [userOrders, setUserOrders] = useState([]);
+    const [listOrders, setListOrders] = useState([]);
+    const [loadedCount, setLoadedCount] = useState(3);
     const [userFilmLiked, setUserFilmLiked] = useState([]);
     const [login, setLogin] = useState('');
     const defaultImage = 'data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wCEAAkGBwgHBgkIBwgKCgkLDRYPDQwMDRsUFRAWIB0iIiAdHx8kKDQsJCYxJx8fLT0tMTU3Ojo6Iys/RD84QzQ5OjcBCgoKDQwNGg8PGjclHyU3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3Nzc3N//AABEIAMAAzAMBIgACEQEDEQH/xAAbAAEAAgMBAQAAAAAAAAAAAAAABQYBAwQHAv/EADUQAAICAQIDBAgFBAMAAAAAAAABAgMEBREhMUEGUVJhEiIyQnGB0eETFCORoXKxwfAzU4L/xAAVAQEBAAAAAAAAAAAAAAAAAAAAAf/EABQRAQAAAAAAAAAAAAAAAAAAAAD/2gAMAwEAAhEDEQA/ALMACqAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAALjy4h8OfAAAAAAAAAAAAAAAAAAAAAAAAAAAAA8uvcZSbaSTbfLYtuh6JDGjHIyoqV/SL5Q+4EVp3Z7IylGzIf4Fb6P2n8uhP4uhYGPx/BVkvFPiSRkiNUMeqC2jVWvhFCWPVJbSqhJecUbQBF5Wg4OQn+l+HLxVvYgNR7P5WInOn9etcfV4SS+HX5FzMNAea/yC165ocb4yyMNKNyW8oL3/uVX/X5FVgAAAAAAAAAAAAAAAAAAADMYucowjzk9v3AsHZfTlbZ+dtW8YPatPrLvLTtx3NOFjxxcWqmC2UIpG8iAAAAAAAAMFT7Uacqbll1R2hN7TS6PvLacuoY0cvEupkvajw+PQDz4GWtns+aMFUAAAAAAAAAAAAAAAAO3Rq1bqmNFrh+JucRIaA0tXx9+9r+AL2uQC5AiAAAAAAAAAAA8+1WCr1PKglsla9vnxOU7tcalq+W14/7JI4SqAAAAAAAAAAAAAAAAG7CuePl1Wr3Jp/I0jzA9Ki1KKkuTW6MkP2bzVlYCrk27adoy3fNdH/vcTBEAAAAAAAAD5nJQjKcntGK3bPohu02b+WwnVF7Tu9X5dQKllWu/JtufOybl+7NQBVAAAAAAAAAAAAAAAAAAB1adm2YGVG6viuU4+JdxesTJqyqY3UyTg0ednZpupX6dd6VTbrb9at8pfRkRfwR+nari5ySrn6NnWuXMkAAMbmQABHajq+Lgwe81OzpXF8fsB05uVVh0yuvltFfy+4ouo5lmdlSvt4b8Ix8K7j61HUL8+307n6q9mC5ROQqgAAAAAAAAAAAAAAAAAAAAAAAMp7Pdbprk0d+LrWfjL0Y3enFe7YvSI8AT0O1OUl6+PS35NoS7U5TXq49MfNtsgQBIZOs5+Smp3uMX7ta2ODfv5mAAAAAAAAAAAAAAAAAAAAAAAAZ2Puii2+1V01ynN9IoDX12Hx4LzLBg9mbJpTzLVBeCD3f7k3i6Tg4vGqiLl4pcWBS6cPJv/4Me2fnGPA7a9A1Kxb/AIEYf1zX+C67ACox7M5r9qdEf/Tf+DL7MZf/AHUfNv6FtAFNn2d1CPsqmf8ATP7HHfpmdQt7cW1LvS9L+xfglsB5u1s0nz7jD4HoWRh42UtsimE/NriQ2Z2YqknLEtdb8MuKAqwOrN0/JwWlfW1F8prjF/M5tntuBgAAAAAAAAAAAAAHU+6q522Rrri5Tk9kl1LZo2hV4m12SlZf0T5Q+4EXpnZ63JSsy96qnxUfef0LRjYtOLUq6K1CK7uvxNq22MgAAAAAUAAAAABsABiUIzi4yimnzT6lf1Ts7CalbgepJ862+D+HcWEbBHnNtVlNkq7YOE480z4L3qemUahVtatpr2bFzX1Kbn4V2De6r4teGXSSA5gAAAAAAAD6rhO2yNdcXKcnskj5+JbezulflavzF8f1rFwXhX1A6NF0mGn1elYlK+S9aXd5IlAgAAAUAAAAAAAAAAAAAAAAObPwqs7HlVcufKXWL70dICPPs7Dtwb3TauXKXSS7znL1q+nx1DGcFtG2PsSfR/Qo9kJVWShOLjKLaafQD5AAAA2Y9M8i+FVS9ecvRQEt2b0781kPJtX6VT2SfvS+xbkacLGhiY0Ka16sVtv3+ZvAAAKAAAAAAAAAAAAAAAAAAAAABW+1GnbpZtUeu1vw7yyHxdVC6uVdi3jJbNBHnPPj3g35uPLEy7ceXOD5967zQB//2Q==';
@@ -135,6 +138,16 @@ const MyAccount = () => {
     }, []);
 
     useEffect(() => {
+        setListOrders(userOrders.slice(0, 3));
+    }, [userOrders]);
+
+    const loadMore = () => {
+        const nextCount = loadedCount + 3;
+        setListOrders(userOrders.slice(0, nextCount));
+        setLoadedCount(nextCount);
+    };
+
+    useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/userInfo/filmNew`, {
             method: 'POST',
             headers: {
@@ -194,17 +207,23 @@ const MyAccount = () => {
                                     />
                                 )
                             })) : (
-                            <div style={{width:'100%',textAlign:'center'}}>
-                                <p style={{ marginTop: '68px', fontFamily: 'Roboto', fontSize: '16px'}}>Bạn chưa có bộ sưu tập phim</p>
+                            <div style={{ width: '100%', textAlign: 'center' }}>
+                                <p style={{ marginTop: '68px', fontFamily: 'Roboto', fontSize: '16px' }}>Bạn chưa có bộ sưu tập phim</p>
                             </div>
                         )}
                     </div>
                 )}
 
                 {isOrders && (
+<<<<<<< Updated upstream
                     <div className="acc_orders" style={{marginTop: '20px'}}>
                         {userOrders.length > 0 ? (
                             userOrders.map((items) => {
+=======
+                    <div className="acc_orders">
+                        {listOrders.length > 0 ? (
+                            listOrders.map((items) => {
+>>>>>>> Stashed changes
                                 const datee = items.show_date.substring(0, 10); // Lấy ngày đúng
                                 const time = items.show_time.substring(0, 5);
                                 return (
@@ -235,8 +254,8 @@ const MyAccount = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <div style={{display:'flex',flexDirection:'column',justifyContent:'space-between',alignItems:'center'}} >
-                                            <img src="http://res.cloudinary.com/dh3qus4yk/image/upload/v1732765979/qtncugo3qk1ehyqfs0oo.jpg" style={{width:'82%',height:'128px',marginBottom:'6px'}} alt="QR Code" />
+                                        <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'space-between', alignItems: 'center' }} >
+                                            <img src="http://res.cloudinary.com/dh3qus4yk/image/upload/v1732765979/qtncugo3qk1ehyqfs0oo.jpg" style={{ width: '82%', height: '128px', marginBottom: '6px' }} alt="QR Code" />
                                             <h2>Tổng tiền: {formatVND(items.total_price)}</h2>
                                         </div>
                                     </div>
@@ -244,6 +263,11 @@ const MyAccount = () => {
                             })
                         ) : (
                             <p style={{ marginTop: '68px', textAlign: 'center' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
+                        )}
+                        {loadedCount < userOrders.length && (
+                            <div onClick={loadMore} style={{ display: 'flex', justifyContent: 'center', marginTop: '26px' }}>
+                                <ExpandMoreIcon style={{ cursor: 'pointer', color: 'rgb(138, 138, 138)' }} />
+                            </div>
                         )}
                     </div>
                 )}
