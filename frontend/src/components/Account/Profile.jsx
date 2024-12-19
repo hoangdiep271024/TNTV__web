@@ -34,7 +34,8 @@ export default function Profile() {
   const [file, setFile] = useState(null);
   const [preview, setPreview] = useState(null);
   const [uploadStatus, setUploadStatus] = useState('');
-  const [message, setMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
+  const [okMessage, setOkMessage]= useState('')
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
     setFile(selectedFile);
@@ -113,33 +114,6 @@ export default function Profile() {
       });
     }
   }, [userInfor]);
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: value
-    }));
-  };
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/userInfo/update`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData)
-      });
-    useEffect(() => {
-        if (userInfor) {
-          setFormData({
-            name: userInfor.full_name || '',
-            phone__number: userInfor.phone_number || '',
-            gmail: userInfor.email || '',
-            sex:userInfor.sex || '',
-            jwt: jwt
-          });
-        }
-      }, [userInfor]);
       const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData((prevData) => ({
@@ -160,52 +134,25 @@ export default function Profile() {
           if (response.ok) {
             const data = await response.json();
             if (data.success) {
+              setOkMessage('Thay đổi thông tin thành công')
               setTimeout(() => {
                 window.location.reload();
               }, 1500);
             } else {
               const error__alert = `Thay đổi thông tin thất bại: ${data.message}`;
               console.log(error__alert);
+              setErrorMessage(error__alert)
             }
           } else {
             console.error('Lỗi khi thay đổi thông tin:', response.statusText);
+            setErrorMessage('Lỗi khi thay đổi thông tin:', response.statusText)
           }
         } catch (error) {
+          setErrorMessage('Lỗi mạng:', error)
           console.error('Lỗi mạng:', error);
         }
       };
-        const changeClickButton = () => {
-            setChangeClick(!changeClick)
-        }
-        const submit = async () => {
-          // Submit form 1 (file upload)
-          if (file) {
-            await handleSubmitt(new Event('submit'));
-          }
-          
-          // Submit form 2 (user info)
-          await handleSubmit(new Event('submit'));
-        };
 
-      if (response.ok) {
-        const data = await response.json();
-        if (data.success) {
-          setMessage(data.message);
-          setTimeout(() => {
-            window.location.reload();
-          }, 1500);
-
-        } else {
-          const error__alert = `Thay đổi thông tin thất bại: ${data.message}`;
-          console.log(error__alert);
-        }
-      } else {
-        console.error('Lỗi khi thay đổi thông tin:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Lỗi mạng:', error);
-    }
-  };
   const changeClickButton = () => {
     setChangeClick(!changeClick)
   }
@@ -219,7 +166,24 @@ export default function Profile() {
     await handleSubmit(new Event('submit'));
   };
 
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 2000); // 2 giây
 
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    if (okMessage) {
+      const timerr = setTimeout(() => {
+        setOkMessage('');
+      }, 2000); 
+
+      return () => clearTimeout(timerr);
+    }
+  }, [okMessage]);
   return (
     <div>
       {login && (<Box
@@ -237,9 +201,15 @@ export default function Profile() {
         }}
         autoComplete="off"
       >
-        {message && (
-          <Alert variant='filled' severity="success" style={{ transition: '-moz-initial', width: '100%', position: 'absolute', zIndex: '20', top: '0', left: '0' }}>
-            {message}
+        {errorMessage && (
+          <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {errorMessage}
+          </Alert>
+        )}
+
+      {okMessage && (
+          <Alert variant='filled' severity="success" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {okMessage}
           </Alert>
         )}
         <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', width: '100%' }}>

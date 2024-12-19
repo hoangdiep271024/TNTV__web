@@ -112,7 +112,7 @@ export default function Shared() {
                   width: "100%",
                   height: "100%",
                   backgroundColor: "rgba(0, 0, 0, 0.5)",
-                  zIndex: 4
+                  zIndex: 8
                 }}
                 onClick={forgotPasswordClick} />{" "}
               <ForgetPassword></ForgetPassword>

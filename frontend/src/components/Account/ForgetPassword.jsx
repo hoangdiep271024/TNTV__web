@@ -178,8 +178,18 @@ export default function ForgetPassword() {
     <>
    {step === 1 && (<Box
     sx={{
+      // position: "absolute",
+      // zIndex: "15",
+      // top: "0",
+      // left: "0",
+      // width: "25vw",
+      // height: "100vh",
+      // backgroundColor: "#fff",
+      // transition: 'linear',
+      // paddingLeft:'25px',
+      // paddingTop:'30px'
       position: "absolute",
-      zIndex: "15",
+      zIndex: "10",
       top: "0",
       left: "0",
       width: "25vw",
