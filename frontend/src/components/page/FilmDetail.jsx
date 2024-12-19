@@ -183,7 +183,7 @@ export default function FilmDetail() {
                 }}
               >
                 {" "}
-                <iframe
+                {data.info.film[0].film_trailer && <iframe
                   src={convertYouTubeLinkToEmbed(
                     data.info.film[0].film_trailer
                   )}
@@ -191,7 +191,8 @@ export default function FilmDetail() {
                   height="600px"
                   frameborder="0"
                   allowfullscreen
-                ></iframe>
+                ></iframe>}
+                {!data.info.film[0].film_trailer && <img style={{width: '700px', height: '500px'}} src="/trailerr.webp"></img>}
 
 
               </div>

@@ -131,17 +131,18 @@ export default function FilmDetail() {
         return (
           <>
             <FilmInfo
-              image={item.film_img}
-              name={item.film_name}
-              type={data.info.categorys}
-              descript={item.film_describe}
-              evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
-              release={exactlyDate} 
-              time={item.duration}
-              age={item.age_limit}
-              actors={data.info.actors}
-              directors={data.info.directors}
-            />
+                image={item.film_img}
+                name={item.film_name}
+                type={data.info.categorys}
+                descript={item.film_describe}
+                evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
+                release={exactlyDate}
+                time={item.duration}
+                age={item.age_limit}
+                actors={data.info.actors}
+                directors={data.info.directors}
+                film_id = {item.film_id}
+              />
             <div style={{ display: 'flex', justifyContent: 'center', gap: '7%', paddingTop: "15px", fontSize: '16px' }}>
               <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Thông tin</Link>
               <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Lịch chiếu</Link>
