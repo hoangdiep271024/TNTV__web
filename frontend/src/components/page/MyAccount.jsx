@@ -176,7 +176,7 @@ const theme = useTheme()
                                     />
                                 )
                             })) : (
-                            <p style={{ marginLeft: '5px', marginTop: '11px',fontFamily:'Roboto', fontSize:'16px' , marginLeft: '22vw'}}>Bạn chưa có bộ sư tập phim</p>
+                            <p style={{ marginTop: '11px',fontFamily:'Roboto', fontSize:'16px' , marginLeft: '22vw'}}>Bạn chưa có bộ sư tập phim</p>
                         )}
                     </div>
                 )}
@@ -220,7 +220,7 @@ const theme = useTheme()
                                 )
                             })
                         ) : (
-                            <p style={{ marginLeft: '5px', marginTop: '16px', marginLeft: '25vw' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
+                            <p style={{ marginTop: '16px', marginLeft: '25vw' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
                         )}
                     </div>
                 )}

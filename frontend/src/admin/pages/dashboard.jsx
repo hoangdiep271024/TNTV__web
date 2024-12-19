@@ -23,15 +23,17 @@ export default function DashboardPage() {
             // console.log(jwt);
 
             try {
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=10`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=11`, {
                     method: 'GET',
                     headers: {
                         'Authorization': 'Bearer ' + jwt,
                     },
                     // credentials: 'include',
                 });
-                // const result = await response.json();
+
+                const result = await response.json();
                 setDashboardData(result);
+                // console.log(result);
             } catch (error) {
                 // console.error('Error fetching dashboard data:', error);
             }
@@ -120,38 +122,46 @@ export default function DashboardPage() {
                                             </TableRow>
                                         </TableHead>
                                         <TableBody>
-                                            {dashboardData.filmResult.map((film) => (
-                                                <TableRow key={film.film_id}>
+                                            {dashboardData.filmResult?.length > 0 ? (
+                                                dashboardData.filmResult.map((film) => (
+                                                    <TableRow key={film.film_id}>
 
-                                                    <TableCell
-                                                        component="th"
-                                                        scope="row"
-                                                        sx={{
-                                                            fontWeight: "bold",
-                                                            color: film.total_tickets_sold ? 'inherit' : 'red'
-                                                        }}
-                                                    >
-                                                        {film.film_name}
+                                                        <TableCell
+                                                            component="th"
+                                                            scope="row"
+                                                            sx={{
+                                                                fontWeight: "bold",
+                                                                color: film.total_tickets_sold ? 'inherit' : 'red'
+                                                            }}
+                                                        >
+                                                            {film.film_name}
+                                                        </TableCell>
+
+                                                        <TableCell
+                                                            align="center"
+                                                            sx={{ color: film.total_tickets_sold ? 'inherit' : 'red' }}
+                                                        >
+                                                            {film.total_tickets_sold}
+                                                        </TableCell>
+
+                                                        <TableCell
+                                                            align="center"
+                                                            sx={{ color: film.total_revenue ? 'inherit' : 'red' }}
+                                                        >
+                                                            {film.total_revenue
+                                                                ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(film.total_revenue)
+                                                                : 'Chưa có doanh thu'}
+                                                        </TableCell>
+
+                                                    </TableRow>
+                                                ))
+                                            ) : (
+                                                <TableRow>
+                                                    <TableCell colSpan={3} align="center">
+                                                        Không có dữ liệu phim.
                                                     </TableCell>
-
-                                                    <TableCell
-                                                        align="center"
-                                                        sx={{ color: film.total_tickets_sold ? 'inherit' : 'red' }}
-                                                    >
-                                                        {film.total_tickets_sold}
-                                                    </TableCell>
-
-                                                    <TableCell
-                                                        align="center"
-                                                        sx={{ color: film.total_revenue ? 'inherit' : 'red' }}
-                                                    >
-                                                        {film.total_revenue
-                                                            ? new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(film.total_revenue)
-                                                            : 'Chưa có doanh thu'}
-                                                    </TableCell>
-
                                                 </TableRow>
-                                            ))}
+                                            )}
                                         </TableBody>
                                     </Table>
                                 </TableContainer>

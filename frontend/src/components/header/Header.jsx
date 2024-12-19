@@ -204,6 +204,7 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
 export default Header;
 
 function AlertDialog({click}) {
+  const navigate =useNavigate()
   const [open, setOpen] = React.useState(false);
   
   const handleClickOpen = () => {

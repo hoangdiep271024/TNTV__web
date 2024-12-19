@@ -23,6 +23,7 @@ const SubmitButton = styled.input`
 `;
 
 const Login = ({onSetAccClick, onSetForgotPassword}) => {
+  const navigate = useNavigate()
   const [errorMessage, setErrorMessage] = useState('');
   const [okMessage, setOkMessage]= useState('')
   const [formData, setFormData] = useState({
@@ -54,12 +55,18 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setOkMessage(`Đăng nhập thành công: ${data.message}`)
-          localStorage.setItem('jwt', data.jwt)
-          setTimeout(() => {
+          setOkMessage(`Login successful: ${data.message}`);
+          localStorage.setItem('jwt', data.jwt);
+          localStorage.setItem('user_id', data.user_id)
+          if(data.message == 'user'){setTimeout(() => {
             window.location.reload();
-          }, 1500);
-          
+          }, 1500);}
+          else{
+            setTimeout(() => {
+              window.location.href = "/admin";
+              location.window.reload();
+            }, 1500);
+          }
           
         } else {
           const error__alert =`Đăng nhập thất bại: ${data.message}`;
