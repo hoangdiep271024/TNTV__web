@@ -177,7 +177,7 @@ const MyAccount = () => {
                                 )
                             })) : (
                             <div style={{width:'100%',textAlign:'center'}}>
-                                <p style={{ marginTop: '68px', fontFamily: 'Roboto', fontSize: '16px'}}>Bạn chưa có bộ sư tập phim</p>
+                                <p style={{ marginTop: '68px', fontFamily: 'Roboto', fontSize: '16px'}}>Bạn chưa có bộ sưu tập phim</p>
                             </div>
                         )}
                     </div>
@@ -217,7 +217,10 @@ const MyAccount = () => {
                                                 </div>
                                             </div>
                                         </div>
-                                        <h2>Tổng tiền: {formatVND(items.total_price)}</h2>
+                                        <div style={{display:'flex',flexDirection:'column',justifyContent:'space-between',alignItems:'center'}} >
+                                            <img src="http://res.cloudinary.com/dh3qus4yk/image/upload/v1732765979/qtncugo3qk1ehyqfs0oo.jpg" style={{width:'82%',height:'128px',marginBottom:'6px'}} alt="QR Code" />
+                                            <h2>Tổng tiền: {formatVND(items.total_price)}</h2>
+                                        </div>
                                     </div>
                                 )
                             })
