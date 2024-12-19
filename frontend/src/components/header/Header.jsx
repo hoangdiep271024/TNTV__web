@@ -57,8 +57,8 @@ const Header = ({ onLoginClick, onSignupClick, onProfileClick }) => {
     onProfileClick();
   };
   const ClickNew = () => {
-    window.location.reload()
     navigate('/tin_tuc/viet_bai')
+    window.location.reload()
   }
   const theme = useTheme();
   const [login, setLogin] = useState('');
