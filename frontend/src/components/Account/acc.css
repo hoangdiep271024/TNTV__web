@@ -61,12 +61,13 @@
 .acc_filmLiked{
     display: flex;
     gap : 22px;
+    margin: 5px 22%;
 }
 
 .orders_card-container{
     border: 1px solid #e3ebf6;
     padding: 5px;
-    margin: 5px 5px;
+    margin: 5px 22%;
     border-radius: 3px;
 }
 

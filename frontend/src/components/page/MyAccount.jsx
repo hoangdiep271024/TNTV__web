@@ -6,12 +6,12 @@ import '../Account/acc.css'
 import Film_card from '../film/Film_card';
 import { useNavigate } from 'react-router-dom';
 import BasicPagination from '../film/BasicPagination';
-import { Box } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 import { useTheme } from '@emotion/react';
 import NewCard from '../new/NewCard';
 
 const MyAccount = () => {
-const theme = useTheme()
+    const theme = useTheme()
     const [isOrders, setIsOrders] = useState(true);
     const [isFilmLike, setIsFilmLike] = useState(false);
     const [userInfor, setUserInfor] = useState([]);
@@ -56,7 +56,7 @@ const theme = useTheme()
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
+            body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
         })
             .then(response => response.json())
             .then(responseData => {
@@ -78,7 +78,7 @@ const theme = useTheme()
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
+            body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
         })
             .then(response => response.json())
             .then(responseData => {
@@ -100,7 +100,7 @@ const theme = useTheme()
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
+            body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
         })
             .then(response => response.json())
             .then(responseData => {
@@ -122,7 +122,7 @@ const theme = useTheme()
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({jwt: localStorage.getItem('jwt')})
+            body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
         })
             .then(response => response.json())
             .then(responseData => {
@@ -146,11 +146,11 @@ const theme = useTheme()
                 <img src={Acc_banner} style={{ height: 'auto', width: '100%' }} />
             </div>
             <div className='acc_container'>
-                <div className='acc_content' style={{marginLeft: '22%'}}>
+                <div className='acc_content' style={{ marginLeft: '22%' }}>
                     <img src={userInfor.user_img ? userInfor.user_img : defaultImage} />
                     <p>{userInfor.full_name}</p>
                 </div>
-                <div className='acc_navbar' style={{marginLeft: '24%'}}>
+                <div className='acc_navbar' style={{ marginLeft: '24%' }}>
                     <p className={`acc_navbar-option ${isOrders ? 'selected' : ''}`} onClick={ClickOrders}>Vé Đã Đặt</p>
                     <p className={`acc_navbar-option ${isFilmLike ? 'selected' : ''}`} onClick={ClickFilmLike}>Phim Đã thích</p>
                     <p className={`acc_navbar-option ${isNew ? 'selected' : ''}`} onClick={ClickNew}>Bài báo đã viết</p>
@@ -158,7 +158,7 @@ const theme = useTheme()
                 </div>
                 <hr className='line' />
                 {isFilmLike && (
-                    <div className='acc_filmLiked' style={{marginLeft: '22vw'}}>
+                    <div className='acc_filmLiked'>
                         {userFilmLiked.length > 0 ? (
                             userFilmLiked.map((items) => {
                                 const datee = items.Release_date.substring(0, 10);
@@ -176,7 +176,9 @@ const theme = useTheme()
                                     />
                                 )
                             })) : (
-                            <p style={{ marginTop: '11px',fontFamily:'Roboto', fontSize:'16px' , marginLeft: '22vw'}}>Bạn chưa có bộ sư tập phim</p>
+                            <div style={{width:'100%',textAlign:'center'}}>
+                                <p style={{ marginTop: '68px', fontFamily: 'Roboto', fontSize: '16px'}}>Bạn chưa có bộ sư tập phim</p>
+                            </div>
                         )}
                     </div>
                 )}
@@ -188,10 +190,10 @@ const theme = useTheme()
                                 const datee = items.show_date.substring(0, 10); // Lấy ngày đúng
                                 const time = items.show_time.substring(0, 5);
                                 return (
-                                    <div className='orders_card-container' style={{marginLeft: '22vw'}}>
+                                    <div className='orders_card-container'>
                                         <div className='orders_card'>
 
-                                            <img src={items.film_img} onClick={()=>handleClickimg(items.film_name,items.film_id)}/>
+                                            <img src={items.film_img} onClick={() => handleClickimg(items.film_name, items.film_id)} />
 
                                             <div className='orders_card-content'>
                                                 <h1>{items.film_name}</h1>
@@ -220,23 +222,23 @@ const theme = useTheme()
                                 )
                             })
                         ) : (
-                            <p style={{ marginTop: '16px', marginLeft: '25vw' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
+                            <p style={{ marginTop: '68px', textAlign: 'center' }}>Bạn chưa có đơn hàng nào cả</p> // Thêm thông báo khi không có đơn hàng
                         )}
                     </div>
                 )}
                 {userNew && isNew && (
-  <Box sx={{ marginTop: '70px', width: '100vw' }}>
-    {userNew.length === 0 ? (
-      <Typography textAlign="center" variant="h6" color="text.secondary">
-        Bạn chưa có bài viết nào
-      </Typography>
-    ) : (
-      <div style={{ width: '80%', marginLeft: '10%' }}>
-        <Neww data={userNew}></Neww>
-      </div>
-    )}
-  </Box>
-)}
+                    <Box sx={{ marginTop: '68px', width: '100vw' }}>
+                        {userNew.length === 0 ? (
+                            <Typography textAlign="center">
+                                Bạn chưa có bài viết nào
+                            </Typography>
+                        ) : (
+                            <div style={{ width: '80%', marginLeft: '10%' }}>
+                                <Neww data={userNew}></Neww>
+                            </div>
+                        )}
+                    </Box>
+                )}
 
             </div>
             <Footer />
@@ -246,43 +248,43 @@ const theme = useTheme()
 
 export default MyAccount;
 
-function Neww({data}) {
+function Neww({ data }) {
 
     const theme = useTheme();
     const [currentPage, setCurrentPage] = useState(1);
     const filmsPerPage = 4;
     const handlePageChange = (event, value) => {
-      setCurrentPage(value);
+        setCurrentPage(value);
     };
     const currentData = data
-  
+
     const indexOfLastFilm = currentPage * filmsPerPage;
     const indexOfFirstFilm = indexOfLastFilm - filmsPerPage;
     const currentFilms = currentData.slice(indexOfFirstFilm, indexOfLastFilm);
-  
+
     const totalPages = Math.max(Math.ceil(currentData.length / filmsPerPage), 1);
-  
+
     return (
-      <Box>
-      <Box sx={{width: '100%', height: 'auto', display: 'flex', gap: '3%'}}>
-          {currentFilms.map(item => {
-            const datee = item.new_time.substring(0, 10);
-            const year = datee.substring(0, 4);
-            const month = datee.substring(5, 7);
-            const day = datee.substring(8, 10);
-            const exactlyDate = `${day}/${month}`;
-            return (
-              <Box sx={{ width: '23%' , height:'auto'}}>
-              <NewCard
-              img={item.new_img} header= {item.new_header} footer = {item.new_footer} date = {exactlyDate} new_id = {item.new_id}
-              />
-              </Box>
-            );
-          })}
-  
-  </Box>
-        {data && <Box sx={{width: '80vw', display: 'flex', justifyContent: 'center', marginTop: '20px'}}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
-        
-      </Box>
+        <Box>
+            <Box sx={{ width: '100%', height: 'auto', display: 'flex', gap: '3%' }}>
+                {currentFilms.map(item => {
+                    const datee = item.new_time.substring(0, 10);
+                    const year = datee.substring(0, 4);
+                    const month = datee.substring(5, 7);
+                    const day = datee.substring(8, 10);
+                    const exactlyDate = `${day}/${month}`;
+                    return (
+                        <Box sx={{ width: '23%', height: 'auto' }}>
+                            <NewCard
+                                img={item.new_img} header={item.new_header} footer={item.new_footer} date={exactlyDate} new_id={item.new_id}
+                            />
+                        </Box>
+                    );
+                })}
+
+            </Box>
+            {data && <Box sx={{ width: '80vw', display: 'flex', justifyContent: 'center', marginTop: '20px' }}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
+
+        </Box>
     );
-  }
+}
