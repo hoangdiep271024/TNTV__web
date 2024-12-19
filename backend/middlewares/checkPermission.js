@@ -86,6 +86,13 @@ export const checkPermisson = async (req, res, next) => {
             });
         }
 
+        if(user[0].role != 1) {
+            return res.status(401).json({
+                messages: "Chỉ có admin mới có thể truy cập vào trang web này!",
+                success: false
+            });
+        }
+
         res.locals.user = user;
 
         next();
