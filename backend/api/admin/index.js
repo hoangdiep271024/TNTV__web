@@ -8,25 +8,25 @@ import userRoutes from "./user.js";
 import dashboardRoutes from "./dashboard.js";
 import newsRoutes from "./new.js";
 
-import { checkPermisson } from "../../middlewares/checkPermission.js";
+import { checkPermissonAdmin } from "../../middlewares/checkPermission.js";
 
 export const adminApi = (app) => {
 
     const PATH_ADMIN = `${systemConfig.prefixAdmin}`;
 
-    app.use(`/${PATH_ADMIN}/films`, checkPermisson, filmRoutes);
+    app.use(`/${PATH_ADMIN}/films`, checkPermissonAdmin, filmRoutes);
 
-    app.use(`/${PATH_ADMIN}/cinemas`, checkPermisson, cinemaRoutes);
+    app.use(`/${PATH_ADMIN}/cinemas`, checkPermissonAdmin, cinemaRoutes);
 
-    app.use(`/${PATH_ADMIN}/rooms`, checkPermisson, roomRoutes);
+    app.use(`/${PATH_ADMIN}/rooms`, checkPermissonAdmin, roomRoutes);
 
-    app.use(`/${PATH_ADMIN}/showtimes`, checkPermisson, showTimeRoutes);
+    app.use(`/${PATH_ADMIN}/showtimes`, checkPermissonAdmin, showTimeRoutes);
 
-    app.use(`/${PATH_ADMIN}/orders`, checkPermisson, orderRoutes);
+    app.use(`/${PATH_ADMIN}/orders`, checkPermissonAdmin, orderRoutes);
 
-    app.use(`/${PATH_ADMIN}/users`, checkPermisson, userRoutes);
+    app.use(`/${PATH_ADMIN}/users`, checkPermissonAdmin, userRoutes);
 
-    app.use(`/${PATH_ADMIN}/dashboard`, checkPermisson, dashboardRoutes);
+    app.use(`/${PATH_ADMIN}/dashboard`, checkPermissonAdmin, dashboardRoutes);
 
-    app.use(`/${PATH_ADMIN}/news`, checkPermisson, newsRoutes);
+    app.use(`/${PATH_ADMIN}/news`, newsRoutes);
 }

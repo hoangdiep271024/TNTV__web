@@ -4,18 +4,20 @@ import * as controller from "../../controllers/admin/new.js";
 
 import { handleUpload, upload } from "../../middlewares/uploadCloud.js";
 
+import { checkPermissonAdmin, checkPermissonUser } from "../../middlewares/checkPermission.js";
+
 const newsRoutes = express.Router()
 
 newsRoutes.get("/abc", controller.abc);
 
-newsRoutes.get("/", controller.index);
+newsRoutes.get("/", checkPermissonUser,  controller.index);
 
-newsRoutes.get("/detail/:newId", controller.detail);
+newsRoutes.get("/detail/:newId", checkPermissonUser, controller.detail);
 
-newsRoutes.get("/create", controller.create);
+newsRoutes.get("/create", checkPermissonUser, controller.create);
 
 newsRoutes.post(
-    "/create", upload.single("new_img"), async (req, res, next) =>{
+    "/create", checkPermissonUser, upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
         if(req.file) {
             const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -28,10 +30,10 @@ newsRoutes.post(
     },
     controller.createPost);
 
-newsRoutes.get("/edit/:newId", controller.edit);
+newsRoutes.get("/edit/:newId", checkPermissonUser, controller.edit);
 
 newsRoutes.patch(
-    "/edit/:newId", upload.single("new_img"), async (req, res, next) =>{
+    "/edit/:newId", checkPermissonUser, upload.single("new_img"), async (req, res, next) =>{
         res.locals.url = "";
         if(req.file) {
             const b64 = Buffer.from(req.file.buffer).toString("base64");
@@ -45,6 +47,6 @@ newsRoutes.patch(
     controller.editPatch
 );
 
-newsRoutes.delete("/delete/:newId", controller.deleteItem);
+newsRoutes.delete("/delete/:newId", checkPermissonUser, controller.deleteItem);
 
 export default newsRoutes;
