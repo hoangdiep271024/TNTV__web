@@ -72,8 +72,10 @@ export const newAboard = async (req, res) => {
 export const NewDetail = async (req, res) => {  
     const new_id = req.params.new_id
     let query = `
-    select * from news
-    where new_id= ?
+    SELECT news.new_id, news.film_id, news.new_content, news.new_img, news.new_time, users.username
+ from news
+ inner join users on users.user_id = news.user_id
+ where new_id = ?
     `;
     
     connection.query(query, [new_id],(error, results) => {

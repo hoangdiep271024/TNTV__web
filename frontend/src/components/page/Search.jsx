@@ -89,7 +89,7 @@ export default function Search() {
               </>);
             })
         ) : (
-          <p>Không có dữ liệu để hiển thị.</p>
+          <p style={{textAlign: 'center', fontSize: '20px', marginTop: '20px'}}>Không có kết quả phù hợp! Vui lòng thử từ khoá khác</p>
         )}
       </Box>
 

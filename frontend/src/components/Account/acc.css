@@ -42,15 +42,9 @@
     margin: 0;
 }
 
-.acc_navbar-option{
-    color: rgb(34, 34, 34);
-    font-size: 13px;
-    cursor: pointer;
-}
-
-.acc_navbar-option.selected{
-    color: rgb(123, 123, 123);
-}
+.acc_navbar-option.selected {
+    color: '#ef4444'
+    }
 
 .line {
     border: none;

@@ -151,14 +151,14 @@ const MyAccount = () => {
                     <p>{userInfor.full_name}</p>
                 </div>
                 <div className='acc_navbar' style={{ marginLeft: '24%' }}>
-                    <p className={`acc_navbar-option ${isOrders ? 'selected' : ''}`} onClick={ClickOrders}>Vé Đã Đặt</p>
-                    <p className={`acc_navbar-option ${isFilmLike ? 'selected' : ''}`} onClick={ClickFilmLike}>Phim Đã thích</p>
-                    <p className={`acc_navbar-option ${isNew ? 'selected' : ''}`} onClick={ClickNew}>Bài báo đã viết</p>
+                    <p className={`acc_navbar-option`} style={{ color: isOrders ? '#6e96cd' : 'inherit', cursor: 'pointer' }} onClick={ClickOrders}>Vé Đã Đặt</p>
+                    <p className={`acc_navbar-option`}  style={{ color: isFilmLike ? '#6e96cd' : 'inherit', cursor: 'pointer' }} onClick={ClickFilmLike}>Phim Đã thích</p>
+                    <p className={`acc_navbar-option`} style={{ color: isNew ? '#6e96cd' : 'inherit', cursor: 'pointer' }} onClick={ClickNew}>Bài báo đã viết</p>
 
                 </div>
                 <hr className='line' />
                 {isFilmLike && (
-                    <div className='acc_filmLiked'>
+                    <div className='acc_filmLiked' style={{marginTop: '20px'}}>
                         {userFilmLiked.length > 0 ? (
                             userFilmLiked.map((items) => {
                                 const datee = items.Release_date.substring(0, 10);
@@ -184,13 +184,13 @@ const MyAccount = () => {
                 )}
 
                 {isOrders && (
-                    <div className="acc_orders">
+                    <div className="acc_orders" style={{marginTop: '20px'}}>
                         {userOrders.length > 0 ? (
                             userOrders.map((items) => {
                                 const datee = items.show_date.substring(0, 10); // Lấy ngày đúng
                                 const time = items.show_time.substring(0, 5);
                                 return (
-                                    <div className='orders_card-container'>
+                                    <div className='orders_card-container' style={{marginTop: '15px'}}>
                                         <div className='orders_card'>
 
                                             <img src={items.film_img} onClick={() => handleClickimg(items.film_name, items.film_id)} />

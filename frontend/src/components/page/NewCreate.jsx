@@ -118,7 +118,7 @@ const NewCreate = () => {
   return (
     <Box>
       <Shared />
-      <Box sx={{ marginTop: '19vh' }}>
+      <Box sx={{ marginTop: '21vh' }}>
         <div style={{
           marginTop: '20px', fontSize: '30px', textAlign: 'center',
           fontFamily: 'Montserrat', fontWeight: '600',
@@ -229,7 +229,7 @@ const NewCreate = () => {
               style={{ width: '100%', overflow: 'auto', overflowY: 'scroll', height: '500px' }}
             />
           </div>
-          <button type="submit" style={{ marginTop: "20px", position: 'absolute', right: '0px' }}>
+          <button type="submit" style={{ marginTop: "20px", position: 'absolute', right: '0px', width: 'auto', padding: '5px' }}>
             Tạo bài viết
           </button>
         </form>
