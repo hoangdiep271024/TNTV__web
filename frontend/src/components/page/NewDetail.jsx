@@ -98,7 +98,7 @@ export default function NewDetail() {
             <div style={{height: '105px'}}>
               <div style={{overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal'}}>{item.new_header}</div>
               <div style={{textAlign: 'end', fontSize: '15px', position: 'absolute', right: '15px', bottom: '15px'}}>{exactlyDate}</div>
-              <div style={{ fontSize: '15px', position: 'absolute', bottom: '15px'}}>{item.username}</div>
+              <div style={{ fontSize: '15px', position: 'absolute', bottom: '15px', color: '#ef4444'}}>{item.username}</div>
             </div>
           </Box>
         )

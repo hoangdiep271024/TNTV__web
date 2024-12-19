@@ -49,7 +49,25 @@ const MyAccount = () => {
         localStorage.setItem('film_id', film_id)
         navigate(`/phim/${film_name}`);
     };
-
+    
+    useEffect(() => {
+        fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ jwt: localStorage.getItem('jwt') })
+        })
+          .then(response => response.json())
+          .then(responseData => {
+            if (!responseData.success) {
+              
+              navigate('/auth');
+            }
+          })
+          .catch(error => console.error('Error:', error));
+      }, []);
+    
     useEffect(() => {
         fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
             method: 'POST',

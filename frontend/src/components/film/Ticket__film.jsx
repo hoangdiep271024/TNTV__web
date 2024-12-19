@@ -84,7 +84,7 @@ export default function Ticket__film({ onLoadComplete }) {
       {loading && (
   <Box sx= {{display: 'flex', width: '80%', flexWrap: 'wrap', gap: '10px', marginLeft: '10%',}}>
     {Array.from({ length: 14 }, (_, index) => (
-      <Box key ={index}>
+      <Box key={index}>
       <Skeleton
         variant="rectangular"
         width={150}

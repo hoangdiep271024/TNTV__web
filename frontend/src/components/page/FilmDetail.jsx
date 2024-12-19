@@ -198,6 +198,7 @@ export default function FilmDetail() {
             </>
           );
         })()}
+        {dataRelate && dataRelate.length > 0 && <div style={{fontSize: '25px', fontWeight: '700', fontFamily: 'Montserrat', marginLeft: '20%', marginTop: '30px'}}>BÀI VIẾT LIÊN QUAN</div>}
         { dataRelate && dataRelate.length > 0 && dataRelate.map((item, index) => {
        const datee = item.new_time.substring(0, 10);
        const month = datee.substring(5, 7);
@@ -205,7 +206,6 @@ export default function FilmDetail() {
        const exactlyDate = `${day}/${month}`;
       return (
         <Box>
-          <div style={{fontSize: '25px', fontWeight: '700', fontFamily: 'Montserrat', marginLeft: '20%', marginTop: '30px'}}>BÀI VIẾT LIÊN QUAN</div>
           <Box key={index} sx={{ display: 'flex', padding: '10px 5px', gap: '7px', alignItems: 'center', border: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderRadius: '15px', cursor: 'pointer', position: 'relative', width: '60%', marginLeft: '20%', marginTop: '20px'}} onClick = {() => ClickNew(item.new_id, item.new_header)}>
             <img src={item.new_img} alt="related item" style={{width: '60%', height:'auto', maxHeight: '105px', maxWidth: '200px', objectFit: 'cover'}} />
             <div style={{height: '105px'}}>
@@ -219,7 +219,7 @@ export default function FilmDetail() {
         
       );
     })}
-    {dataRelate && dataRelate.length == 0 && <div style={{fontSize: '25px', fontWeight: '700', fontFamily: 'Montserrat', textAlign: 'center', marginTop: '40px'}}>CHƯA CÓ BÀI VIẾT NÀO LIÊN QUAN</div>}
+    {dataRelate && dataRelate.length == 0 && <div style={{fontSize: '25px', fontWeight: '600', fontFamily: 'Montserrat', textAlign: 'center', marginTop: '40px'}}>CHƯA CÓ BÀI VIẾT NÀO LIÊN QUAN</div>}
      {data && <Footer/>}
     </Box>
   );
