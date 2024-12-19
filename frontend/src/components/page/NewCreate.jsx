@@ -6,8 +6,6 @@ import Footer from "../Footer/Footer";
 import Shared from "../Shared";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
-
-
 const NewCreate = () => {
   const navigate = useNavigate();
   const theme = useTheme();
