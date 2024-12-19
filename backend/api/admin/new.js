@@ -6,6 +6,8 @@ import { handleUpload, upload } from "../../middlewares/uploadCloud.js";
 
 const newsRoutes = express.Router()
 
+newsRoutes.get("/abc", controller.abc);
+
 newsRoutes.get("/", controller.index);
 
 newsRoutes.get("/detail/:newId", controller.detail);

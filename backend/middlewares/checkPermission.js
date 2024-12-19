@@ -51,13 +51,14 @@ export const checkPermisson = async (req, res, next) => {
 //         // }
 
         // Lấy token từ header Authorization
-        const authHeader = req.headers['Authorization'];
+        const authHeader = req.headers['authorization'];
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({
-                messages: "Unauthorized\nPlease login first!",
+                messages: "Unauthorized.Please login first!",
                 success: false
             });
         }
+        
 
         const token = authHeader.split(' ')[1]; // Tách 'Bearer' khỏi token
         const userId = verifyToken(token).id;
@@ -65,13 +66,13 @@ export const checkPermisson = async (req, res, next) => {
         // Nếu token expired hoặc không hợp lệ thì userId sẽ null
         if(!userId) {
             return res.status(401).json({
-                messages: "Token is invalid.\nPlease login first!",
+                messages: "Token is invalid.Please login first!",
                 success: false
             });
         }
         if(isTokenExpired(token)){
             return res.status(401).json({
-                messages: "Token is expired.\nPlease login again!",
+                messages: "Token is expired.Please login again!",
                 success: false
             });
         }
@@ -80,7 +81,7 @@ export const checkPermisson = async (req, res, next) => {
 
         if (user.length == 0) {
             return res.status(401).json({
-                messages: "Token is expired or invalid\nPlease login first!",
+                messages: "Token is expired or invalid.Please login first!",
                 success: false
             });
         }

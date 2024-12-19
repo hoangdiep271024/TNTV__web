@@ -164,6 +164,17 @@ export const editPatch = async (req, res) => {
             if (role == "user") role = 0;
             else role = 1;
 
+            // Kiểm tra trùng lặp username
+            const [checkUserName] = await connection.promise().query(`Select * from users where username = ?`, [username]);
+
+            if(checkUserName.length > 0) {
+                if(checkUserName[0].username != username) {
+                    return res.status(500).json({
+                        message: `Username ${username} already existed.\nPlease choose another username.`
+                    })
+                }
+            }
+
             // Kiểm tra trùng lặp email
             const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
 
@@ -193,6 +204,17 @@ export const editPatch = async (req, res) => {
             else sex = 2;
             if (role == "user") role = 0;
             else role = 1;
+
+            // Kiểm tra trùng lặp username
+            const [checkUserName] = await connection.promise().query(`Select * from users where username = ?`, [username]);
+
+            if(checkUserName.length > 0) {
+                if(checkUserName[0].username != username) {
+                    return res.status(500).json({
+                        message: `Username ${username} already existed.\nPlease choose another username.`
+                    })
+                }
+            }
 
             // Kiểm tra trùng lặp email
             const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);

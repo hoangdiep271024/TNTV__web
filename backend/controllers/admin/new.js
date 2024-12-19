@@ -1,5 +1,16 @@
 import connection from "../../models/SQLConnection.js";
 
+export const abc = (req, res) => {
+    const authHeader = req.headers['authorization'];
+        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
+        //     return res.status(401).json({
+        //         messages: "Unauthorized.Please login first! 1",
+        //         success: false
+        //     });
+        // }
+    console.log(authHeader);
+}
+
 // [GET] /admin/news
 export const index = async (req, res) => {
     // SELECT * FROM news;
