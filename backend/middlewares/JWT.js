@@ -7,7 +7,7 @@ const SECRET_CODE = process.env.SECRET_CODE
 export const createJWT = (payload) => {
     let token = null;
     try{
-        token = jwt.sign(payload,SECRET_CODE,{ expiresIn: '30m' });
+        token = jwt.sign(payload,SECRET_CODE,{ expiresIn: '10h' });
     } catch (err){
         console.log(err);
     }
@@ -21,6 +21,10 @@ export const verifyToken = (token) => {
         data = decoded
     } catch (err) {
         console.log(err);
+        if (err.name === "TokenExpiredError") {
+            throw new Error("TokenExpiredError");
+        }
+        throw new Error("InvalidTokenError");
     }
     return data;
 }
