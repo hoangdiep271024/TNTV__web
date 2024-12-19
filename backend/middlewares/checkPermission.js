@@ -54,7 +54,7 @@ export const checkPermisson = async (req, res, next) => {
         const authHeader = req.headers['authorization'];
         if (!authHeader || !authHeader.startsWith('Bearer ')) {
             return res.status(401).json({
-                messages: "Unauthorized.Please login first!",
+                messages: "Chưa xác thực. Vui lòng đăng nhập trước!",
                 success: false
             });
         }
@@ -66,13 +66,13 @@ export const checkPermisson = async (req, res, next) => {
         // Nếu token expired hoặc không hợp lệ thì userId sẽ null
         if(!userId) {
             return res.status(401).json({
-                messages: "Token is invalid.Please login first!",
+                messages: "Token không hợp lệ.Vui lòng đăng nhập trước!",
                 success: false
             });
         }
         if(isTokenExpired(token)){
             return res.status(401).json({
-                messages: "Token is expired.Please login again!",
+                messages: "Token đã hết hạn.Vui lòng đăng nhập lại!",
                 success: false
             });
         }
@@ -81,7 +81,7 @@ export const checkPermisson = async (req, res, next) => {
 
         if (user.length == 0) {
             return res.status(401).json({
-                messages: "Token is expired or invalid.Please login first!",
+                messages: "Token đã hết hạn hoặc không hợp lệ.Vui lòng đăng nhập trước!",
                 success: false
             });
         }
@@ -93,12 +93,12 @@ export const checkPermisson = async (req, res, next) => {
         console.log(error);
         if (error.message === "TokenExpiredError") {
             return res.status(401).json({
-                messages: "Token is expired. Please login again!",
+                messages: "Token đã hết hạn. Vui lòng đăng nhập lại!",
                 success: false
             });
         }
         return res.status(401).json({
-            messages: "Invalid token. Please login again!",
+            messages: "Token đã hết hạn. Vui lòng đăng nhập lại!",
             success: false
         });
     }

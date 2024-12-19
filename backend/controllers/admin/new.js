@@ -87,7 +87,7 @@ export const detail = async (req, res) => {
     } else {
         res.json({
             messages: {
-                error: "New not found"
+                error: "Không tồn tại bản tin"
             }
         });
     }
@@ -104,7 +104,7 @@ export const create = async (req, res) => {
     catch (error) {
         console.error(error);
         res.status(500).json({
-            message: "Error creating new",
+            message: "Lỗi tạo mới bản tin",
             error: error
         });
     }
@@ -131,7 +131,7 @@ export const createPost = async (req, res) => {
         const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
         if (film.length === 0) {
             return res.status(500).json({
-                message: "Film doesn't exist.\nPlease choose film again!"
+                message: "Phim không tồn tại. Vui lòng chọn lại phim!"
             });
         }
         const filmId = film[0].film_id;
@@ -150,18 +150,18 @@ export const createPost = async (req, res) => {
         // Kiểm tra xem bản ghi có được tạo thành công không
         if (New) {
             res.status(201).json({
-                message: "New created successfully",
+                message: "Tạo bản tin thành công",
                 NewId: New.insertId, // ID của bản ghi mới được tạo
             });
         } else {
             res.status(500).json({
-                message: "Error creating New",
+                message: "Lỗi tạo mới bản tin",
             });
         }
     } catch (error) {
         console.log(error);
         res.status(501).json({
-            message: "Error creating New",
+            message: "Lỗi tạo mới bản tin",
             error: error
         });
     }
@@ -201,7 +201,7 @@ export const edit = async (req, res) => {
         } else {
             res.json({
                 messages: {
-                    error: "New not found"
+                    error: "Không tìm thấy bản tin"
                 }
             });
         }
@@ -209,7 +209,7 @@ export const edit = async (req, res) => {
         console.log(error);
         res.status(500).json({
             messages: {
-                error: "New not found"
+                error: "Không tìm thấy bản tin"
             }
         });
     }
@@ -235,7 +235,7 @@ export const editPatch = async (req, res) => {
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
             if (film.length == 0) {
                 return res.status(500).json({
-                    message: "Film doesn't exist\nPlease choose film again",
+                    message: "Phim không tồn tại. Vui lòng chọn lại phim!",
                 });
             }
             const filmId = film[0].film_id;
@@ -258,7 +258,7 @@ export const editPatch = async (req, res) => {
             const [film] = await connection.promise().query(`SELECT film_id FROM films WHERE film_name = ?`, [film_name]);
             if (film.length == 0) {
                 return res.status(500).json({
-                    message: "Film doesn't exist\nPlease choose film again"
+                    message: "Phim không tồn tại. Vui lòng chọn lại phim!"
                 });
             }
             const filmId = film[0].film_id;
@@ -277,12 +277,12 @@ export const editPatch = async (req, res) => {
         }
 
         res.status(200).json({
-            message: "New and related records updated successfully",
+            message: "Cập nhật bản tin và các bản ghi liên quan thành công!",
         });
     } catch (error) {
         console.log(error);
         res.status(501).json({
-            message: "Error edit New",
+            message: "Lỗi khi sửa bản tin",
             error: error
         });
     }
@@ -297,17 +297,17 @@ export const deleteItem = async (req, res) => {
 
         if (deleteResult.affectedRows < 0) {
             return res.status(501).json({
-                message: "New deleted doesn't exist",
+                message: "Bản tin cần xóa không tồn tại",
             });
         }
 
         res.status(200).json({
-            message: "New and related records deleted successfully",
+            message: "Xóa bản tin và các bản ghi liên quan thành công",
         });
     } catch (error) {
         console(error);
         res.status(501).json({
-            message: "Error deleting New",
+            message: "Lỗi khi xóa bản tin",
             error: error
         });
     }
