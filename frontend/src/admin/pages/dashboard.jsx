@@ -20,22 +20,20 @@ export default function DashboardPage() {
                 return;
             }
 
+            // console.log(jwt);
+
             try {
-                const requestOptions = {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=10`, {
                     method: 'GET',
-                    redirect: 'follow',
                     headers: {
                         'Authorization': 'Bearer ' + jwt,
                     },
-                    // credentials: 'include'
-                };
-
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/dashboard?month=11`, requestOptions);
-                const result = await response.json();
-
+                    // credentials: 'include',
+                });
+                // const result = await response.json();
                 setDashboardData(result);
             } catch (error) {
-                console.error('Error fetching dashboard data:', error);
+                // console.error('Error fetching dashboard data:', error);
             }
         };
 

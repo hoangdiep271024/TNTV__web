@@ -36,7 +36,7 @@ app.use(cookieParser());
 app.set('trust proxy', 1)
 // app.options('*', corMw);
 
-app.use(cors())
+// app.use(cors())
 
 app.use(express.static(path.join(distPath, 'dist'))); // Hoặc 'build'
 

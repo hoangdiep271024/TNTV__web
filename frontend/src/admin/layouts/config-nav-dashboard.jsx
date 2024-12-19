@@ -68,7 +68,7 @@ export const navData = [
     // },
     {
         title: 'Đăng xuất',
-        path: '/admin/auth',
+        path: '/auth',
         icon: <ExitIcon />,
     }
 ];
