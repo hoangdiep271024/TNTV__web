@@ -35,13 +35,12 @@ export default function AccountHeader({login, signup}) {
         },
       }}
     >
-  <IconButton style={{width: '50px', height: '50px'}}>
+  <IconButton style={{width: '50px', height: '50px'}} onClick={handleClick}>
   <AccountCircleIcon
         id="basic-button"
         aria-controls={open ? 'basic-menu' : undefined}
         aria-haspopup="true"
         aria-expanded={open ? 'true' : undefined}
-        onClick={handleClick}
         style={{fontSize: '40px'}}
       >
       </AccountCircleIcon>

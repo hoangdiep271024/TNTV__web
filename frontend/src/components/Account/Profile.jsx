@@ -133,7 +133,6 @@ export default function Profile() {
             const data = await response.json();
             if (data.success) {
               setTimeout(() => {
-                console.log('gui form 2 thanh cong')
                 window.location.reload();
               }, 1500);
             } else {

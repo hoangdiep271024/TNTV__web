@@ -6,7 +6,10 @@ import Footer from "../Footer/Footer";
 import Shared from "../Shared";
 import { useTheme } from "@emotion/react";
 import { useNavigate } from "react-router-dom";
+import Alert from '@mui/material/Alert';
 const NewCreate = () => {
+  const [errorMessage, setErrorMessage] = useState('');
+  const [okMessage, setOkMessage]= useState('')
   const navigate = useNavigate();
   const theme = useTheme();
   const jwt = localStorage.getItem('jwt');
@@ -16,7 +19,8 @@ const NewCreate = () => {
     new_footer: "",
     new_content: "",
   });
-
+  const [loading, setLoading] = useState(false)
+ 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
       method: 'POST',
@@ -28,6 +32,7 @@ const NewCreate = () => {
       .then(response => response.json())
       .then(responseData => {
         if (!responseData.success) {
+          
           navigate('/auth');
         }
       })
@@ -56,9 +61,12 @@ const NewCreate = () => {
   };
 
   const handleSubmit = async (e) => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth", 
+    });
     e.preventDefault();
-
-
+    setLoading(true)
     const parser = new DOMParser();
     const doc = parser.parseFromString(formData.new_content, "text/html");
     const images = doc.querySelectorAll("img");
@@ -88,7 +96,17 @@ const NewCreate = () => {
         body: data,
       });
       const result = await response.json();
-      console.log("Response:", result);
+      setLoading(false)
+      if(result.message == 'Tạo bản tin thành công') {
+        setOkMessage(`Tạo bản tin thành công`)
+        
+        setTimeout(() => {
+          window.location.href = '/auth';;
+        }, 2500);
+      }
+      else {
+        setErrorMessage(result.message)
+      }
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -114,9 +132,41 @@ const NewCreate = () => {
     "link",
     "image",
   ];
+  useEffect(() => {
+    if (errorMessage) {
+      const timer = setTimeout(() => {
+        setErrorMessage('');
+      }, 2000); // 2 giây
+
+      return () => clearTimeout(timer);
+    }
+  }, [errorMessage]);
+  useEffect(() => {
+    if (okMessage) {
+      const timerr = setTimeout(() => {
+        setOkMessage('');
+      }, 2000); 
+
+      return () => clearTimeout(timerr);
+    }
+  }, [okMessage]);
 
   return (
     <Box>
+      {errorMessage && (
+          <Alert variant='filled' severity="error" style={{position: 'fixed',transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {errorMessage}
+          </Alert>
+        )}
+      {loading &&  <Alert variant='filled' severity="warning" style={{position: 'fixed',transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {`Đang tải lên`}
+          </Alert>}
+
+      {okMessage && (
+          <Alert variant='filled' severity="success" style={{position: 'fixed',transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0'}}>
+            {okMessage}
+          </Alert>
+        )}
       <Shared />
       <Box sx={{ marginTop: '21vh' }}>
         <div style={{
