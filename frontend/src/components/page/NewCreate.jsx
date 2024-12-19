@@ -52,13 +52,13 @@ const NewCreate = () => {
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    setNewImg(file); 
+    setNewImg(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-   
+
     const parser = new DOMParser();
     const doc = parser.parseFromString(formData.new_content, "text/html");
     const images = doc.querySelectorAll("img");
@@ -66,7 +66,7 @@ const NewCreate = () => {
       img.style.width = "700px";
     });
 
-    
+
     const updatedContent = doc.body.innerHTML;
 
     const data = new FormData();
@@ -140,7 +140,7 @@ const NewCreate = () => {
                 required
                 sx={{
                   "& .MuiInputLabel-shrink": {
-                    transform: "translate(12px, -7px) scale(0.85)", 
+                    transform: "translate(12px, -7px) scale(0.85)",
                   },
                 }}
                 InputProps={{
@@ -200,7 +200,7 @@ const NewCreate = () => {
                 required
                 sx={{
                   "& .MuiInputLabel-shrink": {
-                    transform: "translate(12px, -7px) scale(0.85)", 
+                    transform: "translate(12px, -7px) scale(0.85)",
                   },
                 }}
                 InputProps={{

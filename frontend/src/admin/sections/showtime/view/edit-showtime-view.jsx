@@ -12,12 +12,19 @@ export function EditShowtimeView({ showtimeId }) {
         show_time: "",
     });
 
+    const [filmNames, setFilmNames] = useState([]);
     const [originalData, setOriginalData] = useState(null);
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const navigate = useNavigate();
+
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     useEffect(() => {
         const fetchShowtimeDetails = async () => {
@@ -26,6 +33,7 @@ export function EditShowtimeView({ showtimeId }) {
 
                 if (!jwt) {
                     console.error('JWT token is missing');
+                    setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                     return;
                 }
 
@@ -40,7 +48,7 @@ export function EditShowtimeView({ showtimeId }) {
                     throw new Error("Failed to fetch showtime details");
                 }
                 const data = await response.json();
-                console.log(data);
+                // console.log(data);
 
                 const showDate = data.showTime[0]?.show_date || "";
                 const formattedShowDate = showDate ? new Date(showDate).toLocaleDateString("en-CA") : "";
@@ -65,11 +73,6 @@ export function EditShowtimeView({ showtimeId }) {
         fetchShowtimeDetails();
     }, [showtimeId]);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -77,6 +80,7 @@ export function EditShowtimeView({ showtimeId }) {
 
             if (!jwt) {
                 console.error('JWT token is missing');
+                setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                 return;
             }
 

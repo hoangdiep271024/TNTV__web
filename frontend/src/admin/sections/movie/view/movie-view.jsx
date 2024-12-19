@@ -79,7 +79,7 @@ export function MovieView() {
                         "Content-Type": "application/json",
                         'Authorization': 'Bearer ' + jwt,
                     },
-                    credentials: 'include',
+                    // credentials: 'include',
                 });
 
                 if (!response.ok) throw new Error("Failed to fetch movies");

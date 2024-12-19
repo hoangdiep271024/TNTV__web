@@ -1,6 +1,6 @@
-import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button } from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button, Autocomplete } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 export function CreateShowtimeView() {
@@ -12,14 +12,23 @@ export function CreateShowtimeView() {
         show_time: "",
     });
 
+    const [filmNames, setFilmNames] = useState([]);
+
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
     const navigate = useNavigate();
 
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
+    // Function to handle input changes
     const handleInputChange = (event) => {
+        // Extract the name and value from the event target
         const { name, value } = event.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
+
+        // Update the formData state with the new value for the corresponding input field
+        setFormData((prevFormData) => ({
+            ...prevFormData,
+            [name]: value,
+        }));
     };
 
     const handleSubmit = async (event) => {
@@ -36,6 +45,7 @@ export function CreateShowtimeView() {
 
             if (!jwt) {
                 console.error('JWT token is missing');
+                setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                 return;
             }
 
@@ -59,6 +69,7 @@ export function CreateShowtimeView() {
         } catch (error) {
             // console.error(error);
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi tạo suất chiếu!", severity: "error" });
+
             setFormData({
                 film_name: "",
                 room_name: "",
@@ -69,6 +80,42 @@ export function CreateShowtimeView() {
         }
     };
 
+    useEffect(() => {
+        const getFilmNames = async () => {
+            try {
+                const jwt = localStorage.getItem('jwt');
+
+                if (!jwt) {
+                    console.error('JWT token is missing');
+                    setSnackbar({ open: true, message: `Lỗi khi gọi API: ${error.message}`, severity: "error" });
+                    return;
+                }
+
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
+                    method: 'GET',
+                    headers: {
+                        "Content-Type": "application/json",
+                        'Authorization': 'Bearer ' + jwt,
+                    },
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || "Failed to fetch films");
+                }
+
+                const listfilms = await response.json();
+                // console.log(listfilms.map((film) => film.film_name));
+                setFilmNames(listfilms.map((film) => film.film_name));
+            } catch (error) {
+                // console.error('Lỗi khi gọi API:', error);
+                setSnackbar({ open: true, message: `Lỗi khi gọi API: ${error.message}`, severity: "error" });
+            }
+        }
+
+        getFilmNames();
+    }, []);
+
     return (
         <DashboardContent>
             <Card>
@@ -78,14 +125,34 @@ export function CreateShowtimeView() {
                 <CardContent>
                     <form onSubmit={handleSubmit}>
                         <Stack spacing={3}>
-                            <TextField
+
+                            {/* <TextField
                                 name="film_name"
                                 label="Tên phim"
                                 value={formData.film_name}
                                 onChange={handleInputChange}
                                 required
                                 fullWidth
+                            /> */}
+
+                            <Autocomplete
+                                name="film_name"
+                                options={filmNames}
+                                isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
+                                value={formData.film_name}
+                                onChange={(event, newValue) => {
+                                    setFormData({ ...formData, film_name: newValue });
+                                }}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Tên phim"
+                                        placeholder="Vui lòng chọn hoặc nhập tên phim"
+                                        required
+                                    />
+                                )}
                             />
+
                             <TextField
                                 name="room_name"
                                 label="Tên phòng"
@@ -94,6 +161,7 @@ export function CreateShowtimeView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="cinema_name"
                                 label="Tên rạp"
@@ -102,6 +170,7 @@ export function CreateShowtimeView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="show_date"
                                 label="Ngày chiếu"
@@ -112,6 +181,7 @@ export function CreateShowtimeView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="show_time"
                                 label="Giờ chiếu"
@@ -122,6 +192,7 @@ export function CreateShowtimeView() {
                                 required
                                 fullWidth
                             />
+
                         </Stack>
 
                         <Box mt={3} display="flex" justifyContent="flex-end">
