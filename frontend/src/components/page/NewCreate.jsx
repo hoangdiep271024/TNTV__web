@@ -1,19 +1,38 @@
 import { Box, TextField } from "@mui/material";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import Footer from "../Footer/Footer";
 import Shared from "../Shared";
 import { useTheme } from "@emotion/react";
+import { useNavigate } from "react-router-dom";
 
 const NewCreate = () => {
+  const navigate = useNavigate()
     const theme =useTheme()
+    const jwt = localStorage.getItem('jwt')
   const [formData, setFormData] = useState({
     film_name: "",
     new_header: "",
     new_footer: "",
     new_content: "",
   });
+  useEffect(() => {
+    fetch(`${import.meta.env.VITE_API_URL}/api/userInfo`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({jwt : jwt})
+    })
+      .then(response => response.json())
+      .then(responseData => {
+        if(!responseData.success){
+          navigate('/auth')
+        }        
+      })
+      .catch(error => console.error('Error:', error));
+  }, []);
 
   const [newImg, setNewImg] = useState(null); 
 
@@ -48,12 +67,12 @@ const NewCreate = () => {
     if (newImg) {
       data.append("new_img", newImg); 
     }
-
+console.log(localStorage.getItem('jwt'))
     try {
         const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/news/create`, {
           method: "POST",
           headers: {
-            'Authorization': 'Bearer ' + localStorage.getItem('jwt'),
+            'Authorization': 'Bearer ' + localStorage.getItem('jwt')
           },
           body: data, 
         });
