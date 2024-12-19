@@ -278,6 +278,7 @@ export const phim = async (req, res) => {
         query += " AND category_id = ?";
         params.push(categoryId);
     }
+    query+=" and films.film_type in (1,2)"
     query += " GROUP BY films.film_id";
     connection.query(query, params, (error, results) => {
         if (error) {
@@ -342,7 +343,7 @@ export const filmType = async (req, res) => {
     FROM films
     INNER JOIN category_film ON category_film.film_id = films.film_id
     INNER JOIN film_evaluate ON film_evaluate.film_id = films.film_id
-    WHERE category_film.category_id = ?
+    WHERE  films.film_type in (1,2) and category_film.category_id = ?
     `;
 
     connection.query(query, [category_id], (error, results) => {

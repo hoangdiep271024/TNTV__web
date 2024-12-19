@@ -26,6 +26,10 @@ export default function FilmInfo(props) {
   const [isClickTrailer, setIsClickTrailer] = useState(false)
   const trailerClick = () => {
            setIsClickTrailer(!isClickTrailer)
+           window.scrollTo({
+            top: 0, 
+            behavior: 'smooth', 
+          });
   }
   const [isClickEvaluate, setIsClickEvaluate] = useState(false)
   const EvaluateClick = () => {
