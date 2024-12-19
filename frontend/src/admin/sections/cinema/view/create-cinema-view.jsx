@@ -27,6 +27,7 @@ export function CreateCinemaView() {
 
             if (!jwt) {
                 console.error('JWT token is missing');
+                setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                 return;
             }
 
@@ -45,6 +46,7 @@ export function CreateCinemaView() {
 
             // const result = await response.json();
             // console.log(result);
+
             setSnackbar({ open: true, message: "Rạp chiếu phim đã được tạo thành công!", severity: "success" });
             setTimeout(() => navigate("/admin/cinema"), 1000);
         } catch (error) {
@@ -88,8 +90,6 @@ export function CreateCinemaView() {
 
                             <Autocomplete
                                 name="cluster_name"
-                                value={formData.cluster_name}
-                                onChange={(event, newValue) => handleInputChange({ target: { name: 'cluster_name', value: newValue } })}
                                 options={[
                                     'Beta Cinemas',
                                     'CGV Cinemas',
@@ -104,21 +104,22 @@ export function CreateCinemaView() {
                                     'Cinemax',
                                     'Love'
                                 ]}
-                                isOptionEqualToValue={(option, value) => option === value}
+                                isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
+                                value={formData.cluster_name}
+                                onChange={(event, newValue) => {
+                                    setFormData({ ...formData, cluster_name: newValue });
+                                }}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         label="Tên cụm rạp"
                                         required
-                                        fullWidth
                                     />
                                 )}
                             />
 
                             <Autocomplete
                                 name="region_name"
-                                value={formData.region_name}
-                                onChange={(event, newValue) => handleInputChange({ target: { name: 'region_name', value: newValue } })}
                                 options={[
                                     "Hà Nội", "Tp.Hồ Chí Minh", "Bình Dương", "Đồng Nai", "Cần Thơ", "Đà Nẵng",
                                     "Khánh Hòa", "Lâm Đồng", "Quảng Ninh", "Bình Định", "Bà Rịa-Vũng Tàu", "Bắc Giang",
@@ -129,13 +130,16 @@ export function CreateCinemaView() {
                                     "Long An", "Nam Định", "Ninh BÌnh", "Ninh Thuận", "Phú Thọ", "Quảng Ngãi", "Quảng Trị",
                                     "Sơn La", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Yên Bái"
                                 ]}
-                                isOptionEqualToValue={(option, value) => option === value}
+                                isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
+                                value={formData.region_name}
+                                onChange={(event, newValue) => {
+                                    setFormData({ ...formData, region_name: newValue });
+                                }}
                                 renderInput={(params) => (
                                     <TextField
                                         {...params}
                                         label="Khu vực"
                                         required
-                                        fullWidth
                                     />
                                 )}
                             />

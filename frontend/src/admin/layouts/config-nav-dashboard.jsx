@@ -67,7 +67,7 @@ export const navData = [
     //     icon: <ArticleIcon />,
     // },
     {
-        title: 'Đăng xuất',
+        title: 'Quay về trang chủ',
         path: '/auth',
         icon: <ExitIcon />,
     }

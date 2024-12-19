@@ -12,11 +12,17 @@ export function EditCinemaView({ cinemaId }) {
     });
 
     const [originalData, setOriginalData] = useState(null);
+    const navigate = useNavigate();
 
     const [loading, setLoading] = useState(true);
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
-    const navigate = useNavigate();
+
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     useEffect(() => {
         const fetchCinemaDetails = async () => {
@@ -25,6 +31,7 @@ export function EditCinemaView({ cinemaId }) {
 
                 if (!jwt) {
                     console.error('JWT token is missing');
+                    setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                     return;
                 }
 
@@ -34,15 +41,14 @@ export function EditCinemaView({ cinemaId }) {
                         "Content-Type": "application/json",
                         'Authorization': 'Bearer ' + jwt,
                     }
-                }
+                });
 
-                );
                 if (!response.ok) {
                     throw new Error("Failed to fetch cinema details");
                 }
+
                 const data = await response.json();
                 // console.log(data);
-
                 const cinema = data.cinema[0] || {};
                 const cluster = data.clusters[0] || {};
                 const region = data.regions[0] || {};
@@ -67,11 +73,6 @@ export function EditCinemaView({ cinemaId }) {
         fetchCinemaDetails();
     }, [cinemaId]);
 
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
-
     const handleSubmit = async (event) => {
         event.preventDefault();
         try {
@@ -79,6 +80,7 @@ export function EditCinemaView({ cinemaId }) {
 
             if (!jwt) {
                 console.error('JWT token is missing');
+                setSnackbar({ open: true, message: "JWT token is missing", severity: "error" });
                 return;
             }
 
@@ -101,8 +103,8 @@ export function EditCinemaView({ cinemaId }) {
             setTimeout(() => navigate("/admin/cinema"), 1000);
         } catch (error) {
             // console.error(error);
-            setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật rạp!", severity: "error" });
             setFormData(originalData);
+            setSnackbar({ open: true, message: "Có lỗi xảy ra khi cập nhật rạp!", severity: "error" });
         }
     };
 
@@ -145,8 +147,6 @@ export function EditCinemaView({ cinemaId }) {
 
                                 <Autocomplete
                                     name="cluster_name"
-                                    value={formData.cluster_name}
-                                    onChange={(event, newValue) => handleInputChange({ target: { name: 'cluster_name', value: newValue } })}
                                     options={[
                                         'Beta Cinemas',
                                         'CGV Cinemas',
@@ -161,20 +161,22 @@ export function EditCinemaView({ cinemaId }) {
                                         'Cinemax',
                                         'Love'
                                     ]}
+                                    isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
+                                    value={formData.cluster_name}
+                                    onChange={(event, newValue) => {
+                                        setFormData({ ...formData, cluster_name: newValue });
+                                    }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             label="Tên cụm rạp"
                                             required
-                                            fullWidth
                                         />
                                     )}
                                 />
 
                                 <Autocomplete
                                     name="region_name"
-                                    value={formData.region_name}
-                                    onChange={(event, newValue) => handleInputChange({ target: { name: 'region_name', value: newValue } })}
                                     options={[
                                         "Hà Nội", "Tp.Hồ Chí Minh", "Bình Dương", "Đồng Nai", "Cần Thơ", "Đà Nẵng",
                                         "Khánh Hòa", "Lâm Đồng", "Quảng Ninh", "Bình Định", "Bà Rịa-Vũng Tàu", "Bắc Giang",
@@ -185,15 +187,20 @@ export function EditCinemaView({ cinemaId }) {
                                         "Long An", "Nam Định", "Ninh BÌnh", "Ninh Thuận", "Phú Thọ", "Quảng Ngãi", "Quảng Trị",
                                         "Sơn La", "Trà Vinh", "Tuyên Quang", "Vĩnh Long", "Yên Bái"
                                     ]}
+                                    isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
+                                    value={formData.region_name}
+                                    onChange={(event, newValue) => {
+                                        setFormData({ ...formData, region_name: newValue });
+                                    }}
                                     renderInput={(params) => (
                                         <TextField
                                             {...params}
                                             label="Khu vực"
                                             required
-                                            fullWidth
                                         />
                                     )}
                                 />
+
                             </Stack>
 
                             <Box mt={3} display="flex" justifyContent="flex-end">
