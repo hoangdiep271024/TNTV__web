@@ -86,7 +86,7 @@ export default function Ticket__film({ onLoadComplete }) {
     {Array.from({ length: 14 }, (_, index) => (
       <Box>
       <Skeleton
-        key={index}
+        key={index+10000}
         variant="rectangular"
         width={150}
         height={260}

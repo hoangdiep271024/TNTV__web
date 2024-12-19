@@ -36,7 +36,7 @@ export default function NewDetail() {
     }
   };
   useEffect(() => {
-    fetchNewDetail()
+    fetchNewDetail() 
   }, [])
 
   const fetchNewRelate = async (film_id) => {
