@@ -24,6 +24,7 @@ export default function Textt({ fullText}) {
         fontSize: '20px',
         color: '#fafafa',
         marginTop: '30px',
+        whiteSpace: "nowrap"
       }}
     >
       {text}

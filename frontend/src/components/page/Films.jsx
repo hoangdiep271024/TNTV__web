@@ -6,6 +6,7 @@ import { useTheme } from "@emotion/react";
 import FilmList from '../film/FilmList';
 import Film_card from '../film/Film_card';
 import BasicPagination from '../film/BasicPagination';
+import { Skeleton } from '@mui/material';
 
 export default function Films() {
   const theme = useTheme()
@@ -80,8 +81,31 @@ export default function Films() {
           </select>
     
     </Box>
-    {dataa && <div style={{ marginTop: '20px', fontSize: '30px', marginLeft: '10%', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444'}}>DANH SÁCH PHIM {'>>'}</div>}
+<div style={{ marginTop: '20px', fontSize: '30px', marginLeft: '10%', fontFamily: 'Montserrat', fontWeight: '600', color: theme.palette.mode === 'dark' ? '#c0c2c4' : '#EF4444'}}>DANH SÁCH PHIM {'>>'}</div>
     {dataa && <Ticket__film data = {dataa}></Ticket__film>}
+    {!dataa && (
+  <Box sx= {{display: 'flex', width: '80%', flexWrap: 'wrap', gap: '10px', marginLeft: '10%',marginTop: '10px'}}>
+    {Array.from({ length: 14 }, (_, index) => (
+      <Box>
+      <Skeleton
+        key={index}
+        variant="rectangular"
+        width={150}
+        height={260}
+        style={{ marginBottom: '10px',  borderRadius: '10px' }}
+      />
+      <Skeleton
+      key={index}
+      variant="rectangular"
+      width={150}
+      height={30}
+      style={{ marginBottom: '10px',  borderRadius: '10px' }}
+    />
+    </Box>
+
+    ))}
+  </Box>
+)}
     {dataa && <Footer/>}
    </Box>
   )
@@ -91,7 +115,7 @@ function Ticket__film({data}) {
 
   const theme = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
-  const filmsPerPage = 16;
+  const filmsPerPage = 14;
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -125,6 +149,7 @@ function Ticket__film({data}) {
           );
         })}
       </FilmList>
+
 
       {data && <Box sx={{width: '100vw', display: 'flex', justifyContent: 'center'}}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
       

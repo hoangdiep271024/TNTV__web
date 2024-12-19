@@ -143,7 +143,7 @@ const ClickType =(category_id) => {
 }
   return (
     <>
-     {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '40%', position: 'absolute', zIndex:'20', top: '40px', left:'30%', animation: `${flyDown} 0.5s ease-out`}}>
+     {message && <Alert variant='filled' severity="error" style={{transition: '-moz-initial', width: '100%', position: 'absolute', zIndex:'20', top: '0', left:'0', animation: `${flyDown} 0.5s ease-out`}}>
             {message}
           </Alert>} 
     <Box sx={{width: '100vw', minHeight: '35vh', backgroundColor: 'black', marginTop: '20vh', display: 'flex', alignItems: 'center', gap: 2.5, color: 'white', justifyContent:'center', paddingTop: '10px', paddingBottom: '10px'}}>

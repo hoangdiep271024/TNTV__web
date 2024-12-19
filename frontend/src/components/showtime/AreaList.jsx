@@ -486,7 +486,7 @@ export default function AreaList() {
               <Box key={key} sx={{ marginBottom: "10px" , width: '600px'}}>
                  
                     {Object.values(data[Time]).map((film, index) => (
-                                <Box key={index} sx={{  minHeight: '200px', display: 'flex', gap: 2, width: '600px', borderRadius: '5px' , border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, paddingLeft: '20px', paddingTop: '20px'}}>
+                                <Box key={index} sx={{  minHeight: '200px', display: 'flex', gap: 2, width: '600px', borderRadius: '5px' , border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, paddingLeft: '20px', paddingTop: '20px', marginTop: '15px'}}>
                                     <img onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} src={film.film_img} style={{width: '100px', height: '160px', objectFit: 'cover',cursor: 'pointer'}}></img>
                                     <Box>
                                     <p onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} style={{fontSize: '20px', cursor: 'pointer'}}><strong>{film.film_name}</strong></p>
