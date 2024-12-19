@@ -48,6 +48,7 @@ export default function Films() {
     <Box sx={{marginTop: '20vh', display: 'flex', justifyContent: 'center'}}>
     <select onChange={handleChange} className="filmType" value={formData.filmType} name="filmType" style={{outline: 'none', borderRadius: '7px', border: '1px solid #e6e4e3', height: '35px', width: '10vw', fontSize: '17px', paddingLeft: '7px'}}>
           <option selected hidden>Trạng thái</option>
+          <option value="0">Ngừng chiếu</option>
           <option value="1">Đang chiếu</option>
           <option value="2">Sắp chiếu</option>
           <option value="4">Tất cả</option>

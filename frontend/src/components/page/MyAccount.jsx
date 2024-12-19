@@ -215,15 +215,9 @@ const MyAccount = () => {
                 )}
 
                 {isOrders && (
-<<<<<<< Updated upstream
-                    <div className="acc_orders" style={{marginTop: '20px'}}>
-                        {userOrders.length > 0 ? (
-                            userOrders.map((items) => {
-=======
                     <div className="acc_orders">
                         {listOrders.length > 0 ? (
                             listOrders.map((items) => {
->>>>>>> Stashed changes
                                 const datee = items.show_date.substring(0, 10); // Lấy ngày đúng
                                 const time = items.show_time.substring(0, 5);
                                 return (

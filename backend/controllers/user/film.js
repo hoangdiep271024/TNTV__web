@@ -278,7 +278,7 @@ export const phim = async (req, res) => {
         query += " AND category_id = ?";
         params.push(categoryId);
     }
-    query+=" and films.film_type in (1,2)"
+    query+=" and films.film_type in (1,2,0)"
     query += " GROUP BY films.film_id";
     connection.query(query, params, (error, results) => {
         if (error) {
