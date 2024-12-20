@@ -71,6 +71,10 @@ export function EditMovieView({ movieId }) {
                 }
                 const data = await response.json();
 
+                // console.log(data.categories?.map((cat) => cat.category_name) || []);
+                // console.log(data.directors?.map((dir) => dir.director_name) || []);
+                // console.log(data.actors?.map((actor) => actor.actor_name) || []);
+
                 const fetchedData = {
                     film_name: data.film[0]?.film_name,
                     film_img: data.film[0].film_img,
@@ -81,9 +85,10 @@ export function EditMovieView({ movieId }) {
                     duration: data.film[0]?.duration,
                     film_type: data.film[0]?.film_type,
                     country: data.film[0]?.country,
-                    categories: data.categories?.map((cat) => cat.category_name) || [],
-                    directors: data.directors?.map((dir) => dir.director_name) || [],
+
                     actors: data.actors?.map((actor) => actor.actor_name) || [],
+                    directors: data.directors?.map((dir) => dir.director_name) || [],
+                    categories: data.categories?.map((cat) => cat.category_name) || [],
                 };
 
                 // console.log([...new Set(data.categories?.map((cat) => cat.category_name))]);
@@ -138,13 +143,10 @@ export function EditMovieView({ movieId }) {
             formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
         }
 
-        // const categoriesArray = formData.categories.split(",").map(item => item.trim());
-        // const actorsArray = formData.actors.split(",").map(item => item.trim());
-        // const directorsArray = formData.directors.split(",").map(item => item.trim());
-
         // console.log(formData.categories);
         // console.log(formData.directors);
         // console.log(formData.actors);
+
         formDataObj.append("categories", formData.categories);
         formDataObj.append("directors", formData.directors);
         formDataObj.append("actors", formData.actors);
@@ -451,7 +453,7 @@ export function EditMovieView({ movieId }) {
                                         value.map((option, index) => (
                                             <Chip
                                                 variant="outlined"
-                                                // key={option}
+                                                key={option}
                                                 label={option}
                                                 {...getTagProps({ index })}
                                             />
@@ -471,7 +473,14 @@ export function EditMovieView({ movieId }) {
                                     label="Đạo diễn"
                                     placeholder="Thêm đạo diễn (cách nhau bởi dấu phẩy)"
                                     value={formData.directors.join(', ')}
-                                    onChange={handleInputChange}
+                                    onChange={(event) => {
+                                        const inputValue = event.target.value;
+                                        const directorsArray = inputValue.split(',').map(item => item.trim());
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            directors: directorsArray
+                                        }));
+                                    }}
                                     fullWidth
                                 />
 
@@ -480,7 +489,14 @@ export function EditMovieView({ movieId }) {
                                     label="Diễn viên"
                                     placeholder="Thêm diễn viên (cách nhau bởi dấu phẩy)"
                                     value={formData.actors.join(', ')}
-                                    onChange={handleInputChange}
+                                    onChange={(event) => {
+                                        const inputValue = event.target.value;
+                                        const actorsArray = inputValue.split(',').map(item => item.trim());
+                                        setFormData((prev) => ({
+                                            ...prev,
+                                            actors: actorsArray
+                                        }));
+                                    }}
                                     fullWidth
                                 />
                             </Stack>

@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button, Autocomplete } from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button, Autocomplete, Chip } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { useState } from "react";
 
@@ -62,7 +62,7 @@ export function CreateMovieView() {
         event.preventDefault();
 
         const formDataObj = new FormData();
-        console.log(formData);
+        /// console.log(formData);
 
         formDataObj.append("film_name", formData.film_name);
         formDataObj.append("film_trailer", formData.film_trailer);
@@ -77,11 +77,11 @@ export function CreateMovieView() {
             formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
         }
 
-        console.log(formDataObj);
+        // console.log(formDataObj);
 
-        formDataObj.append("categories", formData.categories);
-        formDataObj.append("directors", formData.directors);
         formDataObj.append("actors", formData.actors);
+        formDataObj.append("directors", formData.directors);
+        formDataObj.append("categories", formData.categories);
 
         try {
             const jwt = localStorage.getItem('jwt');
@@ -96,7 +96,7 @@ export function CreateMovieView() {
                 headers: {
                     'Authorization': 'Bearer ' + jwt,
                 },
-                body: JSON.stringify(formDataObj),
+                body: formDataObj,
             });
 
             if (!response.ok) {
@@ -350,27 +350,72 @@ export function CreateMovieView() {
                                 ))}
                             </TextField>
 
-                            <TextField
-                                name="categories"
-                                label="Thể loại (cách nhau bởi dấu phẩy)"
+                            <Autocomplete
+                                multiple
+                                freeSolo
+                                options={[
+                                    "Kinh Dị", "Hài Kịch", "Hành Động", "Tội Phạm",
+                                    "Phiêu Lưu", "Hoạt Hình", "Gia Đình",
+                                    "Khoa Học Viễn Tưởng", "Bí Ẩn", "Giả Tưởng",
+                                    "Lãng Mạng", "Drama", "Giật Gân", "Âm Nhạc",
+                                    "Tiểu Sử", "Lịch Sử", "Chiến Tranh"
+                                ]}
                                 value={formData.categories}
-                                onChange={handleInputChange}
-                                fullWidth
+                                onChange={(event, value) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        categories: value
+                                    }));
+                                }}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            variant="outlined"
+                                            key={option}
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Thể loại"
+                                        placeholder="Thêm thể loại (cách nhau bởi dấu phẩy)"
+                                    />
+                                )}
                             />
+
 
                             <TextField
                                 name="directors"
-                                label="Đạo diễn (cách nhau bởi dấu phẩy)"
-                                value={formData.directors}
-                                onChange={handleInputChange}
+                                label="Đạo diễn"
+                                placeholder="Thêm đạo diễn (cách nhau bởi dấu phẩy)"
+                                value={formData.directors.join(', ')}
+                                onChange={(event) => {
+                                    const inputValue = event.target.value;
+                                    const directorsArray = inputValue.split(',').map(item => item.trim());
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        directors: directorsArray
+                                    }));
+                                }}
                                 fullWidth
                             />
 
                             <TextField
                                 name="actors"
-                                label="Diễn viên (cách nhau bởi dấu phẩy)"
-                                value={formData.actors}
-                                onChange={handleInputChange}
+                                label="Diễn viên"
+                                placeholder="Thêm diễn viên (cách nhau bởi dấu phẩy)"
+                                value={formData.actors.join(', ')}
+                                onChange={(event) => {
+                                    const inputValue = event.target.value;
+                                    const actorsArray = inputValue.split(',').map(item => item.trim());
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        actors: actorsArray
+                                    }));
+                                }}
                                 fullWidth
                             />
                         </Stack>
