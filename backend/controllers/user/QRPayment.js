@@ -2,22 +2,31 @@ import crypto from "crypto";
 import https from "https";
 import { isTokenExpired, verifyToken } from '../../middlewares/JWT.js';
 import connection from "../../models/SQLConnection.js";
-async function updateSeatStatus(showtime_id, bookedSeat, reserved_until) {
+
+async function checkSeatStatus(showtime_id, bookedSeat) {
     try {
         // Chuyển đổi bookedSeat thành chuỗi để sử dụng trong câu truy vấn
         const seatIds = bookedSeat.map(seat => seat.seat_id).join(',');
 
-        // Kiểm tra xem có ghế nào đã được giữ hoặc đã được đặt không
+        // Truy vấn lấy thông tin của các ghế
         const [rows] = await connection.promise().query(`
             SELECT seat_id, seat_status, reserved_until 
             FROM seat_status 
-            WHERE showtime_id = ? AND seat_id IN (${seatIds}) AND (seat_status = 1 OR reserved_until > NOW())
+            WHERE showtime_id = ? AND seat_id IN (${seatIds})
         `, [showtime_id]);
 
-        if (rows.length > 0) {
-            // Có ghế không thể giữ
-            return { success: false, message: 'Some seats are already reserved or booked', conflictedSeats: rows };
-        }
+        return rows; // Trả về dữ liệu chi tiết của các ghế
+
+    } catch (error) {
+        console.error('Lỗi khi lấy thông tin ghế:', error);
+        throw error;
+    }
+}
+
+async function updateSeatStatus(showtime_id, bookedSeat, reserved_until) {
+    try {
+        // Chuyển đổi bookedSeat thành chuỗi để sử dụng trong câu truy vấn
+        const seatIds = bookedSeat.map(seat => seat.seat_id).join(',');
 
         // Cập nhật trạng thái ghế
         await connection.promise().query(`
@@ -36,24 +45,55 @@ async function updateSeatStatus(showtime_id, bookedSeat, reserved_until) {
 
 export const giuGhe = async (req, res) => {
     const { showtime_id, bookedSeat } = req.body;
-    const reserved_until = new Date(Date.now() + 5 * 60 * 1000); // Thời gian hiện tại + 5 phút
 
     try {
-        // Gọi hàm updateSeatStatus để kiểm tra và cập nhật trạng thái ghế
-        const result = await updateSeatStatus(showtime_id, bookedSeat, reserved_until);
+        // Lấy thông tin trạng thái của các ghế
+        const seatDetails = await checkSeatStatus(showtime_id, bookedSeat);
+        console.log(seatDetails)
 
-        if (!result.success) {
-            return res.json({ 
-                success: false, 
-                message: result.message, 
-                conflictedSeats: result.conflictedSeats 
+        // Chuyển đổi reserved_until từ chuỗi thành Date để so sánh
+        const conflictedSeats = seatDetails.filter(seat => {
+            const reservedUntilDate = seat.reserved_until ? new Date(seat.reserved_until) : null;
+            const now = new Date();
+
+            // Nếu ghế đang được giữ hoặc đã hết thời gian đặt
+            if (seat.seat_status === 1) return true;
+            
+            // Kiểm tra nếu reserved_until còn ít hơn 5 phút so với thời gian hiện tại
+            if (reservedUntilDate && reservedUntilDate > now) {
+                const timeDiff = reservedUntilDate - now;
+                if (timeDiff >= 299 * 1000) {
+                    return false;
+                }
+                return true; 
+            }
+
+            return false; // Không có xung đột
+        });
+
+        if (conflictedSeats.length > 0) {
+            return res.json({
+                success: false,
+                message: 'Có ghế đã được giữ hoặc đặt',
+                conflictedSeats
+            });
+        }
+
+        // Nếu không có ghế bị xung đột, cập nhật reserved_until
+        const reserved_until = new Date(Date.now() + 5 * 60 * 1000); // Thời gian hiện tại + 5 phút
+        const updateResult = await updateSeatStatus(showtime_id, bookedSeat, reserved_until);
+        console.log(reserved_until)
+        if (!updateResult.success) {
+            return res.status(400).json({
+                success: false,
+                message: updateResult.message
             });
         }
 
         return res.json({ success: true });
 
     } catch (error) {
-        console.error('Error reserving seats:', error);
+        console.error('Lỗi khi giữ ghế:', error);
         return res.status(500).json({ success: false, message: 'Error reserving seats' });
     }
 };
