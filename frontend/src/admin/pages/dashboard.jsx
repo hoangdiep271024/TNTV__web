@@ -43,7 +43,9 @@ export default function DashboardPage() {
     }, []);
 
     return (
-        <>
+        <Box
+        // sx={{ backgroundColor: '#f0f0f0', minHeight: '100vh', padding: 3 }}
+        >
             <Helmet>
                 <title>{`Tổng quan | Trang quản trị website bán vé xem phim NHTT`}</title>
             </Helmet>
@@ -171,6 +173,6 @@ export default function DashboardPage() {
                     </Box>
                 </Box>
             </DashboardContent>
-        </>
+        </Box>
     );
 }

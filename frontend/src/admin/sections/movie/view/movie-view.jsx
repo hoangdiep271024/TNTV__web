@@ -73,7 +73,7 @@ export function MovieView() {
                     return;
                 }
 
-                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films`, {
+                const response = await fetch(`${import.meta.env.VITE_API_URL}/api/admin/films?limitItems=150`, {
                     method: 'GET',
                     headers: {
                         "Content-Type": "application/json",
