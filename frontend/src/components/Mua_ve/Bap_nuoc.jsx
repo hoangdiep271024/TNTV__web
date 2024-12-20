@@ -107,26 +107,7 @@ function Bap_nuoc({ nextStep, prevStep }) {
             </div>
             <button id="tiep-tuc" onClick={async () => {
                 try {
-                    const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/giu_ghe`, {
-                        method: 'POST',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ showtime_id: showtime_id, bookedSeat: selectedSeats })
-                    }).then(response => response.json())
-                        .then(responseData => {
-                            console.log(responseData)
-                            if (responseData.success) {
-                                nextStep();
-                            }
-                            else {
-                                // Hiển thị alert với danh sách ghế đã được đặt
-                                const bookedSeatsList = responseData.bookedSeats.join(', ');
-                                alert(`Ghế sau đã được đặt: ${bookedSeatsList}`);
-                            }
-
-                        })
-                        .catch(error => console.error('Error:', error));
+                    nextStep();
                 } catch (error) {
                     console.error('Error when posting to /api/payment/giu_ghe:', error);
                 }
