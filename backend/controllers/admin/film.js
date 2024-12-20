@@ -162,6 +162,10 @@ export const createPost = async (req, res) => {
         age_limit = parseInt(age_limit);
         duration = parseInt(duration);
 
+        actors = actors.split(',').map(item => item.trim());
+        directors = directors.split(',').map(item => item.trim());
+        categories = categories.split(',').map(item => item.trim());
+
         // Kiểm tra trùng lặp tên phim
         const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
 
@@ -436,10 +440,11 @@ export const editPatch = async (req, res) => {
             });
         }
 
-        let { categories, directors, actors } = req.body;
+        let { categories, directors, actors } = req.body;        
 
         // Update bảng actor_film(nếu có)
         if (actors) {
+            actors = actors.split(',').map(item => item.trim());
             for (const actor of actors) {
                 const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
                 const actorInfo = await new Promise((resolve, reject) => {
@@ -468,6 +473,7 @@ export const editPatch = async (req, res) => {
         }
         // Update bảng director_film(nếu có)
         if (directors) {
+            directors = directors.split(',').map(item => item.trim());
             for (const director of directors) {
                 const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
                 const directorInfo = await new Promise((resolve, reject) => {
@@ -497,6 +503,7 @@ export const editPatch = async (req, res) => {
 
         // Update bảng category_film(nếu có)
         if (categories) {
+            categories = categories.split(',').map(item => item.trim());
             for (const category of categories) {
                 const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
                 const categoryInfo = await new Promise((resolve, reject) => {
