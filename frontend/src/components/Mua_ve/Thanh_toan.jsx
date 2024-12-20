@@ -26,6 +26,46 @@ const Thanh_toan = ({ nextStep }) => {
         return () => clearInterval(timer);
     }, []);
 
+    // Giữ ghế khi vào trang
+    useEffect(() => {
+        if (selectedSeats.length > 0) {
+            handleGiuGhe(); // Giữ ghế nếu có ghế đã chọn
+        }
+    }, [selectedSeats]);
+
+    // Hàm giữ ghế
+    const handleGiuGhe = async () => {
+        setLoading(true); // Bắt đầu loading khi giữ ghế
+
+        try {
+            // Gửi thông tin giữ ghế tới server
+            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/payment/giu_ghe`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${jwt}`,  // Thêm token nếu cần
+                },
+                body: JSON.stringify({
+                    showtime_id: showtime_id,
+                    bookedSeat: selectedSeats,  // Ghế đã được chọn
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+            } else {
+                alert('Có vẻ ghế đã có người đặt. Vui lòng thử lại.');
+                window.location.reload();
+            }
+        } catch (error) {
+            console.error('Error during reserving seats:', error);
+            alert('Đã có lỗi xảy ra khi giữ ghế. Vui lòng thử lại.');
+        } finally {
+            setLoading(false); // Dừng loading sau khi xử lý xong
+        }
+    };
+
     // Xử lý khi hết giờ
     const handleTimeOut = async () => {
         alert('Đã hết giờ giữ ghế! Bạn sẽ được chuyển về trang chủ.');

@@ -92,6 +92,22 @@ export function MovieTableRow({ row, selected, onSelectRow, onDelete }) {
                         variant="body2"
                         label={row.film_type === 1 ? 'Đang chiếu' : 'Sắp chiếu'}
                         color={row.film_type === 1 ? 'primary' : 'secondary'}
+                        // label={
+                        //     row.film_type === 2
+                        //         ? 'Sắp chiếu'
+                        //         : row.film_type === 1
+                        //             ? 'Đang chiếu'
+                        //             : row.film_type === 0
+                        //                 ? 'Ngừng chiếu' : 'Không xác định'
+                        // }
+                        // color={
+                        //     row.film_type === 0
+                        //         ? 'default'
+                        //         : row.film_type === 1
+                        //             ? 'primary'
+                        //             : row.film_type === 2
+                        //                 ? 'secondary' : 'default'
+                        // }
                         size="small"
                         sx={{ fontWeight: 'bold' }}
                     />

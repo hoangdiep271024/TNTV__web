@@ -10,9 +10,10 @@ export function EditMovieView({ movieId }) {
         film_trailer: "",
         Release_date: "",
         film_describe: "",
-        age_limit: "",
+        age_limit: 5,
         duration: "",
         film_type: 1,
+        country: 1,
         categories: [],
         directors: [],
         actors: [],
@@ -29,7 +30,23 @@ export function EditMovieView({ movieId }) {
         { value: 0, label: "Sắp chiếu" },
     ];
 
+    // const filmTypeOptions = [
+    //     { value: 0, label: "Ngừng chiếu" },
+    //     { value: 1, label: "Đang chiếu" },
+    //     { value: 2, label: "Sắp chiếu" },
+    // ];
+
+    const countryOptions = [
+        { value: "1", label: "Việt Nam" },
+        { value: "0", label: "Nước ngoài" },
+    ];
+
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
+
+    const handleInputChange = (event) => {
+        const { name, value } = event.target;
+        setFormData((prev) => ({ ...prev, [name]: value }));
+    };
 
     useEffect(() => {
         const fetchMovieDetails = async () => {
@@ -63,9 +80,10 @@ export function EditMovieView({ movieId }) {
                     age_limit: data.film[0]?.age_limit,
                     duration: data.film[0]?.duration,
                     film_type: data.film[0]?.film_type,
-                    categories: [...new Set(data.categories?.map((cat) => cat.category_name))] || [],
-                    directors: [...new Set(data.directors?.map((dir) => dir.director_name))] || [],
-                    actors: [...new Set(data.actors?.map((actor) => actor.actor_name))] || [],
+                    country: data.film[0]?.country,
+                    categories: data.categories?.map((cat) => cat.category_name) || [],
+                    directors: data.directors?.map((dir) => dir.director_name) || [],
+                    actors: data.actors?.map((actor) => actor.actor_name) || [],
                 };
 
                 // console.log([...new Set(data.categories?.map((cat) => cat.category_name))]);
@@ -84,12 +102,6 @@ export function EditMovieView({ movieId }) {
 
         fetchMovieDetails();
     }, [movieId]);
-
-    const handleInputChange = (event) => {
-        const { name, value } = event.target;
-        //console.log(`${name}: ${value}`); // Debugging log
-        setFormData((prev) => ({ ...prev, [name]: value }));
-    };
 
     const handleImageReset = () => {
         setFormData((prev) => ({ ...prev, film_img: null }));
@@ -120,6 +132,7 @@ export function EditMovieView({ movieId }) {
         formDataObj.append("age_limit", formData.age_limit);
         formDataObj.append("duration", formData.duration);
         formDataObj.append("film_type", formData.film_type);
+        formDataObj.append("country", formData.country);
 
         if (formData.film_img) {
             formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
@@ -129,9 +142,12 @@ export function EditMovieView({ movieId }) {
         // const actorsArray = formData.actors.split(",").map(item => item.trim());
         // const directorsArray = formData.directors.split(",").map(item => item.trim());
 
-        formDataObj.append("categories", JSON.stringify(formData.categories));
-        formDataObj.append("directors", JSON.stringify(formData.directors));
-        formDataObj.append("actors", JSON.stringify(formData.actors));
+        // console.log(formData.categories);
+        // console.log(formData.directors);
+        // console.log(formData.actors);
+        formDataObj.append("categories", formData.categories);
+        formDataObj.append("directors", formData.directors);
+        formDataObj.append("actors", formData.actors);
 
         // for (let pair of formDataObj.entries()) {
         //     console.log(pair[0] + ": " + pair[1]);
@@ -318,7 +334,6 @@ export function EditMovieView({ movieId }) {
                                     fullWidth
                                 />
 
-                                {/* release date input */}
                                 <TextField
                                     name="Release_date"
                                     label="Ngày phát hành"
@@ -341,7 +356,29 @@ export function EditMovieView({ movieId }) {
                                     fullWidth
                                 />
 
-                                <TextField
+                                <Autocomplete
+                                    options={[
+                                        5, 13, 16, 18
+                                    ]}
+                                    value={formData.age_limit}
+                                    onChange={(event, newValue) => {
+                                        setFormData({ ...formData, age_limit: newValue });
+                                    }}
+                                    getOptionLabel={(option) => option.toString()}
+
+                                    renderInput={(params) => (
+                                        <TextField
+                                            {...params}
+                                            name="age_limit"
+                                            label="Giới hạn độ tuổi"
+                                            type="number"
+                                            fullWidth
+                                            required
+                                        />
+                                    )}
+                                />
+
+                                {/* <TextField
                                     name="age_limit"
                                     label="Giới hạn độ tuổi"
                                     type="number"
@@ -349,7 +386,7 @@ export function EditMovieView({ movieId }) {
                                     onChange={handleInputChange}
                                     required
                                     fullWidth
-                                />
+                                /> */}
 
                                 <TextField
                                     name="duration"
@@ -377,6 +414,22 @@ export function EditMovieView({ movieId }) {
                                     ))}
                                 </TextField>
 
+                                <TextField
+                                    name="country"
+                                    label="Quốc gia"
+                                    select
+                                    value={formData.country}
+                                    onChange={handleInputChange}
+                                    required
+                                    fullWidth
+                                >
+                                    {countryOptions.map((option) => (
+                                        <MenuItem key={option.value} value={option.value}>
+                                            {option.label}
+                                        </MenuItem>
+                                    ))}
+                                </TextField>
+
                                 <Autocomplete
                                     multiple
                                     freeSolo
@@ -398,7 +451,7 @@ export function EditMovieView({ movieId }) {
                                         value.map((option, index) => (
                                             <Chip
                                                 variant="outlined"
-                                                key={option}
+                                                // key={option}
                                                 label={option}
                                                 {...getTagProps({ index })}
                                             />
@@ -417,15 +470,16 @@ export function EditMovieView({ movieId }) {
                                     name="directors"
                                     label="Đạo diễn"
                                     placeholder="Thêm đạo diễn (cách nhau bởi dấu phẩy)"
-                                    value={formData.directors}
+                                    value={formData.directors.join(', ')}
                                     onChange={handleInputChange}
                                     fullWidth
                                 />
+
                                 <TextField
                                     name="actors"
                                     label="Diễn viên"
                                     placeholder="Thêm diễn viên (cách nhau bởi dấu phẩy)"
-                                    value={formData.actors}
+                                    value={formData.actors.join(', ')}
                                     onChange={handleInputChange}
                                     fullWidth
                                 />
