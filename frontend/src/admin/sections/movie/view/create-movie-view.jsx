@@ -288,9 +288,11 @@ export function CreateMovieView() {
                             />
 
                             <Autocomplete
+                                name="age_limit"
                                 options={[
                                     5, 13, 16, 18
                                 ]}
+                                isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
                                 value={formData.age_limit}
                                 onChange={(event, newValue) => {
                                     setFormData({ ...formData, age_limit: newValue });

@@ -86,9 +86,9 @@ export function EditMovieView({ movieId }) {
                     film_type: data.film[0]?.film_type,
                     country: data.film[0]?.country,
 
-                    actors: data.actors?.map((actor) => actor.actor_name) || [],
-                    directors: data.directors?.map((dir) => dir.director_name) || [],
-                    categories: data.categories?.map((cat) => cat.category_name) || [],
+                    actors: [...new Set(data.actors?.map((actor) => actor.actor_name) || [])],
+                    directors: [...new Set(data.directors?.map((dir) => dir.director_name) || [])],
+                    categories: [...new Set(data.categories?.map((cat) => cat.category_name) || [])],
                 };
 
                 // console.log([...new Set(data.categories?.map((cat) => cat.category_name))]);
@@ -359,9 +359,11 @@ export function EditMovieView({ movieId }) {
                                 />
 
                                 <Autocomplete
+                                    name="age_limit"
                                     options={[
                                         5, 13, 16, 18
                                     ]}
+                                    isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
                                     value={formData.age_limit}
                                     onChange={(event, newValue) => {
                                         setFormData({ ...formData, age_limit: newValue });
@@ -433,6 +435,7 @@ export function EditMovieView({ movieId }) {
                                 </TextField>
 
                                 <Autocomplete
+                                    name="categories"
                                     multiple
                                     freeSolo
                                     options={[
