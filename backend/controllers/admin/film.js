@@ -549,6 +549,7 @@ export const deleteFilm = async (req, res) => {
         const filmId = req.params.id;
 
         await Promise.all([
+            connection.promise().query(`DELETE FROM film_evaluate WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM actor_film WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM director_film WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM category_film WHERE film_id = ?`, [filmId]),
