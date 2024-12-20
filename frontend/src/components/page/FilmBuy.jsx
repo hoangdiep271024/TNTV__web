@@ -131,17 +131,18 @@ export default function FilmDetail() {
         return (
           <>
             <FilmInfo
-              image={item.film_img}
-              name={item.film_name}
-              type={data.info.categorys}
-              descript={item.film_describe}
-              evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
-              release={exactlyDate} 
-              time={item.duration}
-              age={item.age_limit}
-              actors={data.info.actors}
-              directors={data.info.directors}
-            />
+                image={item.film_img}
+                name={item.film_name}
+                type={data.info.categorys}
+                descript={item.film_describe}
+                evalute={JSON.parse(data.info.evaluate[0].film_rate).toFixed(1)}
+                release={exactlyDate}
+                time={item.duration}
+                age={item.age_limit}
+                actors={data.info.actors}
+                directors={data.info.directors}
+                film_id = {item.film_id}
+              />
             <div style={{ display: 'flex', justifyContent: 'center', gap: '7%', paddingTop: "15px", fontSize: '16px' }}>
               <Link to={`/phim/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Thông tin</Link>
               <Link to={`/lich_chieu/${encodeURIComponent(createSlug(data.info.film[0].film_name))}`} style={{ textDecoration: 'none', cursor: 'pointer', color: theme.palette.mode === 'dark' ? 'white' : 'black' }}>Lịch chiếu</Link>
@@ -389,6 +390,10 @@ export default function FilmDetail() {
           return (
             day && (
               <Box key={key} sx={{ marginBottom: "10px" , width: '700px'}}>
+                  {isEmptyObject(film__region[Time]) && <Box sx={{width: '700px', marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+              
+              <div>Tạm thời chưa có thông tin về lịch chiếu</div>
+              </Box>}
                 {Object.keys(film__region[Time]).map((theater) => (
                   <Box key={theater} sx={{ marginBottom: "5px" }}>
                     <Box sx={{ color: theme.palette.mode === "dark" ? "white" : "#86888a", backgroundColor: theme.palette.mode === "dark" ? "#4aacf7" : "#E8ECED", height: '50px', display: 'flex', gap: 1, alignItems: 'center', paddingLeft: '5px', width: '700px', borderRadius: '5px'}}>
@@ -457,7 +462,10 @@ export default function FilmDetail() {
         })}
       </Box>
       </Box>
-      <Footer/>
+      {data && <Footer/>}
     </>
   );
+}
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0;
 }

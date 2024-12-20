@@ -24,6 +24,7 @@ export default function Text({ fullText}) {
         fontSize: '32px',
         color: '#fafafa',
         marginTop: '28vh',
+        whiteSpace: "nowrap"
       }}
     >
       {text}

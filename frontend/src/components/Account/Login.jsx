@@ -55,7 +55,7 @@ const Login = ({onSetAccClick, onSetForgotPassword}) => {
       if (response.ok) {
         const data = await response.json();
         if (data.success) {
-          setOkMessage(`Login successful: ${data.message}`);
+          setOkMessage(`Đăng nhập thành công: ${data.message}`);
           localStorage.setItem('jwt', data.jwt);
           localStorage.setItem('user_id', data.user_id)
           if(data.message == 'user'){setTimeout(() => {

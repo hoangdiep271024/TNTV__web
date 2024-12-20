@@ -123,6 +123,7 @@ export default function FilmDetail() {
                 age={item.age_limit}
                 actors={data.info.actors}
                 directors={data.info.directors}
+                film_id = {item.film_id}
               />
               <div
                 style={{
@@ -421,9 +422,14 @@ export default function FilmDetail() {
         <Box sx={{ marginTop: "20px", width: "100vw", display: 'flex', justifyContent: 'center' }}>
         {film__region && Object.keys(film__region).map((Time, key) => {
           const day = key === dayStates;
+          console.log(isEmptyObject(film__region[Time]))
           return (
             day && (
               <Box key={key} sx={{ marginBottom: "10px" , width: '700px'}}>
+                {isEmptyObject(film__region[Time]) && <Box sx={{width: '700px', marginTop: '20px', display: 'flex', justifyContent: 'center'}}>
+              
+              <div>Tạm thời chưa có thông tin về lịch chiếu</div>
+              </Box>}
                 {Object.keys(film__region[Time]).map((theater) => (
                   <Box key={theater} sx={{ marginBottom: "5px" }}>
                     <Box sx={{ color: theme.palette.mode === "dark" ? "white" : "#86888a", backgroundColor: theme.palette.mode === "dark" ? "#4aacf7" : "#E8ECED", height: '50px', display: 'flex', gap: 1, alignItems: 'center', paddingLeft: '5px', width: '700px', borderRadius: '5px'}}>
@@ -480,8 +486,12 @@ export default function FilmDetail() {
                         )}
                       </Box>
                     ))}
+                    
+                   
                   </Box>
+                  
                 ))}
+                  
               </Box>
             )
           );
@@ -490,9 +500,14 @@ export default function FilmDetail() {
           
           
         })}
+        
       </Box>
+      
       </Box>
       {data && <Footer/>}
     </>
   );
+}
+function isEmptyObject(obj) {
+  return Object.keys(obj).length === 0;
 }

@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import BasicPagination from './BasicPagination';
 import Film_card from './Film_card';
 import FilmList from './FilmList';
+import { Skeleton } from "@mui/material";
 
 export default function Ticket__film({ onLoadComplete }) {
 
@@ -12,6 +13,7 @@ export default function Ticket__film({ onLoadComplete }) {
   const [showing, setShowing] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const filmsPerPage = 14;
+  const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     fetch(`${import.meta.env.VITE_API_URL}/api/film/filmShowing`, {
@@ -24,6 +26,7 @@ export default function Ticket__film({ onLoadComplete }) {
     .then(responseData => {
       setData(responseData); 
       onLoadComplete(responseData);
+      setLoading(false)
     })
     .catch(error => console.error('Error:', error));
   }, [onLoadComplete]);
@@ -51,13 +54,14 @@ export default function Ticket__film({ onLoadComplete }) {
   const totalPages = Math.max(Math.ceil(currentData.length / filmsPerPage), 1);
 
   return (
-    <Box sx={{width: '100vw', marginTop: '17vh'}}>
+    <Box sx={{width: '100vw', marginTop: '19vh'}}>
       <Box sx={{display: 'flex' , alignItems: 'center', textAlign:'center', justifyContent: 'center', gap: '15px'}}>
         <div style={{ fontSize: '20px', cursor: 'pointer', color: showing ? '#babfc2' : undefined }} onClick={showingClick}>Đang chiếu</div>
         <div style={{ fontSize: '50px'}}>|</div>
         <div style={{ fontSize: '20px', cursor: 'pointer', color: !showing ? '#babfc2' : undefined }} onClick={unShowingClick}>Sắp chiếu</div>
       </Box>
 
+      {data &&
       <FilmList>
         {currentFilms.map(item => {
           const datee = item.Release_date.substring(0, 10);
@@ -76,9 +80,30 @@ export default function Ticket__film({ onLoadComplete }) {
             />
           );
         })}
-      </FilmList>
+      </FilmList>}
+      {loading && (
+  <Box sx= {{display: 'flex', width: '80%', flexWrap: 'wrap', gap: '10px', marginLeft: '10%',}}>
+    {Array.from({ length: 14 }, (_, index) => (
+      <Box key={index}>
+      <Skeleton
+        variant="rectangular"
+        width={150}
+        height={260}
+        style={{ marginBottom: '10px',  borderRadius: '10px' }}
+      />
+      <Skeleton
+      variant="rectangular"
+      width={150}
+      height={30}
+      style={{ marginBottom: '10px',  borderRadius: '10px' }}
+    />
+    </Box>
 
-      {data && <Box sx={{width: '100vw', display: 'flex', justifyContent: 'center'}}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
+    ))}
+  </Box>
+)}
+
+      {!loading && <Box sx={{width: '100vw', display: 'flex', justifyContent: 'center'}}><BasicPagination count={totalPages} page={currentPage} changee={handlePageChange}></BasicPagination></Box>}
       
     </Box>
   );

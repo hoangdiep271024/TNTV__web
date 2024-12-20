@@ -98,7 +98,7 @@ function Ticket__film({data}) {
 
   const theme = useTheme();
   const [currentPage, setCurrentPage] = useState(1);
-  const filmsPerPage = 16;
+  const filmsPerPage = 14;
   const handlePageChange = (event, value) => {
     setCurrentPage(value);
   };
@@ -114,7 +114,7 @@ function Ticket__film({data}) {
     <Box>
 
 {data && <FilmList>
-        {data.map((film, index) => {
+        {currentFilms.map((film, index) => {
            const datee = film.Release_date.substring(0, 10);
            const year = datee.substring(0, 4);
            const month = datee.substring(5, 7);

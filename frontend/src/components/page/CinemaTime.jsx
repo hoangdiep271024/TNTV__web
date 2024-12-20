@@ -321,7 +321,7 @@ export default function CinemaTime() {
               <Box key={key} sx={{ marginBottom: "10px" , width: '600px'}}>
                  
                     {Object.values(data[Time]).map((film, index) => (
-                                <Box key={index} sx={{  minHeight: '200px', display: 'flex', gap: 2, width: '600px', borderRadius: '5px' , border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, paddingLeft: '20px', paddingTop: '20px'}}>
+                                <Box key={index} sx={{  minHeight: '200px', display: 'flex', gap: 2, width: '600px', borderRadius: '5px' , border: `1px solid ${theme.palette.mode === 'dark' ? 'white' : 'black'}`, paddingLeft: '20px', paddingTop: '20px', marginTop: '15px'}}>
                                     <img onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} src={film.film_img} style={{width: '100px', height: '160px', objectFit: 'cover',cursor: 'pointer'}}></img>
                                     <Box>
                                     <p onClick={() => ClickFilmCard(encodeURIComponent(createSlugg(film.film_name)), film.film_id)} style={{fontSize: '20px', cursor: 'pointer'}}><strong>{film.film_name}</strong></p>
@@ -329,10 +329,10 @@ export default function CinemaTime() {
                                       <div>{`Thời lượng: ${film.duration} phút`}</div>
                                       <div>{`T${film.age_limit}`}</div>
                                     </div>
-                                    <Box sx={{display: 'flex' ,flexWrap: 'wrap' , gap: '15px'}}></Box>
+                                    <Box sx={{display: 'flex' ,flexWrap: 'wrap' , gap: '15px'}}>
                                     {Array.isArray(film.showtimes) && film.showtimes.map((showTime, key) => (
                                        <Button style={{border: '1px solid #009688', borderRadius: '3px'}} onClick={() => clickShowtime(film.film_name, showTime.showtime_id)} key={key}>{showTime.show_time.substring(0,5)}</Button>
-        ))}
+        ))}</Box>
                                     </Box>
                                 </Box>
                             ))}

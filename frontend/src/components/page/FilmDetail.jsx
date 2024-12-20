@@ -5,6 +5,7 @@ import { Link, useLocation, useParams } from "react-router-dom";
 import Footer from "../Footer/Footer";
 import Shared from "../Shared";
 import FilmInfo from "../film/FilmInfo";
+import { useNavigate } from "react-router-dom";
 
 function createSlug(name) {
   return name
@@ -15,6 +16,7 @@ function createSlug(name) {
 }
 
 export default function FilmDetail() {
+  const navigate = useNavigate()
   const location = useLocation();
   const { film_name } = useParams();
   const decodedFilmName = decodeURIComponent(film_name);
@@ -22,6 +24,7 @@ export default function FilmDetail() {
   const [data, setData] = useState(null);
   const film_id = localStorage.getItem('film_id')
   const theme = useTheme();
+  const [dataRelate, setDataRelate] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -51,6 +54,36 @@ export default function FilmDetail() {
       fetchData();
     }
   }, [film_id]);
+
+  const fetchNewRelate = async (film_id) => {
+    try {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/new/film_id=${film_id}`, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      if (response.ok) {
+        const result = await response.json();
+        setDataRelate(result);
+        console.log(result);
+      } else {
+        console.error('Lỗi khi truy cập:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Lỗi mạng:', error);
+    }
+  };
+  useEffect(() => {
+    if (film_id) {
+      fetchNewRelate(film_id);
+    }
+  }, [film_id]);
+  const ClickNew = (new_id, new_header) => {
+    localStorage.setItem('new_id', new_id)
+    navigate(`/tin_tuc/${encodeURIComponent(createSlug(new_header))}`)
+    window.location.reload()
+  }
   return (
     <Box sx={{
       width: "100vw",
@@ -150,7 +183,7 @@ export default function FilmDetail() {
                 }}
               >
                 {" "}
-                <iframe
+                {data.info.film[0].film_trailer && <iframe
                   src={convertYouTubeLinkToEmbed(
                     data.info.film[0].film_trailer
                   )}
@@ -158,11 +191,36 @@ export default function FilmDetail() {
                   height="600px"
                   frameborder="0"
                   allowfullscreen
-                ></iframe>
+                ></iframe>}
+                {!data.info.film[0].film_trailer && <img style={{width: '700px', height: '500px'}} src="/trailerr.webp"></img>}
+
+
               </div>
             </>
           );
         })()}
+        {dataRelate && dataRelate.length > 0 && <div style={{fontSize: '25px', fontWeight: '700', fontFamily: 'Montserrat', marginLeft: '20%', marginTop: '30px'}}>BÀI VIẾT LIÊN QUAN</div>}
+        { dataRelate && dataRelate.length > 0 && dataRelate.map((item, index) => {
+       const datee = item.new_time.substring(0, 10);
+       const month = datee.substring(5, 7);
+       const day = datee.substring(8, 10);
+       const exactlyDate = `${day}/${month}`;
+      return (
+        <Box>
+          <Box key={index} sx={{ display: 'flex', padding: '10px 5px', gap: '7px', alignItems: 'center', border: `1px solid ${theme.palette.mode === 'light' ? '#cfcfcf' : '#404040'}`, borderRadius: '15px', cursor: 'pointer', position: 'relative', width: '60%', marginLeft: '20%', marginTop: '20px'}} onClick = {() => ClickNew(item.new_id, item.new_header)}>
+            <img src={item.new_img} alt="related item" style={{width: '60%', height:'auto', maxHeight: '105px', maxWidth: '200px', objectFit: 'cover'}} />
+            <div style={{height: '105px'}}>
+              <div style={{overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal'}}>{item.new_header}</div>
+              <div style={{overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal', fontSize: '13px', color: '#8a8584'}}>{item.new_footer}</div>
+              <div style={{textAlign: 'end', fontSize: '15px', position: 'absolute', right: '15px', bottom: '15px'}}>{exactlyDate}</div>
+              <div style={{ fontSize: '15px', position: 'absolute', bottom: '15px', color: '#ef4444'}}>{item.username}</div>
+            </div>
+          </Box>
+          </Box>
+        
+      );
+    })}
+    {dataRelate && dataRelate.length == 0 && <div style={{fontSize: '25px', fontWeight: '600', fontFamily: 'Montserrat', textAlign: 'center', marginTop: '40px'}}>CHƯA CÓ BÀI VIẾT NÀO LIÊN QUAN</div>}
      {data && <Footer/>}
     </Box>
   );

@@ -36,7 +36,7 @@ export default function NewDetail() {
     }
   };
   useEffect(() => {
-    fetchNewDetail()
+    fetchNewDetail() 
   }, [])
 
   const fetchNewRelate = async (film_id) => {
@@ -72,9 +72,13 @@ export default function NewDetail() {
   return (
     <Box>
       <Shared/>
-      <Box sx= {{display: 'flex', width: '80%', marginLeft: '8%', gap: '4%', marginTop: '19vh'}}>
-          {dataDetail && <Box sx= {{width: '57%', minWidth: '730px', backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#383836', borderRadius: '10px', padding: '20px 15px'}}>
+      <Box sx= {{display: 'flex', width: '80%', marginLeft: '8%', gap: '4%', marginTop: '19vh',}}>
+          {dataDetail && <Box sx= {{width: '57%', minWidth: '730px', position: 'relative', backgroundColor: theme.palette.mode === 'light' ? '#fafafa' : '#383836', borderRadius: '10px', padding: '20px 15px'}}>
             <div dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(dataDetail[0].new_content) }} /> 
+            <div style={{ textAlign: 'end' }}>
+  Viết bởi: <span style={{ color: '#009688', fontSize: '18px' }}>{dataDetail[0].username}</span>
+</div>
+            <div style={{textAlign: 'end'}}>{`( ${formatDate(dataDetail[0].new_time)} )`}</div>
             </Box>}
 
           <Box sx={{width: '40%', height: 'auto', borderRadius: '10px', overflow: 'hidden'}}>
@@ -94,7 +98,7 @@ export default function NewDetail() {
             <div style={{height: '105px'}}>
               <div style={{overflow: 'hidden',display: '-webkit-box',WebkitBoxOrient: 'vertical', WebkitLineClamp: 2, whiteSpace: 'normal'}}>{item.new_header}</div>
               <div style={{textAlign: 'end', fontSize: '15px', position: 'absolute', right: '15px', bottom: '15px'}}>{exactlyDate}</div>
-              <div style={{ fontSize: '15px', position: 'absolute', bottom: '15px'}}>{item.username}</div>
+              <div style={{ fontSize: '15px', position: 'absolute', bottom: '15px', color: '#ef4444'}}>{item.username}</div>
             </div>
           </Box>
         )
@@ -108,4 +112,12 @@ export default function NewDetail() {
      {dataDetail && dataRelate &&  <Footer/>}
     </Box>
   )
+}
+function formatDate(dateString) {
+  const datee = dateString.substring(0, 10); 
+  const year = datee.substring(0, 4);      
+  const month = datee.substring(5, 7);     
+  const day = datee.substring(8, 10);       
+  const exactlyDate = `${day}/${month}`;    
+  return exactlyDate;                       
 }
