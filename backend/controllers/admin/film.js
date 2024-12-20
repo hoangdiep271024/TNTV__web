@@ -435,8 +435,8 @@ export const editPatch = async (req, res) => {
                 if(actorInfo[0].actor_id) {
                     const actorId = actorInfo[0].actor_id;
                     const queryUpdateActorFilm = `UPDATE actor_film
-                    SET actor_id = ?
-                    WHERE film_id = ?`;
+                                                SET actor_id = ?
+                                                WHERE film_id = ?`;
                     await new Promise((resolve, reject) => {
                         connection.query(queryUpdateActorFilm, [actorId, filmId], (err, results) => {
                             if (err) return reject(err);
