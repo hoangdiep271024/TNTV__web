@@ -1,14 +1,14 @@
 import connection from "../../models/SQLConnection.js";
 
-export const abc = (req, res) => {
-    const authHeader = req.headers['authorization'];
-        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        //     return res.status(401).json({
-        //         messages: "Unauthorized.Please login first! 1",
-        //         success: false
-        //     });
-        // }
-    console.log(authHeader);
+export const abc = async (req, res) => {
+    const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
+    const actorInfo = await new Promise((resolve, reject) => {
+        connection.query(queryActor, ['Thúy Diễm'], (err, results) => {
+            if (err) return reject(err);
+            resolve(results);
+        });
+    });
+    res.json(actorInfo[0].actor_id);
 }
 
 // [GET] /admin/news
