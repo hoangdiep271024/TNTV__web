@@ -159,6 +159,8 @@ export const createPost = async (req, res) => {
     try {
         let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } = req.body;
         console.log(req.body);
+        age_limit = parseInt(age_limit);
+        duration = parseInt(duration);
 
         // Kiểm tra trùng lặp tên phim
         const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
@@ -382,6 +384,9 @@ export const editPatch = async (req, res) => {
         if (res.locals.url == "") {
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
 
+            age_limit = parseInt(age_limit);
+            duration = parseInt(duration);
+
             // Kiểm tra trùng lặp tên phim
             const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ? and film_id != ?`, [film_name, filmId]);
 
@@ -405,6 +410,9 @@ export const editPatch = async (req, res) => {
 
         } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
+
+            age_limit = parseInt(age_limit);
+            duration = parseInt(duration);
 
             // Kiểm tra trùng lặp tên phim
             const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ? and film_id != ?`, [film_name, filmId]);
