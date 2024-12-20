@@ -10,7 +10,8 @@ export const index = async (req, res) => {
 
     if (status) {
         if (status == "Showing") filmType = 'film_type = 1';
-        else if (status == "Coming") filmType = 'film_type = 0';
+        else if (status == "Coming") filmType = 'film_type = 2';
+        else if (status == "Stopping") filmType = 'film_type = 0'
     }
     // Hết lọc theo trạng thái
 
