@@ -1,15 +1,8 @@
 import connection from "../../models/SQLConnection.js";
 
-// export const abc = async (req, res) => {
-//     const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
-//     const actorInfo = await new Promise((resolve, reject) => {
-//         connection.query(queryActor, ['Thúy Diễm'], (err, results) => {
-//             if (err) return reject(err);
-//             resolve(results);
-//         });
-//     });
-//     res.json(actorInfo[0].actor_id);
-// }
+export const abc = async (req, res) => {
+    res.json(req.body);
+}
 
 // [GET] /admin/news
 export const index = async (req, res) => {

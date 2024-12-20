@@ -8,7 +8,7 @@ import { checkPermissonAdmin, checkPermissonUser } from "../../middlewares/check
 
 const newsRoutes = express.Router()
 
-// newsRoutes.get("/abc", controller.abc);
+newsRoutes.post("/abc", controller.abc);
 
 newsRoutes.get("/", checkPermissonUser,  controller.index);
 
