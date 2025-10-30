@@ -1,14 +1,7 @@
 import connection from "../../models/SQLConnection.js";
 
-export const abc = (req, res) => {
-    const authHeader = req.headers['authorization'];
-        // if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        //     return res.status(401).json({
-        //         messages: "Unauthorized.Please login first! 1",
-        //         success: false
-        //     });
-        // }
-    console.log(authHeader);
+export const abc = async (req, res) => {
+    res.json(req.body);
 }
 
 // [GET] /admin/news

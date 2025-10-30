@@ -165,25 +165,21 @@ export const editPatch = async (req, res) => {
             else role = 1;
 
             // Kiểm tra trùng lặp username
-            const [checkUserName] = await connection.promise().query(`Select * from users where username = ?`, [username]);
+            const [checkUserName] = await connection.promise().query(`Select * from users where username = ? and user_id != ?`, [username, userId]);
 
             if(checkUserName.length > 0) {
-                if(checkUserName[0].username != username) {
-                    return res.status(500).json({
-                        message: `Username ${username} already existed.\nPlease choose another username.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Username ${username} already existed.Please choose another username.`
+                });
             }
 
             // Kiểm tra trùng lặp email
-            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
+            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ? and user_id != ?`, [email, userId]);
 
             if(checkUserEmail.length > 0) {
-                if(checkUserEmail[0].email != email) {
-                    return res.status(500).json({
-                        message: `Email ${email} already existed.\nPlease choose another email.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Email ${email} already existed.\nPlease choose another email.`
+                })
             }
 
             // Update bảng User
@@ -206,25 +202,21 @@ export const editPatch = async (req, res) => {
             else role = 1;
 
             // Kiểm tra trùng lặp username
-            const [checkUserName] = await connection.promise().query(`Select * from users where username = ?`, [username]);
+            const [checkUserName] = await connection.promise().query(`Select * from users where username = ? and user_id != ?`, [username, userId]);
 
             if(checkUserName.length > 0) {
-                if(checkUserName[0].username != username) {
-                    return res.status(500).json({
-                        message: `Username ${username} already existed.\nPlease choose another username.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Username ${username} already existed.Please choose another username.`
+                });
             }
 
             // Kiểm tra trùng lặp email
-            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ?`, [email]);
+            const [checkUserEmail] = await connection.promise().query(`Select * from users where email = ? and user_id != ?`, [email, userId]);
 
             if(checkUserEmail.length > 0) {
-                if(checkUserEmail[0].email != email) {
-                    return res.status(500).json({
-                        message: `Email ${email} already existed.\nPlease choose another email.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Email ${email} already existed.\nPlease choose another email.`
+                })
             }
 
             // Update bảng User

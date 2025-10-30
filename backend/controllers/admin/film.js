@@ -10,7 +10,8 @@ export const index = async (req, res) => {
 
     if (status) {
         if (status == "Showing") filmType = 'film_type = 1';
-        else if (status == "Coming") filmType = 'film_type = 0';
+        else if (status == "Coming") filmType = 'film_type = 2';
+        else if (status == "Stopping") filmType = 'film_type = 0'
     }
     // Hết lọc theo trạng thái
 
@@ -157,6 +158,13 @@ export const create = async (req, res) => {
 export const createPost = async (req, res) => {
     try {
         let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country, categories, directors, actors } = req.body;
+        console.log(req.body);
+        age_limit = parseInt(age_limit);
+        duration = parseInt(duration);
+
+        actors = actors.split(',').map(item => item.trim());
+        directors = directors.split(',').map(item => item.trim());
+        categories = categories.split(',').map(item => item.trim());
 
         // Kiểm tra trùng lặp tên phim
         const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
@@ -184,63 +192,88 @@ export const createPost = async (req, res) => {
             });
         });
 
-        // Lưu data vào bảng actor_film
-        for (const actor of actors) {
-            const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
-            const actorInfo = await new Promise((resolve, reject) => {
-                connection.query(queryActor, [actor], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
+        if(actors) {
+            // Lưu data vào bảng actor_film
+            for (const actor of actors) {
+                const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
+                const actorInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryActor, [actor], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
                 });
-            });
-            const actorId = actorInfo[0].actor_id;
-            const queryInsertActor = `INSERT INTO actor_film (film_id, actor_id) VALUES (?, ?)`;
-            await new Promise((resolve, reject) => {
-                connection.query(queryInsertActor, [filmId, actorId], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
-                });
-            });
+                if(actorInfo[0].actor_id) {
+                    const actorId = actorInfo[0].actor_id;
+                    const queryInsertActor = `INSERT INTO actor_film (film_id, actor_id) VALUES (?, ?)`;
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryInsertActor, [filmId, actorId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
+                    });
+                } else {
+                    res.status(500).json({
+                        message: "Actor doesn't exist",
+                    });
+                }
+            }
         }
+        
 
-        // // Lưu data vào bảng director_film
-        for (const director of directors) {
-            const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
-            const directorInfo = await new Promise((resolve, reject) => {
-                connection.query(queryDirector, [director], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
+        if(directors) {
+            // // Lưu data vào bảng director_film
+            for (const director of directors) {
+                const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
+                const directorInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryDirector, [director], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
                 });
-            });
-            const directorId = directorInfo[0].director_id;
-            const queryInsertDirector = `INSERT INTO director_film (film_id, director_id) VALUES (?, ?)`;
-            await new Promise((resolve, reject) => {
-                connection.query(queryInsertDirector, [filmId, directorId], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
-                });
-            });
+                if(directorInfo[0].director_id) {
+                    const directorId = directorInfo[0].director_id;
+                    const queryInsertDirector = `INSERT INTO director_film (film_id, director_id) VALUES (?, ?)`;
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryInsertDirector, [filmId, directorId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
+                    });
+                } else {
+                    res.status(500).json({
+                        message: "Director doesn't exist",
+                    });
+                }
+            }
         }
-
-        // Lưu data vào bảng category_film
-        for (const category of categories) {
-            const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
-            const categoryInfo = await new Promise((resolve, reject) => {
-                connection.query(queryCategory, [category], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
+        
+        if(categories) {
+            // Lưu data vào bảng category_film
+            for (const category of categories) {
+                const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
+                const categoryInfo = await new Promise((resolve, reject) => {
+                    connection.query(queryCategory, [category], (err, results) => {
+                        if (err) return reject(err);
+                        resolve(results);
+                    });
                 });
-            });
-            const categoryId = categoryInfo[0].category_id;
-            const queryInsertCategory = `INSERT INTO category_film (category_id, film_id) VALUES (?, ?)`;
-            await new Promise((resolve, reject) => {
-                connection.query(queryInsertCategory, [categoryId, filmId], (err, results) => {
-                    if (err) return reject(err);
-                    resolve(results);
-                });
-            });
+                if(categoryInfo[0].category_id) {
+                    const categoryId = categoryInfo[0].category_id;
+                    const queryInsertCategory = `INSERT INTO category_film (category_id, film_id) VALUES (?, ?)`;
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryInsertCategory, [categoryId, filmId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
+                    });
+                } else {
+                    res.status(500).json({
+                        message: "Category doesn't exist",
+                    })
+                }
+            }
         }
-
+    
         // Kiểm tra xem bản ghi có được tạo thành công không
         if (film) {
             res.status(201).json({
@@ -349,19 +382,22 @@ export const editPatch = async (req, res) => {
     try {
         const filmId = parseInt(req.params.id);
 
+        console.log(req.body);
+
         // Khi không gửi lên ảnh mới thì giữ nguyên cái link cũ
         if (res.locals.url == "") {
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
 
+            age_limit = parseInt(age_limit);
+            duration = parseInt(duration);
+
             // Kiểm tra trùng lặp tên phim
-            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
+            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ? and film_id != ?`, [film_name, filmId]);
 
             if(checkFilmName.length > 0) {
-                if(checkFilmName[0].film_id != filmId) {
-                    return res.status(500).json({
-                        message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                })
             }
 
             // Update bảng film
@@ -379,15 +415,16 @@ export const editPatch = async (req, res) => {
         } else { // Khi mà tải lên ảnh mới thì link ảnh thay bằng res.locals.url
             let { film_name, film_trailer, Release_date, film_describe, age_limit, duration, film_type, country } = req.body;
 
+            age_limit = parseInt(age_limit);
+            duration = parseInt(duration);
+
             // Kiểm tra trùng lặp tên phim
-            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ?`, [film_name]);
+            const [checkFilmName] = await connection.promise().query(`Select * from films where film_name = ? and film_id != ?`, [film_name, filmId]);
 
             if(checkFilmName.length > 0) {
-                if(checkFilmName[0].film_id != filmId) {
-                    return res.status(500).json({
-                        message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
-                    })
-                }
+                return res.status(500).json({
+                    message: `Film ${film_name} already existed.\nPlease choose another name for your film.`
+                })
             }
 
             // Update bảng film
@@ -403,10 +440,11 @@ export const editPatch = async (req, res) => {
             });
         }
 
-        let { categories, directors, actors } = req.body;
+        let { categories, directors, actors } = req.body;        
 
         // Update bảng actor_film(nếu có)
         if (actors) {
+            actors = actors.split(',').map(item => item.trim());
             for (const actor of actors) {
                 const queryActor = `SELECT actor_id FROM actors WHERE actor_name = ?`;
                 const actorInfo = await new Promise((resolve, reject) => {
@@ -415,20 +453,27 @@ export const editPatch = async (req, res) => {
                         resolve(results);
                     });
                 });
-                const actorId = actorInfo[0].actor_id;
-                const queryUpdateActorFilm = `UPDATE actor_film
-                                        SET actor_id = ?
-                                        WHERE film_id = ?`;
-                await new Promise((resolve, reject) => {
-                    connection.query(queryUpdateActorFilm, [actorId, filmId], (err, results) => {
-                        if (err) return reject(err);
-                        resolve(results);
+                if(actorInfo[0].actor_id) {
+                    const actorId = actorInfo[0].actor_id;
+                    const queryUpdateActorFilm = `UPDATE actor_film
+                                                SET actor_id = ?
+                                                WHERE film_id = ?`;
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryUpdateActorFilm, [actorId, filmId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
                     });
-                });
+                } else {
+                    res.status(500).json({
+                        message: "Actor doesn't exist"
+                    })
+                }
             }
         }
         // Update bảng director_film(nếu có)
         if (directors) {
+            directors = directors.split(',').map(item => item.trim());
             for (const director of directors) {
                 const queryDirector = `SELECT director_id FROM directors WHERE director_name = ?`;
                 const directorInfo = await new Promise((resolve, reject) => {
@@ -437,21 +482,28 @@ export const editPatch = async (req, res) => {
                         resolve(results);
                     });
                 });
-                const directorId = directorInfo[0].director_id;
-                const queryUpdateDirectorFilm = `UPDATE director_film
+                if(directorInfo[0].director_id) {
+                    const directorId = directorInfo[0].director_id;
+                    const queryUpdateDirectorFilm = `UPDATE director_film
                                             SET director_id = ?
                                             WHERE film_id = ?`;
-                await new Promise((resolve, reject) => {
-                    connection.query(queryUpdateDirectorFilm, [directorId, filmId], (err, results) => {
-                        if (err) return reject(err);
-                        resolve(results);
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryUpdateDirectorFilm, [directorId, filmId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
                     });
-                });
+                } else {
+                    res.status(500).json({
+                        message: "Director doesn't exist"
+                    })
+                }
             }
         }
 
         // Update bảng category_film(nếu có)
         if (categories) {
+            categories = categories.split(',').map(item => item.trim());
             for (const category of categories) {
                 const queryCategory = `SELECT category_id FROM categorys WHERE category_name = ?`;
                 const categoryInfo = await new Promise((resolve, reject) => {
@@ -460,16 +512,22 @@ export const editPatch = async (req, res) => {
                         resolve(results);
                     });
                 });
-                const categoryId = categoryInfo[0].category_id;
-                const queryUpdateCategoryFilm = `UPDATE category_film
-                                                SET category_id = ?
-                                                WHERE film_id = ?`;
-                await new Promise((resolve, reject) => {
-                    connection.query(queryUpdateCategoryFilm, [categoryId, filmId], (err, results) => {
-                        if (err) return reject(err);
-                        resolve(results);
+                if(categoryInfo[0].category_id) {
+                    const categoryId = categoryInfo[0].category_id;
+                    const queryUpdateCategoryFilm = `UPDATE category_film
+                                                    SET category_id = ?
+                                                    WHERE film_id = ?`;
+                    await new Promise((resolve, reject) => {
+                        connection.query(queryUpdateCategoryFilm, [categoryId, filmId], (err, results) => {
+                            if (err) return reject(err);
+                            resolve(results);
+                        });
                     });
-                });
+                } else {
+                    res.status(500).json({
+                        message: "Category doesn't exist"
+                    })
+                }
             }
         }
 
@@ -491,6 +549,7 @@ export const deleteFilm = async (req, res) => {
         const filmId = req.params.id;
 
         await Promise.all([
+            connection.promise().query(`DELETE FROM film_evaluate WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM actor_film WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM director_film WHERE film_id = ?`, [filmId]),
             connection.promise().query(`DELETE FROM category_film WHERE film_id = ?`, [filmId]),

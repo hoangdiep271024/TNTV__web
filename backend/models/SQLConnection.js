@@ -4,7 +4,7 @@ import mysql from 'mysql2';
 // Tạo một kết nối đơn lẻ
 const connection = mysql.createConnection({
     host: 'localhost', // Địa chỉ của máy chủ cơ sở dữ liệu
-    port: 3306,
+    port: 3307,
     user: 'root', // Tên người dùng của cơ sở dữ liệu
     password: '5ang15122003', // Mật khẩu của cơ sở dữ liệu
     database: 'test' // Tên của cơ sở dữ liệu

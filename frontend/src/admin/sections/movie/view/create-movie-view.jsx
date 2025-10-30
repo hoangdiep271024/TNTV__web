@@ -1,4 +1,4 @@
-import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button } from "@mui/material";
+import { Card, CardHeader, CardContent, Typography, Stack, TextField, Snackbar, Alert, MenuItem, Box, Button, Autocomplete, Chip } from "@mui/material";
 import { DashboardContent } from "../../../layouts/dashboard";
 import { useState } from "react";
 
@@ -9,18 +9,31 @@ export function CreateMovieView() {
         film_trailer: "",
         Release_date: "",
         film_describe: "",
-        age_limit: "",
+        age_limit: 5,
         duration: "",
-        film_type: "1",
-        categories: "",
-        directors: "",
-        actors: "",
+        film_type: 1,
+        country: 1,
+        categories: [],
+        directors: [],
+        actors: [],
     })
     const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+
     const filmTypeOptions = [
         { value: "1", label: "Đang chiếu" },
-        { value: "2", label: "Sắp chiếu" },
+        { value: "0", label: "Sắp chiếu" },
     ];
+
+    const countryOptions = [
+        { value: "1", label: "Việt Nam" },
+        { value: "0", label: "Nước ngoài" },
+    ];
+
+    // const filmTypeOptions = [
+    //     { value: 0, label: "Ngừng chiếu" },
+    //     { value: 1, label: "Đang chiếu" },
+    //     { value: 2, label: "Sắp chiếu" },
+    // ];
 
     const handleSnackbarClose = () => setSnackbar((prev) => ({ ...prev, open: false }));
 
@@ -49,6 +62,7 @@ export function CreateMovieView() {
         event.preventDefault();
 
         const formDataObj = new FormData();
+        /// console.log(formData);
 
         formDataObj.append("film_name", formData.film_name);
         formDataObj.append("film_trailer", formData.film_trailer);
@@ -57,10 +71,17 @@ export function CreateMovieView() {
         formDataObj.append("age_limit", formData.age_limit);
         formDataObj.append("duration", formData.duration);
         formDataObj.append("film_type", formData.film_type);
+        formDataObj.append("country", formData.country);
 
         if (formData.film_img) {
             formDataObj.append("film_img", formData.film_img); // Append the file as a Blob
         }
+
+        // console.log(formDataObj);
+
+        formDataObj.append("actors", formData.actors);
+        formDataObj.append("directors", formData.directors);
+        formDataObj.append("categories", formData.categories);
 
         try {
             const jwt = localStorage.getItem('jwt');
@@ -75,7 +96,7 @@ export function CreateMovieView() {
                 headers: {
                     'Authorization': 'Bearer ' + jwt,
                 },
-                body: JSON.stringify(payload),
+                body: formDataObj,
             });
 
             if (!response.ok) {
@@ -94,14 +115,36 @@ export function CreateMovieView() {
                 film_trailer: "",
                 Release_date: "",
                 film_describe: "",
-                age_limit: "",
+                age_limit: 5,
                 duration: "",
                 film_type: 1,
-                categories: "",
-                directors: "",
-                actors: "",
+                country: 1,
+                categories: [],
+                directors: [],
+                actors: [],
             });
             setSnackbar({ open: true, message: "Có lỗi xảy ra khi tạo phim!", severity: "error" });
+        }
+    };
+
+    const getYouTubeEmbedUrl = (url) => {
+        try {
+            const regexShort = /(?:https?:\/\/)?youtu\.be\/([^&\s]+)/;
+            const matchShort = url.match(regexShort);
+            if (matchShort) {
+                return `https://www.youtube.com/embed/${matchShort[1]}`;
+            }
+
+            const regexWatch = /(?:https?:\/\/)?(?:www\.)?youtube\.com\/watch\?v=([^&\s]+)/;
+            const matchWatch = url.match(regexWatch);
+            if (matchWatch) {
+                return `https://www.youtube.com/embed/${matchWatch[1]}`;
+            }
+
+            return url;
+        } catch (error) {
+            console.error("Error transforming YouTube URL:", error);
+            return url;
         }
     };
 
@@ -201,9 +244,22 @@ export function CreateMovieView() {
                                 </Box>
                             </Box>
 
+                            {/* display trailer and trailer input */}
+                            {formData.film_trailer && (
+                                <Box>
+                                    <iframe
+                                        width="50%"
+                                        height="315"
+                                        src={getYouTubeEmbedUrl(formData.film_trailer)}
+                                        title="Movie Trailer"
+                                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                        allowFullScreen
+                                    />
+                                </Box>
+                            )}
                             <TextField
                                 name="film_trailer"
-                                label="URL trailer"
+                                label="Trailer URL (Shortened URL or Standard URL)"
                                 value={formData.film_trailer}
                                 onChange={handleInputChange}
                                 fullWidth
@@ -219,6 +275,7 @@ export function CreateMovieView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="film_describe"
                                 label="Mô tả"
@@ -229,15 +286,30 @@ export function CreateMovieView() {
                                 required
                                 fullWidth
                             />
-                            <TextField
+
+                            <Autocomplete
                                 name="age_limit"
-                                label="Giới hạn độ tuổi"
-                                type="number"
+                                options={[
+                                    5, 13, 16, 18
+                                ]}
+                                isOptionEqualToValue={(option, value) => value !== null && option.value === value.value}
                                 value={formData.age_limit}
-                                onChange={handleInputChange}
-                                required
-                                fullWidth
+                                onChange={(event, newValue) => {
+                                    setFormData({ ...formData, age_limit: newValue });
+                                }}
+                                getOptionLabel={(option) => option.toString()}
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        name="age_limit"
+                                        label="Giới hạn độ tuổi"
+                                        type="number"
+                                        fullWidth
+                                        required
+                                    />
+                                )}
                             />
+
                             <TextField
                                 name="duration"
                                 label="Thời lượng (phút)"
@@ -247,6 +319,7 @@ export function CreateMovieView() {
                                 required
                                 fullWidth
                             />
+
                             <TextField
                                 name="film_type"
                                 label="Trạng thái phim"
@@ -262,25 +335,89 @@ export function CreateMovieView() {
                                     </MenuItem>
                                 ))}
                             </TextField>
+
                             <TextField
-                                name="categories"
-                                label="Thể loại (cách nhau bởi dấu phẩy)"
-                                value={formData.categories}
+                                name="country"
+                                label="Quốc gia"
+                                select
+                                value={formData.country}
                                 onChange={handleInputChange}
+                                required
                                 fullWidth
+                            >
+                                {countryOptions.map((option) => (
+                                    <MenuItem key={option.value} value={option.value}>
+                                        {option.label}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+
+                            <Autocomplete
+                                multiple
+                                freeSolo
+                                options={[
+                                    "Kinh Dị", "Hài Kịch", "Hành Động", "Tội Phạm",
+                                    "Phiêu Lưu", "Hoạt Hình", "Gia Đình",
+                                    "Khoa Học Viễn Tưởng", "Bí Ẩn", "Giả Tưởng",
+                                    "Lãng Mạng", "Drama", "Giật Gân", "Âm Nhạc",
+                                    "Tiểu Sử", "Lịch Sử", "Chiến Tranh"
+                                ]}
+                                value={formData.categories}
+                                onChange={(event, value) => {
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        categories: value
+                                    }));
+                                }}
+                                renderTags={(value, getTagProps) =>
+                                    value.map((option, index) => (
+                                        <Chip
+                                            variant="outlined"
+                                            key={option}
+                                            label={option}
+                                            {...getTagProps({ index })}
+                                        />
+                                    ))
+                                }
+                                renderInput={(params) => (
+                                    <TextField
+                                        {...params}
+                                        label="Thể loại"
+                                        placeholder="Thêm thể loại (cách nhau bởi dấu phẩy)"
+                                    />
+                                )}
                             />
+
+
                             <TextField
                                 name="directors"
-                                label="Đạo diễn (cách nhau bởi dấu phẩy)"
-                                value={formData.directors}
-                                onChange={handleInputChange}
+                                label="Đạo diễn"
+                                placeholder="Thêm đạo diễn (cách nhau bởi dấu phẩy)"
+                                value={formData.directors.join(', ')}
+                                onChange={(event) => {
+                                    const inputValue = event.target.value;
+                                    const directorsArray = inputValue.split(',').map(item => item.trim());
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        directors: directorsArray
+                                    }));
+                                }}
                                 fullWidth
                             />
+
                             <TextField
                                 name="actors"
-                                label="Diễn viên (cách nhau bởi dấu phẩy)"
-                                value={formData.actors}
-                                onChange={handleInputChange}
+                                label="Diễn viên"
+                                placeholder="Thêm diễn viên (cách nhau bởi dấu phẩy)"
+                                value={formData.actors.join(', ')}
+                                onChange={(event) => {
+                                    const inputValue = event.target.value;
+                                    const actorsArray = inputValue.split(',').map(item => item.trim());
+                                    setFormData((prev) => ({
+                                        ...prev,
+                                        actors: actorsArray
+                                    }));
+                                }}
                                 fullWidth
                             />
                         </Stack>
